@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     private float m_mySpeed;
     //SpeedOffSet
     private float m_speedOffSet = 0.1f;
+    //GroundCheck
+    private bool isGround;
     //Gravity
     private float m_gravity = -9.81f;
 
@@ -35,6 +37,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        CheckGround();
         PlayerMove();
     }
 
@@ -65,6 +68,8 @@ public class PlayerController : MonoBehaviour
         Vector3 inputDirection = transform.TransformDirection(new Vector3(m_playerInput.InputValue.x, 0f, m_playerInput.InputValue.y));
 
         m_playerController.Move(inputDirection * m_mySpeed * Time.deltaTime);
+
+        
     }
 
     private void PlayerRotation()
@@ -84,9 +89,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Gravity()
+    private void OnDrawGizmos()
     {
+        Vector3 GizmoPosition = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+        Gizmos.DrawWireSphere(GizmoPosition, 0.5f);
+    }
 
+    private void CheckGround()
+    {
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+        isGround = Physics.CheckSphere(spherePosition, 0.5f, LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore);
+
+        if (isGround)
+        {
+            Debug.Log("¶¥");
+        }
+        else
+        {
+            Debug.Log("¶¥¾Æ´Ô");
+        }
     }
 
     private bool SpeedCorrection(float currentHorizontalspeed)
