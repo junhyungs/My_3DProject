@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     private bool isGround;
     //Gravity
     private float m_gravity = -9.81f;
+    //VerticalVelocity
+    private float m_verticalVelocity;
 
 
     private PlayerInputSystem m_playerInput;
@@ -38,6 +40,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         CheckGround();
+        Gravity();
         PlayerMove();
     }
 
@@ -67,7 +70,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 inputDirection = transform.TransformDirection(new Vector3(m_playerInput.InputValue.x, 0f, m_playerInput.InputValue.y));
 
-        m_playerController.Move(inputDirection * m_mySpeed * Time.deltaTime);
+        m_playerController.Move((inputDirection * m_mySpeed + Vector3.up * m_verticalVelocity) * Time.deltaTime);
 
         
     }
@@ -91,13 +94,28 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Vector3 GizmoPosition = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+        Vector3 GizmoPosition = new Vector3(transform.position.x, transform.position.y + 0.4f, transform.position.z);
         Gizmos.DrawWireSphere(GizmoPosition, 0.5f);
+    }
+
+    private void Gravity()
+    {
+        if (isGround)
+        {
+            if (m_verticalVelocity < 0)
+            {
+                m_verticalVelocity = -2f;
+            }
+        }
+        else
+        {
+            m_verticalVelocity += m_gravity * Time.deltaTime;
+        }
     }
 
     private void CheckGround()
     {
-        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y + 0.4f, transform.position.z);
         isGround = Physics.CheckSphere(spherePosition, 0.5f, LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore);
 
         if (isGround)
