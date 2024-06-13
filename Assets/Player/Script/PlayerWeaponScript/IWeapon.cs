@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IWeapon
 {
-    public void SetWeapon();
+    public void UseWeapon();
 }

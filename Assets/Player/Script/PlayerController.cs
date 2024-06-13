@@ -26,8 +26,8 @@ public class PlayerController : MonoBehaviour
     private bool isGround;
     //VerticalVelocity
     private float m_verticalVelocity;
+    //RotationVelocity
     private float m_rotationVelocity;
-    
     //PlayerMoveControll
     private bool isAction = true;
 

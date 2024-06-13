@@ -2,16 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sword : MonoBehaviour
+public class Sword : Weapon
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+        m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Sword);
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void UseWeapon()
     {
         
     }
