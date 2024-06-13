@@ -11,6 +11,9 @@ public class PlayerInputSystem : MonoBehaviour
     [Header("Roll")]
     [SerializeField] bool isRoll;
 
+    [Header("Look")]
+    [SerializeField] bool isLook;
+
     public Vector2 InputValue
     {
         get { return m_Input; }
@@ -19,6 +22,11 @@ public class PlayerInputSystem : MonoBehaviour
     public bool IsRoll
     {
         get { return isRoll; }
+    }
+
+    private void OnLook(InputValue input)
+    {
+
     }
 
     private void OnMove(InputValue input)
