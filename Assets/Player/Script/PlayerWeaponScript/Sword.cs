@@ -8,9 +8,11 @@ public class Sword : Weapon
     {
         m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Sword);
     }
-
     public override void UseWeapon()
     {
-        
+
+
+        Debug.Log("Ä® »ç¿ëÇÔ");
     }
+    
 }

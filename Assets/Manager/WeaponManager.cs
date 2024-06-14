@@ -6,11 +6,21 @@ using UnityEngine;
 public enum PlayerWeapon
 {
     Sword,
-    Bow
+    Bow,
+    FireBall,
+
 }
 
 public class WeaponManager : Singleton<WeaponManager>
 {
+    [Header("PlayerUseWeapon")]
+    [SerializeField] private GameObject[] m_playerUseWeapon_Prefab;
+    [Header("PlayerIdleWeapon")]
+    [SerializeField] private GameObject[] m_playerIdleWeapon_Prefab;
+
+    private IWeapon m_weapon;
+    private PlayerWeapon m_currentWeapon;
+
     private Dictionary<PlayerWeapon, WeaponData> WeaponDataDictionary = new Dictionary<PlayerWeapon, WeaponData>();
     private Dictionary<PlayerWeapon, Weapon> WeaponDictionary = new Dictionary<PlayerWeapon, Weapon>();
     private Dictionary<PlayerWeapon, GameObject> WeaponPrefabDictionary = new Dictionary<PlayerWeapon, GameObject>();
@@ -24,11 +34,62 @@ public class WeaponManager : Singleton<WeaponManager>
     {
         WeaponDataDictionary.Add(PlayerWeapon.Sword, new WeaponData(15.0f, 5.0f, false));
         WeaponDataDictionary.Add(PlayerWeapon.Bow, new WeaponData(15.0f, 10.0f, true));
+
+        m_currentWeapon = PlayerWeapon.Sword;
+        AllDisableWeapon();
     }
+
+    
+
+   
+
+    public void StopWeapon()
+    {
+        if(m_currentWeapon == PlayerWeapon.Bow)
+        {
+            m_playerUseWeapon_Prefab[(int)m_currentWeapon].SetActive(false);
+            return;
+        }
+
+        ActiveWeapon(m_currentWeapon, false);
+    }
+
+    public void ActiveWeapon(PlayerWeapon weapon, bool isUsing)
+    {
+        if (isUsing)
+        {
+            if (m_playerUseWeapon_Prefab[(int)weapon] != null)
+            {
+                m_playerUseWeapon_Prefab[(int)weapon].SetActive(true);
+            }
+        }
+        else
+        {
+            if (m_playerIdleWeapon_Prefab[(int)weapon] != null)
+            {
+                m_playerIdleWeapon_Prefab[(int)weapon].SetActive(true);
+            }
+        }
+    }
+
+
+    
 
     public void AddWeapon(PlayerWeapon weapon, Weapon addWeapon)
     {
         WeaponDictionary.Add(weapon, addWeapon);
+    }
+
+    public bool ContainsWeapon(PlayerWeapon weapon)
+    {
+        if(WeaponDictionary.ContainsKey(weapon))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void AddWeaponPrefab(PlayerWeapon weapon, GameObject weaponPrefab)
@@ -50,6 +111,26 @@ public class WeaponManager : Singleton<WeaponManager>
     {
         return WeaponDataDictionary[weapon];
     }
+
+    private void AllDisableWeapon()
+    {
+        foreach(var weapon in m_playerUseWeapon_Prefab)
+        {
+            if(weapon != null)
+            {
+                weapon.SetActive(false);
+            }
+        }
+
+        foreach(var weapon in m_playerIdleWeapon_Prefab)
+        {
+            if(weapon != null)
+            {
+                weapon.SetActive(false);
+            }
+        }
+    }
+
 }
 
 public struct WeaponData

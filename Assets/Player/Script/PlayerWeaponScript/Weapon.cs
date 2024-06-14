@@ -4,11 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class Weapon : MonoBehaviour, IWeapon
+public abstract class Weapon : MonoBehaviour, IWeapon
 {
     protected WeaponData m_weaponData;
-
-    public virtual void UseWeapon() { }
+    public abstract void UseWeapon();
 }
 
 

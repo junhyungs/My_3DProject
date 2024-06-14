@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEditor.Search;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerMoveController : MonoBehaviour
 {
     [Header("Speed")]
     [SerializeField] private float m_walkSpeed;
@@ -31,6 +32,9 @@ public class PlayerController : MonoBehaviour
     //PlayerMoveControll
     private bool isAction = true;
 
+    private IWeapon m_weapon;
+    private PlayerWeapon m_currentWeapon;
+
 
 
     private PlayerInputSystem m_playerInput;
@@ -48,12 +52,47 @@ public class PlayerController : MonoBehaviour
         m_playerAnimator = GetComponent<Animator>();
     }
 
+    private void Start()
+    {
+        m_currentWeapon = PlayerWeapon.Sword;
+        SetWeapon(m_currentWeapon);
+    }
+
     void Update()
     {
         CheckGround();
         Gravity();
         PlayerClickRotation();
         PlayerMove();
+    }
+    public void SetWeapon(PlayerWeapon weapon)
+    {
+        Debug.Log(m_currentWeapon.ToString());
+        m_currentWeapon = weapon;
+
+        Component component = gameObject.GetComponent<IWeapon>() as Component;
+
+        if (component != null)
+        {
+            Destroy(component);
+        }
+
+        switch (weapon)
+        {
+            case PlayerWeapon.Sword:
+                m_weapon = gameObject.AddComponent<Sword>();
+                break;
+            case PlayerWeapon.Bow:
+                m_weapon = gameObject.AddComponent<Bow>();
+                break;
+        }
+
+        WeaponManager.Instance.StopWeapon();
+    }
+    public void UseWeapon()
+    {
+        m_weapon.UseWeapon();
+        WeaponManager.Instance.ActiveWeapon(m_currentWeapon, true);
     }
 
     private void PlayerMove()
@@ -96,47 +135,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-    //private bool PlayerClickRotation()
-    //{
-    //    if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(1))
-    //    {
-    //        Ray mouseRayposition = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-    //        if (Physics.Raycast(mouseRayposition, out RaycastHit hit, 100))
-    //        {
-    //            Vector3 playerLookrotation = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-
-    //            float distance = Vector3.Distance(transform.position, hit.point);
-
-    //            if (distance > 0.1f)
-    //            {
-    //                transform.LookAt(playerLookrotation);
-                    
-    //                return true;
-    //            }
-    //        }
-    //    }
-
-    //    return false;
-    //}
-
     private void PlayerClickRotation()
     {
         bool GetMouseButton = Input.GetMouseButton(1);
+        bool GetMouseButtons = Input.GetMouseButtonDown(1);
         bool GetMouseButtonDown = Input.GetMouseButtonDown(0);
 
         if (GetMouseButton || GetMouseButtonDown)
         {
-            
-
             if (GetMouseButtonDown)
             {
                 isAction = false;
+                if(m_currentWeapon != PlayerWeapon.Sword)
+                {
+                    SetWeapon(PlayerWeapon.Sword);
+                }
+                    
+                UseWeapon();
             }
             else if (GetMouseButton)
             {
+                if (GetMouseButtons)
+                {
+                    SetWeapon(PlayerWeapon.Bow);
+                }
+
                 isAction = false;
+                UseWeapon();
             }
 
             Ray mouseRayposition = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -155,7 +180,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
     
 
     private void OnDrawGizmos()

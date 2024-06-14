@@ -31,22 +31,7 @@ public class CinemachineCamera : MonoBehaviour
 
     private void Update()
     {
-        //RotateCamera();
         CameraMovement();
-    }
-
-    private void RotateCamera()
-    {
-        if (Input.GetMouseButton(1))
-        {
-            m_virtualCam.Follow = m_targetTrans.transform;
-            m_virtualCam.LookAt = m_targetTrans.transform;
-        }
-        else
-        {
-            m_virtualCam.Follow = transform;
-            m_virtualCam.LookAt = transform;
-        }
     }
 
     private void RayPosition()
@@ -90,7 +75,6 @@ public class CinemachineCamera : MonoBehaviour
                 }
                 else if (Input.GetKey(KeyCode.LeftShift))
                 {
-                    Debug.Log("GetKey");
                     RayPosition();
                     m_virtualCam.Follow = m_lookTrans.transform;
                     m_virtualCam.LookAt = m_lookTrans.transform;

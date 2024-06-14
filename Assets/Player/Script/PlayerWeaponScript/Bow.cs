@@ -11,6 +11,6 @@ public class Bow : Weapon
 
     public override void UseWeapon()
     {
-
+        Debug.Log("활 사용함");
     }
 }
