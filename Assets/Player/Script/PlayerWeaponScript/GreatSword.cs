@@ -2,18 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sword : Weapon
+public class GreatSword : Weapon
 {
     private void Start()
     {
-        m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Sword);
+        m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.GreatSword);
     }
-
     public override void UseWeapon()
     {
-
-
-        Debug.Log("Ä® »ç¿ëÇÔ");
+        
     }
-    
 }

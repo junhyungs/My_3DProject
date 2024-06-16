@@ -2,15 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bow : Weapon
+public class Umbrella : Weapon
 {
     private void Start()
     {
-        m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Bow);
+        m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Umbrella);
     }
-
     public override void UseWeapon()
     {
-        Debug.Log("활 사용함");
+        
     }
 }

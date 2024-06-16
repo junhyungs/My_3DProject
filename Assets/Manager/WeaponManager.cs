@@ -6,105 +6,160 @@ using UnityEngine;
 public enum PlayerWeapon
 {
     Sword,
-    Bow,
-    FireBall,
-
+    Hammer,
+    Dagger,
+    GreatSword,
+    Umbrella
 }
 
 public class WeaponManager : Singleton<WeaponManager>
 {
     [Header("PlayerUseWeapon")]
     [SerializeField] private GameObject[] m_playerUseWeapon_Prefab;
+
     [Header("PlayerIdleWeapon")]
     [SerializeField] private GameObject[] m_playerIdleWeapon_Prefab;
 
-    private IWeapon m_weapon;
-    private PlayerWeapon m_currentWeapon;
+    [Header("PlayerPrefab")]
+    [SerializeField] private GameObject m_player;
 
-    private Dictionary<PlayerWeapon, WeaponData> WeaponDataDictionary = new Dictionary<PlayerWeapon, WeaponData>();
-    private Dictionary<PlayerWeapon, Weapon> WeaponDictionary = new Dictionary<PlayerWeapon, Weapon>();
-    private Dictionary<PlayerWeapon, GameObject> WeaponPrefabDictionary = new Dictionary<PlayerWeapon, GameObject>();
+    private IWeapon m_currentWeapon;
+    private PlayerWeapon m_weaponType;
+    private Dictionary<PlayerWeapon, WeaponData> WeaponDataDictionary = new Dictionary<PlayerWeapon, WeaponData>();    
+    private Dictionary<PlayerWeapon, GameObject> UseWeaponObject = new Dictionary<PlayerWeapon, GameObject>();
+    private Dictionary<PlayerWeapon, GameObject> IdleWeaponObject = new Dictionary<PlayerWeapon, GameObject>();
 
     private void Awake()
     {
-        InitWeapon();
-    }
-
-    private void InitWeapon()
-    {
-        WeaponDataDictionary.Add(PlayerWeapon.Sword, new WeaponData(15.0f, 5.0f, false));
-        WeaponDataDictionary.Add(PlayerWeapon.Bow, new WeaponData(15.0f, 10.0f, true));
-
-        m_currentWeapon = PlayerWeapon.Sword;
+        InitWeaponData();
+        InitWeaponObject();
+        InitIdleWeaponObject();
         AllDisableWeapon();
+
+        SetWeapon(PlayerWeapon.Sword);
     }
 
-    
-
-   
-
-    public void StopWeapon()
+    private void InitWeaponData()
     {
-        if(m_currentWeapon == PlayerWeapon.Bow)
+        WeaponDataDictionary.Add(PlayerWeapon.Sword, new WeaponData(1.0f, 0.4f, 2.5f));
+        WeaponDataDictionary.Add(PlayerWeapon.Hammer, new WeaponData(1.15f, 0.5f, 2.5f));
+        WeaponDataDictionary.Add(PlayerWeapon.Dagger, new WeaponData(0.8f, 0.35f, 1.8f));
+        WeaponDataDictionary.Add(PlayerWeapon.GreatSword, new WeaponData(1.25f, 0.5f, 3.0f));
+        WeaponDataDictionary.Add(PlayerWeapon.Umbrella, new WeaponData(0.5f, 0.4f, 2.5f));
+    }
+
+    private void InitWeaponObject()
+    {
+        UseWeaponObject.Add(PlayerWeapon.Sword, m_playerUseWeapon_Prefab[0]);
+        UseWeaponObject.Add(PlayerWeapon.Hammer, m_playerUseWeapon_Prefab[1]);
+        UseWeaponObject.Add(PlayerWeapon.Dagger, m_playerUseWeapon_Prefab[2]);
+        UseWeaponObject.Add(PlayerWeapon.GreatSword, m_playerUseWeapon_Prefab[3]);
+        UseWeaponObject.Add(PlayerWeapon.Umbrella, m_playerUseWeapon_Prefab[4]);
+    }
+
+    private void InitIdleWeaponObject()
+    {
+        IdleWeaponObject.Add(PlayerWeapon.Sword, m_playerIdleWeapon_Prefab[0]);
+        IdleWeaponObject.Add(PlayerWeapon.Hammer, m_playerIdleWeapon_Prefab[1]);
+        IdleWeaponObject.Add(PlayerWeapon.Dagger, m_playerIdleWeapon_Prefab[2]);
+        IdleWeaponObject.Add(PlayerWeapon.GreatSword, m_playerIdleWeapon_Prefab[3]);
+        IdleWeaponObject.Add(PlayerWeapon.Umbrella, m_playerIdleWeapon_Prefab[4]);
+    }
+
+    public void SetWeapon(PlayerWeapon weaponType)
+    {
+        m_weaponType = weaponType;
+
+        Component component = gameObject.GetComponent<IWeapon>() as Component;
+
+        if(component != null)
         {
-            m_playerUseWeapon_Prefab[(int)m_currentWeapon].SetActive(false);
+            Destroy(component);
+        }
+
+        switch(weaponType)
+        {
+            case PlayerWeapon.Sword:
+                m_currentWeapon = gameObject.AddComponent<Sword>();
+                break;
+            case PlayerWeapon.Hammer:
+                m_currentWeapon = gameObject.AddComponent<Hammer>();
+                break;
+            case PlayerWeapon.Dagger:
+                m_currentWeapon = gameObject.AddComponent<Dagger>();
+                break;
+            case PlayerWeapon.GreatSword:
+                m_currentWeapon = gameObject.AddComponent<GreatSword>();
+                break;
+            case PlayerWeapon.Umbrella:
+                m_currentWeapon = gameObject.AddComponent<Umbrella>();
+                break;
+        }
+
+        IdleWeaponActive(true);
+    }
+
+    public void IdleWeaponActive(bool active)
+    {
+        if (m_playerIdleWeapon_Prefab[(int)m_weaponType] != null)
+        {
+            if (active)
+            {
+                GetIdleWeaponObject(m_weaponType).SetActive(true);
+            }
+            else
+            {
+                GetIdleWeaponObject(m_weaponType).SetActive(false);
+            }
+        }
+        else
             return;
-        }
-
-        ActiveWeapon(m_currentWeapon, false);
     }
 
-    public void ActiveWeapon(PlayerWeapon weapon, bool isUsing)
+    public void UseWeaponActive(bool active)
     {
-        if (isUsing)
+        if (m_playerUseWeapon_Prefab[(int)m_weaponType] != null)
         {
-            if (m_playerUseWeapon_Prefab[(int)weapon] != null)
+            if (active)
             {
-                m_playerUseWeapon_Prefab[(int)weapon].SetActive(true);
+                GetUseWeaponObject(m_weaponType).SetActive(true);
+            }
+            else
+            {
+                GetUseWeaponObject(m_weaponType).SetActive(false);
             }
         }
         else
+            return;
+    }
+
+    private void AllDisableWeapon()
+    {
+        foreach (var weapon in m_playerUseWeapon_Prefab)
         {
-            if (m_playerIdleWeapon_Prefab[(int)weapon] != null)
+            if (weapon != null)
             {
-                m_playerIdleWeapon_Prefab[(int)weapon].SetActive(true);
+                weapon.SetActive(false);
+            }
+        }
+
+        foreach (var weapon in m_playerIdleWeapon_Prefab)
+        {
+            if (weapon != null)
+            {
+                weapon.SetActive(false);
             }
         }
     }
 
-
-    
-
-    public void AddWeapon(PlayerWeapon weapon, Weapon addWeapon)
+    public GameObject GetUseWeaponObject(PlayerWeapon weapon)
     {
-        WeaponDictionary.Add(weapon, addWeapon);
+        return UseWeaponObject[weapon];
     }
 
-    public bool ContainsWeapon(PlayerWeapon weapon)
+    public GameObject GetIdleWeaponObject(PlayerWeapon weapon)
     {
-        if(WeaponDictionary.ContainsKey(weapon))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public void AddWeaponPrefab(PlayerWeapon weapon, GameObject weaponPrefab)
-    {
-        WeaponPrefabDictionary.Add(weapon, weaponPrefab);
-    }
-
-    public Weapon GetWeapon(PlayerWeapon weapon)
-    {
-        return WeaponDictionary[weapon];
-    }
-
-    public GameObject GetWeaponPrefab(PlayerWeapon weapon)
-    {
-        return WeaponPrefabDictionary[weapon];
+        return IdleWeaponObject[weapon];
     }
 
     public WeaponData GetWeaponData(PlayerWeapon weapon)
@@ -112,40 +167,22 @@ public class WeaponManager : Singleton<WeaponManager>
         return WeaponDataDictionary[weapon];
     }
 
-    private void AllDisableWeapon()
+    public void UseWeapon()
     {
-        foreach(var weapon in m_playerUseWeapon_Prefab)
-        {
-            if(weapon != null)
-            {
-                weapon.SetActive(false);
-            }
-        }
-
-        foreach(var weapon in m_playerIdleWeapon_Prefab)
-        {
-            if(weapon != null)
-            {
-                weapon.SetActive(false);
-            }
-        }
+        m_currentWeapon.UseWeapon();
     }
-
 }
 
 public struct WeaponData
 {
-    //weaponRange : true = long, false = short
-    public bool weaponRange { get; }
     public float m_attackPower { get; }
     public float m_attackSpeed { get; }
-
-    public WeaponData(float attackPower, float attackSpeed, bool weaponRange)
+    public float m_attackRange { get; }
+    public WeaponData(float attackPower, float attackSpeed, float weaponRange)
     {
         m_attackPower = attackPower;
         m_attackSpeed = attackSpeed;
-        this.weaponRange = weaponRange;
+        m_attackRange = weaponRange;
     }
-
 }
 

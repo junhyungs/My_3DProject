@@ -3,9 +3,13 @@ using System.Collections.Generic;
 
 using UnityEditor.Search;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMoveController : MonoBehaviour
 {
+    [Header("InputSystem")]
+    [SerializeField] private Vector2 m_playerInput;
+
     [Header("Speed")]
     [SerializeField] private float m_walkSpeed;
 
@@ -32,67 +36,30 @@ public class PlayerMoveController : MonoBehaviour
     //PlayerMoveControll
     private bool isAction = true;
 
-    private IWeapon m_weapon;
-    private PlayerWeapon m_currentWeapon;
-
-
-
-    private PlayerInputSystem m_playerInput;
     private CharacterController m_playerController;
-    private PlayerAttackController m_playerAttack;
-    private CinemachineCamera m_playerCam;
     private Animator m_playerAnimator;
 
     private void Awake()
     {
-        m_playerAttack = GetComponent<PlayerAttackController>();
-        m_playerInput = GetComponent<PlayerInputSystem>();
-        m_playerCam = GetComponent<CinemachineCamera>();
         m_playerController = GetComponent<CharacterController>();
         m_playerAnimator = GetComponent<Animator>();
-    }
-
-    private void Start()
-    {
-        m_currentWeapon = PlayerWeapon.Sword;
-        SetWeapon(m_currentWeapon);
     }
 
     void Update()
     {
         CheckGround();
         Gravity();
-        PlayerClickRotation();
         PlayerMove();
     }
-    public void SetWeapon(PlayerWeapon weapon)
+
+    private void OnMove(InputValue input)
     {
-        Debug.Log(m_currentWeapon.ToString());
-        m_currentWeapon = weapon;
-
-        Component component = gameObject.GetComponent<IWeapon>() as Component;
-
-        if (component != null)
-        {
-            Destroy(component);
-        }
-
-        switch (weapon)
-        {
-            case PlayerWeapon.Sword:
-                m_weapon = gameObject.AddComponent<Sword>();
-                break;
-            case PlayerWeapon.Bow:
-                m_weapon = gameObject.AddComponent<Bow>();
-                break;
-        }
-
-        WeaponManager.Instance.StopWeapon();
+        SetMove(input.Get<Vector2>());
     }
-    public void UseWeapon()
+
+    private void SetMove(Vector2 input)
     {
-        m_weapon.UseWeapon();
-        WeaponManager.Instance.ActiveWeapon(m_currentWeapon, true);
+        m_playerInput = input;
     }
 
     private void PlayerMove()
@@ -101,7 +68,7 @@ public class PlayerMoveController : MonoBehaviour
         {
             m_targetSpeed = m_walkSpeed;
 
-            if (m_playerInput.InputValue == Vector2.zero)
+            if (m_playerInput == Vector2.zero)
             {
                 m_targetSpeed = 0f;
             }
@@ -119,9 +86,9 @@ public class PlayerMoveController : MonoBehaviour
             else
                 m_mySpeed = m_targetSpeed;
 
-            Vector3 rotationDir = new Vector3(m_playerInput.InputValue.x, 0, m_playerInput.InputValue.y).normalized;
+            Vector3 rotationDir = new Vector3(m_playerInput.x, 0, m_playerInput.y).normalized;
 
-            if (m_playerInput.InputValue != Vector2.zero)
+            if (m_playerInput != Vector2.zero)
             {
                 float targetRotation = Mathf.Atan2(rotationDir.x, rotationDir.z) * Mathf.Rad2Deg;
 
@@ -135,50 +102,50 @@ public class PlayerMoveController : MonoBehaviour
         }
     }
 
-    private void PlayerClickRotation()
-    {
-        bool GetMouseButton = Input.GetMouseButton(1);
-        bool GetMouseButtons = Input.GetMouseButtonDown(1);
-        bool GetMouseButtonDown = Input.GetMouseButtonDown(0);
+    //private void PlayerClickRotation()
+    //{
+    //    bool GetMouseButton = Input.GetMouseButton(1);
+    //    bool GetMouseButtons = Input.GetMouseButtonDown(1);
+    //    bool GetMouseButtonDown = Input.GetMouseButtonDown(0);
 
-        if (GetMouseButton || GetMouseButtonDown)
-        {
-            if (GetMouseButtonDown)
-            {
-                isAction = false;
-                if(m_currentWeapon != PlayerWeapon.Sword)
-                {
-                    SetWeapon(PlayerWeapon.Sword);
-                }
+    //    if (GetMouseButton || GetMouseButtonDown)
+    //    {
+    //        if (GetMouseButtonDown)
+    //        {
+    //            isAction = false;
+    //            if(m_currentWeapon != PlayerWeapon.Sword)
+    //            {
+    //                SetWeapon(PlayerWeapon.Sword);
+    //            }
                     
-                UseWeapon();
-            }
-            else if (GetMouseButton)
-            {
-                if (GetMouseButtons)
-                {
-                    SetWeapon(PlayerWeapon.Bow);
-                }
+    //            UseWeapon();
+    //        }
+    //        else if (GetMouseButton)
+    //        {
+    //            if (GetMouseButtons)
+    //            {
+    //                SetWeapon(PlayerWeapon.Bow);
+    //            }
 
-                isAction = false;
-                UseWeapon();
-            }
+    //            isAction = false;
+    //            UseWeapon();
+    //        }
 
-            Ray mouseRayposition = Camera.main.ScreenPointToRay(Input.mousePosition);
+    //        Ray mouseRayposition = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(mouseRayposition, out RaycastHit hit, 100))
-            {
-                Vector3 playerLookrotation = new Vector3(hit.point.x, transform.position.y, hit.point.z);
+    //        if (Physics.Raycast(mouseRayposition, out RaycastHit hit, 100))
+    //        {
+    //            Vector3 playerLookrotation = new Vector3(hit.point.x, transform.position.y, hit.point.z);
 
-                float distance = Vector3.Distance(transform.position, hit.point);
+    //            float distance = Vector3.Distance(transform.position, hit.point);
 
-                if (distance > 0.1f)
-                {
-                    transform.LookAt(playerLookrotation);
-                }
-            }
-        }
-    }
+    //            if (distance > 0.1f)
+    //            {
+    //                transform.LookAt(playerLookrotation);
+    //            }
+    //        }
+    //    }
+    //}
 
     
 
