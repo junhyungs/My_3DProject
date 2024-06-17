@@ -13,6 +13,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Roll",
+                    "type": "Button",
+                    "id": "fbdf6216-c378-4fa3-83b0-03a1271d571a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RightClickAttack",
+                    "type": "Button",
+                    "id": "8d4d7e8a-a640-43c4-9f2d-e8357c0a0858",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(pressPoint=0.1,behavior=2)",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "LeftClickAttack",
+                    "type": "Button",
+                    "id": "7b04123f-9705-4f27-986c-2dc712cb5a3e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -70,6 +97,39 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "34f41dca-dedb-4f1b-bf07-aff5536009cf",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Roll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4f00d92c-3d33-4861-add0-5c6940b89efe",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RightClickAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "764d2b21-f7c1-4d34-afa6-00a1dcbb950a",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Press(pressPoint=0.1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftClickAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

@@ -111,10 +111,10 @@ public class CinemachineCamera : MonoBehaviour
         if (transPoser != null)
         {
             transPoser.m_BindingMode = CinemachineTransposer.BindingMode.WorldSpace;
-            transPoser.m_FollowOffset = new Vector3(0f, 25f, -20f);
-            transPoser.m_XDamping = 3f;
-            transPoser.m_YDamping = 3f;
-            transPoser.m_ZDamping = 3f;
+            transPoser.m_FollowOffset = new Vector3(0f, 20f, -15f);
+            transPoser.m_XDamping = 2f;
+            transPoser.m_YDamping = 2f;
+            transPoser.m_ZDamping = 2f;
         }
     }
 
