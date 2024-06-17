@@ -8,8 +8,14 @@ public class Hook : Skill
     {
         m_skillData = SkillManager.Instance.GetSkillData(PlayerSkill.Hook);
     }
-    public override void UseSkill()
-    {
 
+    public override void Fire(bool isFire)
+    {
+        
     }
+
+    public override void UseSkill(Transform spawnPosition)
+    {
+        
+    }    
 }

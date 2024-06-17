@@ -8,7 +8,13 @@ public class FireBall : Skill
     {
         m_skillData = SkillManager.Instance.GetSkillData(PlayerSkill.FireBall);
     }
-    public override void UseSkill()
+    
+    public override void UseSkill(Transform spawnPosition)
+    {
+        
+    }
+
+    public override void Fire(bool isFire)
     {
         
     }

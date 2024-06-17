@@ -15,6 +15,13 @@ public class SkillManager : Singleton<SkillManager>
 {
     private Dictionary<PlayerSkill, SkillData> SkillDictionary = new Dictionary<PlayerSkill, SkillData>();
     private Dictionary<PlayerSkill, Skill> GetSkillDictionary = new Dictionary<PlayerSkill, Skill>();
+    private int Cost;
+
+    public int SkillCost
+    {
+        get { return Cost; }
+        set { Cost = value; }
+    }
 
     private void Awake()
     {
@@ -23,10 +30,11 @@ public class SkillManager : Singleton<SkillManager>
 
     private void InitSkill()
     {
-        SkillDictionary.Add(PlayerSkill.Bow, new SkillData(1.0f, 10.0f, 20.0f, 1));
-        SkillDictionary.Add(PlayerSkill.FireBall, new SkillData(1.0f, 10.0f, 20.0f, 1));
-        SkillDictionary.Add(PlayerSkill.Bomb, new SkillData(1.0f, 10.0f, 20.0f, 2));
-        SkillDictionary.Add(PlayerSkill.Hook, new SkillData(1.0f, 10.0f, 20.0f, 0));
+        SkillDictionary.Add(PlayerSkill.Bow, new SkillData(1.0f, 10.0f, 0f, 1));
+        SkillDictionary.Add(PlayerSkill.FireBall, new SkillData(1.0f, 10.0f, 1f, 1));
+        SkillDictionary.Add(PlayerSkill.Bomb, new SkillData(1.0f, 10.0f, 10.0f, 2));
+        SkillDictionary.Add(PlayerSkill.Hook, new SkillData(1.0f, 10.0f, 5.0f, 0));
+        Cost = 4;
     }
 
     public void AddSkill(PlayerSkill skillName, Skill skill)

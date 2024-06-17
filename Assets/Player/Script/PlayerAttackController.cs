@@ -12,9 +12,6 @@ public class PlayerAttackController : MonoBehaviour
     [Header("ProjectilePosition")]
     [SerializeField] private Transform m_arrowTransform;
 
-    private GameObject Arrow;
-
-
     private Animator m_playerAnimator;
     private ISkill m_currentSkill;
     private IWeapon m_currentWeapon;
@@ -23,13 +20,7 @@ public class PlayerAttackController : MonoBehaviour
 
     private void Awake()
     {
-        InitComponent();
-    }
-
-    private void Start()
-    {
-        InitAttack();
-        DisableObject();
+        Init();
     }
 
     private void Update()
@@ -40,19 +31,16 @@ public class PlayerAttackController : MonoBehaviour
         }
     }
 
-    private void InitComponent()
+    private void Init()
     {
         m_playerAnimator = GetComponent<Animator>();
-    }
-
-    private void InitAttack()
-    {
         m_SkillName = PlayerSkill.Bow;
         SetSkill(m_SkillName);
         SetWeapon();
+        DisableObject();
     }
 
-    private void SetSkill(PlayerSkill skillName)
+    public void SetSkill(PlayerSkill skillName)
     {
         m_SkillName = skillName;
 
@@ -118,6 +106,7 @@ public class PlayerAttackController : MonoBehaviour
     private void OnLeftClickAttack(InputValue input)
     {
         bool isPressed = input.isPressed;
+
         LeftClick(isPressed);
     }
 
@@ -126,6 +115,7 @@ public class PlayerAttackController : MonoBehaviour
         if (isPressed)
         {
             UseAttack();
+
             LookAtMouse();
         }
     }
@@ -133,34 +123,33 @@ public class PlayerAttackController : MonoBehaviour
     private void OnRightClickAttack(InputValue input)
     {
         bool isPress = input.isPressed;
+
         RightClick(isPress);
     }
 
     private void RightClick(bool press)
     {
-        if (press)
+        ActiveSkillObject(m_SkillName, press);
+
+        OnCurrentSkillAnimation(m_SkillName, press);
+
+        if (!press)
         {
-            OnCurrentSkill(m_SkillName, press);
-            LookAtMouse();
-        }
-        else
-        {
-            OnCurrentSkill(m_SkillName, press);
+            m_currentSkill.Fire(true);
         }
     }
 
-    private void OnCurrentSkill(PlayerSkill skillName, bool isPressed)
+    private void ActiveSkillObject(PlayerSkill skillName, bool isPressed)
+    {
+        m_skillObject[(int)skillName].SetActive(isPressed);
+    }
+
+    private void OnCurrentSkillAnimation(PlayerSkill skillName, bool isPressed)
     {
         switch(skillName)
         {
             case PlayerSkill.Bow:
                 m_playerAnimator.SetBool("Arrow", isPressed);
-                m_skillObject[0].SetActive(isPressed);
-
-                if(Arrow != null)
-                {
-                    UseSkillAttack(isPressed);
-                }
                 break;
             case PlayerSkill.FireBall:
                 //파이어볼
@@ -172,17 +161,7 @@ public class PlayerAttackController : MonoBehaviour
                 //갈고리
                 break;
         }
-    }
-
-    private void UseAttack()
-    {
-        m_currentWeapon.UseWeapon();
-    }
-
-    private void UseSkillAttack(bool isPressed)
-    {
-        m_currentSkill.UseSkill();
-    }
+    }   
 
     private void LookAtMouse()
     {
@@ -212,12 +191,21 @@ public class PlayerAttackController : MonoBehaviour
         }
     }
 
-    //AnimationEvent
-    public void GetArrow()
+    private void UseAttack()
     {
-        Arrow = PoolManager.Instance.GetArrow();
-        Arrow.transform.position = m_arrowTransform.position;
-        Arrow.transform.SetParent(m_skillObject[0].transform);
+        m_currentWeapon.UseWeapon();
+    }
+
+    //AnimationEvent
+    public void UseSkillAttack()
+    {
+        switch (m_SkillName)
+        {
+            case PlayerSkill.Bow:
+                m_currentSkill.UseSkill(m_arrowTransform);
+                break;
+        }
+
     }
 
 }

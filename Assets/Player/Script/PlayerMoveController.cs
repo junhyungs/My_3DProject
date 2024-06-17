@@ -36,6 +36,12 @@ public class PlayerMoveController : MonoBehaviour
     //PlayerMoveControll
     private bool isAction = true;
 
+    public bool IsAction
+    {
+        get { return isAction; }
+        set { isAction = value; }
+    }
+
     private CharacterController m_playerController;
     private Animator m_playerAnimator;
 

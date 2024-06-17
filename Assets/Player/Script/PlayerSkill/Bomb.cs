@@ -9,8 +9,13 @@ public class Bomb : Skill
         m_skillData = SkillManager.Instance.GetSkillData(PlayerSkill.Bomb);
     }
 
-    public override void UseSkill()
+    public override void UseSkill(Transform spawnPosition)
     {
-        
+     
+    }
+
+    public override void Fire(bool isFire)
+    {
+     
     }
 }

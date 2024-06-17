@@ -31,7 +31,7 @@ public class PoolManager : Singleton<PoolManager>
         for(int i = 0; i < m_arrowCount; i++)
         {
             GameObject arrow = Instantiate(m_arrowPrefab, m_arrowPoolPosition);
-            arrow.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            
             arrow.SetActive(false);
             ArrowPool.Enqueue(arrow);
         }
@@ -47,6 +47,8 @@ public class PoolManager : Singleton<PoolManager>
     public GameObject GetArrow()
     {
         GameObject arrow = ArrowPool.Dequeue();
+        Rigidbody arrowRigid = arrow.GetComponent<Rigidbody>();
+        arrowRigid.velocity = Vector3.zero; 
         ArrowPool.Enqueue(arrow);
         arrow.SetActive(true);
         return arrow;   
@@ -58,5 +60,11 @@ public class PoolManager : Singleton<PoolManager>
         FireBallPool.Enqueue(fire);
         fire.SetActive(false);
         return fire;
+    }
+
+    public void ReturnArrow(GameObject arrow)
+    {
+        arrow.transform.SetParent(m_arrowPoolPosition);
+        arrow.SetActive(false);
     }
 }

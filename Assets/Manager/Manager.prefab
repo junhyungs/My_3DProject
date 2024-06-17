@@ -140,10 +140,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e071461345eec942979c31ddf1abd6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_arrowPrefab: {fileID: 0}
-  m_arrowCount: 0
-  m_fireBallPrefab: {fileID: 0}
-  m_fireBallCount: 0
+  m_arrowPrefab: {fileID: 5006458751219365940, guid: 5740cdfe320cbf741b770fb2f95aa282, type: 3}
+  m_arrowCount: 10
+  m_arrowPoolPosition: {fileID: 6935728097963216611}
+  m_fireBallPrefab: {fileID: 5006458751219365940, guid: 5740cdfe320cbf741b770fb2f95aa282, type: 3}
+  m_fireBallCount: 10
+  m_fireBallPoolPosition: {fileID: 8233350416491848573}
 --- !u!1 &8194714446572462271
 GameObject:
   m_ObjectHideFlags: 0
