@@ -97,57 +97,10 @@ public class PlayerMoveController : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0, smoothRotation, 0);
             }
 
+            m_playerAnimator.SetFloat("MoveSpeed", m_mySpeed);
             m_playerController.Move((rotationDir * m_mySpeed + Vector3.up * m_verticalVelocity) * Time.deltaTime);
-
         }
     }
-
-    //private void PlayerClickRotation()
-    //{
-    //    bool GetMouseButton = Input.GetMouseButton(1);
-    //    bool GetMouseButtons = Input.GetMouseButtonDown(1);
-    //    bool GetMouseButtonDown = Input.GetMouseButtonDown(0);
-
-    //    if (GetMouseButton || GetMouseButtonDown)
-    //    {
-    //        if (GetMouseButtonDown)
-    //        {
-    //            isAction = false;
-    //            if(m_currentWeapon != PlayerWeapon.Sword)
-    //            {
-    //                SetWeapon(PlayerWeapon.Sword);
-    //            }
-                    
-    //            UseWeapon();
-    //        }
-    //        else if (GetMouseButton)
-    //        {
-    //            if (GetMouseButtons)
-    //            {
-    //                SetWeapon(PlayerWeapon.Bow);
-    //            }
-
-    //            isAction = false;
-    //            UseWeapon();
-    //        }
-
-    //        Ray mouseRayposition = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-    //        if (Physics.Raycast(mouseRayposition, out RaycastHit hit, 100))
-    //        {
-    //            Vector3 playerLookrotation = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-
-    //            float distance = Vector3.Distance(transform.position, hit.point);
-
-    //            if (distance > 0.1f)
-    //            {
-    //                transform.LookAt(playerLookrotation);
-    //            }
-    //        }
-    //    }
-    //}
-
-    
 
     private void OnDrawGizmos()
     {
@@ -177,11 +130,11 @@ public class PlayerMoveController : MonoBehaviour
 
         if (isGround)
         {
-            Debug.Log("¶¥");
+            m_playerAnimator.SetBool("isGround", false);
         }
         else
         {
-            Debug.Log("¶¥¾Æ´Ô");
+            m_playerAnimator.SetBool("isGround", true);
         }
     }
 
