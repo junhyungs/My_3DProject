@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface ISkill
 {
-    public void UseSkill(Transform spawnPosition);
-    public void Fire(bool isFire);
+    public void UseSkill(GameObject spawnPositionObj);
+    public void Fire(GameObject spawnPositionObj, bool isFire);
 }
 

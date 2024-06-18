@@ -4,28 +4,30 @@ using UnityEngine;
 
 public class Bow : Skill
 {
-    private GameObject Arrow;
-
     private void Start()
     {
         m_skillData = SkillManager.Instance.GetSkillData(PlayerSkill.Bow);
     }
 
-    public override void UseSkill(Transform spawnPosition)
+    public override void UseSkill(GameObject spawnPositionObj)
     {
-        Arrow = PoolManager.Instance.GetArrow();
-        ArrowObject arrowObj = Arrow.GetComponent<ArrowObject>();
-        arrowObj.IsFire(false);
-        arrowObj.SetProjectileObjectData(m_skillData.m_attackPower, m_skillData.m_projectileSpeed, m_skillData.m_projectileRange);
-        Arrow.transform.position = spawnPosition.position;
-        Arrow.transform.SetParent(spawnPosition);
+        GameObject arrowObj = PoolManager.Instance.GetArrow();
+        
+        ArrowObject arrowComponent = arrowObj.GetComponent<ArrowObject>();
+        arrowComponent.IsFire(false);
+        arrowComponent.SetProjectileObjectData(m_skillData.m_attackPower, m_skillData.m_projectileSpeed, m_skillData.m_projectileRange);
+        arrowObj.transform.SetParent(spawnPositionObj.transform);
+        arrowObj.transform.localPosition = Vector3.zero;
+        arrowObj.transform.localRotation = spawnPositionObj.transform.localRotation;
+        
     }
 
-    public override void Fire(bool isFire)
+
+    public override void Fire(GameObject spawnPositionObj, bool isFire)
     {
-        ArrowObject arrowObj = Arrow.GetComponent<ArrowObject>();
-        arrowObj.IsFire(isFire);
-        Arrow.transform.parent = null;
-        Arrow = null;
+        GameObject arrowObj = spawnPositionObj.transform.GetChild(0).gameObject;
+        ArrowObject arrowComponent = arrowObj.GetComponent<ArrowObject>();
+        arrowComponent.IsFire(isFire);
+        arrowObj.transform.parent = null;
     }
 }

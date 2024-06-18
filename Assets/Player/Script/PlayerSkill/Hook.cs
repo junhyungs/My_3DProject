@@ -9,13 +9,13 @@ public class Hook : Skill
         m_skillData = SkillManager.Instance.GetSkillData(PlayerSkill.Hook);
     }
 
-    public override void Fire(bool isFire)
+    public override void UseSkill(GameObject spawnPositionObj)
+    {
+
+    }
+
+    public override void Fire(GameObject spawnPositionObj, bool isFire)
     {
         
     }
-
-    public override void UseSkill(Transform spawnPosition)
-    {
-        
-    }    
 }

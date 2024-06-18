@@ -30,7 +30,7 @@ public class SkillManager : Singleton<SkillManager>
 
     private void InitSkill()
     {
-        SkillDictionary.Add(PlayerSkill.Bow, new SkillData(1.0f, 10.0f, 0f, 1));
+        SkillDictionary.Add(PlayerSkill.Bow, new SkillData(1.0f, 1000.0f, 0f, 1));
         SkillDictionary.Add(PlayerSkill.FireBall, new SkillData(1.0f, 10.0f, 1f, 1));
         SkillDictionary.Add(PlayerSkill.Bomb, new SkillData(1.0f, 10.0f, 10.0f, 2));
         SkillDictionary.Add(PlayerSkill.Hook, new SkillData(1.0f, 10.0f, 5.0f, 0));

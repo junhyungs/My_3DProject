@@ -31,7 +31,6 @@ public class PoolManager : Singleton<PoolManager>
         for(int i = 0; i < m_arrowCount; i++)
         {
             GameObject arrow = Instantiate(m_arrowPrefab, m_arrowPoolPosition);
-            
             arrow.SetActive(false);
             ArrowPool.Enqueue(arrow);
         }

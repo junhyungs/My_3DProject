@@ -10,7 +10,7 @@ public class PlayerAttackController : MonoBehaviour
     [SerializeField] private GameObject[] m_skillObject;
 
     [Header("ProjectilePosition")]
-    [SerializeField] private Transform m_arrowTransform;
+    [SerializeField] private GameObject m_arrowPositionObject;
 
     private Animator m_playerAnimator;
     private ISkill m_currentSkill;
@@ -135,7 +135,7 @@ public class PlayerAttackController : MonoBehaviour
 
         if (!press)
         {
-            m_currentSkill.Fire(true);
+            m_currentSkill.Fire(m_arrowPositionObject, true);
         }
     }
 
@@ -199,10 +199,16 @@ public class PlayerAttackController : MonoBehaviour
     //AnimationEvent
     public void UseSkillAttack()
     {
+        if (SkillManager.Instance.SkillCost == 0)
+        {
+            return;
+        }
+
         switch (m_SkillName)
         {
             case PlayerSkill.Bow:
-                m_currentSkill.UseSkill(m_arrowTransform);
+                m_currentSkill.UseSkill(m_arrowPositionObject);
+                SkillManager.Instance.SkillCost--;
                 break;
         }
 

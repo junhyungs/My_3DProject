@@ -35,6 +35,10 @@ public class PlayerMoveController : MonoBehaviour
     private float m_rotationVelocity;
     //PlayerMoveControll
     private bool isAction = true;
+    //Roll
+    private bool isRoll = false;
+    //RollSpeed
+    private float m_rollSpeed = 15.0f;
 
     public bool IsAction
     {
@@ -63,6 +67,42 @@ public class PlayerMoveController : MonoBehaviour
         SetMove(input.Get<Vector2>());
     }
 
+    private void OnRoll(InputValue input)
+    {
+        bool isPressed = input.isPressed;
+
+        if (isPressed && !isRoll)
+        {
+            m_playerAnimator.SetBool("isRoll", true);
+        }
+    }
+
+    public void StartRoll()
+    {
+        isAction = false;
+        StartCoroutine(Roll());
+    }
+
+    public void StopRoll()
+    {
+        isRoll = false;
+        isAction = true;
+    }
+
+    private IEnumerator Roll()
+    {
+        m_playerAnimator.SetBool("isRoll", false);
+        isRoll = true;
+        
+        while (isRoll)
+        {
+            Vector3 rollPos = (transform.forward).normalized * m_rollSpeed * Time.deltaTime;
+            m_playerController.Move(rollPos);
+            yield return null;
+        }
+    }
+
+   
     private void SetMove(Vector2 input)
     {
         m_playerInput = input;

@@ -27,9 +27,4 @@ public class ProjectileObject : MonoBehaviour
         m_speed = speed;
         m_range = range;
     }
-
-    protected void DisableObject()
-    {
-        this.gameObject.SetActive(false);
-    }
 }

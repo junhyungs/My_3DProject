@@ -1,15 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ArrowObject : ProjectileObject
 {
     protected override void Awake()
     {
-        base.Awake();
-        m_disableTime = 3.0f;
-        m_projectileRigidbody.useGravity = false;
-        isFire = false;        
+        base.Awake();      
     }
 
     public override void IsFire(bool fire)
