@@ -102,6 +102,12 @@ public class PlayerMoveController : MonoBehaviour
         }
     }
 
+    private IEnumerator RollCoolTime()
+    {
+        yield return new WaitForSeconds(1.0f);
+        
+    }
+
    
     private void SetMove(Vector2 input)
     {

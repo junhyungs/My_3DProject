@@ -9,6 +9,15 @@ public class PlayerAttackController : MonoBehaviour
     [Header("PlayerSkill_Object")]
     [SerializeField] private GameObject[] m_skillObject;
 
+    [Header("PlayerIdleWeapon")]
+    [SerializeField] private GameObject[] m_IdleObject;
+
+    [Header("PlayerUseLeftWeapon")]
+    [SerializeField] private GameObject[] m_LeftObject;
+
+    [Header("PlayerUseRightWeapon")]
+    [SerializeField] private GameObject[] m_RightObject;
+
     [Header("ProjectilePosition")]
     [SerializeField] private GameObject m_arrowPositionObject;
 
@@ -115,7 +124,8 @@ public class PlayerAttackController : MonoBehaviour
         if (isPressed)
         {
             UseAttack();
-
+            m_playerAnimator.SetTrigger("Attack");
+            m_playerAnimator.SetBool("NextAttack", true);
             LookAtMouse();
         }
     }
