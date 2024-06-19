@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -21,11 +23,19 @@ public class PlayerAttackController : MonoBehaviour
     [Header("ProjectilePosition")]
     [SerializeField] private GameObject m_arrowPositionObject;
 
+
     private Animator m_playerAnimator;
+    private AnimatorStateInfo m_playerCurrentAnimation;
+    private int m_currentAnimationHash;
     private ISkill m_currentSkill;
     private IWeapon m_currentWeapon;
     private PlayerWeapon m_weaponType;
     private PlayerSkill m_SkillName;
+
+   
+    private int m_leftAttackAnim = Animator.StringToHash("Slash_Light_L");
+    private int m_rightAttackAnim = Animator.StringToHash("Slash_Light_R");
+    private int m_lastAttackAnim = Animator.StringToHash("Slash_Light_L_Last");
 
     private void Awake()
     {
@@ -38,6 +48,7 @@ public class PlayerAttackController : MonoBehaviour
         {
             LookAtMouse();
         }
+
     }
 
     private void Init()
@@ -48,7 +59,8 @@ public class PlayerAttackController : MonoBehaviour
         SetWeapon();
         DisableObject();
     }
-
+   
+   
     public void SetSkill(PlayerSkill skillName)
     {
         m_SkillName = skillName;
@@ -75,6 +87,7 @@ public class PlayerAttackController : MonoBehaviour
                 m_currentSkill = gameObject.AddComponent<Hook>();
                 break;
         }
+
 
     }
 
@@ -109,7 +122,7 @@ public class PlayerAttackController : MonoBehaviour
                 break;
         }
 
-
+        ActiveIdleWeaponObject(m_weaponType, true);
     }
 
     private void OnLeftClickAttack(InputValue input)
@@ -149,10 +162,7 @@ public class PlayerAttackController : MonoBehaviour
         }
     }
 
-    private void ActiveSkillObject(PlayerSkill skillName, bool isPressed)
-    {
-        m_skillObject[(int)skillName].SetActive(isPressed);
-    }
+    
 
     private void OnCurrentSkillAnimation(PlayerSkill skillName, bool isPressed)
     {
@@ -199,6 +209,47 @@ public class PlayerAttackController : MonoBehaviour
                 skillObj.SetActive(false);
             }
         }
+    }
+
+    public void OnLeftObj()
+    {
+        ActiveLeftWeaponObject(m_weaponType, true);
+        ActiveIdleWeaponObject(m_weaponType, false);
+    }
+    public void OffLeftObj()
+    {
+        ActiveLeftWeaponObject(m_weaponType, false);
+        ActiveIdleWeaponObject(m_weaponType, true);
+    }
+    public void OnRightObj()
+    {
+        ActiveRightWeaponObject(m_weaponType, true);
+        ActiveIdleWeaponObject(m_weaponType, false);
+    }
+    public void OffRightObj()
+    {
+        ActiveRightWeaponObject(m_weaponType, false);
+        ActiveIdleWeaponObject(m_weaponType, true);
+    }
+
+    private void ActiveSkillObject(PlayerSkill skillName, bool isPressed)
+    {
+        m_skillObject[(int)skillName].SetActive(isPressed);
+    }
+
+    public void ActiveLeftWeaponObject(PlayerWeapon weaponType, bool active)
+    {
+        m_LeftObject[(int)weaponType].SetActive(active);
+    }
+
+    public void ActiveRightWeaponObject(PlayerWeapon weaponType, bool active)
+    {
+        m_RightObject[(int)weaponType].SetActive(active);
+    }
+
+    public void ActiveIdleWeaponObject(PlayerWeapon weaponType, bool active)
+    {
+        m_IdleObject[(int)weaponType].SetActive(active);
     }
 
     private void UseAttack()
