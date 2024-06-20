@@ -2152,7 +2152,7 @@ MonoBehaviour:
   - {fileID: 6826938976730961678}
   m_SkillObject:
   - {fileID: 205112086}
-  m_test: {fileID: 8683479056089047427}
+  m_MaterialObject: {fileID: 8683479056089047427}
 --- !u!114 &3595761709615567607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3738,7 +3738,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4141480228085024447
 Transform:
   m_ObjectHideFlags: 0
@@ -3782,7 +3782,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a9dc214e6f3d8a24097bcfa728ab4a88, type: 2}
+  - {fileID: 2100000, guid: c8ff6b6720b7bee49ae42812fe1a6c2b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3816,7 +3816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0279a916a07bf06448f53f411bc73b3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_material: {fileID: 0}
+  m_swordEffectMaterial: {fileID: 2100000, guid: c8ff6b6720b7bee49ae42812fe1a6c2b, type: 2}
 --- !u!1 &8754896749875173932
 GameObject:
   m_ObjectHideFlags: 0

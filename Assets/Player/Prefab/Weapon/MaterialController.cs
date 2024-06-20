@@ -4,33 +4,36 @@ using UnityEngine;
 
 public class MaterialController : MonoBehaviour
 {
-    [Header("Material")]
-    [SerializeField] private Material m_material;
+    [Header("SwordEffectMaterial")]
+    [SerializeField] private Material m_swordEffectMaterial;
 
-    private float dissolveAmount = 0.1f;
-    private bool dissolve = false;
-    private float m_time = 3.0f;
+    private Coroutine m_swordEffectCor;
+    private float m_swordEffectAmountTime = 1.0f;
 
-    private void OnEnable()
+    public void OnSwordEffectMaterial()
     {
-        dissolveAmount = 0.1f;
-
-        StartCoroutine(Test());
-    }
-
-    private IEnumerator Test()
-    {
-        float t = 0;
-
-        while( t < m_time)
+        if(m_swordEffectCor != null)
         {
-            m_material.SetFloat("_Float", dissolveAmount);
-            dissolveAmount -= 0.001f;
-            yield return null;
-            t += Time.deltaTime;
+            StopCoroutine(m_swordEffectCor); ;
         }
 
-        this.gameObject.SetActive(false);
+        m_swordEffectCor = StartCoroutine(OnSwordEffect());
+    }
+
+    private IEnumerator OnSwordEffect()
+    {
+        float time = 0f;
+        float amountValue = 0.1f;
+
+        while(time < m_swordEffectAmountTime)
+        {
+            m_swordEffectMaterial.SetFloat("_Value", amountValue);
+            amountValue -= 0.001f;
+            yield return null;
+            time += Time.deltaTime;
+        }
+
+        m_swordEffectCor = null;
     }
 
 }

@@ -16,12 +16,13 @@ public class PlayerWeaponController : MonoBehaviour
     [Header("PlayerSkillWeapon")]
     [SerializeField] private GameObject[] m_SkillObject;
 
-    [Header("TestOBject")]
-    [SerializeField] private GameObject m_test;
+    [Header("EffectMaterial")]
+    [SerializeField] private GameObject m_MaterialObject;
 
     private IWeapon m_currentWeapon;
     private PlayerWeapon m_weaponType;
     private Animator m_weaponAnimation;
+    private MaterialController m_materialController;
 
     private WaitForSeconds m_deactiveRightTime = new WaitForSeconds(0.4f);
     private WaitForSeconds m_deactiveLeftTime = new WaitForSeconds(0.4f);
@@ -37,9 +38,20 @@ public class PlayerWeaponController : MonoBehaviour
     private void Init()
     {
         m_weaponAnimation = GetComponent<Animator>();
+        GetMaterialComponent();
         OnDisableWeaponObject();
         m_weaponType = PlayerWeapon.Sword;
         SetWeapon(m_weaponType);
+    }
+
+    public void GetMaterialComponent()
+    {
+        if (m_MaterialObject == null)
+        {
+            return;
+        }
+
+        m_materialController = m_MaterialObject.GetComponent<MaterialController>();
     }
 
     public void SetWeapon(PlayerWeapon weaponType)
@@ -143,7 +155,7 @@ public class PlayerWeaponController : MonoBehaviour
 
     public void UseWeapon()
     {
-        m_test.SetActive(true);
+        m_materialController.OnSwordEffectMaterial();
         m_weaponAnimation.SetTrigger("Attack");
         m_weaponAnimation.SetBool("NextAttack", false);
         m_currentWeapon.UseWeapon();
