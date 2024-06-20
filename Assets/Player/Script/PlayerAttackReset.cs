@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
-public class PlayerAttackReset : StateMachineBehaviour
+public class PlayerAttackReset : StateMachineBehaviour//부착된 애니메이션 State에서만 활성화.
 {
     [Header("TriggerName")]
     [SerializeField] private string m_triggerName;
@@ -13,7 +13,6 @@ public class PlayerAttackReset : StateMachineBehaviour
     private int m_Slash_Light_L = Animator.StringToHash("Slash_Light_L");
     private int m_Slash_Light_R = Animator.StringToHash("Slash_Light_R");
     private int m_Slash_Light_Last = Animator.StringToHash("Slash_Light_L_Last");
-    private int m_Idle = Animator.StringToHash("");
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -25,36 +24,26 @@ public class PlayerAttackReset : StateMachineBehaviour
             m_moveController = animator.GetComponent<PlayerMoveController>();
         }
 
-        bool playAttackAnimation = stateInfo.shortNameHash == m_Slash_Light_L
-            || stateInfo.shortNameHash == m_Slash_Light_R
-            || stateInfo.shortNameHash == m_Slash_Light_Last;
-
-        if (playAttackAnimation)
-        {
-            Debug.Log("OnStateExitCall");
-            m_moveController.IsAction = true;
-        }
+        m_moveController.IsAction = true;
 
     }
 
-    public override void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    //애니메이션의 루트모션이 진행되는 동안 매 프레임마다 호출. 애니메이션의 활성화 여부와 관계가 없기 때문에 
+    //애니메이션의 루트 모션이 진행되는 중이라면 매 프레임마다 계속 호출된다.
+    public override void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) { }
+    
+    //애니매이션이 활성화 되었을 때만 매 프레임마다 호출. 애니메이션이 비활성화 되면 호출되지않음.
+    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(m_moveController == null)
+        if (m_moveController == null)
         {
             m_moveController = animator.GetComponent<PlayerMoveController>();
         }
 
-        bool playAttackAnimation = stateInfo.shortNameHash == m_Slash_Light_L 
-            || stateInfo.shortNameHash == m_Slash_Light_R
-            || stateInfo.shortNameHash == m_Slash_Light_Last;
-
-        if (playAttackAnimation && m_moveController.IsAction)
-        {
-            m_moveController.IsAction = false;
-        }
-        
-
+        m_moveController.IsAction = false;
+        m_moveController.AnimationStateMove();
     }
+
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -75,5 +64,6 @@ public class PlayerAttackReset : StateMachineBehaviour
         {
             m_objectController.ActiveRightWeaponObject();
         }
+
     }
 }

@@ -60,7 +60,6 @@ public class PlayerMoveController : MonoBehaviour
         CheckGround();
         Gravity();
         PlayerMove();
-        Debug.Log(isAction);
     }
 
     private void OnMove(InputValue input)
@@ -101,6 +100,12 @@ public class PlayerMoveController : MonoBehaviour
             m_playerController.Move(rollPos);
             yield return null;
         }
+    }
+
+    public void AnimationStateMove()
+    {
+        Vector3 animationStateMove = (transform.forward).normalized * 1.0f * Time.deltaTime;
+        m_playerController.Move(animationStateMove);
     }
    
     private void SetMove(Vector2 input)
