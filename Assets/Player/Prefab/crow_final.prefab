@@ -2152,6 +2152,7 @@ MonoBehaviour:
   - {fileID: 6826938976730961678}
   m_SkillObject:
   - {fileID: 205112086}
+  m_test: {fileID: 8683479056089047427}
 --- !u!114 &3595761709615567607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3730,6 +3731,7 @@ GameObject:
   - component: {fileID: 4141480228085024447}
   - component: {fileID: 7361367812461318095}
   - component: {fileID: 2148118096930456793}
+  - component: {fileID: 5467261928328324052}
   m_Layer: 0
   m_Name: slash_light_L
   m_TagString: Untagged
@@ -3780,7 +3782,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 11713195c5ae46b468a9a81375b626b0, type: 2}
+  - {fileID: 2100000, guid: a9dc214e6f3d8a24097bcfa728ab4a88, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3802,6 +3804,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5467261928328324052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8683479056089047427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0279a916a07bf06448f53f411bc73b3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_material: {fileID: 0}
 --- !u!1 &8754896749875173932
 GameObject:
   m_ObjectHideFlags: 0

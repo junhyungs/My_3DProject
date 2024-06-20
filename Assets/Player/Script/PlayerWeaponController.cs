@@ -16,6 +16,9 @@ public class PlayerWeaponController : MonoBehaviour
     [Header("PlayerSkillWeapon")]
     [SerializeField] private GameObject[] m_SkillObject;
 
+    [Header("TestOBject")]
+    [SerializeField] private GameObject m_test;
+
     private IWeapon m_currentWeapon;
     private PlayerWeapon m_weaponType;
     private Animator m_weaponAnimation;
@@ -140,6 +143,7 @@ public class PlayerWeaponController : MonoBehaviour
 
     public void UseWeapon()
     {
+        m_test.SetActive(true);
         m_weaponAnimation.SetTrigger("Attack");
         m_weaponAnimation.SetBool("NextAttack", false);
         m_currentWeapon.UseWeapon();
