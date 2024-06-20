@@ -14,14 +14,12 @@ public enum PlayerWeapon
 
 public class WeaponManager : Singleton<WeaponManager>
 {
-    private Dictionary<PlayerWeapon, WeaponData> WeaponDataDictionary = new Dictionary<PlayerWeapon, WeaponData>();    
+    private Dictionary<PlayerWeapon, WeaponData> WeaponDataDictionary = new Dictionary<PlayerWeapon, WeaponData>();
     private PlayerWeapon m_currentWeapon;
 
     private void Awake()
     {
         InitWeaponData();
-
-        m_currentWeapon = PlayerWeapon.Sword;
     }
 
     private void InitWeaponData()
@@ -38,7 +36,7 @@ public class WeaponManager : Singleton<WeaponManager>
         return WeaponDataDictionary[weapon];
     }
 
-    public void CurrentWeapon(PlayerWeapon weapon)
+    public void SetCurrentWeapon(PlayerWeapon weapon)
     {
         m_currentWeapon = weapon;
     }
@@ -47,6 +45,7 @@ public class WeaponManager : Singleton<WeaponManager>
     {
         return m_currentWeapon;
     }
+  
 }
 
 public struct WeaponData

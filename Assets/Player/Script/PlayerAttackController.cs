@@ -8,35 +8,13 @@ using UnityEngine.InputSystem;
 
 public class PlayerAttackController : MonoBehaviour
 {
-    [Header("PlayerSkill_Object")]
-    [SerializeField] private GameObject[] m_skillObject;
-
-    [Header("PlayerIdleWeapon")]
-    [SerializeField] private GameObject[] m_IdleObject;
-
-    [Header("PlayerUseLeftWeapon")]
-    [SerializeField] private GameObject[] m_LeftObject;
-
-    [Header("PlayerUseRightWeapon")]
-    [SerializeField] private GameObject[] m_RightObject;
-
-    [Header("ProjectilePosition")]
+    [Header("ProjectilePositionObject")]
     [SerializeField] private GameObject m_arrowPositionObject;
 
-
-    private Animator m_playerAnimator;
-    private AnimatorStateInfo m_playerCurrentAnimation;
-    private int m_currentAnimationHash;
-    private ISkill m_currentSkill;
-    private IWeapon m_currentWeapon;
-    private PlayerWeapon m_weaponType;
-    private PlayerSkill m_SkillName;
-
-   
-    private int m_leftAttackAnim = Animator.StringToHash("Slash_Light_L");
-    private int m_rightAttackAnim = Animator.StringToHash("Slash_Light_R");
-    private int m_lastAttackAnim = Animator.StringToHash("Slash_Light_L_Last");
-
+    private PlayerWeaponController m_weaponController;
+    private PlayerSkillController m_skillController;
+    private PlayerMoveController m_moveController;
+  
     private void Awake()
     {
         Init();
@@ -48,83 +26,15 @@ public class PlayerAttackController : MonoBehaviour
         {
             LookAtMouse();
         }
-
     }
 
     private void Init()
     {
-        m_playerAnimator = GetComponent<Animator>();
-        m_SkillName = PlayerSkill.Bow;
-        SetSkill(m_SkillName);
-        SetWeapon();
-        DisableObject();
+        m_moveController = GetComponent<PlayerMoveController>();
+        m_weaponController = GetComponent<PlayerWeaponController>();   
+        m_skillController = GetComponent<PlayerSkillController>();  
     }
    
-   
-    public void SetSkill(PlayerSkill skillName)
-    {
-        m_SkillName = skillName;
-
-        Component component = gameObject.GetComponent<ISkill>() as Component;
-
-        if (component != null)
-        {
-            Destroy(component);
-        }
-
-        switch (m_SkillName)
-        {
-            case PlayerSkill.Bow:
-                m_currentSkill = gameObject.AddComponent<Bow>();
-                break;
-            case PlayerSkill.FireBall:
-                m_currentSkill = gameObject.AddComponent<FireBall>();
-                break;
-            case PlayerSkill.Bomb:
-                m_currentSkill = gameObject.AddComponent<Bomb>();
-                break;
-            case PlayerSkill.Hook:
-                m_currentSkill = gameObject.AddComponent<Hook>();
-                break;
-        }
-
-
-    }
-
-    public void SetWeapon()
-    {
-        //지금은 웨폰 매니저의 참조를 받지만 나중에는 UI -> 참조 클래스 -> 를 거쳐서 SetWeapon을 호출하도록 변경.
-        m_weaponType = WeaponManager.Instance.GetCurrentWeapon();
-
-        Component component = gameObject.GetComponent<IWeapon>() as Component;
-
-        if(component != null)
-        {
-            Destroy(component);
-        }
-
-        switch(m_weaponType)
-        {
-            case PlayerWeapon.Sword:
-                m_currentWeapon = gameObject.AddComponent<Sword>();
-                break;
-            case PlayerWeapon.Hammer:
-                m_currentWeapon = gameObject.AddComponent<Hammer>();
-                break;
-            case PlayerWeapon.Dagger:
-                m_currentWeapon = gameObject.AddComponent<Dagger>();
-                break;
-            case PlayerWeapon.GreatSword:
-                m_currentWeapon = gameObject.AddComponent<GreatSword>();
-                break;
-            case PlayerWeapon.Umbrella:
-                m_currentWeapon = gameObject.AddComponent<Umbrella>();
-                break;
-        }
-
-        ActiveIdleWeaponObject(m_weaponType, true);
-    }
-
     private void OnLeftClickAttack(InputValue input)
     {
         bool isPressed = input.isPressed;
@@ -136,11 +46,12 @@ public class PlayerAttackController : MonoBehaviour
     {
         if (isPressed)
         {
-            UseAttack();
-            m_playerAnimator.SetTrigger("Attack");
-            m_playerAnimator.SetBool("NextAttack", true);
+            m_moveController.IsAction = false;
+            m_weaponController.UseWeapon();
             LookAtMouse();
         }
+        else
+            m_moveController.IsAction = true;
     }
 
     private void OnRightClickAttack(InputValue input)
@@ -152,36 +63,27 @@ public class PlayerAttackController : MonoBehaviour
 
     private void RightClick(bool press)
     {
-        ActiveSkillObject(m_SkillName, press);
+        PlayerSkill skillType = m_skillController.SkillType;
 
-        OnCurrentSkillAnimation(m_SkillName, press);
+        m_weaponController.ActiveSkillWeaponObject(skillType, press);
+
+        m_skillController.CurrentSkillAnimation(press);
 
         if (!press)
         {
-            m_currentSkill.Fire(m_arrowPositionObject, true);
+            OnSkill(skillType);
         }
     }
 
-    
-
-    private void OnCurrentSkillAnimation(PlayerSkill skillName, bool isPressed)
+    private void OnSkill(PlayerSkill skillType)
     {
-        switch(skillName)
+        switch (skillType)
         {
             case PlayerSkill.Bow:
-                m_playerAnimator.SetBool("Arrow", isPressed);
-                break;
-            case PlayerSkill.FireBall:
-                //파이어볼
-                break;
-            case PlayerSkill.Bomb:
-                //폭탄
-                break;
-            case PlayerSkill.Hook:
-                //갈고리
+                m_skillController.Fire(m_arrowPositionObject);
                 break;
         }
-    }   
+    }
 
     private void LookAtMouse()
     {
@@ -200,76 +102,19 @@ public class PlayerAttackController : MonoBehaviour
         }
     }
 
-    private void DisableObject()
-    {
-        foreach(var skillObj in m_skillObject)
-        {
-            if(skillObj != null)
-            {
-                skillObj.SetActive(false);
-            }
-        }
-    }
-
-    public void OnLeftObj()
-    {
-        ActiveLeftWeaponObject(m_weaponType, true);
-        ActiveIdleWeaponObject(m_weaponType, false);
-    }
-    public void OffLeftObj()
-    {
-        ActiveLeftWeaponObject(m_weaponType, false);
-        ActiveIdleWeaponObject(m_weaponType, true);
-    }
-    public void OnRightObj()
-    {
-        ActiveRightWeaponObject(m_weaponType, true);
-        ActiveIdleWeaponObject(m_weaponType, false);
-    }
-    public void OffRightObj()
-    {
-        ActiveRightWeaponObject(m_weaponType, false);
-        ActiveIdleWeaponObject(m_weaponType, true);
-    }
-
-    private void ActiveSkillObject(PlayerSkill skillName, bool isPressed)
-    {
-        m_skillObject[(int)skillName].SetActive(isPressed);
-    }
-
-    public void ActiveLeftWeaponObject(PlayerWeapon weaponType, bool active)
-    {
-        m_LeftObject[(int)weaponType].SetActive(active);
-    }
-
-    public void ActiveRightWeaponObject(PlayerWeapon weaponType, bool active)
-    {
-        m_RightObject[(int)weaponType].SetActive(active);
-    }
-
-    public void ActiveIdleWeaponObject(PlayerWeapon weaponType, bool active)
-    {
-        m_IdleObject[(int)weaponType].SetActive(active);
-    }
-
-    private void UseAttack()
-    {
-        m_currentWeapon.UseWeapon();
-    }
-
     //AnimationEvent
     public void UseSkillAttack()
     {
-        if (SkillManager.Instance.SkillCost == 0)
+        if (SkillManager.Instance.SkillCount == 0)
         {
             return;
         }
 
-        switch (m_SkillName)
+        switch (m_skillController.SkillType)
         {
             case PlayerSkill.Bow:
-                m_currentSkill.UseSkill(m_arrowPositionObject);
-                SkillManager.Instance.SkillCost--;
+                m_skillController.UseSkill(m_arrowPositionObject);
+                SkillManager.Instance.SkillCount--;
                 break;
         }
 
