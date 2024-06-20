@@ -60,6 +60,7 @@ public class PlayerMoveController : MonoBehaviour
         CheckGround();
         Gravity();
         PlayerMove();
+        Debug.Log(isAction);
     }
 
     private void OnMove(InputValue input)
@@ -101,13 +102,6 @@ public class PlayerMoveController : MonoBehaviour
             yield return null;
         }
     }
-
-    private IEnumerator RollCoolTime()
-    {
-        yield return new WaitForSeconds(1.0f);
-        
-    }
-
    
     private void SetMove(Vector2 input)
     {

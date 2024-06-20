@@ -13,7 +13,7 @@ public class PlayerAttackController : MonoBehaviour
 
     private PlayerWeaponController m_weaponController;
     private PlayerSkillController m_skillController;
-    private PlayerMoveController m_moveController;
+    
   
     private void Awake()
     {
@@ -30,7 +30,6 @@ public class PlayerAttackController : MonoBehaviour
 
     private void Init()
     {
-        m_moveController = GetComponent<PlayerMoveController>();
         m_weaponController = GetComponent<PlayerWeaponController>();   
         m_skillController = GetComponent<PlayerSkillController>();  
     }
@@ -46,12 +45,10 @@ public class PlayerAttackController : MonoBehaviour
     {
         if (isPressed)
         {
-            m_moveController.IsAction = false;
             m_weaponController.UseWeapon();
             LookAtMouse();
         }
-        else
-            m_moveController.IsAction = true;
+    
     }
 
     private void OnRightClickAttack(InputValue input)
