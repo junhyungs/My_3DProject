@@ -13,7 +13,16 @@ public class PlayerAttackController : MonoBehaviour
 
     private PlayerWeaponController m_weaponController;
     private PlayerSkillController m_skillController;
-    
+    private Animator m_attackAnimation;
+    private bool chargeMax;
+    private bool chargeAttackDirection = true;
+    private int m_attackCount;
+
+    public bool IsCharge
+    {
+        get { return chargeMax; }
+        set { chargeMax = value; }
+    }
   
     private void Awake()
     {
@@ -32,6 +41,7 @@ public class PlayerAttackController : MonoBehaviour
     {
         m_weaponController = GetComponent<PlayerWeaponController>();   
         m_skillController = GetComponent<PlayerSkillController>();  
+        m_attackAnimation = GetComponent<Animator>();
     }
    
     private void OnLeftClickAttack(InputValue input)
@@ -45,30 +55,61 @@ public class PlayerAttackController : MonoBehaviour
     {
         if (isPressed)
         {
-            m_weaponController.UseWeapon();
+            m_weaponController.UseWeapon(false);
+            chargeAttackDirection = !chargeAttackDirection;
             LookAtMouse();
         }
-    
     }
 
     private void OnRightClickAttack(InputValue input)
     {
-        bool isPress = input.isPressed;
+        bool isPressed = input.isPressed;
 
-        RightClick(isPress);
+        RightClick(isPressed);
     }
 
-    private void RightClick(bool press)
+    private void RightClick(bool isPressed)
     {
         PlayerSkill skillType = m_skillController.SkillType;
 
-        m_weaponController.ActiveSkillWeaponObject(skillType, press);
+        m_weaponController.ActiveSkillWeaponObject(skillType, isPressed);
 
-        m_skillController.CurrentSkillAnimation(press);
+        m_skillController.CurrentSkillAnimation(isPressed);
 
-        if (!press)
+        if (!isPressed)
         {
             OnSkill(skillType);
+        }
+    }
+
+    private void OnChargeAttack(InputValue input)
+    {
+        bool isPressed = input.isPressed;
+
+        MiddleClick(isPressed);
+    }
+
+    private void MiddleClick(bool isPressed)
+    {
+        if (chargeAttackDirection)
+        {
+            m_attackAnimation.SetTrigger("ChargeAttackR");
+        }
+        else
+        {
+            m_attackAnimation.SetTrigger("ChargeAttackL");
+        }
+
+
+        if (!isPressed && chargeMax)
+        {
+            m_attackAnimation.SetBool("ChargeAttack", false);
+            m_weaponController.UseWeapon(true);
+            chargeAttackDirection = !chargeAttackDirection;
+        }
+        else if(!isPressed && !chargeMax)
+        {
+            m_attackAnimation.SetTrigger("ChargeFail");
         }
     }
 
@@ -115,6 +156,11 @@ public class PlayerAttackController : MonoBehaviour
                 break;
         }
 
+    }
+
+    public void OnCharge()
+    {
+        chargeMax = true;
     }
 
 }

@@ -7,16 +7,24 @@ public class PlayerAttackReset : StateMachineBehaviour//ºÎÂøµÈ ¾Ö´Ï¸ÞÀÌ¼Ç State¿
 {
     [Header("TriggerName")]
     [SerializeField] private string m_triggerName;
+    [SerializeField] private string m_ChargeL;
+    [SerializeField] private string m_ChargeR;
 
     private PlayerWeaponController m_objectController;
     private PlayerMoveController m_moveController;
+    private PlayerAttackController m_attackController;
+    private float m_chargeAttakTimer;
     private int m_Slash_Light_L = Animator.StringToHash("Slash_Light_L");
     private int m_Slash_Light_R = Animator.StringToHash("Slash_Light_R");
     private int m_Slash_Light_Last = Animator.StringToHash("Slash_Light_L_Last");
+    private int m_Charge_slash_L = Animator.StringToHash("Charge_slash_L");
+    private int m_Charge_slash_R = Animator.StringToHash("Charge_slash_R");
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.ResetTrigger(m_triggerName);
+        animator.ResetTrigger(m_ChargeL);
+        animator.ResetTrigger(m_ChargeR);
         animator.SetBool("NextAttack", false);
 
         if(m_moveController == null)
@@ -35,12 +43,27 @@ public class PlayerAttackReset : StateMachineBehaviour//ºÎÂøµÈ ¾Ö´Ï¸ÞÀÌ¼Ç State¿
     //¾Ö´Ï¸ÅÀÌ¼ÇÀÌ È°¼ºÈ­ µÇ¾úÀ» ¶§¸¸ ¸Å ÇÁ·¹ÀÓ¸¶´Ù È£Ãâ. ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ºñÈ°¼ºÈ­ µÇ¸é È£ÃâµÇÁö¾ÊÀ½.
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (m_moveController == null)
+        if (m_moveController == null || m_attackController == null)
         {
             m_moveController = animator.GetComponent<PlayerMoveController>();
+            m_attackController = animator.GetComponent<PlayerAttackController>();
         }
 
         m_moveController.IsAction = false;
+
+        if(stateInfo.shortNameHash == m_Charge_slash_L || stateInfo.shortNameHash == m_Charge_slash_R)
+        {
+            m_chargeAttakTimer += Time.deltaTime;
+
+            if(m_chargeAttakTimer >= 1.0f)
+            {
+                animator.SetBool("ChargeAttack", true);
+                Debug.Log("ChargeAttackTrue");
+                m_chargeAttakTimer = 0f;
+            }
+
+        }
+        
     }
 
 
@@ -50,11 +73,17 @@ public class PlayerAttackReset : StateMachineBehaviour//ºÎÂøµÈ ¾Ö´Ï¸ÞÀÌ¼Ç State¿
         {
             m_objectController = animator.GetComponent<PlayerWeaponController>();
             m_moveController = animator.GetComponent<PlayerMoveController>();
-        }   
+        }
 
+        bool animationStateMove = stateInfo.shortNameHash == m_Slash_Light_L
+            || stateInfo.shortNameHash == m_Slash_Light_R
+            || stateInfo.shortNameHash == m_Slash_Light_Last;
 
-        m_moveController.AnimationStateMove();
-
+        if(animationStateMove)
+        {
+            m_moveController.AnimationStateMove();
+        }
+        
         if(stateInfo.shortNameHash == m_Slash_Light_L)
         {
             m_objectController.ActiveRightWeaponObject();

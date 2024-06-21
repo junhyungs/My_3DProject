@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class PlayerMoveController : MonoBehaviour
 {
@@ -104,8 +105,6 @@ public class PlayerMoveController : MonoBehaviour
 
     public void AnimationStateMove()
     {
-        //Vector3 animationStateMove = (transform.forward).normalized * 1.0f * Time.deltaTime;
-        //m_playerController.Move(animationStateMove);
         StartCoroutine(AnimationMovement());
     }
 

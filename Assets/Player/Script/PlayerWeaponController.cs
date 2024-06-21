@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -142,11 +143,11 @@ public class PlayerWeaponController : MonoBehaviour
         }
     }
 
-    public void UseWeapon()
+    public void UseWeapon(bool isCharge)
     {
         m_weaponAnimation.SetTrigger("Attack");
         m_weaponAnimation.SetBool("NextAttack", false);
-        m_currentWeapon.UseWeapon();
+        m_currentWeapon.UseWeapon(isCharge);
     }
 
 }

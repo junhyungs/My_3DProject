@@ -8,7 +8,7 @@ public class Umbrella : Weapon
     {
         m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Umbrella);
     }
-    public override void UseWeapon()
+    public override void UseWeapon(bool isCharge)
     {
         
     }

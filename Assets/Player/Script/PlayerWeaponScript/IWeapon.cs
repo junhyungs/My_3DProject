@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IWeapon
 {
-    public void UseWeapon();
+    public void UseWeapon(bool isCharge);
 }

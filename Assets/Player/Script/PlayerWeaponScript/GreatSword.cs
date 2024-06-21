@@ -8,7 +8,7 @@ public class GreatSword : Weapon
     {
         m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.GreatSword);
     }
-    public override void UseWeapon()
+    public override void UseWeapon(bool isCharge)
     {
         
     }

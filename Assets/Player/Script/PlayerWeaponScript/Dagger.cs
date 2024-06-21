@@ -9,7 +9,7 @@ public class Dagger : Weapon
         m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Dagger);
     }
 
-    public override void UseWeapon()
+    public override void UseWeapon(bool isCharge)
     {
         
     }    
