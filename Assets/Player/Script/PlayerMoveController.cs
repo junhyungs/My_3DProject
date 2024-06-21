@@ -104,9 +104,25 @@ public class PlayerMoveController : MonoBehaviour
 
     public void AnimationStateMove()
     {
-        Vector3 animationStateMove = (transform.forward).normalized * 1.0f * Time.deltaTime;
-        m_playerController.Move(animationStateMove);
+        //Vector3 animationStateMove = (transform.forward).normalized * 1.0f * Time.deltaTime;
+        //m_playerController.Move(animationStateMove);
+        StartCoroutine(AnimationMovement());
     }
+
+    private IEnumerator AnimationMovement()
+    {
+        float startTime = Time.time;
+
+        Vector3 direction = transform.forward;
+
+        while(Time.time < startTime + 0.2f)
+        {
+            m_playerController.Move(direction * 5.0f * Time.deltaTime);
+            yield return null;
+        }
+    }
+
+    
    
     private void SetMove(Vector2 input)
     {

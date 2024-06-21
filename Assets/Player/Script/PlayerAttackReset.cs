@@ -41,16 +41,18 @@ public class PlayerAttackReset : StateMachineBehaviour//ºÎÂøµÈ ¾Ö´Ï¸ÞÀÌ¼Ç State¿
         }
 
         m_moveController.IsAction = false;
-        m_moveController.AnimationStateMove();
     }
 
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(m_objectController == null)
+        if(m_objectController == null || m_moveController == null)
         {
             m_objectController = animator.GetComponent<PlayerWeaponController>();
+            m_moveController = animator.GetComponent<PlayerMoveController>();
         }   
+
+        m_moveController.AnimationStateMove();
 
         if(stateInfo.shortNameHash == m_Slash_Light_L)
         {

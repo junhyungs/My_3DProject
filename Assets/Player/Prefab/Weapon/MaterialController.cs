@@ -8,7 +8,7 @@ public class MaterialController : MonoBehaviour
     [SerializeField] private Material m_swordEffectMaterial;
 
     private Coroutine m_swordEffectCor;
-    private float m_swordEffectAmountTime = 1.0f;
+    private float m_swordEffectAmountTime = 1.5f;
 
     public void OnSwordEffectMaterial()
     {
