@@ -52,6 +52,7 @@ public class PlayerAttackReset : StateMachineBehaviour//부착된 애니메이션 State�
             m_moveController = animator.GetComponent<PlayerMoveController>();
         }   
 
+
         m_moveController.AnimationStateMove();
 
         if(stateInfo.shortNameHash == m_Slash_Light_L)
