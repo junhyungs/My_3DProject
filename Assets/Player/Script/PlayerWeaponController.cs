@@ -23,6 +23,11 @@ public class PlayerWeaponController : MonoBehaviour
     [Header("SwordEffect")]
     [SerializeField] private Vfx_Controller m_vEffect;
 
+    [Header("SwordMaterial")]
+    [SerializeField] private Material m_swordMaterial;
+    private float m_currentIntensity = 4.0f;
+    private Color m_materialColor;
+
     private IWeapon m_currentWeapon;
     private PlayerWeapon m_weaponType;
 
@@ -55,6 +60,7 @@ public class PlayerWeaponController : MonoBehaviour
     private void Init()
     {
         m_weaponAnimation = GetComponent<Animator>();
+        m_materialColor = m_swordMaterial.GetColor("_Color");
         OnDisableWeaponObject();
         m_weaponType = PlayerWeapon.Sword;
         SetWeapon(m_weaponType);
@@ -118,6 +124,11 @@ public class PlayerWeaponController : MonoBehaviour
 
     public void ActiveChargeLeftWeaponObject(bool isCharge)
     {
+        Color color = m_swordMaterial.GetColor("_Color");
+        Color newColor = color * Mathf.Pow(2f, 3f);
+
+        m_swordMaterial.SetColor("_Color", newColor);
+
         m_LeftObject[(int)m_weaponType].SetActive(true);
         ActiveIdleWeaponObject(false);
     }
@@ -131,6 +142,11 @@ public class PlayerWeaponController : MonoBehaviour
     }
     public void ActiveChargeRightWeaponObject(bool isCharge)
     {
+        Color color = m_swordMaterial.GetColor("_Color");
+        Color newColor = color * Mathf.Pow(2f, 3f);
+
+        m_swordMaterial.SetColor("_Color",newColor);
+
         m_RightObject[(int)m_weaponType].SetActive(true);        
         ActiveIdleWeaponObject(false);
     }
@@ -143,6 +159,7 @@ public class PlayerWeaponController : MonoBehaviour
     public IEnumerator DeactiveRightWeaponObject()
     {
         yield return m_deactiveRightTime;
+        m_swordMaterial.SetColor("_Color", m_materialColor);
         m_RightObject[(int)m_weaponType].SetActive(false);
         ActiveIdleWeaponObject(true);
         m_weaponAnimation.SetBool("NextAttack", true);
@@ -151,6 +168,7 @@ public class PlayerWeaponController : MonoBehaviour
     public IEnumerator DeactiveLeftWeaponObject()
     {
         yield return m_deactiveLeftTime;
+        m_swordMaterial.SetColor("_Color", m_materialColor);
         m_LeftObject[(int)m_weaponType].SetActive(false);
         ActiveIdleWeaponObject(true);
         m_weaponAnimation.SetBool("NextAttack", true);
