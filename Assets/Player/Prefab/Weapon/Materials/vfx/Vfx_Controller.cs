@@ -30,7 +30,6 @@ public class Vfx_Controller : MonoBehaviour
 
     public void LeftWeaponEffect(bool isCharge)
     {
-        Debug.Log(isCharge);
         float effectSize = isCharge ? m_chargeAttackSize : m_normalAttackSize;
 
         m_vEffect.SetFloat("Size", effectSize);
@@ -40,7 +39,6 @@ public class Vfx_Controller : MonoBehaviour
 
     public void RightWeaponEffect(bool isCharge)
     {
-        Debug.Log(isCharge);
         float effectSize = isCharge ? m_chargeAttackSize : m_normalAttackSize;
 
         m_vEffect.SetFloat("Size", effectSize);
