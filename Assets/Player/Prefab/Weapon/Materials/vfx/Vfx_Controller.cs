@@ -6,11 +6,21 @@ using UnityEngine.VFX;
 
 public class Vfx_Controller : MonoBehaviour
 {
+    [Header("LeftDirectionValue")]
+    [SerializeField] private float m_leftDirectionValue;
+
+    [Header("RightDirectionValue")]
+    [SerializeField] private float m_rightDirectionValue;
+
+    [Header("NormalAttactSize")]
+    [SerializeField] private float m_normalAttackSize;
+
+    [Header("ChargeAttackSize")]
+    [SerializeField] private float m_chargeAttackSize;
+
     private VisualEffect m_vEffect;
-    private float m_leftDirectionValue = 4.5f;
-    private float m_rightDirectionValue = -9.5f;
-    private float m_normalAttackSize = 0.7f;
-    private float m_chargeAttackSize = 1.5f;
+    
+    
 
     private void Start()
     {
@@ -18,16 +28,22 @@ public class Vfx_Controller : MonoBehaviour
         m_vEffect.Stop();
     }
 
-    public void LeftWeaponEffect()
+    public void LeftWeaponEffect(bool isCharge)
     {
-        m_vEffect.SetFloat("Size", m_normalAttackSize);
+        Debug.Log(isCharge);
+        float effectSize = isCharge ? m_chargeAttackSize : m_normalAttackSize;
+
+        m_vEffect.SetFloat("Size", effectSize);
         m_vEffect.SetFloat("Diretion", m_leftDirectionValue);
         m_vEffect.Play();
     }
 
-    public void RightWeaponEffect()
+    public void RightWeaponEffect(bool isCharge)
     {
-        m_vEffect.SetFloat("Size", m_normalAttackSize);
+        Debug.Log(isCharge);
+        float effectSize = isCharge ? m_chargeAttackSize : m_normalAttackSize;
+
+        m_vEffect.SetFloat("Size", effectSize);
         m_vEffect.SetFloat("Diretion", m_rightDirectionValue);
         m_vEffect.Play();
     }

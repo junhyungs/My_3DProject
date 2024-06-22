@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-
+using Unity.VisualScripting;
 using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -103,20 +103,22 @@ public class PlayerMoveController : MonoBehaviour
         }
     }
 
-    public void AnimationStateMove()
+    public void AnimationStateMove(bool isChargeMax)
     {
-        StartCoroutine(AnimationMovement());
+        StartCoroutine(AnimationMovement(isChargeMax));
     }
 
-    private IEnumerator AnimationMovement()
+    private IEnumerator AnimationMovement(bool isChargeMax)
     {
         float startTime = Time.time;
+
+        float moveSpeed = isChargeMax ? 10.0f : 5.0f;
 
         Vector3 direction = transform.forward;
 
         while(Time.time < startTime + 0.2f)
         {
-            m_playerController.Move(direction * 5.0f * Time.deltaTime);
+            m_playerController.Move(direction * moveSpeed * Time.deltaTime);
             yield return null;
         }
     }

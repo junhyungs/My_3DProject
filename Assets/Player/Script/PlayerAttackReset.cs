@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections.LowLevel.Unsafe;
@@ -9,31 +10,32 @@ public class PlayerAttackReset : StateMachineBehaviour//부착된 애니메이션 State�
     [SerializeField] private string m_triggerName;
     [SerializeField] private string m_ChargeL;
     [SerializeField] private string m_ChargeR;
+    [SerializeField] private string m_ChargeFail;
 
     private PlayerWeaponController m_objectController;
     private PlayerMoveController m_moveController;
     private PlayerAttackController m_attackController;
-    private float m_chargeAttakTimer;
+
+    #region Animator.StringToHash
     private int m_Slash_Light_L = Animator.StringToHash("Slash_Light_L");
     private int m_Slash_Light_R = Animator.StringToHash("Slash_Light_R");
     private int m_Slash_Light_Last = Animator.StringToHash("Slash_Light_L_Last");
     private int m_Charge_slash_L = Animator.StringToHash("Charge_slash_L");
     private int m_Charge_slash_R = Animator.StringToHash("Charge_slash_R");
+    private int m_Charge_MaxL = Animator.StringToHash("Charge_max_L");
+    private int m_Charge_MaxR = Animator.StringToHash("Charge_max_R");
+    #endregion
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        GetComponent(animator);
+        ChargeMax(stateInfo, false);
         animator.ResetTrigger(m_triggerName);
         animator.ResetTrigger(m_ChargeL);
         animator.ResetTrigger(m_ChargeR);
+        animator.ResetTrigger(m_ChargeFail);
         animator.SetBool("NextAttack", false);
-
-        if(m_moveController == null)
-        {
-            m_moveController = animator.GetComponent<PlayerMoveController>();
-        }
-
         m_moveController.IsAction = true;
-
     }
 
     //애니메이션의 루트모션이 진행되는 동안 매 프레임마다 호출. 애니메이션의 활성화 여부와 관계가 없기 때문에 
@@ -43,59 +45,72 @@ public class PlayerAttackReset : StateMachineBehaviour//부착된 애니메이션 State�
     //애니매이션이 활성화 되었을 때만 매 프레임마다 호출. 애니메이션이 비활성화 되면 호출되지않음.
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (m_moveController == null || m_attackController == null)
+        GetComponent(animator);
+
+        bool isChargeTrue = stateInfo.shortNameHash == m_Charge_slash_L
+            || stateInfo.shortNameHash == m_Charge_slash_R;
+
+        if (isChargeTrue && Input.GetMouseButtonUp(2))
         {
-            m_moveController = animator.GetComponent<PlayerMoveController>();
-            m_attackController = animator.GetComponent<PlayerAttackController>();
+            animator.SetTrigger("ChargeFail");
         }
 
         m_moveController.IsAction = false;
-
-        if(stateInfo.shortNameHash == m_Charge_slash_L || stateInfo.shortNameHash == m_Charge_slash_R)
-        {
-            m_chargeAttakTimer += Time.deltaTime;
-
-            if(m_chargeAttakTimer >= 1.0f)
-            {
-                animator.SetBool("ChargeAttack", true);
-                Debug.Log("ChargeAttackTrue");
-                m_chargeAttakTimer = 0f;
-            }
-
-        }
-        
     }
 
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(m_objectController == null || m_moveController == null)
+        GetComponent(animator);
+        ChargeMax(stateInfo, true);
+        AnimationStateMove(stateInfo, m_attackController.IsChargeMax);
+        ActiveObject(stateInfo);
+    }
+
+    private void GetComponent(Animator animator)
+    {
+        bool isNull = m_attackController == null
+            || m_moveController == null
+            || m_objectController == null;
+
+        if (isNull)
         {
-            m_objectController = animator.GetComponent<PlayerWeaponController>();
             m_moveController = animator.GetComponent<PlayerMoveController>();
+            m_attackController = animator.GetComponent<PlayerAttackController>();
+            m_objectController = animator.GetComponent<PlayerWeaponController>();
         }
+    }
 
+    private void ChargeMax(AnimatorStateInfo stateInfo, bool Value)
+    {
+        bool IsChargeMax = stateInfo.shortNameHash == m_Charge_MaxL
+            || stateInfo.shortNameHash == m_Charge_MaxR;
+
+        if (IsChargeMax)
+        {
+            m_attackController.IsChargeMax = Value;
+        }
+    }
+
+    private void AnimationStateMove(AnimatorStateInfo stateInfo, bool isChargeMax)
+    {
         bool animationStateMove = stateInfo.shortNameHash == m_Slash_Light_L
-            || stateInfo.shortNameHash == m_Slash_Light_R
-            || stateInfo.shortNameHash == m_Slash_Light_Last;
+           || stateInfo.shortNameHash == m_Slash_Light_R
+           || stateInfo.shortNameHash == m_Slash_Light_Last;
 
-        if(animationStateMove)
+        if (animationStateMove)
         {
-            m_moveController.AnimationStateMove();
+            m_moveController.AnimationStateMove(isChargeMax);
         }
-        
-        if(stateInfo.shortNameHash == m_Slash_Light_L)
-        {
-            m_objectController.ActiveRightWeaponObject();
-        }
-        else if(stateInfo.shortNameHash == m_Slash_Light_R)
-        {
-            m_objectController.ActiveLeftWeaponObject();
-        }
-        else if(stateInfo.shortNameHash == m_Slash_Light_Last)
-        {
-            m_objectController.ActiveRightWeaponObject();
-        }
+    }
 
+    private void ActiveObject(AnimatorStateInfo stateInfo)
+    {
+        var actionDic = m_objectController.ActiveWeaponDic;
+
+        if (actionDic.TryGetValue(stateInfo.shortNameHash, out Action<bool> action))
+        {           
+            action(m_attackController.IsChargeMax);
+        }
     }
 }

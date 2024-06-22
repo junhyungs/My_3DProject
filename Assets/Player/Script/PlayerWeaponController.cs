@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.VFX;
 
 public class PlayerWeaponController : MonoBehaviour
@@ -23,17 +25,31 @@ public class PlayerWeaponController : MonoBehaviour
 
     private IWeapon m_currentWeapon;
     private PlayerWeapon m_weaponType;
-    private Animator m_weaponAnimation;
 
     private WaitForSeconds m_deactiveRightTime = new WaitForSeconds(0.4f);
     private WaitForSeconds m_deactiveLeftTime = new WaitForSeconds(0.4f);
 
+    private Animator m_weaponAnimation;
+    private Dictionary<int, Action<bool>> Animation_ActionDic = new Dictionary<int, Action<bool>>();
+
+    public Dictionary<int, Action<bool>> ActiveWeaponDic => Animation_ActionDic;
     public IWeapon CurrentWeapon => m_currentWeapon;
     public PlayerWeapon WeaponType => m_weaponType;
+
+    #region Animation.StringToHash
+    private int m_Slash_Light_L = Animator.StringToHash("Slash_Light_L");
+    private int m_Slash_Light_R = Animator.StringToHash("Slash_Light_R");
+    private int m_Slash_Light_Last = Animator.StringToHash("Slash_Light_L_Last");
+    private int m_Charge_slash_L = Animator.StringToHash("Charge_slash_L");
+    private int m_Charge_slash_R = Animator.StringToHash("Charge_slash_R");
+    private int m_Charge_MaxL = Animator.StringToHash("Charge_max_L");
+    private int m_Charge_MaxR = Animator.StringToHash("Charge_max_R");
+    #endregion
 
     private void Awake()
     {
         Init();
+        Init_AnimationDic();
     }
 
     private void Init()
@@ -42,6 +58,15 @@ public class PlayerWeaponController : MonoBehaviour
         OnDisableWeaponObject();
         m_weaponType = PlayerWeapon.Sword;
         SetWeapon(m_weaponType);
+    }
+
+    private void Init_AnimationDic()
+    {
+        Animation_ActionDic.Add(m_Slash_Light_L, ActiveRightWeaponObject);
+        Animation_ActionDic.Add(m_Slash_Light_R, ActiveLeftWeaponObject);
+        Animation_ActionDic.Add(m_Slash_Light_Last, ActiveRightWeaponObject);
+        Animation_ActionDic.Add(m_Charge_MaxL, ActiveChargeLeftWeaponObject);
+        Animation_ActionDic.Add(m_Charge_MaxR, ActiveChargeRightWeaponObject);
     }
 
     public void SetWeapon(PlayerWeapon weaponType)
@@ -83,20 +108,31 @@ public class PlayerWeaponController : MonoBehaviour
         m_IdleObject[(int)m_weaponType].SetActive(isActive);
     }
 
-    public void ActiveLeftWeaponObject()
+    public void ActiveLeftWeaponObject(bool isCharge)
     {
         m_LeftObject[(int)m_weaponType].SetActive(true);
-        m_vEffect.LeftWeaponEffect();
+        m_vEffect.LeftWeaponEffect(isCharge);
         ActiveIdleWeaponObject(false);
         StartCoroutine(DeactiveLeftWeaponObject());
     }
 
-    public void ActiveRightWeaponObject()
+    public void ActiveChargeLeftWeaponObject(bool isCharge)
+    {
+        m_LeftObject[(int)m_weaponType].SetActive(true);
+        ActiveIdleWeaponObject(false);
+    }
+
+    public void ActiveRightWeaponObject(bool isCharge)
     {
         m_RightObject[(int)m_weaponType].SetActive(true);
-        m_vEffect.RightWeaponEffect();
+        m_vEffect.RightWeaponEffect(isCharge);
         ActiveIdleWeaponObject(false);
         StartCoroutine(DeactiveRightWeaponObject());
+    }
+    public void ActiveChargeRightWeaponObject(bool isCharge)
+    {
+        m_RightObject[(int)m_weaponType].SetActive(true);        
+        ActiveIdleWeaponObject(false);
     }
 
     public void ActiveSkillWeaponObject(PlayerSkill skillName, bool isPressed)

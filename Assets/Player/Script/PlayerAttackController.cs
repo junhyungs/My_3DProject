@@ -14,16 +14,17 @@ public class PlayerAttackController : MonoBehaviour
     private PlayerWeaponController m_weaponController;
     private PlayerSkillController m_skillController;
     private Animator m_attackAnimation;
+   
     private bool chargeMax;
     private bool chargeAttackDirection = true;
-    private int m_attackCount;
 
-    public bool IsCharge
+
+    public bool IsChargeMax
     {
         get { return chargeMax; }
         set { chargeMax = value; }
     }
-  
+
     private void Awake()
     {
         Init();
@@ -43,7 +44,7 @@ public class PlayerAttackController : MonoBehaviour
         m_skillController = GetComponent<PlayerSkillController>();  
         m_attackAnimation = GetComponent<Animator>();
     }
-   
+
     private void OnLeftClickAttack(InputValue input)
     {
         bool isPressed = input.isPressed;
@@ -91,6 +92,28 @@ public class PlayerAttackController : MonoBehaviour
 
     private void MiddleClick(bool isPressed)
     {
+        if (isPressed)
+        {
+            ChargeAttackAnimation();
+        }
+        else
+        {
+            ChargeAttack();
+        }
+
+    }
+    private void ChargeAttack()
+    {
+        if (chargeMax)
+        {
+            m_attackAnimation.SetBool("ChargeAttack", false);
+            m_weaponController.UseWeapon(true);
+            chargeAttackDirection = !chargeAttackDirection;
+        }
+    }
+
+    private void ChargeAttackAnimation()
+    {
         if (chargeAttackDirection)
         {
             m_attackAnimation.SetTrigger("ChargeAttackR");
@@ -98,18 +121,6 @@ public class PlayerAttackController : MonoBehaviour
         else
         {
             m_attackAnimation.SetTrigger("ChargeAttackL");
-        }
-
-
-        if (!isPressed && chargeMax)
-        {
-            m_attackAnimation.SetBool("ChargeAttack", false);
-            m_weaponController.UseWeapon(true);
-            chargeAttackDirection = !chargeAttackDirection;
-        }
-        else if(!isPressed && !chargeMax)
-        {
-            m_attackAnimation.SetTrigger("ChargeFail");
         }
     }
 
@@ -160,7 +171,6 @@ public class PlayerAttackController : MonoBehaviour
 
     public void OnCharge()
     {
-        chargeMax = true;
+        m_attackAnimation.SetBool("ChargeAttack", true);
     }
-
 }

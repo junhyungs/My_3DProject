@@ -86,8 +86,11 @@ VisualEffect:
       - m_Value: -15
         m_Name: New float
         m_Overridden: 1
-      - m_Value: 10
+      - m_Value: 0
         m_Name: Diretion
+        m_Overridden: 1
+      - m_Value: 0.5
+        m_Name: Size
         m_Overridden: 1
     m_Vector2f:
       m_Array: []
@@ -161,3 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db0071dacf3e7a347aadbe723c0094b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_leftDirectionValue: 2
+  m_rightDirectionValue: -2
+  m_normalAttackSize: 0.7
+  m_chargeAttackSize: 1.5
