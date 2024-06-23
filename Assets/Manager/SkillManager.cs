@@ -14,6 +14,7 @@ public enum PlayerSkill
 public class SkillManager : Singleton<SkillManager>
 {
     private Dictionary<PlayerSkill, SkillData> SkillDictionary = new Dictionary<PlayerSkill, SkillData>();
+    private HashSet<PlayerSkill> ObtainedSkill = new HashSet<PlayerSkill>();
     private PlayerSkill m_currentSkill;
     private int m_skillCount;
 
@@ -46,6 +47,28 @@ public class SkillManager : Singleton<SkillManager>
     public void SetCurretSkill(PlayerSkill skill)
     {
         m_currentSkill = skill;
+    }
+
+    public void AddSkill(PlayerSkill skill)
+    {
+        if (HasSkill(skill))
+        {
+            Debug.Log("스킬 등록함");
+            ObtainedSkill.Add(skill);
+        }
+    }
+
+    public bool HasSkill(PlayerSkill skill)
+    {
+        if (!ObtainedSkill.Contains(skill))
+        {
+            Debug.Log("스킬이 HashSet에 없음");
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 

@@ -24,9 +24,12 @@ public class Bow : Skill
 
     public override void Fire(GameObject spawnPositionObj, bool isFire)
     {
-        GameObject arrowObj = spawnPositionObj.transform.GetChild(0).gameObject;
-        ArrowObject arrowComponent = arrowObj.GetComponent<ArrowObject>();
-        arrowComponent.IsFire(isFire);
-        arrowObj.transform.parent = null;
+        if(spawnPositionObj.transform.childCount != 0)
+        {
+            GameObject arrowObj = spawnPositionObj.transform.GetChild(0).gameObject;
+            ArrowObject arrowComponent = arrowObj.GetComponent<ArrowObject>();
+            arrowComponent.IsFire(isFire);
+            arrowObj.transform.parent = null;
+        }
     }
 }

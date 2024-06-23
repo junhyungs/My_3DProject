@@ -56,8 +56,10 @@ public class PoolManager : Singleton<PoolManager>
     public GameObject GetFireBall()
     {
         GameObject fire = FireBallPool.Dequeue();
+        Rigidbody fireRigid = fire.GetComponent<Rigidbody>();
+        fireRigid.velocity = Vector3.zero;
         FireBallPool.Enqueue(fire);
-        fire.SetActive(false);
+        fire.SetActive(true);
         return fire;
     }
 
@@ -65,5 +67,11 @@ public class PoolManager : Singleton<PoolManager>
     {
         arrow.transform.SetParent(m_arrowPoolPosition);
         arrow.SetActive(false);
+    }
+
+    public void ReturnFireBall(GameObject fireBall)
+    {
+        fireBall.transform.SetParent(m_fireBallPoolPosition);
+        fireBall.SetActive(false);
     }
 }

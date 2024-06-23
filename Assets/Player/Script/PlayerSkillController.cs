@@ -20,11 +20,19 @@ public class PlayerSkillController : MonoBehaviour
     {
         m_skillAnimation = GetComponent<Animator>();
         m_skillType = PlayerSkill.Bow;
+        SkillManager.Instance.AddSkill(m_skillType);
+        SkillManager.Instance.AddSkill(PlayerSkill.FireBall);
         SetSkill(m_skillType);
     }
 
     public void SetSkill(PlayerSkill skillType)
     {
+        if(SkillManager.Instance.HasSkill(skillType))
+        {
+            Debug.Log("스킬이 없음. 변경불가");
+            return;
+        }
+
         m_skillType = skillType;
 
         Component component = gameObject.GetComponent<ISkill>() as Component;

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -76,8 +77,6 @@ public class PlayerAttackController : MonoBehaviour
 
     private void RightClick(bool isPressed)
     {
-   
-
         PlayerSkill skillType = m_skillController.SkillType;
 
         m_weaponController.ActiveSkillWeaponObject(skillType, isPressed);
@@ -88,6 +87,7 @@ public class PlayerAttackController : MonoBehaviour
         {
             OnSkill(skillType);
         }
+
     }
 
     private void OnChargeAttack(InputValue input)
@@ -145,9 +145,7 @@ public class PlayerAttackController : MonoBehaviour
 
     private void OnSkill(PlayerSkill skillType)
     {
-        if (!isSkillChange)
-            return;
-
+        
         switch (skillType)
         {
             case PlayerSkill.Bow:
@@ -179,10 +177,8 @@ public class PlayerAttackController : MonoBehaviour
     //AnimationEvent
     public void UseSkillAttack()
     {
-        if (SkillManager.Instance.SkillCount == 0)
-        {
+        if (SkillManager.Instance.SkillCount <= 0)
             return;
-        }
 
         int cost;
 
