@@ -112,7 +112,7 @@ public class PlayerMoveController : MonoBehaviour
     {
         float startTime = Time.time;
 
-        float moveSpeed = isChargeMax ? 10.0f : 5.0f;
+        float moveSpeed = isChargeMax ? 15.0f : 5.0f;
 
         Vector3 direction = transform.forward;
 
@@ -208,6 +208,6 @@ public class PlayerMoveController : MonoBehaviour
 
     private bool SpeedCorrection(float currentHorizontalspeed)
     {
-        return m_currentHorizontalSpeed < m_targetSpeed - m_speedOffSet || m_currentHorizontalSpeed > m_targetSpeed + m_speedOffSet;
+        return currentHorizontalspeed < m_targetSpeed - m_speedOffSet || currentHorizontalspeed > m_targetSpeed + m_speedOffSet;
     }
 }

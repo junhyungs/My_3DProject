@@ -14,6 +14,7 @@ public enum PlayerSkill
 public class SkillManager : Singleton<SkillManager>
 {
     private Dictionary<PlayerSkill, SkillData> SkillDictionary = new Dictionary<PlayerSkill, SkillData>();
+    private PlayerSkill m_currentSkill;
     private int m_skillCount;
 
     public int SkillCount
@@ -30,7 +31,7 @@ public class SkillManager : Singleton<SkillManager>
     private void Init()
     {
         SkillDictionary.Add(PlayerSkill.Bow, new SkillData(1.0f, 1000.0f, 0f, 1));
-        SkillDictionary.Add(PlayerSkill.FireBall, new SkillData(1.0f, 10.0f, 1f, 1));
+        SkillDictionary.Add(PlayerSkill.FireBall, new SkillData(1.0f, 500.0f, 1f, 1));
         SkillDictionary.Add(PlayerSkill.Bomb, new SkillData(1.0f, 10.0f, 10.0f, 2));
         SkillDictionary.Add(PlayerSkill.Hook, new SkillData(1.0f, 10.0f, 5.0f, 0));
 
@@ -40,6 +41,11 @@ public class SkillManager : Singleton<SkillManager>
     public SkillData GetSkillData(PlayerSkill skill)
     {
         return SkillDictionary[skill];
+    }
+
+    public void SetCurretSkill(PlayerSkill skill)
+    {
+        m_currentSkill = skill;
     }
 }
 

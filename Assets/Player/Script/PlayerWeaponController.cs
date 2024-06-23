@@ -14,8 +14,14 @@ public class PlayerWeaponController : MonoBehaviour
     [Header("PlayerLeftWeapon")]
     [SerializeField] private GameObject[] m_LeftObject;
 
+    [Header("PlayerChargeLeftWeapon")]
+    [SerializeField] private GameObject[] m_LeftChargeObject;
+
     [Header("PlayerRightWeapon")]
     [SerializeField] private GameObject[] m_RightObject;
+
+    [Header("PlayerChargeRightWeapon")]
+    [SerializeField] private GameObject[] m_RightChargeObject;
 
     [Header("PlayerSkillWeapon")]
     [SerializeField] private GameObject[] m_SkillObject;
@@ -71,8 +77,8 @@ public class PlayerWeaponController : MonoBehaviour
         Animation_ActionDic.Add(m_Slash_Light_L, ActiveRightWeaponObject);
         Animation_ActionDic.Add(m_Slash_Light_R, ActiveLeftWeaponObject);
         Animation_ActionDic.Add(m_Slash_Light_Last, ActiveRightWeaponObject);
-        Animation_ActionDic.Add(m_Charge_MaxL, ActiveChargeLeftWeaponObject);
-        Animation_ActionDic.Add(m_Charge_MaxR, ActiveChargeRightWeaponObject);
+        Animation_ActionDic.Add(m_Charge_slash_L, ActiveChargeLeftWeaponObject);
+        Animation_ActionDic.Add(m_Charge_slash_R, ActiveChargeRightWeaponObject);
     }
 
     public void SetWeapon(PlayerWeapon weaponType)
@@ -116,6 +122,7 @@ public class PlayerWeaponController : MonoBehaviour
 
     public void ActiveLeftWeaponObject(bool isCharge)
     {
+        m_LeftChargeObject[(int)m_weaponType].SetActive(false);
         m_LeftObject[(int)m_weaponType].SetActive(true);
         m_vEffect.LeftWeaponEffect(isCharge);
         ActiveIdleWeaponObject(false);
@@ -129,12 +136,13 @@ public class PlayerWeaponController : MonoBehaviour
 
         m_swordMaterial.SetColor("_Color", newColor);
 
-        m_LeftObject[(int)m_weaponType].SetActive(true);
+        m_LeftChargeObject[(int)m_weaponType].SetActive(true);
         ActiveIdleWeaponObject(false);
     }
 
     public void ActiveRightWeaponObject(bool isCharge)
     {
+        m_RightChargeObject[(int)m_weaponType].SetActive(false);
         m_RightObject[(int)m_weaponType].SetActive(true);
         m_vEffect.RightWeaponEffect(isCharge);
         ActiveIdleWeaponObject(false);
@@ -147,7 +155,7 @@ public class PlayerWeaponController : MonoBehaviour
 
         m_swordMaterial.SetColor("_Color",newColor);
 
-        m_RightObject[(int)m_weaponType].SetActive(true);        
+        m_RightChargeObject[(int)m_weaponType].SetActive(true);
         ActiveIdleWeaponObject(false);
     }
 

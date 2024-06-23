@@ -10,6 +10,8 @@ public class PlayerAttackController : MonoBehaviour
 {
     [Header("ProjectilePositionObject")]
     [SerializeField] private GameObject m_arrowPositionObject;
+    [SerializeField] private GameObject m_firePositionObject;
+    
 
     private PlayerWeaponController m_weaponController;
     private PlayerSkillController m_skillController;
@@ -17,6 +19,7 @@ public class PlayerAttackController : MonoBehaviour
    
     private bool chargeMax;
     private bool chargeAttackDirection = true;
+    private bool isSkillChange = true;
 
 
     public bool IsChargeMax
@@ -36,6 +39,8 @@ public class PlayerAttackController : MonoBehaviour
         {
             LookAtMouse();
         }
+
+        OnSkillChange();
     }
 
     private void Init()
@@ -71,6 +76,8 @@ public class PlayerAttackController : MonoBehaviour
 
     private void RightClick(bool isPressed)
     {
+   
+
         PlayerSkill skillType = m_skillController.SkillType;
 
         m_weaponController.ActiveSkillWeaponObject(skillType, isPressed);
@@ -124,12 +131,30 @@ public class PlayerAttackController : MonoBehaviour
         }
     }
 
+    private void OnSkillChange()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            m_skillController.SetSkill(PlayerSkill.Bow);
+        }            
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            m_skillController.SetSkill(PlayerSkill.FireBall);
+        }
+    }
+
     private void OnSkill(PlayerSkill skillType)
     {
+        if (!isSkillChange)
+            return;
+
         switch (skillType)
         {
             case PlayerSkill.Bow:
                 m_skillController.Fire(m_arrowPositionObject);
+                break;
+            case PlayerSkill.FireBall:
+                m_skillController.Fire(m_firePositionObject);
                 break;
         }
     }
@@ -159,11 +184,19 @@ public class PlayerAttackController : MonoBehaviour
             return;
         }
 
+        int cost;
+
         switch (m_skillController.SkillType)
         {
             case PlayerSkill.Bow:
+                cost = SkillManager.Instance.GetSkillData(PlayerSkill.Bow).m_cost;
+                SkillManager.Instance.SkillCount -= cost;
                 m_skillController.UseSkill(m_arrowPositionObject);
-                SkillManager.Instance.SkillCount--;
+                break;
+            case PlayerSkill.FireBall:
+                cost = SkillManager.Instance.GetSkillData(PlayerSkill.FireBall).m_cost;
+                SkillManager.Instance.SkillCount -= cost;   
+                m_skillController.UseSkill(m_firePositionObject);
                 break;
         }
 

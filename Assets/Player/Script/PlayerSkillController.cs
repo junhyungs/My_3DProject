@@ -50,6 +50,7 @@ public class PlayerSkillController : MonoBehaviour
                 break;
         }
 
+        SkillManager.Instance.SetCurretSkill(m_skillType);
     }
 
     public void CurrentSkillAnimation(bool isPressed)
@@ -60,7 +61,7 @@ public class PlayerSkillController : MonoBehaviour
                 m_skillAnimation.SetBool("Arrow", isPressed);
                 break;
             case PlayerSkill.FireBall:
-                //ÆÄÀÌ¾îº¼
+                m_skillAnimation.SetBool("ArrowMagic", isPressed);
                 break;
             case PlayerSkill.Bomb:
                 //ÆøÅº

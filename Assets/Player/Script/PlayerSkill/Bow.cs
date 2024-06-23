@@ -19,7 +19,6 @@ public class Bow : Skill
         arrowObj.transform.SetParent(spawnPositionObj.transform);
         arrowObj.transform.localPosition = Vector3.zero;
         arrowObj.transform.localRotation = spawnPositionObj.transform.localRotation;
-        
     }
 
 
