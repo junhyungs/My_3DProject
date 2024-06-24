@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -12,15 +13,22 @@ public class Vfx_Controller : MonoBehaviour
     [Header("RightDirectionValue")]
     [SerializeField] private float m_rightDirectionValue;
 
-    [Header("NormalAttactSize")]
-    [SerializeField] private float m_normalAttackSize;
-
-    [Header("ChargeAttackSize")]
-    [SerializeField] private float m_chargeAttackSize;
-
     private VisualEffect m_vEffect;
+    private float m_normalAttackSize;
+    private float m_chargeAttackSize;
+    private bool isCharge;
     
-    
+    public float NormalAttackSize
+    {
+        get { return m_normalAttackSize;}
+        set { m_normalAttackSize = value;}
+    }
+
+    public float ChargeAttackSize
+    {
+        get { return m_chargeAttackSize; }
+        set { m_chargeAttackSize = value;}
+    }
 
     private void Start()
     {
@@ -28,20 +36,25 @@ public class Vfx_Controller : MonoBehaviour
         m_vEffect.Stop();
     }
 
-    public void LeftWeaponEffect(bool isCharge)
+    public void IsCharge(bool isCharge)
     {
-        float effectSize = isCharge ? m_chargeAttackSize : m_normalAttackSize;
+        this.isCharge = isCharge;
+    }
 
-        m_vEffect.SetFloat("Size", effectSize);
+    public void LeftWeaponEffect()
+    {
+        float range = isCharge ? m_chargeAttackSize : m_normalAttackSize;
+        Debug.Log(range);
+        m_vEffect.SetFloat("Size", range);
         m_vEffect.SetFloat("Diretion", m_leftDirectionValue);
         m_vEffect.Play();
     }
 
-    public void RightWeaponEffect(bool isCharge)
+    public void RightWeaponEffect()
     {
-        float effectSize = isCharge ? m_chargeAttackSize : m_normalAttackSize;
-
-        m_vEffect.SetFloat("Size", effectSize);
+        float range = isCharge ? m_chargeAttackSize : m_normalAttackSize;
+        Debug.Log(range);
+        m_vEffect.SetFloat("Size", range);
         m_vEffect.SetFloat("Diretion", m_rightDirectionValue);
         m_vEffect.Play();
     }

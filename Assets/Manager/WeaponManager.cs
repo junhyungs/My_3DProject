@@ -24,11 +24,11 @@ public class WeaponManager : Singleton<WeaponManager>
 
     private void InitWeaponData()
     {
-        WeaponDataDictionary.Add(PlayerWeapon.Sword, new WeaponData(1.0f, 0.4f, 2.5f));
-        WeaponDataDictionary.Add(PlayerWeapon.Hammer, new WeaponData(1.15f, 0.5f, 2.5f));
-        WeaponDataDictionary.Add(PlayerWeapon.Dagger, new WeaponData(0.8f, 0.35f, 1.8f));
-        WeaponDataDictionary.Add(PlayerWeapon.GreatSword, new WeaponData(1.25f, 0.5f, 3.0f));
-        WeaponDataDictionary.Add(PlayerWeapon.Umbrella, new WeaponData(0.5f, 0.4f, 2.5f));
+        WeaponDataDictionary.Add(PlayerWeapon.Sword, new WeaponData(1.0f, 3.0f, 0.7f,1.0f,new Vector3(0.7f,0.7f,0.7f),new Vector3(1.0f,0.7f,1.0f)));
+        WeaponDataDictionary.Add(PlayerWeapon.Hammer, new WeaponData(1.0f, 3.0f, 0.7f, 1.0f, new Vector3(0.7f, 0.7f, 0.7f), new Vector3(1.0f, 0.7f, 1.0f)));
+        WeaponDataDictionary.Add(PlayerWeapon.Dagger, new WeaponData(1.0f, 3.0f, 0.7f, 1.0f, new Vector3(0.7f, 0.7f, 0.7f), new Vector3(1.0f, 0.7f, 1.0f)));
+        WeaponDataDictionary.Add(PlayerWeapon.GreatSword, new WeaponData(1.0f, 3.0f, 0.7f, 1.0f, new Vector3(0.7f, 0.7f, 0.7f), new Vector3(1.0f, 0.7f, 1.0f)));
+        WeaponDataDictionary.Add(PlayerWeapon.Umbrella, new WeaponData(1.0f, 3.0f, 0.7f, 1.0f, new Vector3(0.7f, 0.7f, 0.7f), new Vector3(1.0f, 0.7f, 1.0f)));
     }
 
     public WeaponData GetWeaponData(PlayerWeapon weapon)
@@ -51,13 +51,19 @@ public class WeaponManager : Singleton<WeaponManager>
 public struct WeaponData
 {
     public float m_attackPower { get; }
-    public float m_attackSpeed { get; }
-    public float m_attackRange { get; }
-    public WeaponData(float attackPower, float attackSpeed, float weaponRange)
+    public float m_chargeAttackPower { get; }
+    public float m_normalEffectRange { get; }
+    public float m_chargeEffectRange { get; }
+    public Vector3 m_normalAttackRange { get; }
+    public Vector3 m_chargeAttackRange { get; }
+    public WeaponData(float attackPower, float chargeAttackPower, float normalEffectRange, float chargeEffectRange, Vector3 normalAttackRange, Vector3 chargeAttackRange)
     {
         m_attackPower = attackPower;
-        m_attackSpeed = attackSpeed;
-        m_attackRange = weaponRange;
+        m_chargeAttackPower = chargeAttackPower;
+        m_normalEffectRange = normalEffectRange;
+        m_chargeEffectRange = chargeEffectRange;
+        m_normalAttackRange = normalAttackRange;
+        m_chargeAttackRange = chargeAttackRange;
     }
 }
 

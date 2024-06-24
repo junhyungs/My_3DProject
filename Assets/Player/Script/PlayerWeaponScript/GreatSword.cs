@@ -8,8 +8,15 @@ public class GreatSword : Weapon
     {
         m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.GreatSword);
     }
-    public override void UseWeapon(bool isCharge)
+
+    public override void InitWeapon(Vfx_Controller effectRange, GameObject hitRangeObject)
+    {
+
+    }
+
+    public override void UseWeapon(bool isCharge, Vfx_Controller effectRange, GameObject hitRange)
     {
         
     }
+
 }

@@ -108,9 +108,9 @@ public class PlayerAttackReset : StateMachineBehaviour//ºÎÂøµÈ ¾Ö´Ï¸ÞÀÌ¼Ç State¿
     {
         var actionDic = m_objectController.ActiveWeaponDic;
 
-        if (actionDic.TryGetValue(stateInfo.shortNameHash, out Action<bool> action))
+        if (actionDic.TryGetValue(stateInfo.shortNameHash, out Action action))
         {           
-            action(m_attackController.IsChargeMax);
+            action();
         }
     }
 }

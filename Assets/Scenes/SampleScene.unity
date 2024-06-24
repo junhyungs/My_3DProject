@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 273603711}
   - component: {fileID: 273603710}
   - component: {fileID: 273603714}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -338,6 +338,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 831018388591064133, guid: 45f8b07518a5df244aec5a257213fd9e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4945783277269194108, guid: 45f8b07518a5df244aec5a257213fd9e, type: 3}
       propertyPath: m_Name
       value: crow_final

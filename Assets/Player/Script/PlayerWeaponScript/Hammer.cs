@@ -8,7 +8,13 @@ public class Hammer : Weapon
     {
         m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Hammer);
     }
-    public override void UseWeapon(bool isCharge)
+
+    public override void InitWeapon(Vfx_Controller effectRange, GameObject hitRangeObject)
+    {
+
+    }
+
+    public override void UseWeapon(bool isCharge, Vfx_Controller effectRange, GameObject hitRange)
     {
  
     }
