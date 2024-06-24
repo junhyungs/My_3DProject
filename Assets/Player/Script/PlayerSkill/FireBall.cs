@@ -22,7 +22,7 @@ public class FireBall : Skill
         spawnPositionObj.transform.localRotation = Quaternion.identity; 
         fireBall.transform.localRotation = spawnPositionObj.transform.localRotation;
         fireBallParticle.SetActive(true);
-
+        
     }
 
     public override void Fire(GameObject spawnPositionObj, bool isFire)

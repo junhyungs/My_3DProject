@@ -9,12 +9,12 @@ public class Umbrella : Weapon
         m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Umbrella);
     }
 
-    public override void InitWeapon(Vfx_Controller effectRange, GameObject hitRangeObject)
+    public override void InitWeapon(GameObject hitRangeObject)
     {
 
     }
 
-    public override void UseWeapon(bool isCharge, Vfx_Controller effectRange, GameObject hitRange)
+    public override void UseWeapon(bool isCharge, GameObject hitRange)
     {
         
     }

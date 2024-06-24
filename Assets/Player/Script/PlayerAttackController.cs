@@ -206,9 +206,4 @@ public class PlayerAttackController : MonoBehaviour
     {
         m_attackAnimation.SetBool("ChargeAttack", true);
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        
-    }
 }

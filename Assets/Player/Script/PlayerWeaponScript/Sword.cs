@@ -4,34 +4,36 @@ using UnityEngine;
 
 public class Sword : Weapon
 {
-    private void Start()
+    private void OnEnable()
     {
         m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Sword);
-        m_weaponAttackPower = m_weaponData.m_attackPower;
-        m_chargeAttackPower = m_weaponData.m_chargeAttackPower;
-        m_normalEffectRange = m_weaponData.m_normalEffectRange;
-        m_chargeEffectRange = m_weaponData.m_chargeEffectRange;
-        m_normalAttackRange = m_weaponData.m_normalAttackRange;
-        m_chargeAttackRange = m_weaponData.m_chargeAttackRange;
+        m_weaponEffect = GetComponent<PlayerWeaponEffectController>();
     }
 
-    public override void InitWeapon(Vfx_Controller effectRange, GameObject hitRangeObject)
+    public override void InitWeapon(GameObject hitRangeObject)
     {
-        effectRange.NormalAttackSize = m_weaponData.m_normalEffectRange;
-        effectRange.ChargeAttackSize = m_weaponData.m_chargeEffectRange;
-        Debug.Log(effectRange.NormalAttackSize);
-        Debug.Log(effectRange.ChargeAttackSize);
-
-        hitRangeObject.transform.localScale = m_normalAttackRange;
+        hitRangeObject.transform.localScale = m_weaponData.m_normalAttackRange;
+        m_weaponEffect.SetEffectRange(m_weaponData.m_normalEffectRange, m_weaponData.m_chargeEffectRange);
     }
 
-    public override void UseWeapon(bool isCharge, Vfx_Controller effectRange, GameObject hitRange)
+    public override void UseWeapon(bool isCharge, GameObject hitRange)
     {
-        effectRange.IsCharge(isCharge);
-        hitRange.transform.localScale = isCharge ? m_chargeAttackRange : m_normalAttackRange;
-        Debug.Log(hitRange);
-        m_currentAttackPower = isCharge ? m_chargeAttackPower : m_weaponAttackPower;
-        Debug.Log(m_currentAttackPower);
+        if(isCharge)
+            ChargeAttack(hitRange);
+        else
+            NormalAttack(hitRange);
+    }
+
+    protected override void ChargeAttack(GameObject hitRange)
+    {
+        hitRange.transform.localScale = m_weaponData.m_chargeAttackRange;
+        m_currentAtk = m_weaponData.m_chargeAttackPower;
+    }
+
+    protected override void NormalAttack(GameObject hitRange)
+    {
+        hitRange.transform.localScale = m_weaponData.m_normalAttackRange;
+        m_currentAtk = m_weaponData.m_attackPower;
     }
 
     private void OnTriggerEnter(Collider other)
