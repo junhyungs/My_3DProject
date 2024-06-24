@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using UnityEngine;
 
 public class FireBallObject : ProjectileObject
 {
     private int m_piercingPower = 5;
+    private bool isBurning = true;
 
     protected override void Awake()
     {
@@ -30,4 +32,6 @@ public class FireBallObject : ProjectileObject
     {
         
     }
+
+    
 }

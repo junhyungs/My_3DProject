@@ -18,7 +18,8 @@ public class FireBall : Skill
         fireBallComponent.SetProjectileObjectData(m_skillData.m_attackPower, m_skillData.m_projectileSpeed, m_skillData.m_projectileRange);
         fireBall.transform.SetParent(spawnPositionObj.transform);
         fireBall.transform.localPosition = Vector3.zero;
-        fireBall.transform.rotation = spawnPositionObj.transform.rotation;
+        spawnPositionObj.transform.localRotation = Quaternion.identity; 
+        fireBall.transform.localRotation = spawnPositionObj.transform.localRotation;
     }
 
     public override void Fire(GameObject spawnPositionObj, bool isFire)
