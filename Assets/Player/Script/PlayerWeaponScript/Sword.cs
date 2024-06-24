@@ -12,8 +12,14 @@ public class Sword : Weapon
     public override void UseWeapon(bool isCharge)
     {
 
-
-        Debug.Log("Ä® »ç¿ëÇÔ");
     }
-    
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        {
+
+        }
+    }
+
 }

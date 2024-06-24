@@ -20,7 +20,6 @@ public class PlayerAttackController : MonoBehaviour
    
     private bool chargeMax;
     private bool chargeAttackDirection = true;
-    private bool isSkillChange = true;
 
 
     public bool IsChargeMax
@@ -117,6 +116,10 @@ public class PlayerAttackController : MonoBehaviour
             m_weaponController.UseWeapon(true);
             chargeAttackDirection = !chargeAttackDirection;
         }
+        else
+        {
+            m_weaponController.ChargeAttackReset();
+        }
     }
 
     private void ChargeAttackAnimation()
@@ -198,8 +201,14 @@ public class PlayerAttackController : MonoBehaviour
 
     }
 
+    //AnimationEvent
     public void OnCharge()
     {
         m_attackAnimation.SetBool("ChargeAttack", true);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        
     }
 }

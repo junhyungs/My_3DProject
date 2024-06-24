@@ -28,6 +28,8 @@ public class PlayerWeaponController : MonoBehaviour
 
     [Header("SwordEffect")]
     [SerializeField] private Vfx_Controller m_vEffect;
+    [SerializeField] private MeshCollider m_NormalAttackCollider;
+    [SerializeField] private MeshCollider m_ChargeAttackCollider;
 
     [Header("SwordMaterial")]
     [SerializeField] private Material m_swordMaterial;
@@ -66,6 +68,8 @@ public class PlayerWeaponController : MonoBehaviour
     {
         m_weaponAnimation = GetComponent<Animator>();
         m_materialColor = m_swordMaterial.GetColor("_Color");
+        m_NormalAttackCollider.enabled = false;
+        m_ChargeAttackCollider.enabled = false;
         OnDisableWeaponObject();
         m_weaponType = PlayerWeapon.Sword;
         SetWeapon(m_weaponType);
@@ -125,6 +129,7 @@ public class PlayerWeaponController : MonoBehaviour
         m_LeftObject[(int)m_weaponType].SetActive(true);
         m_vEffect.LeftWeaponEffect(isCharge);
         ActiveIdleWeaponObject(false);
+        OnCollider(isCharge);
         StartCoroutine(DeactiveLeftWeaponObject());
     }
 
@@ -145,6 +150,7 @@ public class PlayerWeaponController : MonoBehaviour
         m_RightObject[(int)m_weaponType].SetActive(true);
         m_vEffect.RightWeaponEffect(isCharge);
         ActiveIdleWeaponObject(false);
+        OnCollider(isCharge);
         StartCoroutine(DeactiveRightWeaponObject());
     }
     public void ActiveChargeRightWeaponObject(bool isCharge)
@@ -166,6 +172,7 @@ public class PlayerWeaponController : MonoBehaviour
     public IEnumerator DeactiveRightWeaponObject()
     {
         yield return m_deactiveRightTime;
+        OffCollider();
         m_swordMaterial.SetColor("_Color", m_materialColor);
         m_RightObject[(int)m_weaponType].SetActive(false);
         ActiveIdleWeaponObject(true);
@@ -175,10 +182,35 @@ public class PlayerWeaponController : MonoBehaviour
     public IEnumerator DeactiveLeftWeaponObject()
     {
         yield return m_deactiveLeftTime;
+        OffCollider();
         m_swordMaterial.SetColor("_Color", m_materialColor);
         m_LeftObject[(int)m_weaponType].SetActive(false);
         ActiveIdleWeaponObject(true);
         m_weaponAnimation.SetBool("NextAttack", true);
+    }
+
+    public void ChargeAttackReset()
+    {
+        m_swordMaterial.SetColor("_Color", m_materialColor);
+        m_RightChargeObject[(int)m_weaponType].SetActive(false);
+        m_LeftChargeObject[(int)m_weaponType].SetActive(false);
+    }
+
+    private void OnCollider(bool isCharge)
+    {
+        if (isCharge)
+        {
+            m_ChargeAttackCollider.enabled = true;
+            return;
+        }
+
+        m_NormalAttackCollider.enabled = true;
+    }
+
+    private void OffCollider()
+    {
+        m_ChargeAttackCollider.enabled = false;
+        m_NormalAttackCollider.enabled = false;
     }
 
     private void OnDisableWeaponObject()
