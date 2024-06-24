@@ -31,7 +31,6 @@ public class PlayerWeaponController : MonoBehaviour
 
     [Header("SwordMaterial")]
     [SerializeField] private Material m_swordMaterial;
-    private float m_currentIntensity = 4.0f;
     private Color m_materialColor;
 
     private IWeapon m_currentWeapon;

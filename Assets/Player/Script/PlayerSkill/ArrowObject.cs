@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class ArrowObject : ProjectileObject
 {
+    [Header("FireParticle")]
+    [SerializeField] private GameObject m_fireParticleObject;
+
+    private bool isBurning = false;
+
     protected override void Awake()
     {
         base.Awake();      
@@ -13,6 +18,11 @@ public class ArrowObject : ProjectileObject
     public override void IsFire(bool fire)
     {
         isFire = fire;
+
+        if(isFire == true)
+        {
+            Invoke(nameof(ReturnArrow), 5.0f);
+        }
     }
 
     private void FixedUpdate()
@@ -27,7 +37,49 @@ public class ArrowObject : ProjectileObject
 
     private void OnTriggerEnter(Collider other)
     {
-        
+        if(other.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        {
+            IDamged hit = other.gameObject.GetComponent<IDamged>();
+
+            if(hit != null)
+            {
+                hit.TakeDamage(m_atk);
+                ReturnArrow();
+            }
+        }
+
+        Stove isFire = other.gameObject.GetComponent<Stove>();
+
+        if (isFire != null && isBurning == false)
+        {
+            bool burning = isFire.IsBurning;
+            OnFireParticle(burning);
+        }
+
+        if (isBurning)
+        {
+            IBurningObject burning = other.gameObject.GetComponent<IBurningObject>();
+            
+            if(burning != null)
+            {
+                burning.OnBurning(true);
+            }
+
+        }
+    }
+
+    private void OnFireParticle(bool buring)
+    {
+        if (buring)
+        {
+            m_fireParticleObject.SetActive(true);
+            this.isBurning = buring;
+        }
+    }
+
+    private void ReturnArrow()
+    {
+        PoolManager.Instance.ReturnArrow(this.gameObject);
     }
 
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using UnityEngine;
+using UnityEngine.SearchService;
 
 public class FireBallObject : ProjectileObject
 {
@@ -16,6 +17,11 @@ public class FireBallObject : ProjectileObject
     public override void IsFire(bool fire)
     {
         isFire = fire;
+
+        if(isFire == true)
+        {
+            Invoke(nameof(ReturnFireBall), 5.0f);
+        }
     }
 
     private void FixedUpdate()
@@ -30,7 +36,35 @@ public class FireBallObject : ProjectileObject
 
     private void OnTriggerEnter(Collider other)
     {
-        
+        if(other.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        {
+            IDamged hit = other.gameObject.GetComponent<IDamged>();
+
+            if(hit != null)
+            {
+                hit.TakeDamage(m_atk);
+
+                m_piercingPower--;
+            }
+        }
+
+        IBurningObject burning = other.gameObject.GetComponent<IBurningObject>();
+
+        if(burning != null)
+        {
+            burning.OnBurning(isBurning);
+        }
+
+        if(m_piercingPower <= 0 || other.gameObject.layer == LayerMask.NameToLayer("Wall"))
+        {
+            ReturnFireBall();
+        }
+
+    }
+
+    private void ReturnFireBall()
+    {
+        PoolManager.Instance.ReturnFireBall(this.gameObject);
     }
 
     

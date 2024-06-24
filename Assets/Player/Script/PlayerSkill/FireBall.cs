@@ -12,6 +12,7 @@ public class FireBall : Skill
     public override void UseSkill(GameObject spawnPositionObj)
     {
         GameObject fireBall = PoolManager.Instance.GetFireBall();
+        GameObject fireBallParticle = fireBall.transform.GetChild(0).gameObject;
 
         FireBallObject fireBallComponent = fireBall.GetComponent<FireBallObject>();
         fireBallComponent.IsFire(false);
@@ -20,6 +21,8 @@ public class FireBall : Skill
         fireBall.transform.localPosition = Vector3.zero;
         spawnPositionObj.transform.localRotation = Quaternion.identity; 
         fireBall.transform.localRotation = spawnPositionObj.transform.localRotation;
+        fireBallParticle.SetActive(true);
+
     }
 
     public override void Fire(GameObject spawnPositionObj, bool isFire)

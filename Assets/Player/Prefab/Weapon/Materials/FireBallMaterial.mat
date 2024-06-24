@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-255112369732661105
+--- !u!114 &-241012026532909848
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: swordEffectMa
-  m_Shader: {fileID: -6465566751694194690, guid: 22f4bccf59ac9394ca3aa95e4d33c986, type: 3}
+  m_Name: FireBallMaterial
+  m_Shader: {fileID: -6465566751694194690, guid: e43fbfcf07e4df144ab8bbb9b6475bd5, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -33,16 +33,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _MainText:
+    - _SampleTexture2D_fcc3c26e8bd849ada7574323bfd4b3cb_Texture_1:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_deecc86eef734304a575a2aa8d59ab4d_Texture_1:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _swordTexture:
-        m_Texture: {fileID: 2800000, guid: 9e7b45662dfe8d845a3d09f0b74526fe, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -61,8 +53,6 @@ Material:
     m_Floats:
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Value: -0.4
     m_Colors:
-    - _Color: {r: 1, g: 0, b: 0, a: 0}
-    - _Vector2: {r: 0, g: 0, b: 0, a: 0}
+    - _Color: {r: 2.9960785, g: 2.3215687, b: 0.015686275, a: 0}
   m_BuildTextureStacks: []
