@@ -1,10 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
+
 
 public class PlayerMoveController : MonoBehaviour
 {
@@ -45,12 +42,24 @@ public class PlayerMoveController : MonoBehaviour
     private float m_rollSpeed = 15.0f;
     //Ladder
     private bool isLadder;
-    private float m_radderSpeed = 10.0f;
+    private float m_radderSpeed = 5.0f;
+    private bool isLadderDirection = true;
 
     public bool IsAction
     {
         get { return isAction; }
         set { isAction = value; }
+    }
+    public bool IsLadder
+    {
+        get { return isLadder; }
+        set { isLadder = value; }
+    }
+
+    public bool IsLadderDirection
+    {
+        get { return isLadderDirection; }
+        set { isLadderDirection = value; }
     }
 
     private CharacterController m_playerController;
@@ -75,13 +84,11 @@ public class PlayerMoveController : MonoBehaviour
         {
             OnLadder();
         }
+
     }
 
-    private void OnMove(InputValue input)
-    {
-        SetMove(input.Get<Vector2>());
-    }
-
+    
+    //Roll----------------------------------------------------------------------------------------------------------------
     private void OnRoll(InputValue input)
     {
         bool isPressed = input.isPressed;
@@ -116,7 +123,9 @@ public class PlayerMoveController : MonoBehaviour
             yield return null;
         }
     }
+    //EndRoll---------------------------------------------------------------------------------------------------------------
 
+    //playerAttackMove------------------------------------------------------------------------------------------------------
     public void AnimationStateMove(bool isChargeMax)
     {
         StartCoroutine(AnimationMovement(isChargeMax));
@@ -136,21 +145,14 @@ public class PlayerMoveController : MonoBehaviour
             yield return null;
         }
     }
+    //EndAttackMove-----------------------------------------------------------------------------------------------------------
 
-    private void LadderMove()
+    //Movemet-----------------------------------------------------------------------------------------------------------------
+    private void OnMove(InputValue input)
     {
-        if (isLadder)
-        {
-            isAction = false;
-
-            Vector3 ladderMove = new Vector3(0, m_playerInput.y, 0);
-
-            m_playerController.Move(ladderMove * m_radderSpeed * Time.deltaTime);   
-        }
-
+        SetMove(input.Get<Vector2>());
     }
 
-   
     private void SetMove(Vector2 input)
     {
         m_playerInput = input;
@@ -237,14 +239,18 @@ public class PlayerMoveController : MonoBehaviour
         return currentHorizontalspeed < m_targetSpeed - m_speedOffSet || currentHorizontalspeed > m_targetSpeed + m_speedOffSet;
     }
 
+    //EndMovement--------------------------------------------------------------------------------------------------------------------
+
+    //Climb--------------------------------------------------------------------------------------------------------------------------
     private void OnTriggerStay(Collider other)
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Ladder"))
         {
             if (isLadder)
             {
+                CheckGround();
                 Vector3 move = new Vector3(0f, m_playerInput.y, 0f) * m_radderSpeed * Time.deltaTime;
-
+                m_playerAnimator.SetFloat("ClimbSpeed", m_playerInput.y);
                 transform.Translate(move);
             }
         }
@@ -254,9 +260,10 @@ public class PlayerMoveController : MonoBehaviour
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Ladder"))
         {
-            isLadder = false;
-            isAction = true;
+            m_playerAnimator.SetBool("ClimbExit", false);
+            transform.SetParent(null);
         }
+
     }
 
     private void OnLadder()
@@ -272,12 +279,34 @@ public class PlayerMoveController : MonoBehaviour
                 transform.SetParent(checkcoll.gameObject.transform);
                 transform.localPosition = Vector3.zero;
                 transform.rotation = Quaternion.identity;
-                isLadder = true;
-                isAction = false;
-
+                m_playerAnimator.SetTrigger("Climb");
+                m_playerAnimator.SetBool("ClimbExit", true);
                 break;
             }
+        }   
+    }
+
+    public void ClimbStateMove()
+    {
+        StartCoroutine(ClimbStateMovement());
+        Debug.Log(isLadderDirection);
+    }
+
+    private IEnumerator ClimbStateMovement()
+    {
+        float startTime = Time.time;
+
+        float moveSpeed = 5.0f;
+
+        Vector3 direction = transform.forward;
+
+        while (Time.time < startTime + 0.2f)
+        {
+            m_playerController.Move(direction * moveSpeed * Time.deltaTime);
+            yield return null;
         }
     }
+
+    //EndClimb-----------------------------------------------------------------------------------------------------------------
 
 }
