@@ -8,31 +8,36 @@ public class Sword : Weapon
     {
         m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Sword);
         m_weaponEffect = GetComponent<PlayerWeaponEffectController>();
+        m_weaponController = GetComponent<PlayerWeaponController>();
     }
 
     public override void InitWeapon(GameObject hitRangeObject)
     {
-        hitRangeObject.transform.localScale = m_weaponData.m_normalAttackRange;
+        m_weaponController.SetWeaponRange(m_weaponData.m_normalAttackRange);
         m_weaponEffect.SetEffectRange(m_weaponData.m_normalEffectRange, m_weaponData.m_chargeEffectRange);
     }
 
     public override void UseWeapon(bool isCharge, GameObject hitRange)
     {
-        if(isCharge)
+        if (isCharge)
+        {
             ChargeAttack(hitRange);
+        }
         else
+        {
             NormalAttack(hitRange);
+        }
     }
 
     protected override void ChargeAttack(GameObject hitRange)
     {
-        hitRange.transform.localScale = m_weaponData.m_chargeAttackRange;
+        m_weaponController.SetWeaponRange(m_weaponData.m_chargeAttackRange);
         m_currentAtk = m_weaponData.m_chargeAttackPower;
     }
 
     protected override void NormalAttack(GameObject hitRange)
     {
-        hitRange.transform.localScale = m_weaponData.m_normalAttackRange;
+        m_weaponController.SetWeaponRange(m_weaponData.m_normalAttackRange);
         m_currentAtk = m_weaponData.m_attackPower;
     }
 

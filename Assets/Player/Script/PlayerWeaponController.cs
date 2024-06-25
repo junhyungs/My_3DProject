@@ -32,9 +32,6 @@ public class PlayerWeaponController : MonoBehaviour
     private IWeapon m_currentWeapon;
     private PlayerWeapon m_weaponType;
 
-    private WaitForSeconds m_deactiveRightTime = new WaitForSeconds(0.4f);
-    private WaitForSeconds m_deactiveLeftTime = new WaitForSeconds(0.4f);
-
     private Animator m_weaponAnimation;
     private MeshCollider m_attackCollider;
     private PlayerWeaponEffectController m_Effect;
@@ -115,6 +112,11 @@ public class PlayerWeaponController : MonoBehaviour
         ActiveIdleWeaponObject(true);
     }
 
+    public void SetWeaponRange(Vector3 range)
+    {
+        m_AttackRange.transform.localScale = range; 
+    }
+
     public void ActiveIdleWeaponObject(bool isActive)
     {
         m_IdleObject[(int)m_weaponType].SetActive(isActive);
@@ -127,7 +129,6 @@ public class PlayerWeaponController : MonoBehaviour
         m_Effect.ActiveSwordEffect_L(isCharge);
         ActiveIdleWeaponObject(false);
         OnCollider();
-        StartCoroutine(DeactiveLeftWeaponObject());
     }
 
     public void ActiveChargeLeftWeaponObject(bool isCharge)
@@ -144,7 +145,6 @@ public class PlayerWeaponController : MonoBehaviour
         m_Effect.ActiveSwordEffect_R(isCharge);
         ActiveIdleWeaponObject(false);
         OnCollider();
-        StartCoroutine(DeactiveRightWeaponObject());
     }
     public void ActiveChargeRightWeaponObject(bool isCharge)
     {
@@ -158,9 +158,8 @@ public class PlayerWeaponController : MonoBehaviour
         m_SkillObject[(int)skillName].SetActive(isPressed);
     }
 
-    public IEnumerator DeactiveRightWeaponObject()
+    public void DeActiveRightWeaponObj()
     {
-        yield return m_deactiveRightTime;
         OffCollider();
         m_Effect.ResetColor(m_weaponType);
         m_RightObject[(int)m_weaponType].SetActive(false);
@@ -168,9 +167,8 @@ public class PlayerWeaponController : MonoBehaviour
         m_weaponAnimation.SetBool("NextAttack", true);
     }
 
-    public IEnumerator DeactiveLeftWeaponObject()
+    public void DeActiveLeftWeaponObj()
     {
-        yield return m_deactiveLeftTime;
         OffCollider();
         m_Effect.ResetColor(m_weaponType);
         m_LeftObject[(int)m_weaponType].SetActive(false);

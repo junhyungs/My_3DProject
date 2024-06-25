@@ -7,8 +7,9 @@ using UnityEngine.UI;
 
 public abstract class Weapon : MonoBehaviour, IWeapon
 {
-    protected WeaponData m_weaponData;
     protected PlayerWeaponEffectController m_weaponEffect;
+    protected PlayerWeaponController m_weaponController;
+    protected WeaponData m_weaponData;
     protected float m_currentAtk;
 
     public abstract void InitWeapon(GameObject hitRangeObject);
