@@ -11,6 +11,9 @@ public class PlayerMoveController : MonoBehaviour
     [Header("InputSystem")]
     [SerializeField] private Vector2 m_playerInput;
 
+    [Header("LadderInputSystem")]
+    [SerializeField] private Vector2 m_playerLadderInput;
+
     [Header("Speed")]
     [SerializeField] private float m_walkSpeed;
 
@@ -40,6 +43,9 @@ public class PlayerMoveController : MonoBehaviour
     private bool isRoll = false;
     //RollSpeed
     private float m_rollSpeed = 15.0f;
+    //Ladder
+    private bool isLadder;
+    private float m_radderSpeed = 10.0f;
 
     public bool IsAction
     {
@@ -58,9 +64,17 @@ public class PlayerMoveController : MonoBehaviour
 
     void Update()
     {
-        CheckGround();
-        Gravity();
-        PlayerMove();
+        if (!isLadder)
+        {
+            CheckGround();
+            Gravity();
+            PlayerMove();
+        }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            OnLadder();
+        }
     }
 
     private void OnMove(InputValue input)
@@ -123,7 +137,19 @@ public class PlayerMoveController : MonoBehaviour
         }
     }
 
-    
+    private void LadderMove()
+    {
+        if (isLadder)
+        {
+            isAction = false;
+
+            Vector3 ladderMove = new Vector3(0, m_playerInput.y, 0);
+
+            m_playerController.Move(ladderMove * m_radderSpeed * Time.deltaTime);   
+        }
+
+    }
+
    
     private void SetMove(Vector2 input)
     {
@@ -210,4 +236,48 @@ public class PlayerMoveController : MonoBehaviour
     {
         return currentHorizontalspeed < m_targetSpeed - m_speedOffSet || currentHorizontalspeed > m_targetSpeed + m_speedOffSet;
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Ladder"))
+        {
+            if (isLadder)
+            {
+                Vector3 move = new Vector3(0f, m_playerInput.y, 0f) * m_radderSpeed * Time.deltaTime;
+
+                transform.Translate(move);
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Ladder"))
+        {
+            isLadder = false;
+            isAction = true;
+        }
+    }
+
+    private void OnLadder()
+    {
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y + 0.4f, transform.position.z);
+
+        Collider[] CheckCollider = Physics.OverlapSphere(spherePosition, 0.5f, LayerMask.GetMask("Ladder"));
+
+        foreach(var checkcoll in CheckCollider)
+        {
+            if (checkcoll.gameObject.layer == LayerMask.NameToLayer("Ladder"))
+            {
+                transform.SetParent(checkcoll.gameObject.transform);
+                transform.localPosition = Vector3.zero;
+                transform.rotation = Quaternion.identity;
+                isLadder = true;
+                isAction = false;
+
+                break;
+            }
+        }
+    }
+
 }

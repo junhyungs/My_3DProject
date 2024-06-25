@@ -4,7 +4,6 @@ using UnityEngine;
 
 public interface IWeapon
 {
-    public void InitWeapon(GameObject hitRangeObject);
-    public void UseWeapon(bool isCharge, GameObject hitRange);
-
+    public void InitWeapon();
+    public void UseWeapon(bool isCharge);
 }

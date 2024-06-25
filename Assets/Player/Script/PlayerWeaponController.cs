@@ -108,7 +108,7 @@ public class PlayerWeaponController : MonoBehaviour
         }
 
         WeaponManager.Instance.SetCurrentWeapon(m_weaponType);
-        m_currentWeapon.InitWeapon(m_AttackRange);
+        m_currentWeapon.InitWeapon();
         ActiveIdleWeaponObject(true);
     }
 
@@ -220,7 +220,7 @@ public class PlayerWeaponController : MonoBehaviour
     {
         m_weaponAnimation.SetTrigger("Attack");
         m_weaponAnimation.SetBool("NextAttack", false);
-        m_currentWeapon.UseWeapon(isCharge, m_AttackRange);
+        m_currentWeapon.UseWeapon(isCharge);
     }
 
 }

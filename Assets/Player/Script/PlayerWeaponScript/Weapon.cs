@@ -12,12 +12,10 @@ public abstract class Weapon : MonoBehaviour, IWeapon
     protected WeaponData m_weaponData;
     protected float m_currentAtk;
 
-    public abstract void InitWeapon(GameObject hitRangeObject);
-
-    public abstract void UseWeapon(bool isCharge, GameObject hitRange);
-
-    protected virtual void ChargeAttack(GameObject hitRangeObject) { }
-    protected virtual void NormalAttack(GameObject hitRangeObject) { }
+    public abstract void InitWeapon();
+    public abstract void UseWeapon(bool isCharge);
+    protected virtual void ChargeAttack() { }
+    protected virtual void NormalAttack() { }
   
 }
 
