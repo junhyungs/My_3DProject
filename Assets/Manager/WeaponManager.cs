@@ -31,6 +31,25 @@ public class WeaponManager : Singleton<WeaponManager>
         WeaponDataDictionary.Add(PlayerWeapon.Umbrella, new WeaponData(1.0f, 3.0f, 0.7f, 1.0f, new Vector3(0.7f, 0.7f, 0.7f), new Vector3(1.0f, 0.7f, 1.0f)));
     }
 
+    private void Start()
+    {
+        //XML데이터 읽어오기 테스트 (성공)
+        var weaponName = DataManager.Instance.GetWeaponData("Sword").WeaponName;
+        var weaponAtk = DataManager.Instance.GetWeaponData(weaponName).AttackPower;
+        var weaponChargeAtk = DataManager.Instance.GetWeaponData(weaponName).ChargeAttackPower;
+        var weaponNormalEffectRange = DataManager.Instance.GetWeaponData(weaponName).NormalEffectRange;
+        var weaponChargeEffectRange = DataManager.Instance.GetWeaponData(weaponName).ChargeEffectRange;
+        var weaponNormalAttackRange = DataManager.Instance.GetWeaponData(weaponName).NormalAttackRange;
+        var weaponChargeAttackRange = DataManager.Instance.GetWeaponData(weaponName).ChargeAttackRange;
+        Debug.Log(weaponName);
+        Debug.Log(weaponAtk);
+        Debug.Log(weaponChargeAtk);
+        Debug.Log(weaponNormalEffectRange);
+        Debug.Log(weaponChargeEffectRange);
+        Debug.Log(weaponNormalAttackRange);
+        Debug.Log(weaponChargeAttackRange);
+    }
+
     public WeaponData GetWeaponData(PlayerWeapon weapon)
     {
         return WeaponDataDictionary[weapon];

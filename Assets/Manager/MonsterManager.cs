@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MonsterManager : Singleton<MonsterManager>
 {
+    private Dictionary<int, Monster> MonsterDic = new Dictionary<int, Monster>();
+
     /*Dictionary<int, Monster> monsterDic = new Dictionary<int, Monster>();
 
     public void AddMonster(Monster monster)
