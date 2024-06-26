@@ -20,8 +20,14 @@ public class PlayerAttackController : MonoBehaviour
    
     private bool chargeMax;
     private bool chargeAttackDirection = true;
+    private bool isAction = true;
 
 
+    public bool IsAction
+    {
+        get { return isAction;}
+        set { isAction = value;}    
+    }
     public bool IsChargeMax
     {
         get { return chargeMax; }
@@ -35,12 +41,7 @@ public class PlayerAttackController : MonoBehaviour
 
     private void Update()
     {
-        if(Mouse.current != null && Mouse.current.rightButton.isPressed)
-        {
-            LookAtMouse();
-        }
-
-        OnSkillChange();
+        OnUpdate();
     }
 
     private void Init()
@@ -50,8 +51,24 @@ public class PlayerAttackController : MonoBehaviour
         m_attackAnimation = GetComponent<Animator>();
     }
 
+    private void OnUpdate()
+    {
+        if (!isAction)
+            return;
+
+        if (Mouse.current != null && Mouse.current.rightButton.isPressed)
+        {
+            LookAtMouse();
+        }
+
+        OnSkillChange();
+    }
+
     private void OnLeftClickAttack(InputValue input)
     {
+        if (!isAction)
+            return;
+
         bool isPressed = input.isPressed;
 
         LeftClick(isPressed);
@@ -69,6 +86,9 @@ public class PlayerAttackController : MonoBehaviour
 
     private void OnRightClickAttack(InputValue input)
     {
+        if (!isAction)
+            return;
+
         bool isPressed = input.isPressed;
 
         RightClick(isPressed);
@@ -91,6 +111,9 @@ public class PlayerAttackController : MonoBehaviour
 
     private void OnChargeAttack(InputValue input)
     {
+        if (!isAction)
+            return;
+
         bool isPressed = input.isPressed;
 
         MiddleClick(isPressed);

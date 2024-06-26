@@ -44,6 +44,8 @@ public class PlayerMoveController : MonoBehaviour
     private bool isLadder;
     private float m_radderSpeed = 5.0f;
     private bool isLadderDirection = true;
+    private Vector3 m_currentPositionY;
+    private Vector3 m_previousPositionY;
 
     public bool IsAction
     {
@@ -91,6 +93,9 @@ public class PlayerMoveController : MonoBehaviour
     //Roll----------------------------------------------------------------------------------------------------------------
     private void OnRoll(InputValue input)
     {
+        if (!isAction)
+            return; 
+
         bool isPressed = input.isPressed;
 
         if (isPressed && !isRoll)
@@ -249,6 +254,7 @@ public class PlayerMoveController : MonoBehaviour
             if (isLadder)
             {
                 CheckGround();
+                m_previousPositionY = transform.position;
                 Vector3 move = new Vector3(0f, m_playerInput.y, 0f) * m_radderSpeed * Time.deltaTime;
                 m_playerAnimator.SetFloat("ClimbSpeed", m_playerInput.y);
                 transform.Translate(move);
@@ -260,11 +266,12 @@ public class PlayerMoveController : MonoBehaviour
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Ladder"))
         {
+            isLadderDirection = m_previousPositionY.y > m_currentPositionY.y ? true : false;
             m_playerAnimator.SetBool("ClimbExit", false);
             transform.SetParent(null);
         }
-
     }
+
 
     private void OnLadder()
     {
@@ -281,6 +288,7 @@ public class PlayerMoveController : MonoBehaviour
                 transform.rotation = Quaternion.identity;
                 m_playerAnimator.SetTrigger("Climb");
                 m_playerAnimator.SetBool("ClimbExit", true);
+                m_currentPositionY = transform.position;
                 break;
             }
         }   
@@ -289,7 +297,6 @@ public class PlayerMoveController : MonoBehaviour
     public void ClimbStateMove()
     {
         StartCoroutine(ClimbStateMovement());
-        Debug.Log(isLadderDirection);
     }
 
     private IEnumerator ClimbStateMovement()
@@ -298,7 +305,7 @@ public class PlayerMoveController : MonoBehaviour
 
         float moveSpeed = 5.0f;
 
-        Vector3 direction = transform.forward;
+        Vector3 direction = isLadderDirection ? transform.forward : transform.forward * -1f;
 
         while (Time.time < startTime + 0.2f)
         {

@@ -7,12 +7,12 @@ public class ClimbStateBehaviour : StateMachineBehaviour
     PlayerMoveController m_moveContorller;
     PlayerAttackController m_attackController;
 
-    private int m_ClimbExit = Animator.StringToHash("Climbing_off_ladder_top");
+    #region Animator.StringToHash
+    private int m_Climbing_off_ladder_top = Animator.StringToHash("Climbing_off_ladder_top");
     private int m_Climbing_ladder_down = Animator.StringToHash("Climbing_ladder_down");
     private int m_Climbing_Idle = Animator.StringToHash("Climbing_Idle");
     private int m_Climbing_ladder = Animator.StringToHash("Climbing_ladder");
-
-    private int m_LadderDir;
+    #endregion
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -20,6 +20,7 @@ public class ClimbStateBehaviour : StateMachineBehaviour
 
         if (IsClimbExit(stateInfo))
         {
+            m_attackController.IsAction = true;
             m_moveContorller.IsAction = true;
             m_moveContorller.IsLadder = false;
         }
@@ -29,6 +30,7 @@ public class ClimbStateBehaviour : StateMachineBehaviour
     {
         GetComponent(animator);
 
+        m_attackController.IsAction = false;
         m_moveContorller.IsAction = false;
         m_moveContorller.IsLadder = true;
 
@@ -37,9 +39,6 @@ public class ClimbStateBehaviour : StateMachineBehaviour
             m_moveContorller.ClimbStateMove();
         }
     }
-
-
-
 
     private void GetComponent(Animator animator)
     {
@@ -52,6 +51,8 @@ public class ClimbStateBehaviour : StateMachineBehaviour
 
     private bool IsClimbExit(AnimatorStateInfo stateInfo)
     {
-        return stateInfo.shortNameHash == m_ClimbExit;
+        return stateInfo.shortNameHash == m_Climbing_off_ladder_top;
     }
+
+    
 }
