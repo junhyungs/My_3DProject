@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class Dagger : Weapon
 {
-    void Start()
-    {
-        m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Dagger);
+    public Dagger(string weaponName, float normalPower, float chargePower, float normalEffectRange, float chargeEffectRange, Vector3 normalAttackRange, Vector3 chargeAttackRange) : base(weaponName, normalPower, chargePower, normalEffectRange, chargeEffectRange, normalAttackRange, chargeAttackRange)
+    { 
+
+
+
     }
+
+ 
 
     public override void InitWeapon()
     {

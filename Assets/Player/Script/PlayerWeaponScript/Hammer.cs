@@ -4,9 +4,20 @@ using UnityEngine;
 
 public class Hammer : Weapon
 {
-    private void Start()
+    public Hammer(string weaponName, float normalPower, float chargePower, float normalEffectRange, float chargeEffectRange, Vector3 normalAttackRange, Vector3 chargeAttackRange) : base(weaponName, normalPower, chargePower, normalEffectRange, chargeEffectRange, normalAttackRange, chargeAttackRange)
     {
-        m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Hammer);
+        m_weaponName = weaponName;
+        m_normalPower = normalPower;
+        m_chargePower = chargePower;
+        m_normalEffect = normalEffectRange;
+        m_chargeEffect = chargeEffectRange;
+        m_normalAttackRange = normalAttackRange;
+        m_chargeAttackRange = chargeAttackRange;
+    }
+
+    private void OnEnable()
+    {
+        
     }
 
     public override void InitWeapon()

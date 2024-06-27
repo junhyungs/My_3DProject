@@ -15,6 +15,7 @@ public enum PlayerWeapon
 public class WeaponManager : Singleton<WeaponManager>
 {
     private Dictionary<PlayerWeapon, WeaponData> WeaponDataDictionary = new Dictionary<PlayerWeapon, WeaponData>();
+    private Dictionary<PlayerWeapon, Weapon> WeaponDataDic = new Dictionary<PlayerWeapon, Weapon>();
     private PlayerWeapon m_currentWeapon;
 
     private void Awake()
@@ -33,21 +34,8 @@ public class WeaponManager : Singleton<WeaponManager>
 
     private void Start()
     {
-        //XML데이터 읽어오기 테스트 (성공)
-        var weaponName = DataManager.Instance.GetWeaponData("Sword").WeaponName;
-        var weaponAtk = DataManager.Instance.GetWeaponData(weaponName).AttackPower;
-        var weaponChargeAtk = DataManager.Instance.GetWeaponData(weaponName).ChargeAttackPower;
-        var weaponNormalEffectRange = DataManager.Instance.GetWeaponData(weaponName).NormalEffectRange;
-        var weaponChargeEffectRange = DataManager.Instance.GetWeaponData(weaponName).ChargeEffectRange;
-        var weaponNormalAttackRange = DataManager.Instance.GetWeaponData(weaponName).NormalAttackRange;
-        var weaponChargeAttackRange = DataManager.Instance.GetWeaponData(weaponName).ChargeAttackRange;
-        Debug.Log(weaponName);
-        Debug.Log(weaponAtk);
-        Debug.Log(weaponChargeAtk);
-        Debug.Log(weaponNormalEffectRange);
-        Debug.Log(weaponChargeEffectRange);
-        Debug.Log(weaponNormalAttackRange);
-        Debug.Log(weaponChargeAttackRange);
+        //웨폰 객체를 보관하는 코드로 변경
+        
     }
 
     public WeaponData GetWeaponData(PlayerWeapon weapon)

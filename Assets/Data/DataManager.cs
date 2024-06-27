@@ -13,7 +13,7 @@ public class DataManager : Singleton<DataManager>
     public Dictionary<string, _PlayerSkill> LoadedPlayerSkillList { get; private set; }
     public Dictionary<string, _PlayerWeapon> LoadedPlayerWeaponList { get;private set; }
 
-    private readonly string m_dataPath = "C:\\Users\\KGA\\Desktop\\3D_ProjectData";
+    private readonly string m_dataPath = "C:\\Users\\jin05\\OneDrive\\πŸ≈¡ »≠∏È\\3D_ProjectData";
 
     private void Awake()
     {
