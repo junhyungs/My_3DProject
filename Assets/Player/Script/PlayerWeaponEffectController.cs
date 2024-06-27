@@ -38,6 +38,7 @@ public class PlayerWeaponEffectController : MonoBehaviour
     private Dictionary<Effect, GameObject> EffectDic = new Dictionary<Effect, GameObject>();
     private Dictionary<PlayerWeapon, Material> WeaponMaterialDic = new Dictionary<PlayerWeapon, Material>(); 
     private Dictionary<PlayerWeapon, Color> WeaponColorDic = new Dictionary<PlayerWeapon, Color>();
+    private WaitForSeconds m_effectDelayTime = new WaitForSeconds(0.1f);
 
     private float m_normalRange;
     private float m_chargeRange;
@@ -105,6 +106,12 @@ public class PlayerWeaponEffectController : MonoBehaviour
         VisualEffect swordVfx = swordEffect.GetComponent<VisualEffect>();
         swordVfx.SetFloat("Size", effectRange);
         swordVfx.SetFloat("Diretion", m_LeftDirectionValue);
+        StartCoroutine(ActiveDelay_L(swordVfx));
+    }
+
+    private IEnumerator ActiveDelay_L(VisualEffect swordVfx)
+    {
+        yield return m_effectDelayTime;
         swordVfx.Play();
     }
 
@@ -115,6 +122,12 @@ public class PlayerWeaponEffectController : MonoBehaviour
         VisualEffect swordVfx = swordEffect.GetComponent<VisualEffect>();
         swordVfx.SetFloat("Size", effectRange);
         swordVfx.SetFloat("Diretion", m_RightDirectionValue);
+        StartCoroutine(ActiveDelay_R(swordVfx));
+    }
+
+    private IEnumerator ActiveDelay_R(VisualEffect swordVfx)
+    {
+        yield return m_effectDelayTime;
         swordVfx.Play();
     }
 

@@ -31,10 +31,10 @@ public class SkillManager : Singleton<SkillManager>
 
     private void Init()
     {
-        SkillDictionary.Add(PlayerSkill.Bow, new SkillData(1.0f, 500.0f, 0f, 1));
-        SkillDictionary.Add(PlayerSkill.FireBall, new SkillData(1.0f, 200.0f, 1f, 1));
-        SkillDictionary.Add(PlayerSkill.Bomb, new SkillData(1.0f, 10.0f, 10.0f, 2));
-        SkillDictionary.Add(PlayerSkill.Hook, new SkillData(1.0f, 10.0f, 5.0f, 0));
+        SkillDictionary.Add(PlayerSkill.Bow, new SkillData(1, 500.0f, 0f, 1));
+        SkillDictionary.Add(PlayerSkill.FireBall, new SkillData(1, 200.0f, 1f, 1));
+        SkillDictionary.Add(PlayerSkill.Bomb, new SkillData(1, 10.0f, 10.0f, 2));
+        SkillDictionary.Add(PlayerSkill.Hook, new SkillData(1, 10.0f, 5.0f, 0));
 
         m_skillCount = 4;
     }
@@ -74,11 +74,11 @@ public class SkillManager : Singleton<SkillManager>
 
 public struct SkillData
 {
-    public float m_attackPower { get; }
+    public int m_attackPower { get; }
     public float m_projectileSpeed { get; }
     public float m_projectileRange { get; }
     public int m_cost { get; }
-    public SkillData(float attackPower,float projectileSpeed, float projectileRange, int cost)
+    public SkillData(int attackPower,float projectileSpeed, float projectileRange, int cost)
     {
         m_attackPower = attackPower;
         m_projectileSpeed = projectileSpeed;

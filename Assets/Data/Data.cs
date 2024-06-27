@@ -5,8 +5,8 @@ public class _Monster
 {
     public int MonsterId { get; set; }
     public string MonsterName { get; set; }
-    public float MonsterHp { get; set; }
-    public float MonsterAttackPower { get; set; }
+    public int MonsterHp { get; set; }
+    public int MonsterAttackPower { get; set; }
     public float MonsterSpeed { get; set; }
 }
 
@@ -14,16 +14,9 @@ public class _Boss
 {
     public int BossId { get; set; }
     public string BossName { get; set;}
-    public float BossHp { get; set;}
+    public int BossHp { get; set;}
     public float BossAttackPower { get;set;}
     public float BossSpeed { get; set;}
-}
-
-public class _Player
-{
-    public int PlayerId { get; set; }
-    public float PlayerSpeed { get; set; }
-    public float PlayerHp { get; set; }
 }
 
 public class _PlayerSkill

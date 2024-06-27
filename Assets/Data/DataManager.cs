@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 
 public class DataManager : Singleton<DataManager>
 {
     public Dictionary<int, _Monster> LoadedMonsterList { get; private set; }
     public Dictionary<int, _Boss> LoadedBossList { get; private set; }
-    public Dictionary<int, _Player> LoadedPlayerList { get; private set; }
     public Dictionary<string, _PlayerSkill> LoadedPlayerSkillList { get; private set; }
     public Dictionary<string, _PlayerWeapon> LoadedPlayerWeaponList { get;private set; }
 
@@ -24,7 +24,6 @@ public class DataManager : Singleton<DataManager>
     {
         ReadData(nameof(_Monster));
         ReadData(nameof(_Boss));
-        ReadData(nameof(_Player));
         ReadData(nameof(_PlayerSkill));
         ReadData(nameof(_PlayerWeapon));
     }
@@ -38,9 +37,6 @@ public class DataManager : Singleton<DataManager>
                 break;
             case nameof(_Boss):
                 ReadBossData(tableName);
-                break;
-            case nameof(_Player):
-                ReadPlayerData(tableName);
                 break;
             case nameof(_PlayerSkill):
                 ReadPlayerSkillData(tableName);
@@ -112,12 +108,8 @@ public class DataManager : Singleton<DataManager>
 
     }
 
-    private void ReadPlayerSkillData(string tableName)
-    {
-        
-    }
 
-    private void ReadPlayerData(string tableName)
+    private void ReadPlayerSkillData(string tableName)
     {
         
     }
@@ -129,7 +121,23 @@ public class DataManager : Singleton<DataManager>
 
     private void ReadMonsterData(string tableName)
     {
-        
+        LoadedMonsterList = new Dictionary<int, _Monster>();
+
+        XDocument doc = XDocument.Load($"{m_dataPath}/{tableName}.xml");
+        var dataElements = doc.Descendants("data");
+
+        foreach(var data in dataElements)
+        {
+            var tempMonster = new _Monster();
+
+            tempMonster.MonsterId = int.Parse(data.Attribute(nameof(tempMonster.MonsterId)).Value);
+            tempMonster.MonsterName = data.Attribute(nameof(tempMonster.MonsterName)).Value;
+            tempMonster.MonsterHp = int.Parse(data.Attribute(nameof(tempMonster.MonsterHp)).Value);
+            tempMonster.MonsterAttackPower = int.Parse(data.Attribute(nameof(tempMonster.MonsterAttackPower)).Value);
+            tempMonster.MonsterSpeed = float.Parse(data.Attribute(nameof(tempMonster.MonsterSpeed)).Value);
+
+            LoadedMonsterList.Add(tempMonster.MonsterId, tempMonster);  
+        }
     }
 
     public _PlayerWeapon GetWeaponData(string weaponName)
@@ -144,4 +152,18 @@ public class DataManager : Singleton<DataManager>
 
         return weaponDataList[weaponName];
     }
-}
+
+    public _Monster GetMonsterData(int monsterId)
+    {
+        var monsterDataList = LoadedMonsterList;
+
+        if(monsterDataList.Count == 0
+            || monsterDataList.ContainsKey(monsterId) == false)
+        {
+            return null;
+        }
+
+        return monsterDataList[monsterId];
+    }
+
+ }

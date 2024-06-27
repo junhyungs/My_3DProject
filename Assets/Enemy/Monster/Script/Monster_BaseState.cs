@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Monster_BaseState : MonoBehaviour
+public abstract class Monster_BaseState
 {
     public virtual void StateEnter() { }
     public virtual void StateUpdate() { }
