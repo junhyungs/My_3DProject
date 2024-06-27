@@ -12,12 +12,17 @@ public class PlayerManager : Singleton<PlayerManager>
     //[Header("PlayerSpawnPosition")]
     //[SerializeField] private Transform m_playerSpawnPos;
 
-    //private PlayerAttackController m_playerAttackController;
-    //private PlayerMoveController m_playerMoveController;
 
-    //private void Awake()
+    //private void Start()
     //{
-    //    m_playerAttackController = m_playerPrefab.GetComponent<PlayerAttackController>();
-    //    m_playerMoveController = m_playerPrefab.GetComponent <PlayerMoveController>();
+        
+
+
     //}
+
+    //private void CreatePlayer()
+    //{
+
+    //}
+
 }

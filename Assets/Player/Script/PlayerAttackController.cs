@@ -186,7 +186,7 @@ public class PlayerAttackController : MonoBehaviour
     private void LookAtMouse()
     {
         Ray mouseRay = Camera.main.ScreenPointToRay( Input.mousePosition );
-
+        
         if(Physics.Raycast(mouseRay, out RaycastHit hit, 100))
         {
             Vector3 lookPosition = new Vector3(hit.point.x,transform.position.y, hit.point.z);
