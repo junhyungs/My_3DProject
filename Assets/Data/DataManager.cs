@@ -1,26 +1,37 @@
-using System;
-using System.Collections;
+
 using System.Collections.Generic;
 using System.Xml.Linq;
 using UnityEngine;
-using UnityEngine.Animations.Rigging;
 
 
-public class DataManager : Singleton<DataManager>
+
+public class DataManager
 {
+    private static DataManager instance;
+
     public Dictionary<int, _Monster> LoadedMonsterList { get; private set; }
     public Dictionary<int, _Boss> LoadedBossList { get; private set; }
     public Dictionary<string, _PlayerSkill> LoadedPlayerSkillList { get; private set; }
     public Dictionary<string, _PlayerWeapon> LoadedPlayerWeaponList { get;private set; }
 
-    private readonly string m_dataPath = "C:\\Users\\jin05\\OneDrive\\πŸ≈¡ »≠∏È\\3D_ProjectData";
-
-    private void Awake()
+    public static DataManager Instance
     {
-        ReadAllDataAwake();
+        get
+        {
+            if(instance == null)
+            {
+                instance = new DataManager();
+                instance.ReadAllDataAwake();
+            }
+
+            return instance;
+        }
     }
 
-    private void ReadAllDataAwake()
+    private readonly string m_dataPath = "C:\\Users\\KGA\\Desktop\\3D_ProjectData";
+
+  
+    public void ReadAllDataAwake()
     {
         ReadData(nameof(_Monster));
         ReadData(nameof(_Boss));

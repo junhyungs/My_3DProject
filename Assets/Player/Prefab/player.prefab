@@ -1290,6 +1290,7 @@ GameObject:
   - component: {fileID: 8870070693282319305}
   - component: {fileID: 5349546753287860061}
   - component: {fileID: 1354434458802011201}
+  - component: {fileID: 6619979870349109470}
   m_Layer: 0
   m_Name: AttackArea
   m_TagString: Untagged
@@ -1375,6 +1376,18 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2432090755550338912, guid: 38398acdb5cfb25429334608351bafc1, type: 3}
+--- !u!114 &6619979870349109470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3276881577993183672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b56a6c5d6f3bb744bb3fac265d058e4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3324465651423557087
 GameObject:
   m_ObjectHideFlags: 0
@@ -2154,7 +2167,6 @@ GameObject:
   - component: {fileID: 9126693788248737262}
   - component: {fileID: 1118556855495263032}
   - component: {fileID: 3595761709615567607}
-  - component: {fileID: 1092694885627017323}
   - component: {fileID: 660870957}
   - component: {fileID: 5368869635262377739}
   - component: {fileID: 6822609807699286721}
@@ -2317,20 +2329,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9d78c04721b1714282ce11a5fbd0344, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IdleObject:
-  - {fileID: 1816644686}
-  m_LeftObject:
+  LeftObject:
   - {fileID: 2897498430289558025}
-  m_LeftChargeObject:
-  - {fileID: 8654739834625801207}
-  m_RightObject:
+  RightObject:
   - {fileID: 6826938976730961678}
-  m_RightChargeObject:
+  LeftChargeObject:
+  - {fileID: 8654739834625801207}
+  RightChargeObject:
   - {fileID: 6028578686775909874}
-  m_SkillObject:
-  - {fileID: 205112086}
-  - {fileID: 6147349781814275437}
-  m_AttackRange: {fileID: 3276881577993183672}
 --- !u!114 &3595761709615567607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2343,23 +2349,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e8225761c71d3947958355a65d40c47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1092694885627017323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4945783277269194108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd0662f8e6fbe2f499fb5414f88d0fa9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_LeftDirectionValue: 2
-  m_RightDirectionValue: -2
-  m_SwordEffect: {fileID: 1886267547227086215, guid: b8067738ab42948429d634860434b457, type: 3}
-  m_SwordEffectTransform: {fileID: 537195200120203191}
-  m_SwordMaterial: {fileID: 2100000, guid: 3ab1cdef3431eaa4dadebb5bfe43df70, type: 2}
+  SkillObject:
+  - {fileID: 205112086}
+  - {fileID: 6147349781814275437}
 --- !u!136 &660870957
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4364,11 +4356,6 @@ PrefabInstance:
 --- !u!4 &1816644685 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1359346431465193386, guid: 7da61a5319dce6c409e2ab77a13ff8e3, type: 3}
-  m_PrefabInstance: {fileID: 1359346433146926055}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1816644686 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1359346431465193385, guid: 7da61a5319dce6c409e2ab77a13ff8e3, type: 3}
   m_PrefabInstance: {fileID: 1359346433146926055}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4244824171638703520

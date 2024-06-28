@@ -1,45 +1,31 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.VFX;
 
-public class PlayerWeaponController : MonoBehaviour
+public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
 {
-    [Header("PlayerIdleWeapon")]
-    [SerializeField] private GameObject[] m_IdleObject;
+    
+    [Header("LeftWeapon")]
+    [SerializeField] private GameObject[] LeftObject;
 
-    [Header("PlayerLeftWeapon")]
-    [SerializeField] private GameObject[] m_LeftObject;
+    [Header("RightWeapon")]
+    [SerializeField] private GameObject[] RightObject;
 
-    [Header("PlayerChargeLeftWeapon")]
-    [SerializeField] private GameObject[] m_LeftChargeObject;
+    [Header("LeftChargeWeapon")]
+    [SerializeField] private GameObject[] LeftChargeObject;
 
-    [Header("PlayerRightWeapon")]
-    [SerializeField] private GameObject[] m_RightObject;
+    [Header("RightChargeWeapon")]
+    [SerializeField] private GameObject[] RightChargeObject;
 
-    [Header("PlayerChargeRightWeapon")]
-    [SerializeField] private GameObject[] m_RightChargeObject;
-
-    [Header("PlayerSkillWeapon")]
-    [SerializeField] private GameObject[] m_SkillObject;
-
-    [Header("SwordCollider")]
-    [SerializeField] private GameObject m_AttackRange;
-
-    private IWeapon m_currentWeapon;
-    private PlayerWeapon m_weaponType;
-
-    private Animator m_weaponAnimation;
-    private MeshCollider m_attackCollider;
-    private PlayerWeaponEffectController m_Effect;
+    private Action m_Oncollider;
+    private Action m_Offcollider;
     private Dictionary<int, Action<bool>> Animation_ActionDic = new Dictionary<int, Action<bool>>();
 
+    private Animator m_weaponAnimation;
+    [SerializeField]
+    private PlayerWeaponEffectController m_effect;
+
     public Dictionary<int, Action<bool>> ActiveWeaponDic => Animation_ActionDic;
-    public IWeapon CurrentWeapon => m_currentWeapon;
-    public PlayerWeapon WeaponType => m_weaponType;
 
     #region Animation.StringToHash
     private int m_Slash_Light_L = Animator.StringToHash("Slash_Light_L");
@@ -53,166 +39,112 @@ public class PlayerWeaponController : MonoBehaviour
 
     private void Awake()
     {
+        WeaponManager.Instance.RegisterColliderEvent(this);
+    }
+
+    private void Start()
+    {
         Init();
-        Init_AnimationDic();
     }
 
     private void Init()
     {
         m_weaponAnimation = GetComponent<Animator>();
-        m_Effect = GetComponent<PlayerWeaponEffectController>();
-        m_attackCollider = m_AttackRange.GetComponent<MeshCollider>();
-        m_attackCollider.enabled = false;
         OnDisableWeaponObject();
-        m_weaponType = PlayerWeapon.Sword;
-        SetWeapon(m_weaponType);
+        Init_AnimationDic();
     }
 
     private void Init_AnimationDic()
     {
-        Animation_ActionDic.Add(m_Slash_Light_L, ActiveRightWeaponObject);
-        Animation_ActionDic.Add(m_Slash_Light_R, ActiveLeftWeaponObject);
-        Animation_ActionDic.Add(m_Slash_Light_Last, ActiveRightWeaponObject);
-        Animation_ActionDic.Add(m_Charge_slash_L, ActiveChargeLeftWeaponObject);
-        Animation_ActionDic.Add(m_Charge_slash_R, ActiveChargeRightWeaponObject);
+        Animation_ActionDic.Add(m_Slash_Light_L, ActiveRightWeapon);
+        Animation_ActionDic.Add(m_Slash_Light_R, ActiveLeftWeapon);
+        Animation_ActionDic.Add(m_Slash_Light_Last, ActiveRightWeapon);
+        Animation_ActionDic.Add(m_Charge_slash_L, ActiveChargeLeftWeapon);
+        Animation_ActionDic.Add(m_Charge_slash_R, ActiveChargeRightWeapon);
+    }
+   
+
+    public void ActiveLeftWeapon(bool isCharge)
+    {
+        PlayerWeapon currentWeapon = WeaponManager.Instance.GetcurrentWeapon();
+
+        LeftChargeObject[(int)currentWeapon].SetActive(false);
+        LeftObject[(int)currentWeapon].SetActive(true);
+        m_effect.ActiveSwordEffect_L(isCharge);
+        WeaponManager.Instance.ActiveIdleWeapon(false);
+        m_Oncollider.Invoke();
     }
 
-    public void SetWeapon(PlayerWeapon weaponType)
+    public void ActiveChargeLeftWeapon(bool isCharge)
     {
-        m_weaponType = weaponType;
+        PlayerWeapon currentWeapon = WeaponManager.Instance.GetcurrentWeapon();
 
-        Component component = gameObject.GetComponent<IWeapon>() as Component;
-
-        if (component != null)
-        {
-            Destroy(component);
-        }
-
-        switch(weaponType)
-        {
-            case PlayerWeapon.Sword:
-                m_currentWeapon = gameObject.AddComponent<Sword>();
-                break;
-            case PlayerWeapon.Hammer:
-                m_currentWeapon = gameObject.AddComponent<Hammer>();
-                break;
-            case PlayerWeapon.Dagger:
-                m_currentWeapon = gameObject.AddComponent<Dagger>();
-                break;
-            case PlayerWeapon.GreatSword:
-                m_currentWeapon = gameObject.AddComponent<GreatSword>();
-                break;
-            case PlayerWeapon.Umbrella:
-                m_currentWeapon = gameObject.AddComponent<Umbrella>();
-                break;
-        }
-
-        WeaponManager.Instance.SetCurrentWeapon(m_weaponType);
-        m_currentWeapon.InitWeapon();
-        ActiveIdleWeaponObject(true);
+        m_effect.SetNewColor(currentWeapon);
+        LeftChargeObject[(int)currentWeapon].SetActive(true);
+        WeaponManager.Instance.ActiveIdleWeapon(false);
     }
 
-    public void SetWeaponRange(Vector3 range)
+    public void ActiveRightWeapon(bool isCharge)
     {
-        m_AttackRange.transform.localScale = range; 
+        PlayerWeapon currentWeapon = WeaponManager.Instance.GetcurrentWeapon();
+
+        RightChargeObject[(int)currentWeapon].SetActive(false);
+        RightObject[(int)currentWeapon].SetActive(true);
+        m_effect.ActiveSwordEffect_R(isCharge);
+        WeaponManager.Instance.ActiveIdleWeapon(false);
+        m_Oncollider.Invoke();
+    }
+    public void ActiveChargeRightWeapon(bool isCharge)
+    {
+        PlayerWeapon currentWeapon = WeaponManager.Instance.GetcurrentWeapon();
+
+        m_effect.SetNewColor(currentWeapon);
+        RightChargeObject[(int)currentWeapon].SetActive(true);
+        WeaponManager.Instance.ActiveIdleWeapon(false);
     }
 
-    public void ActiveIdleWeaponObject(bool isActive)
+    public void DeActiveRightWeapon()
     {
-        m_IdleObject[(int)m_weaponType].SetActive(isActive);
-    }
+        PlayerWeapon currentWeapon = WeaponManager.Instance.GetcurrentWeapon();
 
-    public void ActiveLeftWeaponObject(bool isCharge)
-    {
-        m_LeftChargeObject[(int)m_weaponType].SetActive(false);
-        m_LeftObject[(int)m_weaponType].SetActive(true);
-        m_Effect.ActiveSwordEffect_L(isCharge);
-        ActiveIdleWeaponObject(false);
-        OnCollider();
-    }
-
-    public void ActiveChargeLeftWeaponObject(bool isCharge)
-    {
-        m_Effect.SetNewColor(m_weaponType);
-        m_LeftChargeObject[(int)m_weaponType].SetActive(true);
-        ActiveIdleWeaponObject(false);
-    }
-
-    public void ActiveRightWeaponObject(bool isCharge)
-    {
-        m_RightChargeObject[(int)m_weaponType].SetActive(false);
-        m_RightObject[(int)m_weaponType].SetActive(true);
-        m_Effect.ActiveSwordEffect_R(isCharge);
-        ActiveIdleWeaponObject(false);
-        OnCollider();
-    }
-    public void ActiveChargeRightWeaponObject(bool isCharge)
-    {
-        m_Effect.SetNewColor(m_weaponType);
-        m_RightChargeObject[(int)m_weaponType].SetActive(true);
-        ActiveIdleWeaponObject(false);
-    }
-
-    public void ActiveSkillWeaponObject(PlayerSkill skillName, bool isPressed)
-    {
-        m_SkillObject[(int)skillName].SetActive(isPressed);
-    }
-
-    public void DeActiveRightWeaponObj()
-    {
-        OffCollider();
-        m_Effect.ResetColor(m_weaponType);
-        m_RightObject[(int)m_weaponType].SetActive(false);
-        ActiveIdleWeaponObject(true);
+        m_Offcollider.Invoke();
+        m_effect.ResetColor(currentWeapon);
+        RightObject[(int)currentWeapon].SetActive(false);
+        WeaponManager.Instance.ActiveIdleWeapon(true);
         m_weaponAnimation.SetBool("NextAttack", true);
     }
 
-    public void DeActiveLeftWeaponObj()
+    public void DeActiveLeftWeapon()
     {
-        OffCollider();
-        m_Effect.ResetColor(m_weaponType);
-        m_LeftObject[(int)m_weaponType].SetActive(false);
-        ActiveIdleWeaponObject(true);
+        PlayerWeapon currentWeapon = WeaponManager.Instance.GetcurrentWeapon();
+
+        m_Offcollider.Invoke();
+        m_effect.ResetColor(currentWeapon);
+        LeftObject[(int)currentWeapon].SetActive(false);
+        WeaponManager.Instance.ActiveIdleWeapon(true);
         m_weaponAnimation.SetBool("NextAttack", true);
     }
 
     public void ChargeAttackReset()
     {
-        m_Effect.ResetColor(m_weaponType);
-        m_RightChargeObject[(int)m_weaponType].SetActive(false);
-        m_LeftChargeObject[(int)m_weaponType].SetActive(false);
+        PlayerWeapon currentWeapon = WeaponManager.Instance.GetcurrentWeapon();
+
+        m_effect.ResetColor(currentWeapon);
+        RightChargeObject[(int)currentWeapon].SetActive(false);
+        LeftChargeObject[(int)currentWeapon].SetActive(false);
     }
 
-    private void OnCollider()
-    {
-        m_attackCollider.enabled = true;
-    }
-
-    private void OffCollider()
-    {
-        m_attackCollider.enabled = false;
-    }
 
     private void OnDisableWeaponObject()
     {
-        foreach(var idleWeapon in m_IdleObject)
-        {
-            idleWeapon.SetActive(false);
-        }
-
-        foreach(var leftWeapon in m_LeftObject)
+        foreach(var leftWeapon in LeftObject)
         {
             leftWeapon.SetActive(false);
         }
 
-        foreach(var rightWeapon in m_RightObject)
+        foreach(var rightWeapon in RightObject)
         {
             rightWeapon.SetActive(false);
-        }
-
-        foreach(var skillWeapon in m_SkillObject)
-        {
-            skillWeapon.SetActive(false);
         }
     }
 
@@ -220,7 +152,30 @@ public class PlayerWeaponController : MonoBehaviour
     {
         m_weaponAnimation.SetTrigger("Attack");
         m_weaponAnimation.SetBool("NextAttack", false);
-        m_currentWeapon.UseWeapon(isCharge);
+        WeaponManager.Instance.UseWeapon(isCharge);
     }
 
+    public void OnCollider(bool isAddEvent, Action callBack)
+    {
+        if (isAddEvent)
+        {
+            m_Oncollider += callBack;
+        }
+        else
+        {
+            m_Oncollider -= callBack;
+        }
+    }
+
+    public void OffCollider(bool isAddEvent, Action callBack)
+    {
+        if(isAddEvent)
+        {
+            m_Offcollider += callBack;
+        }
+        else
+        {
+            m_Offcollider -= callBack;
+        }
+    }
 }

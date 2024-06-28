@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerSkillController : MonoBehaviour
 {
+    [Header("SkillObject")]
+    [SerializeField] private GameObject[] SkillObject;
+
     private ISkill m_currentSkill;
     private PlayerSkill m_skillType;
     private Animator m_skillAnimation;
@@ -19,6 +22,7 @@ public class PlayerSkillController : MonoBehaviour
     private void Init()
     {
         m_skillAnimation = GetComponent<Animator>();
+        OnDisableSkillObject();
         m_skillType = PlayerSkill.Bow;
         SkillManager.Instance.AddSkill(m_skillType);
         SkillManager.Instance.AddSkill(PlayerSkill.FireBall);
@@ -80,6 +84,11 @@ public class PlayerSkillController : MonoBehaviour
         }
     }
 
+    public void ActiveSkillObject(bool isPressed)
+    {
+        SkillObject[(int)m_skillType].SetActive(isPressed);
+    }
+
     public void Fire(GameObject FirePosition)
     {
         m_currentSkill.Fire(FirePosition, true);
@@ -88,5 +97,13 @@ public class PlayerSkillController : MonoBehaviour
     public void UseSkill(GameObject FirePosition)
     {
         m_currentSkill.UseSkill(FirePosition);
+    }
+
+    private void OnDisableSkillObject()
+    {
+        foreach(var skillObj in SkillObject)
+        {
+            skillObj.SetActive(false);
+        }
     }
 }

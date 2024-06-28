@@ -1,39 +1,44 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 
-public abstract class Weapon : MonoBehaviour, IWeapon
+public abstract class Weapon : MonoBehaviour, IWeapon, IWeaponEvent
 {
-    public Weapon(string weaponName, float normalPower, float chargePower, float normalEffectRange,
-        float chargeEffectRange, Vector3 normalAttackRange, Vector3 chargeAttackRange)
+    protected PlayerWeaponEffectController m_weaponEffect;
+    protected Action<float, float, Vector3, Vector3> m_action;
+    protected Action<bool> m_weaponRangeEvent;
+    protected WeaponData m_weaponData;
+
+    public void AddWeaponData(bool isAddEvent, Action<float, float, Vector3, Vector3> callBack)
     {
-        m_weaponName = weaponName;
-        m_normalPower = normalPower;
-        m_chargePower = chargePower;
-        m_normalEffect = normalEffectRange;
-        m_chargeEffect = chargeEffectRange;
-        m_normalAttackRange = normalAttackRange;
-        m_chargeAttackRange = chargeAttackRange;
+        if (isAddEvent)
+        {
+            m_action += callBack;
+        }
+        else
+        {
+            m_action -= callBack;
+        }
     }
 
-    protected PlayerWeaponEffectController m_weaponEffect;
-    protected PlayerWeaponController m_weaponController;
-    protected string m_weaponName;
-    protected float m_normalPower;
-    protected float m_chargePower;
-    protected float m_normalEffect;
-    protected float m_chargeEffect;
-    protected Vector3 m_normalAttackRange;
-    protected Vector3 m_chargeAttackRange;
+    public void AddUseWeaponEvent(bool isAddEvent, Action<bool> callBack)
+    {
+        if (isAddEvent)
+        {
+            m_weaponRangeEvent += callBack;
+        }
+        else
+        {
+            m_weaponRangeEvent -= callBack;
+        }
+    }
 
-    public abstract void InitWeapon();
     public abstract void UseWeapon(bool isCharge);
-    protected virtual void ChargeAttack() { }
-    protected virtual void NormalAttack() { }
-  
 }
 
 

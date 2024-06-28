@@ -136,7 +136,7 @@ public class MoveState : BatState
         {
             m_Bat.State.ChangeState(MonsterState.Idle);
         }
-        Debug.Log(m_Bat.Player.transform.position);
+        
         TargetToPlayer();
     }
 

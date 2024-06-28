@@ -1,9 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -98,7 +92,7 @@ public class PlayerAttackController : MonoBehaviour
     {
         PlayerSkill skillType = m_skillController.SkillType;
 
-        m_weaponController.ActiveSkillWeaponObject(skillType, isPressed);
+        m_skillController.ActiveSkillObject(isPressed);
 
         m_skillController.CurrentSkillAnimation(isPressed);
 
