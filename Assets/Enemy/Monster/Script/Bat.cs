@@ -42,6 +42,7 @@ public class Bat : Monster
     public override void TakeDamage(int damage)
     {
         m_monsterHealth -= damage;
+
         m_monsterAnim.SetTrigger("Hit");
         
         if(m_monsterHealth <= 0)
@@ -199,7 +200,6 @@ public class TraceState : BatState
 
     private void Attack()
     {
-        
         if(m_Bat.Agent.remainingDistance <= m_Bat.Agent.stoppingDistance)
         {
             m_Bat.State.ChangeState(MonsterState.Attack);

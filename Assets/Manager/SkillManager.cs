@@ -53,7 +53,7 @@ public class SkillManager : Singleton<SkillManager>
     {
         if (HasSkill(skill))
         {
-            Debug.Log("스킬 등록함");
+            ObtainedSkill.Add(skill);   
         }
     }
 
