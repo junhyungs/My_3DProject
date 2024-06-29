@@ -27,7 +27,6 @@ public class AttackObject : MonoBehaviour
         m_chargeAtk = chargeAtk;
         m_defaultRange = defaultRange;
         m_chargeRange = chargeRange;
-
         transform.localScale = m_defaultRange;
     }
 
@@ -58,6 +57,6 @@ public class AttackObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("dd?");
+        Debug.Log(other.gameObject.name);
     }
 }

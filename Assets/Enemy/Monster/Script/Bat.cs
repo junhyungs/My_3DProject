@@ -50,6 +50,13 @@ public class Bat : Monster
         }
 
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Sword"))
+            Debug.Log("검 콜라이더");
+    }
+
 }
 
 public abstract class BatState : Monster_BaseState

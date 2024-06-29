@@ -54,7 +54,6 @@ public class SkillManager : Singleton<SkillManager>
         if (HasSkill(skill))
         {
             Debug.Log("스킬 등록함");
-            ObtainedSkill.Add(skill);
         }
     }
 
@@ -62,7 +61,6 @@ public class SkillManager : Singleton<SkillManager>
     {
         if (!ObtainedSkill.Contains(skill))
         {
-            Debug.Log("스킬이 HashSet에 없음");
             return true;
         }
         else

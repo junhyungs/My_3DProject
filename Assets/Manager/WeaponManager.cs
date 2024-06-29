@@ -30,11 +30,6 @@ public class WeaponManager : Singleton<WeaponManager>
         SetWeapon(m_weaponType);
     }
 
-    private void Start()
-    {
-        
-    }
-
     public void InitializeWeaponData()
     {
         InitWeapon(PlayerWeapon.Sword, "Sword");
@@ -56,7 +51,8 @@ public class WeaponManager : Singleton<WeaponManager>
             weaponData.NormalAttackRange,
             weaponData.ChargeAttackRange
             );
-
+        
+        
         WeaponDataDic.Add(weaponType, data);
     }
   
@@ -96,6 +92,12 @@ public class WeaponManager : Singleton<WeaponManager>
         ActiveIdleWeapon(true);
     }
 
+    public void ActiveIdleWeapon(bool active)
+    {
+        IdleObject[(int)m_weaponType].SetActive(active);
+    }
+
+    //RegisterEvent---------------------------------------------------
     public void RegisterWeaponEvent(IWeaponEvent weaponEvent)
     {
         m_weaponEvent = weaponEvent;
@@ -105,12 +107,9 @@ public class WeaponManager : Singleton<WeaponManager>
     {
         m_colliderEvent = onColliderEvent;
     }
-    
-    public void ActiveIdleWeapon(bool active)
-    {
-        IdleObject[(int)m_weaponType].SetActive(active);
-    }
+    //RegisterEvent---------------------------------------------------
 
+    //AddEvent--------------------------------------------------------
     public void AddData(bool isAddEvent, Action<float, float, Vector3, Vector3> callBack)
     {
         m_weaponEvent.AddWeaponData(isAddEvent, callBack);
@@ -130,6 +129,7 @@ public class WeaponManager : Singleton<WeaponManager>
     {
         m_weaponEvent.AddUseWeaponEvent(isAddEvent, callBack);
     }
+    //AddEvent--------------------------------------------------------
 
     public WeaponData GetWeaponData(PlayerWeapon weaponType)
     {

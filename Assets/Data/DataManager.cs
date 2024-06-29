@@ -28,7 +28,7 @@ public class DataManager
         }
     }
 
-    private readonly string m_dataPath = "C:\\Users\\KGA\\Desktop\\3D_ProjectData";
+    private readonly string m_dataPath = "C:\\Users\\jin05\\OneDrive\\πŸ≈¡ »≠∏È\\3D_ProjectData";
 
   
     public void ReadAllDataAwake()
