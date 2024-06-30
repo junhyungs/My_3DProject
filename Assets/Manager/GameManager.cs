@@ -5,10 +5,16 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     private GameObject player;
-    public GameObject Player { get { return player; } set { player = value; } }
+    private bool isGameOver = false;
 
-    void Update()
-    {
-        
-    }
+    public GameObject Player { get { return player; } set { player = value; } }
+    public bool IsGameOver { get {  return isGameOver; } set { isGameOver = value; } }
+
+    [Header("RespawnPosition")]
+    [SerializeField] private Transform m_respawnTransform;
+    public Transform RespawnTransform { get { return m_respawnTransform;} }
+
+    
+
+
 }

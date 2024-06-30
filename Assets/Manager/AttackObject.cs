@@ -11,9 +11,13 @@ public class AttackObject : MonoBehaviour
     private Vector3 m_defaultRange;
     private Vector3 m_chargeRange;
 
-    private void Start()
+    private void Awake()
     {
         WeaponManager.Instance.AddData(true, SetWeaponData);
+    }
+
+    private void Start()
+    {
         WeaponManager.Instance.AddOnColliderEvent(true, OnCollider);
         WeaponManager.Instance.AddOffColliderEvent(true, OffCollider);
         WeaponManager.Instance.AddWeaponRangeEvent(true, SetWeaponRange);
@@ -57,6 +61,23 @@ public class AttackObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
+        if(other.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        {
+            IDamged hit = other.gameObject.GetComponent<IDamged>();
+
+            if (hit != null)
+            {
+                SkillManager.Instance.AddSkillCount();
+                hit.TakeDamage(m_currentAtk);
+            }
+        }
+
+        if(other.gameObject.layer == LayerMask.NameToLayer("GimikObject"))
+        {
+            
+        }
     }
+
+    
+
 }

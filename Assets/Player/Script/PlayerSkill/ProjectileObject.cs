@@ -6,7 +6,7 @@ public class ProjectileObject : MonoBehaviour
 {
     protected Rigidbody m_projectileRigidbody;
     protected bool isFire;
-    protected int m_atk;
+    protected float m_atk;
     protected float m_speed;
     protected float m_range;
     protected float m_disableTime;
@@ -21,7 +21,7 @@ public class ProjectileObject : MonoBehaviour
         isFire = fire;
     }
 
-    public void SetProjectileObjectData(int atk, float speed, float range)
+    public void SetProjectileObjectData(float atk, float speed, float range)
     {
         m_atk = atk;
         m_speed = speed;

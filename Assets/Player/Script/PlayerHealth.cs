@@ -5,16 +5,29 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour, IDamged
 {
     private int m_playerHp;
-    public int PlayerHP { get { return m_playerHp; } set { m_playerHp = value; } }
+    private Animator m_hitAnimator;
 
-    public void TakeDamage(int damage)
+    private void Awake()
     {
-        m_playerHp -= damage;
+        m_playerHp = 4;
+        m_hitAnimator = GetComponent<Animator>();
+    }
 
+    public void TakeDamage(float damage)
+    {
+        m_playerHp -= (int)damage;
 
+        m_hitAnimator.SetTrigger("Hit");
+        
         if(m_playerHp <= 0)
         {
-
+            Die();
         }
+    }
+
+    private void Die()
+    {
+        m_hitAnimator.SetBool("Die", true);
+        GameManager.Instance.IsGameOver = true;
     }
 }

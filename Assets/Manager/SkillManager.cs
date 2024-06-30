@@ -26,17 +26,30 @@ public class SkillManager : Singleton<SkillManager>
 
     private void Awake()
     {
-        Init();
+        InitializeSkillData();
     }
 
-    private void Init()
+    private void InitializeSkillData()
     {
-        SkillDictionary.Add(PlayerSkill.Bow, new SkillData(1, 500.0f, 0f, 1));
-        SkillDictionary.Add(PlayerSkill.FireBall, new SkillData(1, 200.0f, 1f, 1));
-        SkillDictionary.Add(PlayerSkill.Bomb, new SkillData(1, 10.0f, 10.0f, 2));
-        SkillDictionary.Add(PlayerSkill.Hook, new SkillData(1, 10.0f, 5.0f, 0));
+        InitSkill(PlayerSkill.Bow, "Bow");
+        InitSkill(PlayerSkill.FireBall, "FireBall");
+        InitSkill(PlayerSkill.Bomb, "Bomb");
+        InitSkill(PlayerSkill.Hook, "Hook");
 
         m_skillCount = 4;
+    }
+
+    private void InitSkill(PlayerSkill skill, string skillName)
+    {
+        var skillData = DataManager.Instance.GetSkillData(skillName);
+        SkillData data = new SkillData(
+            skillData.SkillName,
+            skillData.SkillAttackPower,
+            skillData.ProjectileSpeed,
+            skillData.SkillRange,
+            skillData.Cost);
+
+        SkillDictionary.Add(skill, data);
     }
 
     public SkillData GetSkillData(PlayerSkill skill)
@@ -47,6 +60,14 @@ public class SkillManager : Singleton<SkillManager>
     public void SetCurretSkill(PlayerSkill skill)
     {
         m_currentSkill = skill;
+    }
+
+    public void AddSkillCount()
+    {
+        if (m_skillCount >= 4)
+            return;
+
+        m_skillCount++;
     }
 
     public void AddSkill(PlayerSkill skill)
@@ -72,12 +93,14 @@ public class SkillManager : Singleton<SkillManager>
 
 public struct SkillData
 {
-    public int m_attackPower { get; }
+    public string m_skillName { get; }
+    public float m_attackPower { get; }
     public float m_projectileSpeed { get; }
     public float m_projectileRange { get; }
     public int m_cost { get; }
-    public SkillData(int attackPower,float projectileSpeed, float projectileRange, int cost)
+    public SkillData(string skillName ,float attackPower,float projectileSpeed, float projectileRange, int cost)
     {
+        m_skillName = skillName;
         m_attackPower = attackPower;
         m_projectileSpeed = projectileSpeed;
         m_projectileRange = projectileRange;

@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
+
+
 
 public class Bat : Monster
 {
@@ -11,6 +12,7 @@ public class Bat : Monster
         base.Start();
         InitStateMachine();
         InitBat();
+        InitMaterial();
     }
 
     private void InitBat()
@@ -18,6 +20,16 @@ public class Bat : Monster
         m_monsterHealth = DataManager.Instance.GetMonsterData((int)MonsterData.Bat).MonsterHp;
         m_monsterAttackPower = DataManager.Instance.GetMonsterData((int)MonsterData.Bat).MonsterAttackPower;
         m_monsterSpeed = DataManager.Instance.GetMonsterData((int)MonsterData.Bat).MonsterSpeed;
+        m_monsterAgent.speed = m_monsterSpeed;
+        
+        
+    }
+
+    private void InitMaterial()
+    {
+        m_copyMaterial = Instantiate(m_originalMaterial);
+        m_skinnedMeshRenderer.material = m_copyMaterial;
+        m_saveColor = m_copyMaterial.GetColor("_Color");
     }
 
     private void InitStateMachine()
@@ -25,8 +37,6 @@ public class Bat : Monster
         m_monsterStateMachine = gameObject.AddComponent<MonsterStateMachine>();
         m_monsterStateMachine.AddState(MonsterState.Idle, new IdleState(this));
         m_monsterStateMachine.AddState(MonsterState.Move, new MoveState(this));
-        m_monsterStateMachine.AddState(MonsterState.Trace, new TraceState(this));
-        m_monsterStateMachine.AddState(MonsterState.Attack, new AttackState(this));
     }
 
     public MonsterStateMachine State { get { return m_monsterStateMachine; } }
@@ -34,30 +44,31 @@ public class Bat : Monster
     public Animator Anim { get { return m_monsterAnim; } }
     public GameObject Player { get { return m_player; } }
 
-    public void ChangerTrace()
+    public override void TakeDamage(float damage)
     {
-        m_monsterStateMachine.ChangeState(MonsterState.Trace);
-    }
+        m_monsterHealth -= (int)damage;
 
-    public override void TakeDamage(int damage)
-    {
-        m_monsterHealth -= damage;
-
-        m_monsterAnim.SetTrigger("Hit");
-        
         if(m_monsterHealth <= 0)
         {
-            gameObject.SetActive(false);    
+            Die();
         }
-
+        else
+        {
+            StartCoroutine(IntensityChange(2f, 2f));
+            KnockBack();
+        }
+            
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void Die()
     {
-        if (other.CompareTag("Sword"))
-            Debug.Log("검 콜라이더");
+        gameObject.layer = LayerMask.NameToLayer("DeadMonster");
+        m_monsterAgent.SetDestination(transform.position);
+        m_monsterAgent.isStopped = true;
+        m_monsterRigid.isKinematic = true;
+        m_monsterAnim.SetTrigger("Die");
+        StartCoroutine(Die(5f, 0.5f, 0.001f));
     }
-
 }
 
 public abstract class BatState : Monster_BaseState
@@ -80,11 +91,6 @@ public class IdleState : BatState
         m_Bat.StartCoroutine(ChangeTimer());
     }
 
-    public override void StateUpdate()
-    {
-        TargetToPlayer();
-    }
-
     public override void StateExit()
     {
         m_idleTime = 0f;
@@ -103,15 +109,6 @@ public class IdleState : BatState
                 m_Bat.State.ChangeState(MonsterState.Move);
                 yield break;
             }
-        }
-    }
-
-    private void TargetToPlayer()
-    {
-        if(Vector3.Distance(m_Bat.Player.transform.position, m_Bat.transform.position) <= 7.0f)
-        {
-            m_Bat.StopCoroutine(ChangeTimer()); 
-            m_Bat.State.ChangeState(MonsterState.Trace);
         }
     }
 }
@@ -144,76 +141,11 @@ public class MoveState : BatState
         {
             m_Bat.State.ChangeState(MonsterState.Idle);
         }
-        
-        TargetToPlayer();
     }
 
     public override void StateExit()
     {
         m_Bat.Anim.SetBool("Move", false);
-    }
-
-    private void TargetToPlayer()
-    {
-        if(Vector3.Distance(m_Bat.Player.transform.position, m_Bat.transform.position) <= 7.0f)
-        {
-            m_Bat.State.ChangeState(MonsterState.Trace);
-        }
-    }
-}
-
-public class TraceState : BatState
-{
-    public TraceState(Bat bat) : base(bat) { }
-
-    public override void StateEnter()
-    {
-        m_Bat.Agent.speed = 7.0f;
-        m_Bat.Anim.SetBool("Move", true);
-        m_Bat.Anim.ResetTrigger("Attack");
-        
-    }
-
-    public override void StateUpdate()
-    {
-        Return();
-        Attack();
-    }
-
-    public override void StateExit()
-    {
-        m_Bat.Agent.speed = 5.0f;
-        m_Bat.Anim.SetBool("Move", false);
-    }
-
-    private void Return()
-    {
-        if(Vector3.Distance(m_Bat.Player.transform.position, m_Bat.transform.position) > 7.0f)
-        {
-            m_Bat.State.ChangeState(MonsterState.Move);
-        }
-        else
-        {
-            m_Bat.Agent.SetDestination(m_Bat.Player.transform.position);
-        }
-    }
-
-    private void Attack()
-    {
-        if(m_Bat.Agent.remainingDistance <= m_Bat.Agent.stoppingDistance)
-        {
-            m_Bat.State.ChangeState(MonsterState.Attack);
-        }
-    }
-}
-
-public class AttackState : BatState
-{
-    public AttackState(Bat bat) : base(bat) { }
-
-    public override void StateEnter()
-    {
-        m_Bat.Anim.SetTrigger("Attack");
     }
 }
 

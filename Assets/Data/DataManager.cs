@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using System.Xml.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -122,12 +123,45 @@ public class DataManager
 
     private void ReadPlayerSkillData(string tableName)
     {
-        
+        LoadedPlayerSkillList = new Dictionary<string, _PlayerSkill>();
+
+        XDocument doc = XDocument.Load($"{m_dataPath}/{tableName}.xml");
+        var dataElements = doc.Descendants("data");
+
+        foreach(var data in dataElements)
+        {
+            var tempSkill = new _PlayerSkill();
+
+            tempSkill.SkillName = data.Attribute(nameof(tempSkill.SkillName)).Value;
+            tempSkill.SkillAttackPower = float.Parse(data.Attribute(nameof(tempSkill.SkillAttackPower)).Value);
+            tempSkill.ProjectileSpeed = float.Parse(data.Attribute(nameof(tempSkill.ProjectileSpeed)).Value);
+            tempSkill.SkillRange = float.Parse(data.Attribute(nameof(tempSkill.SkillRange)).Value); 
+            tempSkill.Cost = int.Parse(data.Attribute(nameof(tempSkill.Cost)).Value);
+
+            LoadedPlayerSkillList.Add(tempSkill.SkillName, tempSkill);
+        }
     }
 
     private void ReadBossData(string tableName)
     {
-        
+        LoadedBossList = new Dictionary<int, _Boss>();
+
+        XDocument doc = XDocument.Load($"{m_dataPath}/{tableName}.xml");
+        var dataElements = doc.Descendants("data");
+
+        foreach (var data in dataElements)
+        {
+            var tempBoss = new _Boss();
+
+            tempBoss.BossId = int.Parse(data.Attribute(nameof(tempBoss.BossId)).Value);
+            tempBoss.BossName = data.Attribute(nameof(tempBoss.BossName)).Value;
+            tempBoss.BossHp = int.Parse(data.Attribute(nameof(tempBoss.BossHp)).Value);
+            tempBoss.BossAttackPower = float.Parse(data.Attribute(nameof(tempBoss.BossAttackPower)).Value);
+            tempBoss.BossSpeed = float.Parse(data.Attribute(nameof(tempBoss.BossSpeed)).Value);
+
+            LoadedBossList.Add(tempBoss.BossId, tempBoss);
+
+        }
     }
 
     private void ReadMonsterData(string tableName)
@@ -175,6 +209,32 @@ public class DataManager
         }
 
         return monsterDataList[monsterId];
+    }
+
+    public _Boss GetBossData(int bossId)
+    {
+        var bossDataList = LoadedBossList;
+
+        if(bossDataList.Count == 0
+            || bossDataList.ContainsKey(bossId) == false)
+        {
+            return null;
+        }
+
+        return bossDataList[bossId];    
+    }
+
+    public _PlayerSkill GetSkillData(string skillName)
+    {
+        var skillDataList = LoadedPlayerSkillList;
+
+        if(skillDataList.Count == 0
+            || skillDataList.ContainsKey(skillName) == false)
+        {
+            return null;
+        }
+
+        return skillDataList[skillName];
     }
 
  }
