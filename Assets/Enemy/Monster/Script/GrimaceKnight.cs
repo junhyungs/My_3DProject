@@ -2,17 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GrimaceKnight : MonoBehaviour
+public class GrimaceKnight : Monster
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void TakeDamage(float damage)
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void Start()
     {
+        base.Start();
+        
         
     }
+
+    private void Update()
+    {
+        if (Vector3.Distance(m_player.transform.position, transform.position) <= 2.0f)
+            m_monsterAnim.SetTrigger("Bite");
+    }
+
+
+    
+
 }

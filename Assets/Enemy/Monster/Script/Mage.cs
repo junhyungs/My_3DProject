@@ -170,7 +170,7 @@ public class MageTelePortState : MageState
     {
         m_Mage.Anim.SetTrigger("TelePort");
 
-        float timer = 2.0f;
+        float timer = 2.5f;
 
         float colorAmount = 0.003f;
 
@@ -216,7 +216,7 @@ public class MageTelePortState : MageState
 
         m_Mage.Anim.SetBool("TelePort_In", true);
 
-        float timer = 2.0f;
+        float timer = 2.5f;
 
         float colorAmount = 0.003f;
 
