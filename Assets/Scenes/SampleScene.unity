@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1827,6 +1827,7 @@ GameObject:
   - component: {fileID: 1407378174}
   - component: {fileID: 1407378173}
   - component: {fileID: 1407378172}
+  - component: {fileID: 1407378177}
   m_Layer: 6
   m_Name: Sphere
   m_TagString: Untagged
@@ -1883,7 +1884,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 698f4eb7e2cf9084cb976184d0ab0090, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1928,6 +1929,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 22
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1407378177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407378171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42984d6024351f947a4da0e45d3de590, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 9999
+  TestMaterial: {fileID: 2100000, guid: 698f4eb7e2cf9084cb976184d0ab0090, type: 2}
 --- !u!1 &1472611363 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1151502900046148, guid: d5e400a2a0d155d4db9970614680534f, type: 3}
@@ -4715,6 +4730,10 @@ PrefabInstance:
     - target: {fileID: 4509663063932249139, guid: 7a27c304a96a1ab4d8f6b3da91a76e8d, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0.001334117
+      objectReference: {fileID: 0}
+    - target: {fileID: 4851097036973490876, guid: 7a27c304a96a1ab4d8f6b3da91a76e8d, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5259277826493473667, guid: 7a27c304a96a1ab4d8f6b3da91a76e8d, type: 3}
       propertyPath: m_LocalRotation.w

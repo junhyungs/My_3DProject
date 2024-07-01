@@ -39,7 +39,7 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
 
     private void Awake()
     {
-        WeaponManager.Instance.RegisterColliderEvent(this);
+        EventManager.Instance.RegisterActiveTriggerColliderEvent(this);
     }
 
     private void Start()
@@ -72,7 +72,7 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
         LeftObject[(int)currentWeapon].SetActive(true);
         m_effect.ActiveSwordEffect_L(isCharge);
         WeaponManager.Instance.ActiveIdleWeapon(false);
-        m_Oncollider.Invoke();
+        m_Oncollider?.Invoke();
     }
 
     public void ActiveChargeLeftWeapon(bool isCharge)
@@ -92,7 +92,7 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
         RightObject[(int)currentWeapon].SetActive(true);
         m_effect.ActiveSwordEffect_R(isCharge);
         WeaponManager.Instance.ActiveIdleWeapon(false);
-        m_Oncollider.Invoke();
+        m_Oncollider?.Invoke();
     }
     public void ActiveChargeRightWeapon(bool isCharge)
     {
@@ -107,22 +107,22 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
     {
         PlayerWeapon currentWeapon = WeaponManager.Instance.GetcurrentWeapon();
 
-        m_Offcollider.Invoke();
         m_effect.ResetColor(currentWeapon);
         RightObject[(int)currentWeapon].SetActive(false);
         WeaponManager.Instance.ActiveIdleWeapon(true);
         m_weaponAnimation.SetBool("NextAttack", true);
+        m_Offcollider?.Invoke();
     }
 
     public void DeActiveLeftWeapon()
     {
         PlayerWeapon currentWeapon = WeaponManager.Instance.GetcurrentWeapon();
 
-        m_Offcollider.Invoke();
         m_effect.ResetColor(currentWeapon);
         LeftObject[(int)currentWeapon].SetActive(false);
         WeaponManager.Instance.ActiveIdleWeapon(true);
         m_weaponAnimation.SetBool("NextAttack", true);
+        m_Offcollider?.Invoke();
     }
 
     public void ChargeAttackReset()
@@ -165,6 +165,7 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
         {
             m_Oncollider -= callBack;
         }
+
     }
 
     public void OffCollider(bool isAddEvent, Action callBack)

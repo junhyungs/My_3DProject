@@ -1,7 +1,8 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerAttackController : MonoBehaviour
+public class PlayerAttackController : MonoBehaviour, IHitEvent
 {
     [Header("ProjectilePositionObject")]
     [SerializeField] private GameObject m_arrowPositionObject;
@@ -11,6 +12,8 @@ public class PlayerAttackController : MonoBehaviour
     private PlayerWeaponController m_weaponController;
     private PlayerSkillController m_skillController;
     private Animator m_attackAnimation;
+
+    private Action<bool> m_hitEvent;
    
     private bool chargeMax;
     private bool chargeAttackDirection = true;
@@ -43,6 +46,7 @@ public class PlayerAttackController : MonoBehaviour
         m_weaponController = GetComponent<PlayerWeaponController>();   
         m_skillController = GetComponent<PlayerSkillController>();  
         m_attackAnimation = GetComponent<Animator>();
+        EventManager.Instance.RegisterOverlapBoxEvent(this);
     }
 
     private void OnUpdate()
@@ -194,6 +198,8 @@ public class PlayerAttackController : MonoBehaviour
         }
     }
 
+   
+
     //AnimationEvent
     public void UseSkillAttack()
     {
@@ -222,5 +228,22 @@ public class PlayerAttackController : MonoBehaviour
     public void OnCharge()
     {
         m_attackAnimation.SetBool("ChargeAttack", true);
+    }
+
+    public void Hit()
+    {
+        m_hitEvent?.Invoke(chargeMax);
+    }
+
+    public void HitOverlapBox(bool isAddEvent, Action<bool> callBack)
+    {
+        if (isAddEvent)
+        {
+            m_hitEvent += callBack;
+        }
+        else
+        {
+            m_hitEvent -= callBack;
+        }
     }
 }

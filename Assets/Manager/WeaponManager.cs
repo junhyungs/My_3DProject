@@ -18,8 +18,6 @@ public class WeaponManager : Singleton<WeaponManager>
 
     private Dictionary<PlayerWeapon, WeaponData> WeaponDataDic = new Dictionary<PlayerWeapon, WeaponData>();
     private IWeapon m_currentWeapon;
-    private IWeaponEvent m_weaponEvent;
-    private IOnColliderEvent m_colliderEvent;
     private PlayerWeapon m_weaponType;
 
     private void Awake()
@@ -96,40 +94,6 @@ public class WeaponManager : Singleton<WeaponManager>
     {
         IdleObject[(int)m_weaponType].SetActive(active);
     }
-
-    //RegisterEvent---------------------------------------------------
-    public void RegisterWeaponEvent(IWeaponEvent weaponEvent)
-    {
-        m_weaponEvent = weaponEvent;
-    }
-
-    public void RegisterColliderEvent(IOnColliderEvent onColliderEvent)
-    {
-        m_colliderEvent = onColliderEvent;
-    }
-    //RegisterEvent---------------------------------------------------
-
-    //AddEvent--------------------------------------------------------
-    public void AddData(bool isAddEvent, Action<float, float, Vector3, Vector3> callBack)
-    {
-        m_weaponEvent.AddWeaponData(isAddEvent, callBack);
-    }
-
-    public void AddOnColliderEvent(bool isAddEvent, Action callBack)
-    {
-        m_colliderEvent.OnCollider(isAddEvent, callBack);
-    }
-
-    public void AddOffColliderEvent(bool isAddEvent, Action callBack)
-    {
-        m_colliderEvent.OffCollider(isAddEvent, callBack);
-    }
-
-    public void AddWeaponRangeEvent(bool isAddEvent, Action<bool> callBack)
-    {
-        m_weaponEvent.AddUseWeaponEvent(isAddEvent, callBack);
-    }
-    //AddEvent--------------------------------------------------------
 
     public WeaponData GetWeaponData(PlayerWeapon weaponType)
     {

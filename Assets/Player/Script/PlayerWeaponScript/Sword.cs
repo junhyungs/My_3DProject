@@ -8,7 +8,7 @@ public class Sword : Weapon
 {
     private void OnEnable()
     {
-        WeaponManager.Instance.RegisterWeaponEvent(this);
+        EventManager.Instance.RegisterSetWeaponDataEvent(this);
         m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Sword);
         m_weaponEffect = GetComponent<PlayerWeaponEffectController>();
         m_weaponEffect.SetEffectRange(m_weaponData.m_defaultEffectRange, m_weaponData.m_chargeEffectRange);
