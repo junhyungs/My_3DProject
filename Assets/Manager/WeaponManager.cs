@@ -56,6 +56,7 @@ public class WeaponManager : Singleton<WeaponManager>
   
     public void SetWeapon(PlayerWeapon weaponType)
     {
+        Debug.Log("SetWeapon");
         ActiveIdleWeapon(false);
 
         m_weaponType = weaponType;
@@ -85,8 +86,8 @@ public class WeaponManager : Singleton<WeaponManager>
                 m_currentWeapon = gameObject.AddComponent<Umbrella>();
                 break;
         }
-        
-        
+
+        InitAttackObject();
         ActiveIdleWeapon(true);
     }
 
@@ -105,9 +106,10 @@ public class WeaponManager : Singleton<WeaponManager>
         return m_weaponType;
     }
 
-    public void UseWeapon(bool isCharge)
+    public void InitAttackObject()
     {
-        m_currentWeapon.UseWeapon(isCharge);
+        Debug.Log("InitAttackObject");
+        m_currentWeapon.InitAttackObject();
     }
 
     private void OnDisableIdleWeaponObject()

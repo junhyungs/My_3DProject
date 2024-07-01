@@ -76,7 +76,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
     {
         if (isPressed)
         {
-            m_weaponController.UseWeapon(false);
+            m_weaponController.Attack();
             chargeAttackDirection = !chargeAttackDirection;
             LookAtMouse();
         }
@@ -134,7 +134,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
         if (chargeMax)
         {
             m_attackAnimation.SetBool("ChargeAttack", false);
-            m_weaponController.UseWeapon(true);
+            m_weaponController.Attack();
             chargeAttackDirection = !chargeAttackDirection;
         }
         else

@@ -5,6 +5,5 @@ using UnityEngine;
 
 public interface IWeaponEvent
 {
-    public void AddWeaponData(bool isAddEvent, Action<float, float, Vector3, Vector3> callBack);
-    public void AddUseWeaponEvent(bool isAddEvent, Action<bool> callBack);
+    public void AddWeaponDataEvent(bool isAddEvent, Action<float, float, Vector3, Vector3> callBack);
 }

@@ -10,7 +10,7 @@ public class GreatSword : Weapon
         
     }
 
-    public override void UseWeapon(bool isCharge)
+    public override void InitAttackObject()
     {
         
     }

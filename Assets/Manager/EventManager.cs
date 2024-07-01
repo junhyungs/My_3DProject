@@ -40,14 +40,10 @@ public class EventManager
     //RegisterEvent-----------------------------------------------------------------------------------
 
     //AddEvent----------------------------------------------------------------------------------------
+   
     public void AddEvent_SetWeaponDataEvent(bool addEvent, Action<float, float, Vector3, Vector3> callBack)
     {
-        m_SetWeaponDataEvent.AddWeaponData(addEvent, callBack);
-    }
-
-    public void AddEvent_SetWeaponRangeEvent(bool addEvent, Action<bool> callBack)
-    {
-        m_SetWeaponDataEvent.AddUseWeaponEvent(addEvent, callBack);
+        m_SetWeaponDataEvent.AddWeaponDataEvent(addEvent, callBack);
     }
 
     public void AddEvent_ActiveTriggerColliderEvent(bool addEvent, Action callBack)

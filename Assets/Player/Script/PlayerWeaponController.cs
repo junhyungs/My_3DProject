@@ -148,11 +148,10 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
         }
     }
 
-    public void UseWeapon(bool isCharge)
+    public void Attack()
     {
         m_weaponAnimation.SetTrigger("Attack");
         m_weaponAnimation.SetBool("NextAttack", false);
-        WeaponManager.Instance.UseWeapon(isCharge);
     }
 
     public void OnCollider(bool isAddEvent, Action callBack)
