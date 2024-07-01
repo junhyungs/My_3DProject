@@ -15,10 +15,20 @@ public class PoolManager : Singleton<PoolManager>
     [SerializeField] private GameObject m_fireBallPrefab;
     [SerializeField] private int m_fireBallCount;
     [SerializeField] private Transform m_fireBallPoolPosition;
-    private Queue<GameObject> FireBallPool = new Queue<GameObject>();   
+    private Queue<GameObject> FireBallPool = new Queue<GameObject>();
 
-    //[Header("Monster")]
-    //[SerializeField] private GameObject[] MonsterPrefab;
+    [Header("MageMonsterBullet")]
+    [SerializeField] private GameObject m_MagicBullet;
+    [SerializeField] private int m_MagicBulletCount;
+    [SerializeField] private Transform m_MagicBulletPoolPosition;
+    private Queue<GameObject> MagicBulletPool = new Queue<GameObject>();
+
+    [Header("HitEffect")]
+    [SerializeField] private GameObject m_HitParticle;
+    [SerializeField] private int m_HitParticleCount;
+    [SerializeField] private Transform m_HitParticlePoolPosition;
+    private Queue<GameObject> HitParticlePool = new Queue<GameObject>();
+
 
 
     private void Start()
@@ -40,6 +50,20 @@ public class PoolManager : Singleton<PoolManager>
             GameObject fire = Instantiate(m_fireBallPrefab, m_fireBallPoolPosition);
             fire.SetActive(false);
             FireBallPool.Enqueue(fire);
+        }
+
+        for(int i = 0; i < m_MagicBulletCount; i++)
+        {
+            GameObject magicBullet = Instantiate(m_MagicBullet, m_MagicBulletPoolPosition);
+            magicBullet.SetActive(false);
+            MagicBulletPool.Enqueue(magicBullet);
+        }
+
+        for(int i = 0; i < m_HitParticleCount; i++)
+        {
+            GameObject hitParticle = Instantiate(m_HitParticle, m_HitParticlePoolPosition);
+            hitParticle.SetActive(false);
+            HitParticlePool.Enqueue(hitParticle);
         }
     }
 
@@ -63,6 +87,21 @@ public class PoolManager : Singleton<PoolManager>
         return fire;
     }
 
+    public GameObject GetMagicBullet()
+    {
+        GameObject magicBullet = MagicBulletPool.Dequeue();
+        MagicBulletPool.Enqueue(magicBullet);
+        magicBullet.SetActive(true);
+        return magicBullet;
+    }
+
+    public GameObject GetHitParticle()
+    {
+        GameObject hitParticle = HitParticlePool.Dequeue();
+        HitParticlePool.Enqueue(hitParticle);
+        return hitParticle;
+    }
+
     public void ReturnArrow(GameObject arrow)
     {
         arrow.transform.SetParent(m_arrowPoolPosition);
@@ -73,5 +112,17 @@ public class PoolManager : Singleton<PoolManager>
     {
         fireBall.transform.SetParent(m_fireBallPoolPosition);
         fireBall.SetActive(false);
+    }
+
+    public void ReturnMagicBullet(GameObject magicBullet)
+    {
+        magicBullet.transform.SetParent(m_MagicBulletPoolPosition);
+        magicBullet.SetActive(false);
+    }
+
+    public void ReturnHitParticle(GameObject hitParticle)
+    {
+        hitParticle.transform.SetParent(m_HitParticlePoolPosition);
+        hitParticle.SetActive(false);
     }
 }

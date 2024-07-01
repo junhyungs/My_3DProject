@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2188923198074524255
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2552611758175737140}
+  m_Layer: 0
+  m_Name: HitParticlePool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2552611758175737140
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2188923198074524255}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8821566160390108350}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3177860234135362418
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,6 +123,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8821566160390108350}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5201405674871892801
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1772669715455115600}
+  m_Layer: 0
+  m_Name: MagicBulletPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1772669715455115600
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5201405674871892801}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8821566160390108350}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6224215133830732443
 GameObject:
@@ -189,6 +251,8 @@ Transform:
   - {fileID: 6935728097963216611}
   - {fileID: 5421599182619721769}
   - {fileID: 8233350416491848573}
+  - {fileID: 1772669715455115600}
+  - {fileID: 2552611758175737140}
   m_Father: {fileID: 6574483347064889870}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -210,6 +274,12 @@ MonoBehaviour:
   m_fireBallPrefab: {fileID: 565449142435857024, guid: a3f022f566e15f74d818a58751d6ff6c, type: 3}
   m_fireBallCount: 10
   m_fireBallPoolPosition: {fileID: 8233350416491848573}
+  m_MagicBullet: {fileID: 3795732553029474043, guid: 7754fd6024c592b4a9fed4238189eb60, type: 3}
+  m_MagicBulletCount: 50
+  m_MagicBulletPoolPosition: {fileID: 1772669715455115600}
+  m_HitParticle: {fileID: 4650828552053493401, guid: 6ad06865208e32b419b49c1ff7a51b74, type: 3}
+  m_HitParticleCount: 100
+  m_HitParticlePoolPosition: {fileID: 2552611758175737140}
 --- !u!1 &8194714446572462271
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,3 +403,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea740529d62304746b30797f518d3d45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_respawnTransform: {fileID: 0}

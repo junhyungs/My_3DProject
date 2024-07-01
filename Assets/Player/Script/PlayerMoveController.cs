@@ -140,7 +140,7 @@ public class PlayerMoveController : MonoBehaviour
     {
         float startTime = Time.time;
 
-        float moveSpeed = isChargeMax ? 15.0f : 5.0f;
+        float moveSpeed = isChargeMax ? 10.0f : 3.0f;
 
         Vector3 direction = transform.forward;
 

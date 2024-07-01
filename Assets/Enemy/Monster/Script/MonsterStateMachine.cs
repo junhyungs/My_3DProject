@@ -7,7 +7,8 @@ public enum MonsterState
     Idle,
     Move,
     Trace,
-    Attack
+    Attack,
+    TelePort
 }
 public class MonsterStateMachine : MonoBehaviour
 {

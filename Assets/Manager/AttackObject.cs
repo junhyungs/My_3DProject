@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class AttackObject : MonoBehaviour
 {
+    
     private MeshCollider m_attackCollider;
     private float m_defaultAtk;
     private float m_chargeAtk;
     private float m_currentAtk;
     private Vector3 m_defaultRange;
     private Vector3 m_chargeRange;
+    private LayerMask m_monsterLayer;
 
     private void Awake()
     {
@@ -23,6 +25,7 @@ public class AttackObject : MonoBehaviour
         WeaponManager.Instance.AddWeaponRangeEvent(true, SetWeaponRange);
         m_attackCollider = GetComponent<MeshCollider>();
         m_attackCollider.enabled = false;
+        m_monsterLayer = LayerMask.NameToLayer("Monster");
     }
 
     public void SetWeaponData(float defaultAtk, float chargeAtk, Vector3 defaultRange, Vector3 chargeRange)
@@ -36,12 +39,12 @@ public class AttackObject : MonoBehaviour
 
     public void OnCollider()
     {
-        m_attackCollider.enabled = true;
+        //m_attackCollider.enabled = true;
     }
 
     public void OffCollider()
     {
-        m_attackCollider.enabled = false;
+        //m_attackCollider.enabled = false;
     }
 
     public void SetWeaponRange(bool isCharge)
@@ -53,24 +56,59 @@ public class AttackObject : MonoBehaviour
         }
         else
         {
+            HitOverlapSphere(isCharge);
             transform.localScale = m_defaultRange;
             m_currentAtk = m_defaultAtk;
         }
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void HitOverlapSphere(bool isCharge)
     {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Monster"))
-        {
-            IDamged hit = other.gameObject.GetComponent<IDamged>();
+        Debug.Log("½ÇÇàµÊ");
+        float sphereRadisu = isCharge ? 1.62f : 2.5f;
 
-            if (hit != null)
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, sphereRadisu, m_monsterLayer);
+
+        Vector3 forward = transform.forward;
+
+        foreach(var hitCollider in hitColliders)
+        {
+            Debug.Log(hitCollider.gameObject.name);
+            Vector3 toCollider = (hitCollider.transform.position - transform.position).normalized;
+
+            float dot = Vector3.Dot(forward, toCollider);
+
+            if(dot > 0)
             {
-                SkillManager.Instance.AddSkillCount();
-                hit.TakeDamage(m_currentAtk);
+                IDamged hit = hitCollider.gameObject.GetComponent<IDamged>();
+
+                if(hit != null)
+                {
+                    hit.TakeDamage(m_defaultAtk);
+                }
             }
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log(other.gameObject.name);   
+        //if(other.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        //{
+        //    IDamged hit = other.gameObject.GetComponent<IDamged>();
+
+        //    if (hit != null)
+        //    {
+        //        GameObject HitParticle = PoolManager.Instance.GetHitParticle();
+        //        ParticleSystem HitParticleSystem = HitParticle.GetComponent<ParticleSystem>();
+        //        HitParticle.transform.position = other.transform.position;
+        //        HitParticle.SetActive(true);
+        //        HitParticleSystem.Play();   
+        //        SkillManager.Instance.AddSkillCount();
+        //        hit.TakeDamage(m_currentAtk);
+        //    }
+        //}
 
         if(other.gameObject.layer == LayerMask.NameToLayer("GimikObject"))
         {
@@ -78,6 +116,10 @@ public class AttackObject : MonoBehaviour
         }
     }
 
-    
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, 2.5f);
+    }
 
 }

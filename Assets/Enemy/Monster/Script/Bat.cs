@@ -21,8 +21,6 @@ public class Bat : Monster
         m_monsterAttackPower = DataManager.Instance.GetMonsterData((int)MonsterData.Bat).MonsterAttackPower;
         m_monsterSpeed = DataManager.Instance.GetMonsterData((int)MonsterData.Bat).MonsterSpeed;
         m_monsterAgent.speed = m_monsterSpeed;
-        
-        
     }
 
     private void InitMaterial()
@@ -42,7 +40,6 @@ public class Bat : Monster
     public MonsterStateMachine State { get { return m_monsterStateMachine; } }
     public NavMeshAgent Agent { get { return m_monsterAgent; } }
     public Animator Anim { get { return m_monsterAnim; } }
-    public GameObject Player { get { return m_player; } }
 
     public override void TakeDamage(float damage)
     {

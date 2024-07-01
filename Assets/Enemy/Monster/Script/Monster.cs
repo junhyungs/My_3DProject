@@ -5,7 +5,8 @@ using UnityEngine.AI;
 
 public enum MonsterData
 {
-    Bat = 1
+    Bat = 1,
+    Mage = 3
 }
 
 public abstract class Monster : MonoBehaviour, IDamged
@@ -54,7 +55,7 @@ public abstract class Monster : MonoBehaviour, IDamged
     {
         Vector3 KnockBackDir = (m_player.transform.position - transform.position).normalized;
 
-        Vector3 KnockBackForce = KnockBackDir * 5.0f;
+        Vector3 KnockBackForce = KnockBackDir * 10.0f;
 
         m_monsterRigid.isKinematic = false;
 
