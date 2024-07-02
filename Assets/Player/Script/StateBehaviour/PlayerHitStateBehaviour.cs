@@ -15,19 +15,18 @@ public class PlayerHitStateBehaviour : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (m_moveContorller == null)
-            animator.GetComponent<PlayerMoveController>();
+            m_moveContorller = animator.GetComponent<PlayerMoveController>();
 
-        if(stateInfo.shortNameHash == m_Hit_back)
+        if (stateInfo.shortNameHash == m_Hit_back)
         {
             m_playerLayer = animator.gameObject.layer;
             animator.gameObject.layer = LayerMask.NameToLayer("HitPlayer");
         }
-    }
 
-    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
         m_moveContorller.IsAction = false;
     }
+
+
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

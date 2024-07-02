@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.ShaderGraph.Internal;
+
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -90,8 +88,7 @@ public class Mage : Monster
         }
         else
         {
-            StartCoroutine(IntensityChange(2f, 2f));
-            KnockBack();
+            StartCoroutine(IntensityChange(2f, 3f));
         }
     }
 

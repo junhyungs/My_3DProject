@@ -8,6 +8,7 @@ public class EventManager
     private IWeaponEvent m_SetWeaponDataEvent;
     private IOnColliderEvent m_ActiveTriggerColliderEvent;
     private IHitEvent m_OverlapBoxEvent;
+    private Action<float, float, Vector3, Vector3> m_setWeaponDataEvent;
 
     public static EventManager Instance
     {

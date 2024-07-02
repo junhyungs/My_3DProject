@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public enum MonsterData
 {
     Bat = 1,
-    Mage = 3
+    Mage = 3,
+    Pot,
 }
 
 public abstract class Monster : MonoBehaviour, IDamged
@@ -24,6 +26,7 @@ public abstract class Monster : MonoBehaviour, IDamged
     protected GameObject m_player;
     protected Color m_saveColor;
 
+    [SerializeField]
     protected int m_monsterHealth;
     protected int m_monsterAttackPower;
     protected float m_monsterSpeed;
@@ -38,45 +41,6 @@ public abstract class Monster : MonoBehaviour, IDamged
         m_player = GameManager.Instance.Player;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    protected void KnockBack()
-    {
-        Vector3 KnockBackDir = (m_player.transform.position - transform.position).normalized;
-
-        Vector3 KnockBackForce = KnockBackDir * 10.0f;
-
-        m_monsterRigid.isKinematic = false;
-
-        m_monsterAgent.isStopped = true;
-
-        m_monsterRigid.AddForce(-KnockBackForce, ForceMode.Impulse);
-
-        StartCoroutine(EndKnockBack());
-    }
-
-    protected IEnumerator EndKnockBack()
-    {
-        yield return new WaitForSeconds(0.5f);
-
-        if(m_monsterHealth > 0)
-        {
-            m_monsterAgent.isStopped = false;
-
-            m_monsterRigid.isKinematic = true;
-        }
-    }
 
     protected IEnumerator IntensityChange(float powValue1, float powValue2)
     {

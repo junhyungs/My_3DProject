@@ -40,6 +40,7 @@ public class Bat : Monster
     public MonsterStateMachine State { get { return m_monsterStateMachine; } }
     public NavMeshAgent Agent { get { return m_monsterAgent; } }
     public Animator Anim { get { return m_monsterAnim; } }
+    
 
     public override void TakeDamage(float damage)
     {
@@ -51,8 +52,7 @@ public class Bat : Monster
         }
         else
         {
-            StartCoroutine(IntensityChange(2f, 2f));
-            KnockBack();
+            StartCoroutine(IntensityChange(2f, 3f));
         }
             
     }

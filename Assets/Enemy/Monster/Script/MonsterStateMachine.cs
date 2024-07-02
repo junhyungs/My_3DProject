@@ -8,7 +8,9 @@ public enum MonsterState
     Move,
     Trace,
     Attack,
-    TelePort
+    TelePort,
+    Hide,
+    SelfDestruction,
 }
 public class MonsterStateMachine : MonoBehaviour
 {
@@ -28,12 +30,7 @@ public class MonsterStateMachine : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        m_currentState.StateOnTriggerEnter(other);
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        m_currentState.StateOnTriggerStay(other);
+        m_currentState.OnTriggerEnter(other);
     }
 
     private void OnTriggerExit(Collider other)

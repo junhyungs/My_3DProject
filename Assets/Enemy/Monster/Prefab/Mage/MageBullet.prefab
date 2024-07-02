@@ -124,6 +124,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4604638191558134849}
   - component: {fileID: 9084534132961350671}
+  - component: {fileID: 8027530785948906041}
   m_Layer: 0
   m_Name: MageBullet
   m_TagString: Untagged
@@ -161,6 +162,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce03d6c2517ed7045889d22661b881dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!135 &8027530785948906041
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3795732553029474043}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.15
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &5909800706195270858
 PrefabInstance:
   m_ObjectHideFlags: 0

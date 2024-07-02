@@ -8,7 +8,6 @@ public class Sword : Weapon
 {
     private void OnEnable()
     {
-        Debug.Log("OnEable");
         EventManager.Instance.RegisterSetWeaponDataEvent(this);
         m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Sword);
         m_weaponEffect = GetComponent<PlayerWeaponEffectController>();
@@ -18,6 +17,6 @@ public class Sword : Weapon
     public override void InitAttackObject()
     {
         m_weaponRangeEvent.Invoke(m_weaponData.m_defaultPower, m_weaponData.m_chargePower,
-            m_weaponData.m_defaultAttackRange, m_weaponData.m_chargeAttackRange);
+        m_weaponData.m_defaultAttackRange, m_weaponData.m_chargeAttackRange);
     }
 }

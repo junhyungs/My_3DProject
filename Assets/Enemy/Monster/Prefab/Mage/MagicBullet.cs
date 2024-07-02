@@ -7,6 +7,13 @@ public class MagicBullet : MonoBehaviour
     private float m_projectileSpeed = 20.0f;
     private float m_Atk;
     private bool isFire = false;
+    private SphereCollider m_collider;
+
+    private void OnEnable()
+    {
+        m_collider = GetComponent<SphereCollider>();
+        m_collider.enabled = false;
+    }
 
     public void IsFire(bool isFire)
     {
@@ -15,6 +22,7 @@ public class MagicBullet : MonoBehaviour
         if(this.isFire == true)
         {
             Invoke(nameof(ReturnMagicBullet), 5.0f);
+            m_collider.enabled = true;
         }
     }
 
@@ -40,6 +48,15 @@ public class MagicBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
+        if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            IDamged hit = other.gameObject.GetComponent<IDamged>();
+
+            if(hit != null)
+            {
+                hit.TakeDamage(m_Atk);
+                ReturnMagicBullet();
+            }
+        }
     }
 }

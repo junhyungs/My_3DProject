@@ -24,6 +24,10 @@ public class WeaponManager : Singleton<WeaponManager>
     {
         InitializeWeaponData();
         OnDisableIdleWeaponObject();
+    }
+
+    private void Start()
+    {
         m_weaponType = PlayerWeapon.Sword;
         SetWeapon(m_weaponType);
     }
@@ -56,7 +60,7 @@ public class WeaponManager : Singleton<WeaponManager>
   
     public void SetWeapon(PlayerWeapon weaponType)
     {
-        Debug.Log("SetWeapon");
+        
         ActiveIdleWeapon(false);
 
         m_weaponType = weaponType;
@@ -87,7 +91,6 @@ public class WeaponManager : Singleton<WeaponManager>
                 break;
         }
 
-        InitAttackObject();
         ActiveIdleWeapon(true);
     }
 
@@ -108,7 +111,6 @@ public class WeaponManager : Singleton<WeaponManager>
 
     public void InitAttackObject()
     {
-        Debug.Log("InitAttackObject");
         m_currentWeapon.InitAttackObject();
     }
 

@@ -152,6 +152,7 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
     {
         m_weaponAnimation.SetTrigger("Attack");
         m_weaponAnimation.SetBool("NextAttack", false);
+        WeaponManager.Instance.InitAttackObject();
     }
 
     public void OnCollider(bool isAddEvent, Action callBack)
