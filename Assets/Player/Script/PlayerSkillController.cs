@@ -26,6 +26,7 @@ public class PlayerSkillController : MonoBehaviour
         m_skillType = PlayerSkill.Bow;
         SkillManager.Instance.AddSkill(m_skillType);
         SkillManager.Instance.AddSkill(PlayerSkill.FireBall);
+        SkillManager.Instance.AddSkill(PlayerSkill.Hook);
         SetSkill(m_skillType);
     }
 
@@ -79,7 +80,7 @@ public class PlayerSkillController : MonoBehaviour
                 //ÆøÅº
                 break;
             case PlayerSkill.Hook:
-                //°¥°í¸®
+                m_skillAnimation.SetTrigger("Hook");
                 break;
         }
     }

@@ -7,7 +7,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
     [Header("ProjectilePositionObject")]
     [SerializeField] private GameObject m_arrowPositionObject;
     [SerializeField] private GameObject m_firePositionObject;
-    
+    [SerializeField] private GameObject m_hookPositionObject;
 
     private PlayerWeaponController m_weaponController;
     private PlayerSkillController m_skillController;
@@ -34,6 +34,16 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
     private void Awake()
     {
         Init();
+    }
+
+    private void Start()
+    {
+       EventManager.Instance.AddEvent_HookPositionEvent(true, OnHookCollied);
+    }
+
+    private void OnDestroy()
+    {
+        EventManager.Instance.AddEvent_HookPositionEvent(false, OnHookCollied);
     }
 
     private void Update()
@@ -96,15 +106,33 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
     {
         PlayerSkill skillType = m_skillController.SkillType;
 
-        m_skillController.ActiveSkillObject(isPressed);
-
-        m_skillController.CurrentSkillAnimation(isPressed);
-
-        if (!isPressed)
+        if (skillType != PlayerSkill.Hook)
         {
-            OnSkill(skillType);
-        }
+            m_skillController.ActiveSkillObject(isPressed);
 
+            m_skillController.CurrentSkillAnimation(isPressed);
+
+            if (!isPressed)
+            {
+                OnSkill(skillType);
+            }
+        }
+        else
+        {
+            m_skillController.ActiveSkillObject(isPressed);
+
+            if (isPressed)
+            {
+                m_skillController.CurrentSkillAnimation(isPressed);
+            }
+        }
+        
+    }
+
+    // HookMove
+    public void OnHookCollied(Vector3 targetPos)
+    {
+        Debug.Log($"ÁÂÇ¥ ¿ÔÀ½");
     }
 
     private void OnChargeAttack(InputValue input)
@@ -160,10 +188,14 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             m_skillController.SetSkill(PlayerSkill.Bow);
-        }            
+        }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             m_skillController.SetSkill(PlayerSkill.FireBall);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            m_skillController.SetSkill(PlayerSkill.Hook);
         }
     }
 
@@ -177,6 +209,9 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
                 break;
             case PlayerSkill.FireBall:
                 m_skillController.Fire(m_firePositionObject);
+                break;
+            case PlayerSkill.Hook:
+                m_skillController.Fire(m_hookPositionObject);
                 break;
         }
     }
@@ -219,6 +254,10 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
                 cost = SkillManager.Instance.GetSkillData(PlayerSkill.FireBall).m_cost;
                 SkillManager.Instance.SkillCount -= cost;   
                 m_skillController.UseSkill(m_firePositionObject);
+                break;
+            case PlayerSkill.Hook:
+                m_skillController.UseSkill(m_hookPositionObject);
+                OnSkill(PlayerSkill.Hook);
                 break;
         }
 

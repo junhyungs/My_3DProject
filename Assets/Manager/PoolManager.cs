@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class PoolManager : Singleton<PoolManager>
@@ -17,6 +18,12 @@ public class PoolManager : Singleton<PoolManager>
     [SerializeField] private Transform m_fireBallPoolPosition;
     private Queue<GameObject> FireBallPool = new Queue<GameObject>();
 
+    [Header("Hook")]
+    [SerializeField] private GameObject m_hookPrefab;
+    [SerializeField] private int m_hookCount;
+    [SerializeField] private Transform m_hookPoolPosition;
+    private Queue<GameObject> HookPool = new Queue<GameObject>();
+
     [Header("MageMonsterBullet")]
     [SerializeField] private GameObject m_MagicBullet;
     [SerializeField] private int m_MagicBulletCount;
@@ -29,7 +36,17 @@ public class PoolManager : Singleton<PoolManager>
     [SerializeField] private Transform m_HitParticlePoolPosition;
     private Queue<GameObject> HitParticlePool = new Queue<GameObject>();
 
+    [Header("playerChainSegment")]
+    [SerializeField] private GameObject m_playerSegment;
+    [SerializeField] private int m_playerSegmentCount;
+    [SerializeField] private Transform m_playerSegmentPoolPosition;
+    private Queue<GameObject> PlayerSegmentPool = new Queue<GameObject>();
 
+    [Header("OldCrowSegment")]
+    [SerializeField] private GameObject m_oldCrowSegment;
+    [SerializeField] private int m_oldCrowSegmentCount;
+    [SerializeField] private Transform m_oldCrowPoolPosition;
+    private Queue<GameObject> OldCrowSegmentPool = new Queue<GameObject>(); 
 
     private void Start()
     {
@@ -64,6 +81,27 @@ public class PoolManager : Singleton<PoolManager>
             GameObject hitParticle = Instantiate(m_HitParticle, m_HitParticlePoolPosition);
             hitParticle.SetActive(false);
             HitParticlePool.Enqueue(hitParticle);
+        }
+
+        for(int i = 0; i < m_playerSegmentCount; i++)
+        {
+            GameObject playerSegment = Instantiate(m_playerSegment, m_playerSegmentPoolPosition);
+            playerSegment.SetActive(false);
+            PlayerSegmentPool.Enqueue(playerSegment);
+        }
+
+        for(int i = 0; i < m_oldCrowSegmentCount; i++)
+        {
+            GameObject oldCrowSegment = Instantiate(m_oldCrowSegment, m_oldCrowPoolPosition);
+            oldCrowSegment.SetActive(false);
+            OldCrowSegmentPool.Enqueue(oldCrowSegment);
+        }
+
+        for(int i = 0; i < m_hookCount; i++)
+        {
+            GameObject hookObject = Instantiate(m_hookPrefab, m_hookPoolPosition);
+            hookObject.SetActive(false);
+            HookPool.Enqueue(hookObject);
         }
     }
 
@@ -102,6 +140,53 @@ public class PoolManager : Singleton<PoolManager>
         return hitParticle;
     }
 
+    public GameObject GetPlayerSegment(Vector3 position, Quaternion rotation)
+    {
+        if(PlayerSegmentPool.Count > 0)
+        {
+            GameObject playerSegment = PlayerSegmentPool.Dequeue();
+            PlayerSegmentPool.Enqueue(playerSegment);
+            playerSegment.transform.position = position;
+            playerSegment.transform.rotation = rotation;
+            playerSegment.SetActive(true);
+            return playerSegment;
+        }
+        else
+        {
+            GameObject newSegment = Instantiate(m_playerSegment, m_playerSegmentPoolPosition);
+            newSegment.AddComponent<BoxCollider>().isTrigger = true;
+            newSegment.transform.position = position;
+            return newSegment;
+        }
+    }
+
+    public GameObject GetOldCrowSegment(Vector3 position)
+    {
+        if(OldCrowSegmentPool.Count > 0)
+        {
+            GameObject oldCrowSegment = OldCrowSegmentPool.Dequeue();
+            OldCrowSegmentPool.Enqueue(oldCrowSegment);
+            oldCrowSegment.transform.position = position;
+            oldCrowSegment.SetActive(true);
+            return oldCrowSegment;
+        }
+        else
+        {
+            GameObject newSegment = Instantiate(m_oldCrowSegment, m_oldCrowPoolPosition);
+            newSegment.AddComponent<BoxCollider>().isTrigger = true;
+            newSegment.transform.position = position;
+            return newSegment;
+        }
+    }
+
+    public GameObject GetHook()
+    {
+        GameObject hookObj = HookPool.Dequeue();
+        HookPool.Enqueue(hookObj);
+        hookObj.SetActive(true);
+        return hookObj; 
+    }
+
     public void ReturnArrow(GameObject arrow)
     {
         arrow.transform.SetParent(m_arrowPoolPosition);
@@ -124,5 +209,17 @@ public class PoolManager : Singleton<PoolManager>
     {
         hitParticle.transform.SetParent(m_HitParticlePoolPosition);
         hitParticle.SetActive(false);
+    }
+
+    public void ReturnPlayerSegment(GameObject playerSegment)
+    {
+        playerSegment.transform.SetParent(m_playerSegmentPoolPosition);
+        playerSegment.SetActive(false);
+    }
+
+    public void ReturnOldCrowSegment(GameObject oldCrowSegment)
+    {
+        oldCrowSegment.transform.SetParent(m_oldCrowPoolPosition);
+        oldCrowSegment.SetActive(false);
     }
 }

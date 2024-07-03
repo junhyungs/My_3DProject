@@ -31,6 +31,37 @@ Transform:
   m_Father: {fileID: 8821566160390108350}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2826178477268224885
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 520666906547488065}
+  m_Layer: 0
+  m_Name: PlayerChainSegmentPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &520666906547488065
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2826178477268224885}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8821566160390108350}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3177860234135362418
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,6 +123,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8821566160390108350}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4823597714797063312
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9070185742116100991}
+  m_Layer: 0
+  m_Name: HookPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9070185742116100991
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4823597714797063312}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8821566160390108350}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4920051750259539404
 GameObject:
@@ -253,6 +315,9 @@ Transform:
   - {fileID: 8233350416491848573}
   - {fileID: 1772669715455115600}
   - {fileID: 2552611758175737140}
+  - {fileID: 520666906547488065}
+  - {fileID: 629898278161267321}
+  - {fileID: 9070185742116100991}
   m_Father: {fileID: 6574483347064889870}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -274,12 +339,21 @@ MonoBehaviour:
   m_fireBallPrefab: {fileID: 565449142435857024, guid: a3f022f566e15f74d818a58751d6ff6c, type: 3}
   m_fireBallCount: 10
   m_fireBallPoolPosition: {fileID: 8233350416491848573}
+  m_hookPrefab: {fileID: 3975855179550094619, guid: 9505644f256ad0a478815c928a48a428, type: 3}
+  m_hookCount: 50
+  m_hookPoolPosition: {fileID: 9070185742116100991}
   m_MagicBullet: {fileID: 3795732553029474043, guid: 7754fd6024c592b4a9fed4238189eb60, type: 3}
   m_MagicBulletCount: 50
   m_MagicBulletPoolPosition: {fileID: 1772669715455115600}
   m_HitParticle: {fileID: 4650828552053493401, guid: 6ad06865208e32b419b49c1ff7a51b74, type: 3}
   m_HitParticleCount: 100
   m_HitParticlePoolPosition: {fileID: 2552611758175737140}
+  m_playerSegment: {fileID: 7135780761297058229, guid: c1773d885d12153499d61e149f7ad66b, type: 3}
+  m_playerSegmentCount: 50
+  m_playerSegmentPoolPosition: {fileID: 520666906547488065}
+  m_oldCrowSegment: {fileID: 7135780761297058229, guid: c1773d885d12153499d61e149f7ad66b, type: 3}
+  m_oldCrowSegmentCount: 100
+  m_oldCrowPoolPosition: {fileID: 629898278161267321}
 --- !u!1 &8194714446572462271
 GameObject:
   m_ObjectHideFlags: 0
@@ -359,6 +433,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6fb5c45dbae614438527bd3a45a5a31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &8897632672407997286
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 629898278161267321}
+  m_Layer: 0
+  m_Name: OldCrowSegmentPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &629898278161267321
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8897632672407997286}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8821566160390108350}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9013140686049389441
 GameObject:
   m_ObjectHideFlags: 0

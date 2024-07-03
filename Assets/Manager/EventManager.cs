@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EventManager
@@ -8,7 +9,7 @@ public class EventManager
     private IWeaponEvent m_SetWeaponDataEvent;
     private IOnColliderEvent m_ActiveTriggerColliderEvent;
     private IHitEvent m_OverlapBoxEvent;
-    private Action<float, float, Vector3, Vector3> m_setWeaponDataEvent;
+    private List<IHookPosition> m_GetHookPositionEvetn = new List<IHookPosition>();
 
     public static EventManager Instance
     {
@@ -38,6 +39,12 @@ public class EventManager
     {
         m_OverlapBoxEvent = overlapEvent;
     }
+
+    public void RegisterHookPositionEvent(IHookPosition hookPositionEvent)
+    {
+        m_GetHookPositionEvetn.Add(hookPositionEvent);
+    }
+
     //RegisterEvent-----------------------------------------------------------------------------------
 
     //AddEvent----------------------------------------------------------------------------------------
@@ -60,5 +67,13 @@ public class EventManager
     public void AddEvent_OverlapBoxEvent(bool addEvent, Action<bool> callBack)
     {
         m_OverlapBoxEvent.HitOverlapBox(addEvent, callBack);
+    }
+
+    public void AddEvent_HookPositionEvent(bool addEvent, Action<Vector3> callBack)
+    {
+        foreach(var evtObj in m_GetHookPositionEvetn)
+        {
+            evtObj.HookPositionEvent(addEvent, callBack);
+        }
     }
 }
