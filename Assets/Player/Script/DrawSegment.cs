@@ -10,6 +10,7 @@ public class DrawSegment : MonoBehaviour
     public float segmentWidth = 1f;
     public float segmentHeight = 1f;
     public float segmentDistance = 1f;
+    public bool isFire;
     public int maxSegment = 50;
 
     private List<GameObject> segments = new List<GameObject>();
@@ -20,6 +21,16 @@ public class DrawSegment : MonoBehaviour
         lastPosition = transform.position;
     }
 
+    private void OnEnable()
+    {
+        isFire = true;
+    }
+
+    public void SetIsFire(bool OnDraw)
+    {
+        isFire = OnDraw;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -27,23 +38,28 @@ public class DrawSegment : MonoBehaviour
 
         if(distance >= segmentDistance)
         {
-            AddSegment(transform.position, transform.rotation);
+            AddSegment(transform.position, transform.rotation, isFire);
             lastPosition = transform.position;
         }
     }
 
-    void AddSegment(Vector3 position, Quaternion rotation)
+    void AddSegment(Vector3 position, Quaternion rotation ,bool isFire)
     {
-        GameObject segment = PoolManager.Instance.GetPlayerSegment(position, rotation);
-        
-        segments.Add(segment);
 
-        if(segments.Count > maxSegment)
+        if (isFire)
         {
-            
+            GameObject segment = PoolManager.Instance.GetPlayerSegment(position, rotation);
+            segments.Add(segment);
+        }
+        
+
+        if (segments.Count > maxSegment)
+        {
+        
             PoolManager.Instance.ReturnPlayerSegment(segments[0]);
             segments.RemoveAt(0);
         }
+
         //GameObject newSegment = new GameObject("TrailSegment");
         //newSegment.transform.position = position;
 

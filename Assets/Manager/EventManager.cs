@@ -69,7 +69,7 @@ public class EventManager
         m_OverlapBoxEvent.HitOverlapBox(addEvent, callBack);
     }
 
-    public void AddEvent_HookPositionEvent(bool addEvent, Action<Vector3> callBack)
+    public void AddEvent_HookPositionEvent(bool addEvent, Action<Vector3, bool> callBack)
     {
         foreach(var evtObj in m_GetHookPositionEvetn)
         {

@@ -58,10 +58,10 @@ public class PlayerMoveController : MonoBehaviour
         set { isLadder = value; }
     }
 
-    public bool IsLadderDirection
+    public bool IsGround
     {
-        get { return isLadderDirection; }
-        set { isLadderDirection = value; }
+        get { return isGround; }
+        set { isGround = value; }
     }
 
     private CharacterController m_playerController;

@@ -1,4 +1,6 @@
+using Cinemachine.Utility;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +13,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
 
     private PlayerWeaponController m_weaponController;
     private PlayerSkillController m_skillController;
+    private CharacterController m_playerController;
     private Animator m_attackAnimation;
 
     private Action<bool> m_hitEvent;
@@ -18,6 +21,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
     private bool chargeMax;
     private bool chargeAttackDirection = true;
     private bool isAction = true;
+    private bool isFlying = false;
 
 
     public bool IsAction
@@ -55,6 +59,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
     {
         m_weaponController = GetComponent<PlayerWeaponController>();   
         m_skillController = GetComponent<PlayerSkillController>();  
+        m_playerController = GetComponent<CharacterController>();
         m_attackAnimation = GetComponent<Animator>();
         EventManager.Instance.RegisterOverlapBoxEvent(this);
     }
@@ -130,9 +135,64 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
     }
 
     // HookMove
-    public void OnHookCollied(Vector3 targetPos)
+    public void OnHookCollied(Vector3 targetPos, bool isAnchor)
     {
         Debug.Log($"ÁÂÇ¥ ¿ÔÀ½");
+        if (isAnchor)
+        {
+            m_attackAnimation.SetTrigger("HookStart");
+            m_attackAnimation.SetBool("HookEnd", true);
+            gameObject.layer = LayerMask.NameToLayer("fly");
+            StartCoroutine(HookMove(targetPos));
+        }
+        else
+            m_attackAnimation.SetTrigger("HookFail");
+    }
+
+    private IEnumerator HookMove(Vector3 targetPos)
+    {
+        float moveSpeed = 15.0f;
+        float StopDistance = 0.05f;
+        float maxMoveDistance = 10.0f;
+        float currentMoveDistance = 0.0f;
+
+        Vector3 moveDirection = (targetPos - transform.position);        
+
+        moveDirection.y = 0;
+
+        moveDirection = moveDirection.normalized;
+
+        isFlying = true;
+
+        while (isFlying)
+        {
+            if((m_hookPositionObject.transform.position - targetPos).sqrMagnitude  < StopDistance * StopDistance)
+            {
+                m_attackAnimation.SetBool("HookEnd", false);
+                gameObject.layer = LayerMask.NameToLayer("Player");
+                isFlying = false;
+            }
+            else
+            {
+                float distance = moveSpeed * Time.deltaTime;
+                currentMoveDistance += distance;
+
+                if(currentMoveDistance >= maxMoveDistance)
+                {
+                    m_attackAnimation.SetBool("HookEnd", false);
+                    gameObject.layer = LayerMask.NameToLayer("Player");
+                    isFlying = false;
+                }
+                else
+                {
+                    m_playerController.Move(moveDirection * moveSpeed * Time.deltaTime);
+                }
+                
+            }
+
+            yield return null;  
+        }
+
     }
 
     private void OnChargeAttack(InputValue input)

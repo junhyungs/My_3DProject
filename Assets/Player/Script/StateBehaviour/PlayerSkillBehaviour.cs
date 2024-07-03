@@ -15,8 +15,6 @@ public class PlayerSkillBehaviour : StateMachineBehaviour
             m_moveController = animator.GetComponent<PlayerMoveController>();
         }
 
-
-
         m_moveController.IsAction = false;
     }
 
@@ -26,7 +24,7 @@ public class PlayerSkillBehaviour : StateMachineBehaviour
 
         if(stateInfo.shortNameHash == m_Hookshot_fly)
         {
-            animator.SetBool("Hook", false);
+            
         }
     }
 }

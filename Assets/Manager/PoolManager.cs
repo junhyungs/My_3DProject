@@ -222,4 +222,10 @@ public class PoolManager : Singleton<PoolManager>
         oldCrowSegment.transform.SetParent(m_oldCrowPoolPosition);
         oldCrowSegment.SetActive(false);
     }
+
+    public void ReturnHookObject(GameObject hookObj)
+    {
+        hookObj.transform.SetParent(m_hookPoolPosition);
+        hookObj.SetActive(false);
+    }
 }

@@ -5,5 +5,5 @@ using UnityEngine;
 
 public interface IHookPosition
 {
-    public void HookPositionEvent(bool isAddEvent, Action<Vector3> callBack);
+    public void HookPositionEvent(bool isAddEvent, Action<Vector3, bool> callBack);
 }
