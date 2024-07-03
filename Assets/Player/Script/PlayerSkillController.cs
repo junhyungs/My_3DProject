@@ -27,6 +27,7 @@ public class PlayerSkillController : MonoBehaviour
         SkillManager.Instance.AddSkill(m_skillType);
         SkillManager.Instance.AddSkill(PlayerSkill.FireBall);
         SkillManager.Instance.AddSkill(PlayerSkill.Hook);
+        SkillManager.Instance.AddSkill(PlayerSkill.Bomb);
         SetSkill(m_skillType);
     }
 
@@ -77,7 +78,7 @@ public class PlayerSkillController : MonoBehaviour
                 m_skillAnimation.SetBool("ArrowMagic", isPressed);
                 break;
             case PlayerSkill.Bomb:
-                //ÆøÅº
+                m_skillAnimation.SetBool("Bomb", isPressed);
                 break;
             case PlayerSkill.Hook:
                 m_skillAnimation.SetTrigger("Hook");

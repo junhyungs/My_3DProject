@@ -46,7 +46,13 @@ public class PoolManager : Singleton<PoolManager>
     [SerializeField] private GameObject m_oldCrowSegment;
     [SerializeField] private int m_oldCrowSegmentCount;
     [SerializeField] private Transform m_oldCrowPoolPosition;
-    private Queue<GameObject> OldCrowSegmentPool = new Queue<GameObject>(); 
+    private Queue<GameObject> OldCrowSegmentPool = new Queue<GameObject>();
+
+    [Header("Bomb")]
+    [SerializeField] private GameObject m_BombPrefab;
+    [SerializeField] private int m_BombPrefabCount;
+    [SerializeField] private Transform m_BombPoolPosition;
+    private Queue<GameObject>BombPool = new Queue<GameObject>();
 
     private void Start()
     {
@@ -102,6 +108,13 @@ public class PoolManager : Singleton<PoolManager>
             GameObject hookObject = Instantiate(m_hookPrefab, m_hookPoolPosition);
             hookObject.SetActive(false);
             HookPool.Enqueue(hookObject);
+        }
+
+        for(int i = 0; i < m_BombPrefabCount; i++)
+        {
+            GameObject bomb = Instantiate(m_BombPrefab, m_BombPoolPosition);
+            bomb.SetActive(false);
+            BombPool.Enqueue(bomb);
         }
     }
 
@@ -187,6 +200,16 @@ public class PoolManager : Singleton<PoolManager>
         return hookObj; 
     }
 
+    public GameObject GetBomb()
+    {
+        GameObject bomb = BombPool.Dequeue();
+        BombPool.Enqueue(bomb);
+        Rigidbody bombRigid = bomb.GetComponent<Rigidbody>();
+        bombRigid.velocity = Vector3.zero;
+        bomb.SetActive(true);
+        return bomb;
+    }
+
     public void ReturnArrow(GameObject arrow)
     {
         arrow.transform.SetParent(m_arrowPoolPosition);
@@ -227,5 +250,11 @@ public class PoolManager : Singleton<PoolManager>
     {
         hookObj.transform.SetParent(m_hookPoolPosition);
         hookObj.SetActive(false);
+    }
+
+    public void ReturnBombObject(GameObject bombObj)
+    {
+        bombObj.transform.SetParent(m_BombPoolPosition);
+        bombObj.SetActive(false);
     }
 }

@@ -7,7 +7,7 @@ using UnityEngine.Assertions.Must;
 public class HookObject : ProjectileObject, IHookPosition
 {
     private Action<Vector3, bool> _hookEventHandler;
-    private DrawSegment m_draw;
+    
     private GameObject m_player;
     private Vector3 m_movePos;
     private float m_maxDistance = 10.0f;
@@ -21,9 +21,7 @@ public class HookObject : ProjectileObject, IHookPosition
     private void OnEnable()
     {
         m_player = GameManager.Instance.Player;
-        m_draw = GetComponent<DrawSegment>();
-
-        transform.gameObject.layer = 0;
+        transform.gameObject.layer = LayerMask.NameToLayer("Default");
         isAnchor = false;
     }
 
@@ -56,21 +54,23 @@ public class HookObject : ProjectileObject, IHookPosition
 
     private void FireDistance()
     {
-        if (Vector3.Distance(transform.position, m_player.transform.position) >= m_maxDistance)
+        if (Vector3.Distance(transform.position, m_player.transform.position) >= m_maxDistance && !isAnchor)
         {
-            Debug.Log(Vector3.Distance(transform.position, m_player.transform.position));
             isFire = false;
 
-            m_draw.SetIsFire(isFire);
+            Collider[] colliders = Physics.OverlapSphere(transform.position, 0.5f, LayerMask.GetMask("Hook"));
 
-            transform.gameObject.layer = 10;
+            foreach(var obj in colliders)
+            {
+                GameObject chain = obj.gameObject;
+
+                PoolManager.Instance.ReturnPlayerSegment(chain);
+            }
+
+            transform.gameObject.layer = LayerMask.NameToLayer("Player");
         }   
     }
 
-    private void DeleteSegment()
-    {
-
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -85,6 +85,7 @@ public class HookObject : ProjectileObject, IHookPosition
             if (!isFire)
             {
                 _hookEventHandler?.Invoke(transform.position, false);
+
                 PoolManager.Instance.ReturnHookObject(this.gameObject);
             }
             else

@@ -10,6 +10,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
     [SerializeField] private GameObject m_arrowPositionObject;
     [SerializeField] private GameObject m_firePositionObject;
     [SerializeField] private GameObject m_hookPositionObject;
+    [SerializeField] private GameObject m_bombPositionObject;
 
     private PlayerWeaponController m_weaponController;
     private PlayerSkillController m_skillController;
@@ -175,6 +176,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
             else
             {
                 float distance = moveSpeed * Time.deltaTime;
+
                 currentMoveDistance += distance;
 
                 if(currentMoveDistance >= maxMoveDistance)
@@ -255,6 +257,10 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
+            m_skillController.SetSkill(PlayerSkill.Bomb);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
             m_skillController.SetSkill(PlayerSkill.Hook);
         }
     }
@@ -272,6 +278,9 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
                 break;
             case PlayerSkill.Hook:
                 m_skillController.Fire(m_hookPositionObject);
+                break;
+            case PlayerSkill.Bomb:
+                m_skillController.Fire(m_bombPositionObject);
                 break;
         }
     }
@@ -318,6 +327,11 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
             case PlayerSkill.Hook:
                 m_skillController.UseSkill(m_hookPositionObject);
                 OnSkill(PlayerSkill.Hook);
+                break;
+            case PlayerSkill.Bomb:
+                cost = SkillManager.Instance.GetSkillData(PlayerSkill.Bomb).m_cost;
+                SkillManager.Instance.SkillCount -= cost;
+                m_skillController.UseSkill(m_bombPositionObject);
                 break;
         }
 

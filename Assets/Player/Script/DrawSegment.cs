@@ -7,11 +7,13 @@ using UnityEngine;
 public class DrawSegment : MonoBehaviour
 {
     //public Material trailMaterial;
+    private GameObject m_player;
     public float segmentWidth = 1f;
     public float segmentHeight = 1f;
     public float segmentDistance = 1f;
-    public bool isFire;
+    private bool isDraw;
     public int maxSegment = 50;
+    public float m_maxDraw = 10f;
 
     private List<GameObject> segments = new List<GameObject>();
     private Vector3 lastPosition;
@@ -23,12 +25,8 @@ public class DrawSegment : MonoBehaviour
 
     private void OnEnable()
     {
-        isFire = true;
-    }
-
-    public void SetIsFire(bool OnDraw)
-    {
-        isFire = OnDraw;
+        m_player = GameManager.Instance.Player;
+        isDraw = true;
     }
 
     // Update is called once per frame
@@ -36,17 +34,24 @@ public class DrawSegment : MonoBehaviour
     {
         float distance = Vector3.Distance(lastPosition, transform.position);
 
-        if(distance >= segmentDistance)
+        Draw();
+
+        if (distance >= segmentDistance)
         {
-            AddSegment(transform.position, transform.rotation, isFire);
+            AddSegment(transform.position, transform.rotation);
             lastPosition = transform.position;
         }
     }
 
-    void AddSegment(Vector3 position, Quaternion rotation ,bool isFire)
+    private void Draw()
     {
+        if (Vector3.Distance(transform.position, m_player.transform.position) >= m_maxDraw)
+            isDraw = false;
+    }
 
-        if (isFire)
+    void AddSegment(Vector3 position, Quaternion rotation)
+    {
+        if (isDraw)
         {
             GameObject segment = PoolManager.Instance.GetPlayerSegment(position, rotation);
             segments.Add(segment);
