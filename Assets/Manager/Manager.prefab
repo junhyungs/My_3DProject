@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1186928273753202705
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5557746430714394893}
+  m_Layer: 0
+  m_Name: MonsterArrowPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5557746430714394893
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1186928273753202705}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8821566160390108350}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2188923198074524255
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,6 +381,7 @@ Transform:
   - {fileID: 629898278161267321}
   - {fileID: 9070185742116100991}
   - {fileID: 7763463971134475833}
+  - {fileID: 5557746430714394893}
   m_Father: {fileID: 6574483347064889870}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -392,6 +424,9 @@ MonoBehaviour:
   m_DekuProjectileObject: {fileID: 5613773650842472073, guid: 2b8e63d0c0afb2649a4182781c8c8b09, type: 3}
   m_DekuProjectileObjectCount: 50
   m_DekuProjectileObjectPoolPosition: {fileID: 7763463971134475833}
+  m_MonsterArrowPrefab: {fileID: 6858184782252721209, guid: cb4df971ef11cf8419c29a2c2a0ef9d9, type: 3}
+  m_MonsterArrowPrefabCount: 50
+  m_MonsterArrowPoolPosition: {fileID: 5557746430714394893}
 --- !u!1 &8194714446572462271
 GameObject:
   m_ObjectHideFlags: 0

@@ -70,10 +70,13 @@ public class Mage : Monster
 
     public void MagicBulletfire()
     {
-        GameObject magicBullet = m_FirePosition.transform.GetChild(0).gameObject;
-        MagicBullet magicBulletComponent = magicBullet.GetComponent<MagicBullet>();
-        magicBulletComponent.IsFire(true);
-        magicBullet.transform.parent = null;
+        if(m_FirePosition.transform.childCount != 0)
+        {
+            GameObject magicBullet = m_FirePosition.transform.GetChild(0).gameObject;
+            MagicBullet magicBulletComponent = magicBullet.GetComponent<MagicBullet>();
+            magicBulletComponent.IsFire(true);
+            magicBullet.transform.parent = null;
+        }
     }
 
     public override void TakeDamage(float damage)

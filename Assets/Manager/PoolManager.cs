@@ -60,15 +60,17 @@ public class PoolManager : Singleton<PoolManager>
     [SerializeField] private Transform m_DekuProjectileObjectPoolPosition;
     private Queue<GameObject> DekuPool = new Queue<GameObject>();
 
+    [Header("MonsterArrow")]
+    [SerializeField] private GameObject m_MonsterArrowPrefab;
+    [SerializeField] private int m_MonsterArrowPrefabCount;
+    [SerializeField] private Transform m_MonsterArrowPoolPosition;
+    private Queue<GameObject> MonsterArrowPool = new Queue<GameObject>();
+
     private void Awake()
     {
         CreateObject();
     }
-    private void Start()
-    {
-        
-    }
-
+   
     private void CreateObject()
     {
         for(int i = 0; i < m_arrowCount; i++)
@@ -132,6 +134,13 @@ public class PoolManager : Singleton<PoolManager>
             GameObject dekuProjectile = Instantiate(m_DekuProjectileObject, m_DekuProjectileObjectPoolPosition);
             dekuProjectile.SetActive(false);
             DekuPool.Enqueue(dekuProjectile);
+        }
+
+        for(int i = 0; i < m_MonsterArrowPrefabCount; i++)
+        {
+            GameObject monsterArrow = Instantiate(m_MonsterArrowPrefab, m_MonsterArrowPoolPosition);
+            monsterArrow.SetActive(false);
+            MonsterArrowPool.Enqueue(monsterArrow);
         }
     }
 
@@ -237,6 +246,14 @@ public class PoolManager : Singleton<PoolManager>
         return dekuProjectile;
     }
 
+    public GameObject GetMonsterArrow()
+    {
+        GameObject monsterArrow = MonsterArrowPool.Dequeue();
+        MonsterArrowPool.Enqueue(monsterArrow);
+        monsterArrow.SetActive(true);
+        return monsterArrow;
+    }
+
     public void ReturnArrow(GameObject arrow)
     {
         arrow.transform.SetParent(m_arrowPoolPosition);
@@ -291,5 +308,11 @@ public class PoolManager : Singleton<PoolManager>
     {
         dekuProjectile.transform.SetParent(m_DekuProjectileObjectPoolPosition);
         dekuProjectile.SetActive(false);
+    }
+
+    public void ReturnMonsterArrow(GameObject monsterArrow)
+    {
+        monsterArrow.transform.SetParent(m_MonsterArrowPoolPosition);
+        monsterArrow.SetActive(false);
     }
 }

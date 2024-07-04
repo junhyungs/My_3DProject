@@ -1,12 +1,15 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.AI;
 
 
+
+
 public class Ghoul : Monster
 {
+    [Header("FirePosition")]
+    [SerializeField] private GameObject m_FirePosition;
     protected override void Start()
     {
         base.Start();
@@ -31,6 +34,7 @@ public class Ghoul : Monster
         m_monsterAttackPower = DataManager.Instance.GetMonsterData(id).MonsterAttackPower;
         m_monsterSpeed = DataManager.Instance.GetMonsterData(id).MonsterSpeed;
         m_monsterAgent.speed = m_monsterSpeed;
+        m_startPosition = transform.position;
     }
 
     private void InitMaterial()
@@ -80,6 +84,44 @@ public class Ghoul : Monster
     {
         get { return m_monsterAgent; }
     }
+
+    public Vector3 StartPosition
+    {
+        get { return m_startPosition; }
+    }
+
+    public bool IsAction
+    {
+        get { return isAction; }
+        set { isAction = value; }
+    }
+
+    private Vector3 m_startPosition;
+    private bool isAction;
+
+    public void Arrow()
+    {
+        GameObject arrow = PoolManager.Instance.GetMonsterArrow();
+
+        GhoulArrow arrowComponent = arrow.GetComponent<GhoulArrow>();
+        arrowComponent.IsFire(false);
+        arrowComponent.SetAttackPower(m_monsterAttackPower);
+        arrow.transform.SetParent(m_FirePosition.transform);
+        arrow.transform.localPosition = Vector3.zero;
+        arrow.transform.rotation = m_FirePosition.transform.rotation;
+    }
+
+    public void ArrowFire()
+    {
+        if(m_FirePosition.transform.childCount != 0)
+        {
+            GameObject arrow = m_FirePosition.transform.GetChild(0).gameObject;
+            GhoulArrow arrowComponent = arrow.GetComponent<GhoulArrow>();
+            arrowComponent.IsFire(true);
+            arrow.transform.parent = null;
+        }
+    }
+
 }
 
 public abstract class GhoulState : Monster_BaseState
@@ -93,34 +135,20 @@ public abstract class GhoulState : Monster_BaseState
 
 public class GhoulIdleState : GhoulState
 {
-    public GhoulIdleState(Ghoul ghoul) : base(ghoul)
-    {
-    }
-    private float m_IdleTime;
+    public GhoulIdleState(Ghoul ghoul) : base(ghoul) { }
+    
+    private float m_traceDistance = 20.0f;
 
-    public override void StateEnter()
+    public override void StateUpdate()
     {
-        m_Ghoul.StartCoroutine(ChangeTimer());
-    }
-
-    public override void StateExit()
-    {
-        m_IdleTime = 0f;
+        TargetToPlayer();
     }
 
-    private IEnumerator ChangeTimer()
+    private void TargetToPlayer()
     {
-        while (true)
+        if(Vector3.Distance(m_Ghoul.transform.position, m_Ghoul.Player.transform.position) <= m_traceDistance)
         {
-            m_IdleTime += Time.deltaTime;
-
-            yield return null;
-
-            if(m_IdleTime >= 1f)
-            {
-                m_Ghoul.State.ChangeState(MonsterState.Move);
-                yield break;
-            }
+            m_Ghoul.State.ChangeState(MonsterState.Trace);
         }
     }
 
@@ -128,58 +156,137 @@ public class GhoulIdleState : GhoulState
 
 public class GhoulMoveState : GhoulState
 {
-    public GhoulMoveState(Ghoul ghoul) : base(ghoul)
-    {
-    }
-
-    private List<Transform> WayPointList = new List<Transform>();
+    public GhoulMoveState(Ghoul ghoul) : base(ghoul) { }
 
     public override void StateEnter()
     {
-        FindWayPoints();
+        m_Ghoul.Anim.SetBool("Walk", true);
+
+        m_Ghoul.gameObject.layer = LayerMask.NameToLayer("DeadMonster");
+
+        m_Ghoul.Agent.stoppingDistance = 0;
+
+        m_Ghoul.Agent.SetDestination(m_Ghoul.StartPosition);
     }
 
     public override void StateUpdate()
     {
-        if (m_Ghoul.Agent.remainingDistance <= m_Ghoul.Agent.stoppingDistance)
+       if(m_Ghoul.Agent.remainingDistance <= m_Ghoul.Agent.stoppingDistance)
         {
+            m_Ghoul.Anim.SetBool("Walk", false);
+
             m_Ghoul.State.ChangeState(MonsterState.Idle);
         }
     }
 
     public override void StateExit()
     {
-        m_Ghoul.Anim.SetBool("Walk", false);
+        m_Ghoul.gameObject.layer = LayerMask.NameToLayer("Monster");
+
+        m_Ghoul.Agent.stoppingDistance = 10f;
     }
-
-    private void FindWayPoints()
-    {
-        GameObject wayPoints = m_Ghoul.transform.parent.gameObject;
-
-        foreach(Transform wayTrans in wayPoints.transform)
-        {
-            WayPointList.Add(wayTrans); 
-        }
-
-        int randomPoint = UnityEngine.Random.Range(0, WayPointList.Count);
-
-        m_Ghoul.Agent.SetDestination(WayPointList[randomPoint].position);
-
-        m_Ghoul.Anim.SetBool("Walk", true);
-    }
-
+  
 }
 
 public class GhoulTraceState : GhoulState
 {
-    public GhoulTraceState(Ghoul ghoul) : base(ghoul)
+    public GhoulTraceState(Ghoul ghoul) : base(ghoul) { }
+
+    private float m_returnMoveDistance = 20.0f;
+
+    public override void StateEnter()
     {
+        m_Ghoul.Anim.SetBool("TraceWalk", true);
+
+        m_Ghoul.Agent.speed += 2;
+
+        m_Ghoul.Agent.SetDestination(m_Ghoul.Player.transform.position);
     }
+
+    public override void StateUpdate()
+    {
+        ReturnMoveState();
+        ChangeAttackState();
+    }
+
+    public override void StateExit()
+    {
+        m_Ghoul.Agent.speed -= 2;
+    }
+
+    private void ChangeAttackState()
+    {
+        if(m_Ghoul.Agent.remainingDistance <= m_Ghoul.Agent.stoppingDistance)
+        {
+            m_Ghoul.Anim.SetBool("TraceWalk", false);
+
+            m_Ghoul.State.ChangeState(MonsterState.Attack);
+        }
+    }
+
+    private void ReturnMoveState()
+    {
+        if(Vector3.Distance(m_Ghoul.transform.position, m_Ghoul.Player.transform.position) > m_returnMoveDistance)
+        {
+            m_Ghoul.Agent.SetDestination(m_Ghoul.transform.position);
+
+            m_Ghoul.Anim.SetBool("TraceWalk", false);
+
+            m_Ghoul.State.ChangeState(MonsterState.Move);
+        }
+        else
+            m_Ghoul.Agent.SetDestination(m_Ghoul.Player.transform.position);
+    }
+
 }
 
 public class GhoulAttackState : GhoulState
 {
-    public GhoulAttackState(Ghoul ghoul) : base(ghoul)
+    public GhoulAttackState(Ghoul ghoul) : base(ghoul) { }
+
+    private float m_returnTraceDistance = 10.0f;
+
+    public override void StateEnter()
     {
+        m_Ghoul.Agent.enabled = false;
     }
+
+    public override void StateUpdate()
+    {
+        Attack();
+        RotationToPlayer();
+    }    
+
+    public override void StateExit()
+    {
+        m_Ghoul.Anim.ResetTrigger("Attack");
+
+        m_Ghoul.Agent.enabled = true;
+    }
+
+    private void Attack()
+    {
+        if (Vector3.Distance(m_Ghoul.transform.position, m_Ghoul.Player.transform.position) <= m_returnTraceDistance)
+        {
+            m_Ghoul.Anim.SetTrigger("Attack");
+        }
+        else
+        {
+            if (!m_Ghoul.IsAction)
+            {
+                m_Ghoul.State.ChangeState(MonsterState.Trace);
+            }
+        }
+       
+    }
+
+    private void RotationToPlayer()
+    {
+        Vector3 rotDir = (m_Ghoul.Player.transform.position - m_Ghoul.transform.position).normalized;
+
+        Quaternion rotation = Quaternion.LookRotation(rotDir);
+
+        m_Ghoul.transform.rotation = Quaternion.Slerp(m_Ghoul.transform.rotation, rotation, 2.0f * Time.deltaTime);
+    }
+
 }
