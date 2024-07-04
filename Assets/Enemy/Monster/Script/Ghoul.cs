@@ -10,6 +10,10 @@ public class Ghoul : Monster
 {
     [Header("FirePosition")]
     [SerializeField] private GameObject m_FirePosition;
+
+    [Header("BowMeshRenderer")]
+    [SerializeField] private MeshRenderer m_bowRenderer;
+    
     protected override void Start()
     {
         base.Start();
@@ -35,6 +39,7 @@ public class Ghoul : Monster
         m_monsterSpeed = DataManager.Instance.GetMonsterData(id).MonsterSpeed;
         m_monsterAgent.speed = m_monsterSpeed;
         m_startPosition = transform.position;
+        isAlive = true;
     }
 
     private void InitMaterial()
@@ -42,6 +47,8 @@ public class Ghoul : Monster
         m_copyMaterial = Instantiate(m_originalMaterial);
         m_skinnedMeshRenderer.material = m_copyMaterial;
         m_saveColor = m_copyMaterial.GetColor("_Color");
+
+        m_bowRenderer.material = m_copyMaterial;
     }
 
     public override void TakeDamage(float damage)
@@ -59,8 +66,11 @@ public class Ghoul : Monster
     private void Die()
     {
         gameObject.layer = LayerMask.NameToLayer("DeadMonster");
-        m_monsterAgent.isStopped = true;
+        isAlive = false;
+
+        m_monsterAgent.enabled = false;
         m_monsterRigid.isKinematic = true;
+
         m_monsterAnim.SetTrigger("Die");
         StartCoroutine(Die(5f, 0.5f, 0.001f));
     }
@@ -96,30 +106,41 @@ public class Ghoul : Monster
         set { isAction = value; }
     }
 
+    public bool IsAlive
+    {
+        get { return isAlive; } 
+    }
+
     private Vector3 m_startPosition;
     private bool isAction;
+    private bool isAlive;
+  
 
     public void Arrow()
     {
-        GameObject arrow = PoolManager.Instance.GetMonsterArrow();
+        if (isAlive)
+        {
+            GameObject arrow = PoolManager.Instance.GetMonsterArrow();
 
-        GhoulArrow arrowComponent = arrow.GetComponent<GhoulArrow>();
-        arrowComponent.IsFire(false);
-        arrowComponent.SetAttackPower(m_monsterAttackPower);
-        arrow.transform.SetParent(m_FirePosition.transform);
-        arrow.transform.localPosition = Vector3.zero;
-        arrow.transform.rotation = m_FirePosition.transform.rotation;
+            GhoulArrow arrowComponent = arrow.GetComponent<GhoulArrow>();
+            arrowComponent.IsFire(false);
+            arrowComponent.SetAttackPower(m_monsterAttackPower);
+            arrow.transform.SetParent(m_FirePosition.transform);
+            arrow.transform.localPosition = Vector3.zero;
+            arrow.transform.rotation = m_FirePosition.transform.rotation;
+        }
     }
 
     public void ArrowFire()
     {
-        if(m_FirePosition.transform.childCount != 0)
+        if(m_FirePosition.transform.childCount != 0 && isAlive)
         {
             GameObject arrow = m_FirePosition.transform.GetChild(0).gameObject;
             GhoulArrow arrowComponent = arrow.GetComponent<GhoulArrow>();
             arrowComponent.IsFire(true);
             arrow.transform.parent = null;
         }
+       
     }
 
 }
@@ -205,6 +226,9 @@ public class GhoulTraceState : GhoulState
 
     public override void StateUpdate()
     {
+        if (!m_Ghoul.IsAlive)
+            return;
+
         ReturnMoveState();
         ChangeAttackState();
     }
@@ -272,7 +296,7 @@ public class GhoulAttackState : GhoulState
         }
         else
         {
-            if (!m_Ghoul.IsAction)
+            if (!m_Ghoul.IsAction && m_Ghoul.IsAlive)
             {
                 m_Ghoul.State.ChangeState(MonsterState.Trace);
             }
@@ -282,11 +306,14 @@ public class GhoulAttackState : GhoulState
 
     private void RotationToPlayer()
     {
-        Vector3 rotDir = (m_Ghoul.Player.transform.position - m_Ghoul.transform.position).normalized;
+        if (m_Ghoul.IsAlive)
+        {
+            Vector3 rotDir = (m_Ghoul.Player.transform.position - m_Ghoul.transform.position).normalized;
 
-        Quaternion rotation = Quaternion.LookRotation(rotDir);
+            Quaternion rotation = Quaternion.LookRotation(rotDir);
 
-        m_Ghoul.transform.rotation = Quaternion.Slerp(m_Ghoul.transform.rotation, rotation, 2.0f * Time.deltaTime);
+            m_Ghoul.transform.rotation = Quaternion.Slerp(m_Ghoul.transform.rotation, rotation, 2.0f * Time.deltaTime);
+        }
     }
 
 }
