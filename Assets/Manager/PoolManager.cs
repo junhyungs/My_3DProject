@@ -54,9 +54,19 @@ public class PoolManager : Singleton<PoolManager>
     [SerializeField] private Transform m_BombPoolPosition;
     private Queue<GameObject>BombPool = new Queue<GameObject>();
 
-    private void Start()
+    [Header("Deku")]
+    [SerializeField] private GameObject m_DekuProjectileObject;
+    [SerializeField] private int m_DekuProjectileObjectCount;
+    [SerializeField] private Transform m_DekuProjectileObjectPoolPosition;
+    private Queue<GameObject> DekuPool = new Queue<GameObject>();
+
+    private void Awake()
     {
         CreateObject();
+    }
+    private void Start()
+    {
+        
     }
 
     private void CreateObject()
@@ -115,6 +125,13 @@ public class PoolManager : Singleton<PoolManager>
             GameObject bomb = Instantiate(m_BombPrefab, m_BombPoolPosition);
             bomb.SetActive(false);
             BombPool.Enqueue(bomb);
+        }
+
+        for(int i = 0; i < m_DekuProjectileObjectCount; i++)
+        {
+            GameObject dekuProjectile = Instantiate(m_DekuProjectileObject, m_DekuProjectileObjectPoolPosition);
+            dekuProjectile.SetActive(false);
+            DekuPool.Enqueue(dekuProjectile);
         }
     }
 
@@ -210,6 +227,16 @@ public class PoolManager : Singleton<PoolManager>
         return bomb;
     }
 
+    public GameObject GetDekuProjectile()
+    {
+        GameObject dekuProjectile = DekuPool.Dequeue();
+        DekuPool.Enqueue(dekuProjectile);
+        Rigidbody dekuRigid = dekuProjectile.GetComponent<Rigidbody>();
+        dekuRigid.velocity = Vector3.zero;
+        dekuProjectile.SetActive(true);
+        return dekuProjectile;
+    }
+
     public void ReturnArrow(GameObject arrow)
     {
         arrow.transform.SetParent(m_arrowPoolPosition);
@@ -254,7 +281,15 @@ public class PoolManager : Singleton<PoolManager>
 
     public void ReturnBombObject(GameObject bombObj)
     {
+        GameObject explosionParticleObject = bombObj.transform.GetChild(1).gameObject;
+        explosionParticleObject.SetActive(false);
         bombObj.transform.SetParent(m_BombPoolPosition);
         bombObj.SetActive(false);
+    }
+
+    public void ReturnDekuProjectile(GameObject dekuProjectile)
+    {
+        dekuProjectile.transform.SetParent(m_DekuProjectileObjectPoolPosition);
+        dekuProjectile.SetActive(false);
     }
 }

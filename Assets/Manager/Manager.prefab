@@ -217,6 +217,37 @@ Transform:
   m_Father: {fileID: 8821566160390108350}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5769073523059447779
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7763463971134475833}
+  m_Layer: 0
+  m_Name: DekuProjectilePool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7763463971134475833
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5769073523059447779}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8821566160390108350}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6224215133830732443
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,6 +349,7 @@ Transform:
   - {fileID: 520666906547488065}
   - {fileID: 629898278161267321}
   - {fileID: 9070185742116100991}
+  - {fileID: 7763463971134475833}
   m_Father: {fileID: 6574483347064889870}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -357,6 +389,9 @@ MonoBehaviour:
   m_BombPrefab: {fileID: 1523854406286180457, guid: 7e07f4621d9768149a293ebfd3bb6dfd, type: 3}
   m_BombPrefabCount: 10
   m_BombPoolPosition: {fileID: 5421599182619721769}
+  m_DekuProjectileObject: {fileID: 5613773650842472073, guid: 2b8e63d0c0afb2649a4182781c8c8b09, type: 3}
+  m_DekuProjectileObjectCount: 50
+  m_DekuProjectileObjectPoolPosition: {fileID: 7763463971134475833}
 --- !u!1 &8194714446572462271
 GameObject:
   m_ObjectHideFlags: 0

@@ -43,7 +43,8 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
 
     private void Start()
     {
-       EventManager.Instance.AddEvent_HookPositionEvent(true, OnHookCollied);
+        Debug.Log("ss");
+        EventManager.Instance.AddEvent_HookPositionEvent(true, OnHookCollied);
     }
 
     private void OnDestroy()
@@ -126,7 +127,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
         else
         {
             m_skillController.ActiveSkillObject(isPressed);
-
+            Debug.Log(isPressed);
             if (isPressed)
             {
                 m_skillController.CurrentSkillAnimation(isPressed);
@@ -138,7 +139,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
     // HookMove
     public void OnHookCollied(Vector3 targetPos, bool isAnchor)
     {
-        Debug.Log($"ÁÂÇ¥ ¿ÔÀ½");
+        
         if (isAnchor)
         {
             m_attackAnimation.SetTrigger("HookStart");
@@ -307,7 +308,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
     //AnimationEvent
     public void UseSkillAttack()
     {
-        if (SkillManager.Instance.SkillCount <= 0)
+        if (SkillManager.Instance.SkillCount <= 0 && m_skillController.SkillType != PlayerSkill.Hook)
             return;
 
         int cost;

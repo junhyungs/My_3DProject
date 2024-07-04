@@ -24,12 +24,13 @@ public class WeaponManager : Singleton<WeaponManager>
     {
         InitializeWeaponData();
         OnDisableIdleWeaponObject();
+        m_weaponType = PlayerWeapon.Sword;
+        SetWeapon(m_weaponType);
     }
 
     private void Start()
     {
-        m_weaponType = PlayerWeapon.Sword;
-        SetWeapon(m_weaponType);
+     
     }
 
     public void InitializeWeaponData()

@@ -20,6 +20,7 @@ public class HookObject : ProjectileObject, IHookPosition
 
     private void OnEnable()
     {
+        
         m_player = GameManager.Instance.Player;
         transform.gameObject.layer = LayerMask.NameToLayer("Default");
         isAnchor = false;
@@ -76,7 +77,24 @@ public class HookObject : ProjectileObject, IHookPosition
     {
         if(other.gameObject.tag == "Hook")
         {
+            _hookEventHandler.Invoke(transform.position, true);
+
+            ReturnHook();
+
+            isAnchor = true;
+        }
+
+        if(other.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        {
+            IDamged hit = other.gameObject.GetComponent<IDamged>();
+
+            if (hit != null)
+            {
+                hit.TakeDamage(m_atk);
+            }
+
             _hookEventHandler?.Invoke(transform.position, true);
+
             isAnchor = true;
         }
         
@@ -84,16 +102,21 @@ public class HookObject : ProjectileObject, IHookPosition
         {
             if (!isFire)
             {
-                _hookEventHandler?.Invoke(transform.position, false);
+                _hookEventHandler.Invoke(transform.position, false);
 
-                PoolManager.Instance.ReturnHookObject(this.gameObject);
+                ReturnHook();
             }
             else
             {
-                PoolManager.Instance.ReturnHookObject(this.gameObject);
+                ReturnHook();
             }
             
         }
+    }
+
+    private void ReturnHook()
+    {
+        PoolManager.Instance.ReturnHookObject(this.gameObject);
     }
 
     public void HookPositionEvent(bool isAddEvent, Action<Vector3, bool> callBack)

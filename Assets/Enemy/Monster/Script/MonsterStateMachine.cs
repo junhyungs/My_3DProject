@@ -11,6 +11,7 @@ public enum MonsterState
     TelePort,
     Hide,
     SelfDestruction,
+    Stun
 }
 public class MonsterStateMachine : MonoBehaviour
 {
@@ -23,7 +24,7 @@ public class MonsterStateMachine : MonoBehaviour
         m_currentState.StateEnter();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         m_currentState.StateUpdate();
     }
@@ -47,6 +48,12 @@ public class MonsterStateMachine : MonoBehaviour
     {
         m_currentState.StateExit();
         m_currentState = StateDic[newState];
+        m_currentState.StateEnter();
+    }
+
+    public void StartState(MonsterState State)
+    {
+        m_currentState = StateDic[State];
         m_currentState.StateEnter();
     }
 }

@@ -66,6 +66,9 @@ public class Bat : Monster
         m_monsterAnim.SetTrigger("Die");
         StartCoroutine(Die(5f, 0.5f, 0.001f));
     }
+
+
+
 }
 
 public abstract class BatState : Monster_BaseState
@@ -145,5 +148,7 @@ public class MoveState : BatState
         m_Bat.Anim.SetBool("Move", false);
     }
 }
+
+
 
 

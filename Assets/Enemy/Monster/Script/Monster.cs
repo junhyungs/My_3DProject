@@ -7,8 +7,12 @@ using UnityEngine.UI;
 public enum MonsterData
 {
     Bat = 1,
+    Slime,
     Mage = 3,
     Pot,
+    Deku,
+    Ghoul
+
 }
 
 public abstract class Monster : MonoBehaviour, IDamged
@@ -25,8 +29,6 @@ public abstract class Monster : MonoBehaviour, IDamged
     protected Material m_copyMaterial;
     protected GameObject m_player;
     protected Color m_saveColor;
-
-    [SerializeField]
     protected int m_monsterHealth;
     protected int m_monsterAttackPower;
     protected float m_monsterSpeed;
@@ -40,7 +42,6 @@ public abstract class Monster : MonoBehaviour, IDamged
         m_monsterRigid = GetComponent<Rigidbody>();
         m_player = GameManager.Instance.Player;
     }
-
 
     protected IEnumerator IntensityChange(float powValue1, float powValue2)
     {
