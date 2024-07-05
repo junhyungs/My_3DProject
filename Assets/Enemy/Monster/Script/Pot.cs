@@ -86,6 +86,8 @@ public class Pot : Monster
     {
         m_monsterHealth -= (int)damage;
 
+        SkillManager.Instance.AddSkillCount();
+
         if(m_monsterHealth <= 0)
         {
             Die();
@@ -122,7 +124,6 @@ public class Pot : Monster
             timer -= Time.deltaTime;
         }
     }
-
 }
 
 public class PotState : Monster_BaseState

@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class PoolManager : Singleton<PoolManager>
 {
+    [Header("Projectile")]
     [Header("ArrowPrefab")]
     [SerializeField] private GameObject m_arrowPrefab;
     [SerializeField] private int m_arrowCount;
@@ -65,6 +66,38 @@ public class PoolManager : Singleton<PoolManager>
     [SerializeField] private int m_MonsterArrowPrefabCount;
     [SerializeField] private Transform m_MonsterArrowPoolPosition;
     private Queue<GameObject> MonsterArrowPool = new Queue<GameObject>();
+
+    [Header("Monster")]
+    [Header("Bat")]
+    [SerializeField] private GameObject m_BatPrefab;
+    [SerializeField] private int m_BatPrefabCount;
+    [SerializeField] private Transform m_BatPoolPosition;
+    private Queue<GameObject>BatPool = new Queue<GameObject>();
+
+    [Header("Mage")]
+    [SerializeField] private GameObject m_MagePrefab;
+    [SerializeField] private int m_MagePrefabCount;
+    [SerializeField] private Transform m_MagePoolPosition;
+    private Queue<GameObject> MagePool = new Queue<GameObject>();
+
+    [Header("Pot")]
+    [SerializeField] private GameObject m_PotPrefab;
+    [SerializeField] private int m_PotPrefabCount;
+    [SerializeField] private Transform m_PotPoolPosition;
+    private Queue<GameObject> PotPool = new Queue<GameObject>();
+
+    [Header("Ghoul")]
+    [SerializeField] private GameObject m_GhoulPrefab;
+    [SerializeField] private int m_GhoulPrefabCount;
+    [SerializeField] private Transform m_GhoulPoolPosition;
+    private Queue<GameObject> GhoulPool = new Queue<GameObject>();
+
+    [Header("DEKU_SCRUB")]
+    [SerializeField] private GameObject m_DekuPrefab;
+    [SerializeField] private int m_DekuPrefabCount;
+    [SerializeField] private Transform m_DekuPoolPosition;
+    private Queue<GameObject> DekuMonsterPool = new Queue<GameObject>();
+    
 
     private void Awake()
     {
@@ -142,8 +175,44 @@ public class PoolManager : Singleton<PoolManager>
             monsterArrow.SetActive(false);
             MonsterArrowPool.Enqueue(monsterArrow);
         }
+
+        for(int i = 0; i < m_BatPrefabCount; i++)
+        {
+            GameObject bat = Instantiate(m_BatPrefab, m_BatPoolPosition);
+            bat.SetActive(false);
+            BatPool.Enqueue(bat);
+        }
+
+        for(int i = 0; i < m_PotPrefabCount; i++)
+        {
+            GameObject pot = Instantiate(m_PotPrefab, m_PotPoolPosition);
+            pot.SetActive(false);
+            PotPool.Enqueue(pot);
+        }
+
+        for(int i = 0; i < m_MagePrefabCount; i++)
+        {
+            GameObject mage = Instantiate(m_MagePrefab, m_MagePoolPosition);
+            mage.SetActive(false);
+            MagePool.Enqueue(mage);
+        }
+
+        for(int i = 0; i < m_GhoulPrefabCount; i++)
+        {
+            GameObject ghoul = Instantiate(m_GhoulPrefab, m_GhoulPoolPosition);
+            ghoul.SetActive(false);
+            GhoulPool.Enqueue(ghoul);
+        }
+
+        for(int i = 0; i < m_DekuPrefabCount; i++)
+        {
+            GameObject deku = Instantiate(m_DekuPrefab, m_DekuPoolPosition);
+            deku.SetActive(false);
+            DekuMonsterPool.Enqueue(deku);
+        }
     }
 
+    #region GetObject
     public GameObject GetArrow()
     {
         GameObject arrow = ArrowPool.Dequeue();
@@ -254,6 +323,50 @@ public class PoolManager : Singleton<PoolManager>
         return monsterArrow;
     }
 
+    public GameObject GetBatMonster()
+    {
+        GameObject bat = BatPool.Dequeue();
+        BatPool.Enqueue(bat);
+        bat.SetActive(true);
+        return bat;
+    }
+
+    public GameObject GetMageMonster()
+    {
+        GameObject mage = MagePool.Dequeue();
+        MagePool.Enqueue(mage);
+        mage.SetActive(true);
+        return mage;
+    }
+
+    public GameObject GetPotMonster()
+    {
+        GameObject pot = PotPool.Dequeue();
+        PotPool.Enqueue(pot);
+        pot.SetActive(true);
+        return pot;
+    }
+
+    public GameObject GetGhoulMonster()
+    {
+        GameObject ghoul = GhoulPool.Dequeue();
+        GhoulPool.Enqueue(ghoul);
+        ghoul.SetActive(true);
+        return ghoul;
+    }
+
+    public GameObject GetDekuMonster()
+    {
+        GameObject deku = DekuMonsterPool.Dequeue();
+        DekuMonsterPool.Enqueue(deku);
+        deku.SetActive(true);
+        return deku;
+    }
+
+    #endregion
+
+    #region ReturnObject
+    //Return Object
     public void ReturnArrow(GameObject arrow)
     {
         arrow.transform.SetParent(m_arrowPoolPosition);
@@ -315,4 +428,35 @@ public class PoolManager : Singleton<PoolManager>
         monsterArrow.transform.SetParent(m_MonsterArrowPoolPosition);
         monsterArrow.SetActive(false);
     }
+
+    public void ReturnBatMonster(GameObject bat)
+    {
+        bat.transform.SetParent(m_BatPoolPosition);
+        bat.SetActive(false);
+    }
+
+    public void ReturnMagerMonster(GameObject mage)
+    {
+        mage.transform.SetParent(m_MagePoolPosition);
+        mage.SetActive(false);
+    }
+
+    public void ReturnPotMonster(GameObject pot)
+    {
+        pot.transform.SetParent(m_PotPoolPosition);
+        pot.SetActive(false);
+    }
+
+    public void ReturnGhoulMonster(GameObject ghoul)
+    {
+        ghoul.transform.SetParent(m_GhoulPoolPosition); 
+        ghoul.SetActive(false);
+    }
+
+    public void ReturnDekuMonster(GameObject deku)
+    {
+        deku.transform.SetParent(m_DekuPoolPosition);
+        deku.SetActive(false);
+    }
+    #endregion
 }

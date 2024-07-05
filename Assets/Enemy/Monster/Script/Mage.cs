@@ -83,6 +83,8 @@ public class Mage : Monster
     {
         m_monsterHealth -= (int)damage;
 
+        SkillManager.Instance.AddSkillCount();
+
         if(m_monsterHealth <= 0)
         {
             isDead = true;
@@ -97,12 +99,24 @@ public class Mage : Monster
 
     private void Die()
     {
+        if (isSpawn)
+        {
+            GimikManager.Instance.UnRegisterMonster(this.gameObject);
+
+            isSpawn = false;
+        }
+
         gameObject.layer = LayerMask.NameToLayer("DeadMonster");
         m_monsterAgent.SetDestination(transform.position);
         m_monsterAgent.isStopped = true;
         m_monsterRigid.isKinematic = true;
         m_monsterAnim.SetTrigger("Die");
-        StartCoroutine(Die(5f, 0.5f, 0.001f));
+        StartCoroutine(Die(5f, 0.5f, 0.003f));
+    }
+
+    public void IsSpawn(bool isSpawn)
+    {
+        this.isSpawn = isSpawn;
     }
 }
 
@@ -172,7 +186,7 @@ public class MageTelePortState : MageState
 
         float timer = 2.5f;
 
-        float colorAmount = 0.003f;
+        float colorAmount = 0.005f;
 
         float colorMaxValue = 0.5f;
 
@@ -218,7 +232,7 @@ public class MageTelePortState : MageState
 
         float timer = 2.5f;
 
-        float colorAmount = 0.003f;
+        float colorAmount = 0.005f;
 
         float colorMaxValue = -0.3f;
 

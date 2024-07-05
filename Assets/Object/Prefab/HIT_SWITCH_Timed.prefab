@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 2135461228600299897}
   - component: {fileID: 3030207012439334620}
   - component: {fileID: 1002475813746567702}
+  - component: {fileID: 1184995030863963604}
+  - component: {fileID: 3893521614823594833}
   m_Layer: 0
   m_Name: HIT_SWITCH_Timed
   m_TagString: Untagged
@@ -84,6 +86,31 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1184995030863963604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650989280109480899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8423cb11d0ed8384eab9bb31b2121e24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &3893521614823594833
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650989280109480899}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.70617473, y: 0.92, z: 0.7055771}
+  m_Center: {x: -0.000021979213, y: 0.54, z: 0.0000073313713}
 --- !u!1 &7168377084170873966
 GameObject:
   m_ObjectHideFlags: 0

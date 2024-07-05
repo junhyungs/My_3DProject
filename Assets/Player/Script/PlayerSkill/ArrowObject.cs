@@ -8,6 +8,7 @@ public class ArrowObject : ProjectileObject
     [Header("FireParticle")]
     [SerializeField] private GameObject m_fireParticleObject;
 
+
     private bool isBurning = false;
 
     protected override void Awake()
@@ -46,6 +47,11 @@ public class ArrowObject : ProjectileObject
                 hit.TakeDamage(m_atk);
                 ReturnArrow();
             }
+        }
+
+        if(other.gameObject.layer == LayerMask.NameToLayer("HitSwitch"))
+        {
+            ReturnArrow();
         }
 
         Stove isFire = other.gameObject.GetComponent<Stove>();

@@ -10,6 +10,7 @@ public class AttackObject : MonoBehaviour
     private Vector3 m_chargeRange;
     private Vector3 m_boxposition;
     private Vector3 m_objectforward;
+    private MeshCollider m_triggerCollider;
 
 
     private void Start()
@@ -18,16 +19,18 @@ public class AttackObject : MonoBehaviour
         EventManager.Instance.AddEvent_DeActiveTriggerColliderEvent(true, OffCollider);
         EventManager.Instance.AddEvent_OverlapBoxEvent(true, HitOverlapBox);
         EventManager.Instance.AddEvent_SetWeaponDataEvent(true, SetWeaponData);
+        m_triggerCollider = transform.GetChild(0).GetComponent<MeshCollider>();
+        m_triggerCollider.enabled = false;
     }
 
     public void OnCollider()
     {
-        
+        m_triggerCollider.enabled = true;
     }
 
     public void OffCollider()
     {
-        
+        m_triggerCollider.enabled = false;
     }
 
   
@@ -67,11 +70,6 @@ public class AttackObject : MonoBehaviour
         {
             damged.TakeDamage(m_currentAtk);
         }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        
     }
 
 }

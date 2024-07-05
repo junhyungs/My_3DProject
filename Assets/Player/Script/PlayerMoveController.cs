@@ -285,7 +285,7 @@ public class PlayerMoveController : MonoBehaviour
             {
                 transform.SetParent(checkcoll.gameObject.transform);
                 transform.localPosition = Vector3.zero;
-                transform.rotation = Quaternion.identity;
+                transform.rotation = checkcoll.transform.rotation;
                 m_playerAnimator.SetTrigger("Climb");
                 m_playerAnimator.SetBool("ClimbExit", true);
                 m_currentPositionY = transform.position;

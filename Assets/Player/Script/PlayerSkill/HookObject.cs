@@ -95,6 +95,8 @@ public class HookObject : ProjectileObject, IHookPosition
 
             _hookEventHandler?.Invoke(transform.position, true);
 
+            ReturnHook();
+
             isAnchor = true;
         }
         

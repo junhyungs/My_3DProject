@@ -76,6 +76,8 @@ public class DEKU_SCRUB : Monster
     {
         m_monsterHealth -= (int)damage;
 
+        SkillManager.Instance.AddSkillCount();
+
         if (m_monsterHealth <= 0)
         {
             isDie = true;

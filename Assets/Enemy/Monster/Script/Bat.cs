@@ -46,6 +46,8 @@ public class Bat : Monster
     {
         m_monsterHealth -= (int)damage;
 
+        SkillManager.Instance.AddSkillCount();
+
         if(m_monsterHealth <= 0)
         {
             Die();
@@ -59,15 +61,25 @@ public class Bat : Monster
 
     private void Die()
     {
+        if (isSpawn)
+        {
+            GimikManager.Instance.UnRegisterMonster(this.gameObject);
+
+            isSpawn = false;
+        }
+
         gameObject.layer = LayerMask.NameToLayer("DeadMonster");
         m_monsterAgent.SetDestination(transform.position);
         m_monsterAgent.isStopped = true;
         m_monsterRigid.isKinematic = true;
         m_monsterAnim.SetTrigger("Die");
-        StartCoroutine(Die(5f, 0.5f, 0.001f));
+        StartCoroutine(Die(5f, 0.5f, 0.003f));
     }
 
-
+    public void IsSpawn(bool isSpawn)
+    {
+        this.isSpawn = isSpawn;
+    }
 
 }
 

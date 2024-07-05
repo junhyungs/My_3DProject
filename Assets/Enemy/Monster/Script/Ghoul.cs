@@ -61,16 +61,27 @@ public class Ghoul : Monster, IDisableArrow
     {
         m_monsterHealth -= (int)damage;
 
+        SkillManager.Instance.AddSkillCount();
+
         if (m_monsterHealth <= 0)
         {
             Die();
         }
         else
+        {
             StartCoroutine(IntensityChange(2f, 3f));
+        }
     }
 
     private void Die()
     {
+        if (isSpawn)
+        {
+            GimikManager.Instance.UnRegisterMonster(this.gameObject);
+
+            isSpawn = false;
+        }
+
         gameObject.layer = LayerMask.NameToLayer("DeadMonster");
         isAlive = false;
 
@@ -79,7 +90,7 @@ public class Ghoul : Monster, IDisableArrow
         OnDisableHendeler?.Invoke();
 
         m_monsterAnim.SetTrigger("Die");
-        StartCoroutine(Die(5f, 0.5f, 0.001f));
+        StartCoroutine(Die(5f, 0.5f, 0.003f));
     }
 
     public MonsterStateMachine State
@@ -153,6 +164,11 @@ public class Ghoul : Monster, IDisableArrow
     public void OnDisableArrow(Action callBack)
     {
         OnDisableHendeler += callBack;
+    }
+
+    public void IsSpawn(bool isSpawn)
+    {
+        this.isSpawn = isSpawn;
     }
 }
 

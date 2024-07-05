@@ -33,6 +33,8 @@ public abstract class Monster : MonoBehaviour, IDamged
     protected int m_monsterAttackPower;
     protected float m_monsterSpeed;
 
+    protected bool isSpawn;
+
     public abstract void TakeDamage(float damage);
     
     protected virtual void Start()
@@ -42,6 +44,8 @@ public abstract class Monster : MonoBehaviour, IDamged
         m_monsterRigid = GetComponent<Rigidbody>();
         m_player = GameManager.Instance.Player;
     }
+
+
 
     protected IEnumerator IntensityChange(float powValue1, float powValue2)
     {
