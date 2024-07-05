@@ -9,6 +9,7 @@ public class EventManager
     private IWeaponEvent m_SetWeaponDataEvent;
     private IOnColliderEvent m_ActiveTriggerColliderEvent;
     private IHitEvent m_OverlapBoxEvent;
+    private List<IDisableArrow> m_OnDisableGhoulArrow = new List<IDisableArrow>();
     private List<IHookPosition> m_GetHookPositionEvetn = new List<IHookPosition>();
 
     public static EventManager Instance
@@ -45,6 +46,11 @@ public class EventManager
         m_GetHookPositionEvetn.Add(hookPositionEvent);
     }
 
+    public void RegisterDisableGhoulArrow(IDisableArrow disableArrowEvent)
+    {
+        m_OnDisableGhoulArrow.Add(disableArrowEvent);
+    }
+
     //RegisterEvent-----------------------------------------------------------------------------------
 
     //AddEvent----------------------------------------------------------------------------------------
@@ -74,6 +80,14 @@ public class EventManager
         foreach(var evtObj in m_GetHookPositionEvetn)
         {
             evtObj.HookPositionEvent(addEvent, callBack);
+        }
+    }
+
+    public void AddEvent_DisableGhoulArrowEvent(Action callBack)
+    {
+        foreach(var ghoulArrow in m_OnDisableGhoulArrow)
+        {
+            ghoulArrow.OnDisableArrow(callBack);
         }
     }
 }

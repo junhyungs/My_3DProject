@@ -61,13 +61,13 @@ public class BombObject : ProjectileObject
     private void FixedUpdate()
     {
         if(!isFlying)
-            m_forcePowerTime += Time.deltaTime;
+            m_forcePowerTime += Time.fixedDeltaTime;
 
         if (isFlying && m_forceTime > 0f)
         {
             BombUp(m_forcePowerTime);
 
-            m_forceTime -= Time.deltaTime;
+            m_forceTime -= Time.fixedDeltaTime;
         }
 
     }

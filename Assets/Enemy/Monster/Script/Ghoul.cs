@@ -1,19 +1,25 @@
 
 using System.Runtime.InteropServices;
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
 
 
 
-public class Ghoul : Monster
+public class Ghoul : Monster, IDisableArrow
 {
     [Header("FirePosition")]
     [SerializeField] private GameObject m_FirePosition;
 
     [Header("BowMeshRenderer")]
     [SerializeField] private MeshRenderer m_bowRenderer;
-    
+
+    private void OnEnable()
+    {
+        EventManager.Instance.RegisterDisableGhoulArrow(this);
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -70,6 +76,7 @@ public class Ghoul : Monster
 
         m_monsterAgent.enabled = false;
         m_monsterRigid.isKinematic = true;
+        OnDisableHendeler?.Invoke();
 
         m_monsterAnim.SetTrigger("Die");
         StartCoroutine(Die(5f, 0.5f, 0.001f));
@@ -114,7 +121,7 @@ public class Ghoul : Monster
     private Vector3 m_startPosition;
     private bool isAction;
     private bool isAlive;
-  
+    private Action OnDisableHendeler;
 
     public void Arrow()
     {
@@ -143,6 +150,10 @@ public class Ghoul : Monster
        
     }
 
+    public void OnDisableArrow(Action callBack)
+    {
+        OnDisableHendeler += callBack;
+    }
 }
 
 public abstract class GhoulState : Monster_BaseState

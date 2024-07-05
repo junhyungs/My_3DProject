@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,11 @@ public class GhoulArrow : MonoBehaviour
     private float m_attackPower;
     private bool isFire;
     private SphereCollider m_collider;
+
+    private void Start()
+    {
+        EventManager.Instance.AddEvent_DisableGhoulArrowEvent(ReturnArrow);
+    }
 
     private void OnEnable()
     {
@@ -59,4 +65,6 @@ public class GhoulArrow : MonoBehaviour
     {
         PoolManager.Instance.ReturnMonsterArrow(this.gameObject);
     }
+
+    
 }

@@ -43,7 +43,6 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
 
     private void Start()
     {
-        Debug.Log("ss");
         EventManager.Instance.AddEvent_HookPositionEvent(true, OnHookCollied);
     }
 
