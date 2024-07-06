@@ -24,6 +24,12 @@ public class CinemachineCamera : MonoBehaviour
 
     private float m_maxDistance = 15f;
 
+    public GameObject PlayerCam
+    {
+        get { return m_playerCam; }
+        set { m_playerCam = value; }
+    }
+
     private void Start()
     {
         InitCamera();
