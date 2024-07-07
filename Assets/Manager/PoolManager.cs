@@ -97,6 +97,13 @@ public class PoolManager : Singleton<PoolManager>
     [SerializeField] private int m_DekuPrefabCount;
     [SerializeField] private Transform m_DekuPoolPosition;
     private Queue<GameObject> DekuMonsterPool = new Queue<GameObject>();
+
+    [Header("Object")]
+    [Header("Soul")]
+    [SerializeField] private GameObject m_SoulObj;
+    [SerializeField] private int m_SoulObjCount;
+    [SerializeField] private Transform m_SoulObjPoolPosition;
+    private Queue<GameObject> SoulPool = new Queue<GameObject>();
     
 
     private void Awake()
@@ -209,6 +216,13 @@ public class PoolManager : Singleton<PoolManager>
             GameObject deku = Instantiate(m_DekuPrefab, m_DekuPoolPosition);
             deku.SetActive(false);
             DekuMonsterPool.Enqueue(deku);
+        }
+
+        for(int i = 0; i < m_SoulObjCount; i++)
+        {
+            GameObject soul = Instantiate(m_SoulObj, m_SoulObjPoolPosition);
+            soul.SetActive(false);
+            SoulPool.Enqueue(soul);
         }
     }
 
@@ -363,6 +377,15 @@ public class PoolManager : Singleton<PoolManager>
         return deku;
     }
 
+    public GameObject GetSoul()
+    {
+        GameObject soul = SoulPool.Dequeue();
+        SoulPool.Enqueue(soul);
+        Rigidbody soulRigid = soul.GetComponent<Rigidbody>();
+        soulRigid.velocity = Vector3.zero;  
+        return soul;
+    }
+
     #endregion
 
     #region ReturnObject
@@ -457,6 +480,12 @@ public class PoolManager : Singleton<PoolManager>
     {
         deku.transform.SetParent(m_DekuPoolPosition);
         deku.SetActive(false);
+    }
+
+    public void ReturnSoul(GameObject soul)
+    {
+        soul.transform.SetParent(m_SoulObjPoolPosition);
+        soul.SetActive(false);
     }
     #endregion
 }

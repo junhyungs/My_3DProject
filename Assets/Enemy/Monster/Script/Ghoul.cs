@@ -15,6 +15,9 @@ public class Ghoul : Monster, IDisableArrow
     [Header("BowMeshRenderer")]
     [SerializeField] private MeshRenderer m_bowRenderer;
 
+    [Header("SoulPosition")]
+    [SerializeField] private GameObject m_DropSoulPosition;
+
     private void OnEnable()
     {
         EventManager.Instance.RegisterDisableGhoulArrow(this);
@@ -81,6 +84,14 @@ public class Ghoul : Monster, IDisableArrow
 
             isSpawn = false;
         }
+
+        GameObject soul = PoolManager.Instance.GetSoul();
+        DropSoul soulComponent = soul.GetComponent<DropSoul>();
+        soul.transform.SetParent(m_DropSoulPosition.transform);
+        soul.transform.localPosition = Vector3.zero;
+        soul.SetActive(true);
+        soulComponent.StartCoroutine(soulComponent.Fly());
+        soul.transform.parent = null;
 
         gameObject.layer = LayerMask.NameToLayer("DeadMonster");
         isAlive = false;

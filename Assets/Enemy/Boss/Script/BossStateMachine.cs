@@ -36,16 +36,6 @@ public class BossStateMachine : MonoBehaviour
         m_currentState.StateTriggerExit(other);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        m_currentState.StateCollisionEnter(collision);
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        m_currentState.StateCollisionExit(collision);
-    }
-
     public void AddState(Boss state, Boss_BaseState newStateClass)
     {
         StateDic.Add(state, newStateClass);
