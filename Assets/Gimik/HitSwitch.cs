@@ -11,6 +11,10 @@ public class HitSwitch : MonoBehaviour
     [Header("GameObject")]
     [SerializeField] private GameObject EventObject;
 
+    private bool isHit;
+
+    public bool IsHit {  get { return isHit; } }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Weapon"))
@@ -20,6 +24,7 @@ public class HitSwitch : MonoBehaviour
             if (gimik.TryGetValue(Key, out Action<GameObject> gimikEvent))
             {
                 gimikEvent.Invoke(EventObject);
+                isHit = true;
             }
         }    
     }
