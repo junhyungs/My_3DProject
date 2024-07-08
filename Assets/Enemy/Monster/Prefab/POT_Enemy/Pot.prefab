@@ -280,6 +280,37 @@ Transform:
   m_Father: {fileID: 3477786913160042389}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0.000009167271, y: 85.100876, z: 179.99998}
+--- !u!1 &1646964814030449114
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8628970521848986506}
+  m_Layer: 6
+  m_Name: SoulPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8628970521848986506
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646964814030449114}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.312, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8417191057494704449}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3211277923257395983
 GameObject:
   m_ObjectHideFlags: 0
@@ -880,6 +911,7 @@ Transform:
   m_Children:
   - {fileID: 612221239934243295}
   - {fileID: 2231910280704364042}
+  - {fileID: 8628970521848986506}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -918,11 +950,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_skinnedMeshRenderer: {fileID: 7508634835119291771}
   m_originalMaterial: {fileID: 2100000, guid: e14149051d3f7b04f86dc672c7e0ac15, type: 2}
-  m_monsterHealth: 0
   m_renderer: {fileID: 640118310942407627}
   m_lid: {fileID: 5252139342554496915}
   m_hideMesh: {fileID: 1344337146145202157}
   m_particle: {fileID: 1879769179923522, guid: 65932b7368590234d8163da03c2055d8, type: 3}
+  m_DropSoulPosition: {fileID: 1646964814030449114}
 --- !u!135 &9188484563878370297
 SphereCollider:
   m_ObjectHideFlags: 0

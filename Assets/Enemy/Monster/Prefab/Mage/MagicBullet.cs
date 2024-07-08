@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.iOS;
 
 public class MagicBullet : MonoBehaviour
 {
@@ -8,6 +9,11 @@ public class MagicBullet : MonoBehaviour
     private float m_Atk;
     private bool isFire = false;
     private SphereCollider m_collider;
+
+    private void Start()
+    {
+        EventManager.Instance.AddEvent_DisableMageBulletEvent(ReturnMagicBullet);
+    }
 
     private void OnEnable()
     {

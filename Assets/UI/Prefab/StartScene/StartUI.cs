@@ -168,7 +168,9 @@ public class StartUI : MonoBehaviour
 
     public void OnNextPanel()
     {
-        Debug.Log("Start");
+        DOTween.KillAll();
+
+        LoadingScene.LoadScene("R_Boss");
     }
 
     public void OnOptionPanel()

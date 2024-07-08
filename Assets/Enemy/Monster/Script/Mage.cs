@@ -1,10 +1,19 @@
+using System;
 using System.Collections;
 
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Mage : Monster
+public class Mage : Monster, IDisableMagicBullet
 {
+    [Header("SoulPosition")]
+    [SerializeField] private GameObject m_DropSoulPosition;
+
+    private void OnEnable()
+    {
+        EventManager.Instance.RegisterDisableMageBullet(this);
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -52,7 +61,7 @@ public class Mage : Monster
     [Header("FirePosition")]
     [SerializeField] private GameObject m_FirePosition;
     private bool isDead = false;
-
+    private Action OnDisableBulletHandler;
 
     public void MagicBullet()
     {
@@ -106,17 +115,31 @@ public class Mage : Monster
             isSpawn = false;
         }
 
+        GameObject soul = PoolManager.Instance.GetSoul();
+        DropSoul soulComponent = soul.GetComponent<DropSoul>();
+        soul.transform.SetParent(m_DropSoulPosition.transform);
+        soul.transform.localPosition = Vector3.zero;
+        soul.SetActive(true);
+        soulComponent.StartCoroutine(soulComponent.Fly());
+        soul.transform.parent = null;
+
         gameObject.layer = LayerMask.NameToLayer("DeadMonster");
         m_monsterAgent.SetDestination(transform.position);
         m_monsterAgent.isStopped = true;
         m_monsterRigid.isKinematic = true;
         m_monsterAnim.SetTrigger("Die");
+        OnDisableBulletHandler?.Invoke();
         StartCoroutine(Die(5f, 0.5f, 0.003f));
     }
 
     public void IsSpawn(bool isSpawn)
     {
         this.isSpawn = isSpawn;
+    }
+
+    public void OnDisableMagicBullet(Action callBack)
+    {
+        OnDisableBulletHandler += callBack;
     }
 }
 
@@ -203,7 +226,7 @@ public class MageTelePortState : MageState
 
     private IEnumerator TelePort_Out()
     {
-        Vector3 randomDirection = Random.insideUnitSphere * telePortRadius;
+        Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * telePortRadius;
 
         randomDirection.y = 0;
 

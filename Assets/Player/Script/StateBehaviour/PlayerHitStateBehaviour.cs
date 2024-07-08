@@ -20,13 +20,17 @@ public class PlayerHitStateBehaviour : StateMachineBehaviour
         if (stateInfo.shortNameHash == m_Hit_back)
         {
             m_playerLayer = animator.gameObject.layer;
+
             animator.gameObject.layer = LayerMask.NameToLayer("HitPlayer");
         }
 
-        m_moveContorller.IsAction = false;
+        
     }
 
-
+    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        m_moveContorller.IsAction = false;
+    }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

@@ -11,6 +11,10 @@ public class DEKU_SCRUB : Monster
 {
     [Header("FirePosition")]
     [SerializeField] private GameObject m_FirePosition;
+
+    [Header("SoulPosition")]
+    [SerializeField] private GameObject m_DropSoulPosition;
+
     protected override void Start()
     {
         base.Start();
@@ -89,6 +93,14 @@ public class DEKU_SCRUB : Monster
 
     private void Die()
     {
+        GameObject soul = PoolManager.Instance.GetSoul();
+        DropSoul soulComponent = soul.GetComponent<DropSoul>();
+        soul.transform.SetParent(m_DropSoulPosition.transform);
+        soul.transform.localPosition = Vector3.zero;
+        soul.SetActive(true);
+        soulComponent.StartCoroutine(soulComponent.Fly());
+        soul.transform.parent = null;
+
         gameObject.layer = LayerMask.NameToLayer("DeadMonster");
         m_monsterAgent.isStopped = true;
         m_monsterRigid.isKinematic = true;

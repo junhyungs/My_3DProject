@@ -64,6 +64,7 @@ public class PlayerSkillController : MonoBehaviour
                 break;
         }
 
+        UIManager.Instance.RequestChangeSkill(m_skillType);
         SkillManager.Instance.SetCurretSkill(m_skillType);
     }
 

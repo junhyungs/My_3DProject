@@ -11,7 +11,7 @@ public class PlayerSkillBehaviour : StateMachineBehaviour
     private PlayerMoveController m_moveController;
     private PlayerAttackController m_attackController;
     private int m_Hookshot_fly = Animator.StringToHash("Hookshot_fly");
-    
+    private int m_Arrow = Animator.StringToHash("Arrow");
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -31,13 +31,7 @@ public class PlayerSkillBehaviour : StateMachineBehaviour
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.ResetTrigger(m_Hook);
-
         m_moveController.IsAction = true;
         m_attackController.IsAction = true;
-
-        if(stateInfo.shortNameHash == m_Hookshot_fly)
-        {
-            
-        }
     }
 }

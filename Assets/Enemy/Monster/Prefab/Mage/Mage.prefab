@@ -1851,6 +1851,37 @@ Transform:
   m_Father: {fileID: 3970730085798351214}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0.4277569, y: 0.3275028, z: 0.566557}
+--- !u!1 &7302349151387214985
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4258218342715397286}
+  m_Layer: 6
+  m_Name: SoulPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4258218342715397286
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7302349151387214985}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.653, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8986040146649432566}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7520627518074055117
 GameObject:
   m_ObjectHideFlags: 0
@@ -2431,6 +2462,7 @@ Transform:
   - {fileID: 3546593566674909530}
   - {fileID: 6710562935023763711}
   - {fileID: 5684122502423482421}
+  - {fileID: 4258218342715397286}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
@@ -2469,7 +2501,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_skinnedMeshRenderer: {fileID: 6357139096094369721}
   m_originalMaterial: {fileID: 2100000, guid: 2433110a26d523c4085eafec69e22e86, type: 2}
-  m_monsterHealth: 0
+  m_DropSoulPosition: {fileID: 7302349151387214985}
   m_FirePosition: {fileID: 4850239912234120878}
 --- !u!195 &-8480042546834929872
 NavMeshAgent:

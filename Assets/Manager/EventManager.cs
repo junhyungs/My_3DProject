@@ -11,6 +11,7 @@ public class EventManager
     private IHitEvent m_OverlapBoxEvent;
     private List<IDisableArrow> m_OnDisableGhoulArrow = new List<IDisableArrow>();
     private List<IHookPosition> m_GetHookPositionEvetn = new List<IHookPosition>();
+    private List<IDisableMagicBullet> m_OnDisableMageBullet = new List<IDisableMagicBullet>();
 
     public static EventManager Instance
     {
@@ -51,6 +52,11 @@ public class EventManager
         m_OnDisableGhoulArrow.Add(disableArrowEvent);
     }
 
+    public void RegisterDisableMageBullet(IDisableMagicBullet disableMageBulletEvent)
+    {
+        m_OnDisableMageBullet.Add(disableMageBulletEvent);
+    }
+
     //RegisterEvent-----------------------------------------------------------------------------------
 
     //AddEvent----------------------------------------------------------------------------------------
@@ -88,6 +94,14 @@ public class EventManager
         foreach(var ghoulArrow in m_OnDisableGhoulArrow)
         {
             ghoulArrow.OnDisableArrow(callBack);
+        }
+    }
+
+    public void AddEvent_DisableMageBulletEvent(Action callBack)
+    {
+        foreach(var mageBullet in m_OnDisableMageBullet)
+        {
+            mageBullet.OnDisableMagicBullet(callBack);
         }
     }
 }

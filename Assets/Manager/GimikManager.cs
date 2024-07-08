@@ -14,7 +14,8 @@ public class GimikManager : Singleton<GimikManager>
     private enum GimikEnum
     {
         OpenDoor = 1,
-        SpawnMonster = 2
+        SpawnMonster = 2,
+        nextSceneDoor = 3,
     }
 
     public Dictionary<int, Action<GameObject>> Gimik
@@ -91,7 +92,7 @@ public class GimikManager : Singleton<GimikManager>
         {
             case 1:
                 GameObject bat = PoolManager.Instance.GetBatMonster();
-                Bat batComponent = bat.GetComponent<Bat>();
+                SpawnBat batComponent = bat.GetComponent<SpawnBat>();
                 batComponent.IsSpawn(true);
                 RegisterMonster(bat);
                 bat.transform.position = SpawnTransform.position;
@@ -130,5 +131,9 @@ public class GimikManager : Singleton<GimikManager>
             }
         }
     }
+
+    //nextScene
+
+
 
 }

@@ -776,6 +776,37 @@ Transform:
   m_Father: {fileID: 3265377080097207316}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 59.021656, y: 14.799826, z: 102.39869}
+--- !u!1 &2098415588628588435
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1359224103268972983}
+  m_Layer: 6
+  m_Name: SoulPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1359224103268972983
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098415588628588435}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.052, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5593222919442827553}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2158031135820924918
 GameObject:
   m_ObjectHideFlags: 0
@@ -1421,7 +1452,7 @@ GameObject:
   - component: {fileID: 6793866184747737891}
   - component: {fileID: 3449182142764584064}
   - component: {fileID: 8827982321696987950}
-  - component: {fileID: 359391034422749288}
+  - component: {fileID: 5278572497968641158}
   m_Layer: 6
   m_Name: Bat_Black
   m_TagString: Untagged
@@ -1444,6 +1475,7 @@ Transform:
   - {fileID: 3544275519943825855}
   - {fileID: 618050227734314410}
   - {fileID: 1237166012085110637}
+  - {fileID: 1359224103268972983}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -1461,6 +1493,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_skinnedMeshRenderer: {fileID: 4142650125845492262}
   m_originalMaterial: {fileID: 2100000, guid: 85a4f691febacd343bc0a9d3f7e5b8e8, type: 2}
+  m_DropSoulPosition: {fileID: 2098415588628588435}
 --- !u!195 &6793866184747737891
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1517,7 +1550,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!54 &359391034422749288
+--- !u!54 &5278572497968641158
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -62,6 +62,11 @@ public class SkillManager : Singleton<SkillManager>
         m_currentSkill = skill;
     }
 
+    public PlayerSkill GetCurrentSkill()
+    {
+        return m_currentSkill;
+    }
+
     public void AddSkillCount()
     {
         if (m_skillCount >= 4)

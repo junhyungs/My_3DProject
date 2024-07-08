@@ -1,8 +1,10 @@
 using Cinemachine.Utility;
+using Palmmedia.ReportGenerator.Core.CodeAnalysis;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 
 public class PlayerAttackController : MonoBehaviour, IHitEvent
 {
@@ -12,6 +14,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
     [SerializeField] private GameObject m_hookPositionObject;
     [SerializeField] private GameObject m_bombPositionObject;
 
+    private GameObject[] m_PositionObject;
     private PlayerWeaponController m_weaponController;
     private PlayerSkillController m_skillController;
     private CharacterController m_playerController;
@@ -23,7 +26,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
     private bool chargeAttackDirection = true;
     private bool isAction = true;
     private bool isFlying = false;
-
+   
 
     public bool IsAction
     {
@@ -63,6 +66,8 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
         m_playerController = GetComponent<CharacterController>();
         m_attackAnimation = GetComponent<Animator>();
         EventManager.Instance.RegisterOverlapBoxEvent(this);
+
+        m_PositionObject = new GameObject[4];
     }
 
     private void OnUpdate()
@@ -112,6 +117,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
     {
         PlayerSkill skillType = m_skillController.SkillType;
 
+
         if (skillType != PlayerSkill.Hook)
         {
             m_skillController.ActiveSkillObject(isPressed);
@@ -126,7 +132,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
         else
         {
             m_skillController.ActiveSkillObject(isPressed);
-            Debug.Log(isPressed);
+
             if (isPressed)
             {
                 m_skillController.CurrentSkillAnimation(isPressed);
@@ -267,7 +273,6 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
 
     private void OnSkill(PlayerSkill skillType)
     {
-        
         switch (skillType)
         {
             case PlayerSkill.Bow:
@@ -283,6 +288,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
                 m_skillController.Fire(m_bombPositionObject);
                 break;
         }
+
     }
 
     private void LookAtMouse()

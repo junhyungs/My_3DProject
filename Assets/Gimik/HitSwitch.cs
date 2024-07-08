@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class HitSwitch : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class HitSwitch : MonoBehaviour
 
     [Header("GameObject")]
     [SerializeField] private GameObject EventObject;
+
+    [Header("Test")]
+    [SerializeField] private PlayableDirector m_TimeLine;
 
     private bool isHit;
 
@@ -24,6 +28,7 @@ public class HitSwitch : MonoBehaviour
             if (gimik.TryGetValue(Key, out Action<GameObject> gimikEvent))
             {
                 gimikEvent.Invoke(EventObject);
+
                 isHit = true;
             }
         }    
