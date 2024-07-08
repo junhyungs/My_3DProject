@@ -5,25 +5,7 @@ using UnityEngine;
 
 public class PlayerSkillViewModel
 {
-    private string skillName;
     private PlayerSkill currentSkill;
-    private Color IconColor;
-
-    public string SkillName
-    {
-        get { return skillName; }
-        set
-        {
-            if(skillName == value)
-            {
-                return;
-            }
-
-            skillName = value;
-            OnPropertyChanged(nameof(skillName));
-        }
-    }
-
     public PlayerSkill CurrentSkill
     {
         get { return currentSkill; }
@@ -39,18 +21,20 @@ public class PlayerSkillViewModel
         }
     }
 
-    public Color CurrentColor
+    private int currentSkillCount;
+
+    public int CurrentSkillCount
     {
-        get { return IconColor; }
+        get { return currentSkillCount; }
         set
         {
-            if(IconColor == value)
+            if(currentSkillCount == value)
             {
                 return;
             }
 
-            IconColor = value;
-            OnPropertyChanged(nameof(IconColor));
+            currentSkillCount = value;
+            OnPropertyChanged(nameof(CurrentSkillCount));
         }
     }
 
@@ -60,8 +44,4 @@ public class PlayerSkillViewModel
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }   
-
-
-
-
 }

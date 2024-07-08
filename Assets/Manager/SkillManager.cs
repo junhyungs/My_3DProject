@@ -21,7 +21,11 @@ public class SkillManager : Singleton<SkillManager>
     public int SkillCount
     {
         get { return m_skillCount; }
-        set { m_skillCount = value; }
+        set
+        {
+            m_skillCount = value;
+            UIManager.Instance.RequestChangeSkillCount(m_skillCount);
+        }
     }
 
     private void Awake()
@@ -37,6 +41,8 @@ public class SkillManager : Singleton<SkillManager>
         InitSkill(PlayerSkill.Hook, "Hook");
 
         m_skillCount = 4;
+
+        UIManager.Instance.RequestChangeSkillCount(m_skillCount);
     }
 
     private void InitSkill(PlayerSkill skill, string skillName)
@@ -73,6 +79,7 @@ public class SkillManager : Singleton<SkillManager>
             return;
 
         m_skillCount++;
+        UIManager.Instance.RequestChangeSkillCount(m_skillCount);
     }
 
     public void AddSkill(PlayerSkill skill)

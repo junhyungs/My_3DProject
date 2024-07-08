@@ -10,12 +10,20 @@ public class PlayerHealth : MonoBehaviour, IDamged
     private void Awake()
     {
         m_playerHp = 4;
+        UIManager.Instance.RequestChangeHp(m_playerHp);
         m_hitAnimator = GetComponent<Animator>();
+    }
+
+    public int PlayerHP
+    {
+        get { return m_playerHp; }
     }
 
     public void TakeDamage(float damage)
     {
         m_playerHp -= (int)damage;
+
+        UIManager.Instance.RequestChangeHp(m_playerHp);
 
         m_hitAnimator.SetTrigger("Hit");
         
