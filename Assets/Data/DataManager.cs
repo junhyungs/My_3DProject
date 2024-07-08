@@ -29,7 +29,7 @@ public class DataManager
         }
     }
 
-    private readonly string m_dataPath = "C:\\Users\\KGA\\Desktop\\3D_ProjectData";
+    private readonly string m_dataPath = "Assets\\Resources";
 
   
     public void ReadAllDataAwake()

@@ -35,7 +35,7 @@ public class PlayerSkillViewModel
             }
 
             currentSkill = value;
-            OnPropertyChanged(nameof(currentSkill));
+            OnPropertyChanged(nameof(CurrentSkill));
         }
     }
 

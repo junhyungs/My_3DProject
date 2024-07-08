@@ -28,7 +28,7 @@ public class PlayerSkillIcon : MonoBehaviour
     private Dictionary<PlayerSkill, Image> Skill_IconDic = new Dictionary<PlayerSkill, Image>();
     
 
-    private void Start()
+    private void OnEnable()
     {
         initIconDic();
 
@@ -53,11 +53,6 @@ public class PlayerSkillIcon : MonoBehaviour
         Skill_IconDic.Add(PlayerSkill.Hook, HookIcon);
     }
 
-    private Image GetSkill_Icon(PlayerSkill skill)
-    {
-        return Skill_IconDic[skill];
-    }
-
     private void OnPropertyChanged(object sender, PropertyChangedEventArgs arg)
     {
         switch(arg.PropertyName)
@@ -67,7 +62,6 @@ public class PlayerSkillIcon : MonoBehaviour
                 break;
             case nameof(m_SkillView.CurrentSkill):
                 m_currentSkill = m_SkillView.CurrentSkill;
-                Debug.Log(m_currentSkill);
                 IconColorChanged(m_SkillView.CurrentSkill);
                 break;
         }
@@ -75,32 +69,15 @@ public class PlayerSkillIcon : MonoBehaviour
 
     private void IconColorChanged(PlayerSkill currentSkill)
     {
-        Image preimg = GetSkill_Icon(m_currentSkill);
-        Color color = Color.gray;
-        preimg.color = color;   
-
-        switch(currentSkill)
+        foreach (var icon in Skill_IconDic.Values)
         {
-            case PlayerSkill.Bow:
-                Image bowColor = GetSkill_Icon(PlayerSkill.Bow);
-                Color changeColor = Color.white;
-                bowColor.color = changeColor;
-                break;
-            case PlayerSkill.FireBall:
-                Image fireImg = GetSkill_Icon(PlayerSkill.FireBall);
-                Color fireColor = Color.white;
-                fireImg.color = fireColor;
-                break;
-            case PlayerSkill.Bomb:
-                Image bombImg = GetSkill_Icon(PlayerSkill.Bomb);
-                Color bombColor = Color.white;
-                bombImg.color = bombColor;
-                break;
-            case PlayerSkill.Hook:
-                Image hookImg = GetSkill_Icon(PlayerSkill.Hook);
-                Color hookColor = Color.white;
-                hookImg.color = hookColor;
-                break;
+            icon.color = Color.gray;
+        }
+
+        if (Skill_IconDic.TryGetValue(currentSkill, out Image currentIcon))
+        {
+            currentIcon.color = Color.white;
         }
     }
+
 }
