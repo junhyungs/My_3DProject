@@ -86,7 +86,7 @@ public class SpawnMonster : MonoBehaviour
     {
         float timer = 2.5f;
 
-        float colorAmount = 0.005f;
+        float colorAmount = 0.006f;
 
         float colorMaxValue = 0.5f;
 
@@ -109,7 +109,7 @@ public class SpawnMonster : MonoBehaviour
     {
         float timer = 2.5f;
 
-        float colorAmount = 0.005f;
+        float colorAmount = 0.006f;
 
         float colorMaxValue = -0.3f;
 
