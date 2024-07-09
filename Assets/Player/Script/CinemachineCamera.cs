@@ -19,6 +19,9 @@ public class CinemachineCamera : MonoBehaviour
     [Header("MaxCameraTransform")]
     [SerializeField] private GameObject m_maxTrans;
 
+    [Header("CameraFollowOffset")]
+    [SerializeField] private Vector3 m_CinemachineVirtualCameraFollowOffSet;
+
     private GameObject m_playerCam;
     private CinemachineVirtualCamera m_virtualCam;
 
@@ -117,7 +120,7 @@ public class CinemachineCamera : MonoBehaviour
         if (transPoser != null)
         {
             transPoser.m_BindingMode = CinemachineTransposer.BindingMode.WorldSpace;
-            transPoser.m_FollowOffset = new Vector3(0f, 20f, -15f);
+            transPoser.m_FollowOffset = m_CinemachineVirtualCameraFollowOffSet;
             transPoser.m_XDamping = 2f;
             transPoser.m_YDamping = 2f;
             transPoser.m_ZDamping = 2f;

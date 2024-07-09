@@ -17,6 +17,11 @@ public class PlayerHealth : MonoBehaviour, IDamged
     public int PlayerHP
     {
         get { return m_playerHp; }
+        set
+        {
+            m_playerHp = value;
+            UIManager.Instance.RequestChangeHp(m_playerHp);
+        }
     }
 
     public void TakeDamage(float damage)

@@ -4,8 +4,17 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public enum InteractionUI_Type
+{
+    Use,
+    Get
+}
+
 public class UIManager : Singleton<UIManager>
 {
+    [Header("InteractionCanvas")]
+    [SerializeField] private Canvas m_InteractionCanvas;
+
     private PlayerSkill m_currentSkill;
     private PlayerWeapon m_currentWeapon;    
 
@@ -13,26 +22,38 @@ public class UIManager : Singleton<UIManager>
     private Action<int> PlayerSkillCountCallBack;
     private Action<int> PlayerHpIconChangeCallBack;
 
+    //Interaction UI Dic
+    private Dictionary<Transform, GameObject> ActiveUIInstance = new Dictionary<Transform, GameObject>();
+
     void Start()
     {
         m_currentSkill = SkillManager.Instance.GetCurrentSkill();
     }
+    
+    public void ItemInteractionUI(Transform itemTransform, InteractionUI_Type interactionType)
+    {
+        if (!ActiveUIInstance.ContainsKey(itemTransform))
+        {
+            GameObject ui = PoolManager.Instance.GetInteractionUI(interactionType);
 
+            ui.transform.position = itemTransform.position + new Vector3(1.5f, 0.5f, 0);
 
+            ui.transform.rotation = Quaternion.Euler(51f, 0, 0f);
 
+            ActiveUIInstance.Add(itemTransform, ui);
+        }
+    }
 
+    public void HideItemInteractionUI(Transform itemTransform ,InteractionUI_Type interactionType)
+    {
+        if(ActiveUIInstance.ContainsKey(itemTransform))
+        {
+            PoolManager.Instance.ReturnInteractionUI(ActiveUIInstance[itemTransform], interactionType);
+            ActiveUIInstance.Remove(itemTransform);
+        }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
+    //Event
     //HP
     public void RequestChangeHp(int hp)
     {

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using System.Reflection;
+using UnityEditor;
 using UnityEditor.Rendering;
 using UnityEngine;
 
@@ -104,7 +106,17 @@ public class PoolManager : Singleton<PoolManager>
     [SerializeField] private int m_SoulObjCount;
     [SerializeField] private Transform m_SoulObjPoolPosition;
     private Queue<GameObject> SoulPool = new Queue<GameObject>();
-    
+
+    [Header("UI")]
+    [Header("InteractionUI")]
+    [SerializeField] private GameObject m_UseUI;
+    [SerializeField] private GameObject m_GetUI;   
+    [SerializeField] private Transform m_UseUIPosition;
+    [SerializeField] private Transform m_GetUIPosition;
+    [SerializeField] private int m_UICount;
+    private Queue<GameObject> UseUIPool = new Queue<GameObject>();
+    private Queue<GameObject> GetUIPool = new Queue<GameObject>();
+   
 
     private void Awake()
     {
@@ -223,6 +235,19 @@ public class PoolManager : Singleton<PoolManager>
             GameObject soul = Instantiate(m_SoulObj, m_SoulObjPoolPosition);
             soul.SetActive(false);
             SoulPool.Enqueue(soul);
+        }
+
+        for(int i = 0; i < m_UICount; i++)
+        {
+            GameObject useUi = Instantiate(m_UseUI, m_UseUIPosition);
+            GameObject getUi = Instantiate(m_GetUI, m_GetUIPosition);
+
+            useUi.SetActive(false);
+            getUi.SetActive(false);
+
+            UseUIPool.Enqueue(useUi);
+            GetUIPool.Enqueue(getUi);
+           
         }
     }
 
@@ -386,6 +411,27 @@ public class PoolManager : Singleton<PoolManager>
         return soul;
     }
 
+    public GameObject GetInteractionUI(InteractionUI_Type uiType)
+    {
+        GameObject interactionUiObject = null;
+
+        switch(uiType)
+        {
+            case InteractionUI_Type.Use:
+                interactionUiObject = UseUIPool.Dequeue();
+                UseUIPool.Enqueue(interactionUiObject);
+                interactionUiObject.SetActive(true);
+                break;
+            case InteractionUI_Type.Get:
+                interactionUiObject = GetUIPool.Dequeue();
+                GetUIPool.Enqueue(interactionUiObject);
+                interactionUiObject.SetActive(true);
+                break;
+        }
+
+        return interactionUiObject;
+    }
+
     #endregion
 
     #region ReturnObject
@@ -487,5 +533,21 @@ public class PoolManager : Singleton<PoolManager>
         soul.transform.SetParent(m_SoulObjPoolPosition);
         soul.SetActive(false);
     }
+
+    public void ReturnInteractionUI(GameObject interactionUI, InteractionUI_Type uiType)
+    {
+        switch(uiType)
+        {
+            case InteractionUI_Type.Use:
+                interactionUI.transform.SetParent(m_UseUIPosition);
+                interactionUI.SetActive(false);
+                break;
+            case InteractionUI_Type.Get:
+                interactionUI.transform.SetParent(m_GetUIPosition);
+                interactionUI.SetActive(false);
+                break;
+        }
+    }
+
     #endregion
 }
