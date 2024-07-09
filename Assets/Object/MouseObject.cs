@@ -6,19 +6,33 @@ public class MouseObject : MonoBehaviour
 {
     private GameObject m_player;
     private Transform m_playerTransform;
+    private bool isOnEable;
+    
     
     void Start()
     {
         Cursor.visible = false;
-        m_player = GameObject.Find("player").gameObject;
+        StartCoroutine(Delay());
+    }
+
+    private IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(1.0f);
+
+        m_player = GameManager.Instance.Player;
         m_playerTransform = m_player.transform;
+
+        isOnEable = true;
     }
 
     
     void Update()
     {
-        MousePointObject();
-        MouseObjectRotation();
+        if (isOnEable)
+        {
+            MousePointObject();
+            MouseObjectRotation();
+        }        
     }
 
     private void MousePointObject()

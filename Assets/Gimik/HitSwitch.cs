@@ -29,9 +29,18 @@ public class HitSwitch : MonoBehaviour
             {
                 gimikEvent.Invoke(EventObject);
 
+                PlayTimeLine();
+
                 isHit = true;
             }
         }    
     }
 
+    private void PlayTimeLine()
+    {
+        if(m_TimeLine != null)
+        {
+            m_TimeLine.Play();
+        }
+    }
 }

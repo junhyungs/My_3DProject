@@ -28,6 +28,9 @@ public class DropSoul : MonoBehaviour
         if (isMove)
         {
             transform.position = Vector3.MoveTowards(transform.position, m_player.transform.position + new Vector3(0, 0.1f, 0), m_moveSpeed * Time.deltaTime);
+
+            if (m_player == null)
+                ReturnSoul();
         }
     }
 
@@ -41,7 +44,7 @@ public class DropSoul : MonoBehaviour
         float randomPosX = Random.Range(-0.5f, 0.5f);
         float randomPosZ = Random.Range(-0.5f, 0.5f);
 
-        Vector3 movePos = new Vector3(randomPosX, 1, randomPosZ) * m_Power;
+        Vector3 movePos = new Vector3(randomPosX, 1.5f, randomPosZ) * m_Power;
 
         m_soulRigid.AddForce(movePos, ForceMode.Force);
 

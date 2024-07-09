@@ -22,6 +22,9 @@ public class SpawnMonster : MonoBehaviour
     [Header("SecondGimikObject")]
     [SerializeField] private GameObject SecondGimikObject;
 
+    [Header("Test")]
+    [SerializeField] private PlayableDirector m_TimeLine;
+
     private SphereCollider m_triggerCollider;
     private Material[] m_doorMaterials;
 
@@ -67,18 +70,28 @@ public class SpawnMonster : MonoBehaviour
         {
             if (!GimikManager.Instance.OnSpawnGimik)
             {
+                PlayTimeLine();
+
                 if (SecondGimikObject == null)
                     yield break;
 
                 if(gimik.TryGetValue(SecondKey, out Action<GameObject> secondGimikEvent))
                 {
-                    secondGimikEvent.Invoke(SecondGimikObject);
+                    secondGimikEvent.Invoke(SecondGimikObject);    
                 }
                 
                 yield break;
             }
 
             yield return null;
+        }
+    }
+
+    private void PlayTimeLine()
+    {
+        if(m_TimeLine != null)
+        {
+            m_TimeLine.Play();
         }
     }
 

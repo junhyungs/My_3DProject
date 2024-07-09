@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+
 public class R_BossGimikManager : MonoBehaviour
 {
     [Header("HitSwitch_1")]
