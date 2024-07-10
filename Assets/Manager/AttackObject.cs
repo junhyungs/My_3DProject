@@ -11,6 +11,7 @@ public class AttackObject : MonoBehaviour
     private Vector3 m_boxposition;
     private Vector3 m_objectforward;
     private MeshCollider m_triggerCollider;
+    private int m_effectCount = 3;
 
 
     private void Start()
@@ -62,13 +63,34 @@ public class AttackObject : MonoBehaviour
 
     private void Hit(Collider other)
     {
-        IDamged damged = other.gameObject.GetComponent<IDamged>();
-
-        Debug.Log(other.gameObject.name);
+        IDamged damged = other.gameObject.GetComponent<IDamged>();        
 
         if (damged != null)
         {
             damged.TakeDamage(m_currentAtk);
+
+            for(int i = 0; i < m_effectCount; i++)
+            {
+                GameObject hitEffect = PoolManager.Instance.GetHitParticle();
+
+                HitEffect hitEffectComponent = hitEffect.GetComponent<HitEffect>();
+
+                ParticleSystem hitSystem = hitEffect.GetComponent<ParticleSystem>();
+
+                int randomRot = Random.Range(20, 161);
+
+                hitEffect.transform.rotation = Quaternion.Euler(0, 0, randomRot);
+
+                hitEffect.transform.position = other.transform.position;
+
+                hitEffect.SetActive(true);
+
+                hitSystem.Play();
+
+                hitEffectComponent.ReturnEffect();
+            }
+
+           
         }
     }
 

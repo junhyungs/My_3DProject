@@ -14,24 +14,21 @@ public class DropSoul : MonoBehaviour
     private GameObject m_player;
     private Rigidbody m_soulRigid;
     private float m_Power = 400.0f;
-    private bool isMove;
 
     private void OnEnable()
     {
         m_soulRigid = GetComponent<Rigidbody>();
         m_player = GameManager.Instance.Player;
-        isMove = false;
     }
 
     private void FixedUpdate()
     {
-        if (isMove)
+        if (m_player.activeSelf)
         {
             transform.position = Vector3.MoveTowards(transform.position, m_player.transform.position + new Vector3(0, 0.1f, 0), m_moveSpeed * Time.deltaTime);
-
-            if (m_player == null)
-                ReturnSoul();
         }
+        else
+            gameObject.SetActive(false);
     }
 
     public int GetSoulValue()
@@ -50,15 +47,14 @@ public class DropSoul : MonoBehaviour
 
         yield return new WaitForSeconds(0.7f);
 
-        isMove = true;
-
         m_soulRigid.velocity = Vector3.zero;
         m_soulRigid.useGravity = false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if(other.gameObject.layer == LayerMask.NameToLayer("Player")
+            || other.gameObject.layer == LayerMask.NameToLayer("HitPlayer"))
         {
             ReturnSoul();
         }
