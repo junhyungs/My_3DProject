@@ -156,6 +156,8 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
             m_attackAnimation.SetTrigger("HookFail");
     }
 
+
+
     private IEnumerator HookMove(Vector3 targetPos)
     {
         float moveSpeed = 15.0f;
@@ -163,7 +165,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
         float maxMoveDistance = 10.0f;
         float currentMoveDistance = 0.0f;
 
-        Vector3 moveDirection = (targetPos - transform.position);        
+        Vector3 moveDirection = (targetPos - transform.position);
 
         moveDirection.y = 0;
 
@@ -173,7 +175,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
 
         while (isFlying)
         {
-            if((m_hookPositionObject.transform.position - targetPos).sqrMagnitude  < StopDistance * StopDistance)
+            if ((m_hookPositionObject.transform.position - targetPos).sqrMagnitude < StopDistance * StopDistance)
             {
                 m_attackAnimation.SetBool("HookEnd", false);
                 gameObject.layer = LayerMask.NameToLayer("Player");
@@ -185,7 +187,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
 
                 currentMoveDistance += distance;
 
-                if(currentMoveDistance >= maxMoveDistance)
+                if (currentMoveDistance >= maxMoveDistance)
                 {
                     m_attackAnimation.SetBool("HookEnd", false);
                     gameObject.layer = LayerMask.NameToLayer("Player");
@@ -195,10 +197,10 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
                 {
                     m_playerController.Move(moveDirection * moveSpeed * Time.deltaTime);
                 }
-                
+
             }
 
-            yield return null;  
+            yield return null;
         }
 
     }

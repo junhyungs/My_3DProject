@@ -41,6 +41,9 @@ public class PlayerHealth : MonoBehaviour, IDamged
     private void Die()
     {
         m_hitAnimator.SetBool("Die", true);
+
         GameManager.Instance.IsGameOver = true;
+
+        GameManager.Instance.RespawnPlayer();
     }
 }

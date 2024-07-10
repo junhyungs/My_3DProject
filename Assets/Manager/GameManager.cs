@@ -15,6 +15,35 @@ public class GameManager : Singleton<GameManager>
     public Transform RespawnTransform { get { return m_respawnTransform;} }
 
     
+    public void RespawnPlayer()
+    {
+        if (isGameOver)
+        {
+            StartCoroutine(Respawn());
+        }
+    }
 
+    private IEnumerator Respawn()
+    {
+        yield return new WaitForSeconds(2.0f);
+
+        PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
+
+        playerHealth.PlayerHP = 4;
+
+        Animator playerAnim = player.GetComponent<Animator>();
+
+        playerAnim.SetBool("Die", false);
+
+        PlayerMoveController playerMoveController = player.GetComponent<PlayerMoveController>();
+
+        playerMoveController.IsAction = true;
+
+        player.transform.position = m_respawnTransform.position;
+
+        player.SetActive(true);
+
+        isGameOver = false;
+    }
 
 }
