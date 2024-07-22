@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -9,7 +10,7 @@ public class Player : MonoBehaviour
 {
     private IInteractionItem m_itemInteraction;
 
-    private void Awake()
+    private void OnEnable()
     {
         GameManager.Instance.Player = this.gameObject;
     }

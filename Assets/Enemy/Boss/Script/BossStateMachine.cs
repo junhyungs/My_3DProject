@@ -2,22 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Boss
+public enum BossState
 {
-    Idle,
-    Move,
-    Trace,
-    Attack
+    Dash,
+    Jump,
+    MegaDash,
+    Scream,
+    Egg
 }
 
 public class BossStateMachine : MonoBehaviour
 {
-    private Dictionary<Boss, Boss_BaseState> StateDic = new Dictionary<Boss, Boss_BaseState>();
+    private Dictionary<BossState, Boss_BaseState> StateDic = new Dictionary<BossState, Boss_BaseState>();
     private Boss_BaseState m_currentState;
 
     private void Start()
     {
-        m_currentState = StateDic[Boss.Idle];
+        m_currentState = StateDic[BossState.Dash];
         m_currentState.StateEnter();
     }
 
@@ -36,12 +37,12 @@ public class BossStateMachine : MonoBehaviour
         m_currentState.StateTriggerExit(other);
     }
 
-    public void AddState(Boss state, Boss_BaseState newStateClass)
+    public void AddState(BossState state, Boss_BaseState newStateClass)
     {
         StateDic.Add(state, newStateClass);
     }
 
-    public void ChangeState(Boss newState)
+    public void ChangeState(BossState newState)
     {
         m_currentState.StateExit();
         m_currentState = StateDic[newState];

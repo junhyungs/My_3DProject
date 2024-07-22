@@ -155,7 +155,7 @@ public class DataManager
 
             tempBoss.BossId = int.Parse(data.Attribute(nameof(tempBoss.BossId)).Value);
             tempBoss.BossName = data.Attribute(nameof(tempBoss.BossName)).Value;
-            tempBoss.BossHp = int.Parse(data.Attribute(nameof(tempBoss.BossHp)).Value);
+            tempBoss.BossHp = float.Parse(data.Attribute(nameof(tempBoss.BossHp)).Value);
             tempBoss.BossAttackPower = float.Parse(data.Attribute(nameof(tempBoss.BossAttackPower)).Value);
             tempBoss.BossSpeed = float.Parse(data.Attribute(nameof(tempBoss.BossSpeed)).Value);
 

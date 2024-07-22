@@ -14,7 +14,7 @@ public class _Boss
 {
     public int BossId { get; set; }
     public string BossName { get; set;}
-    public int BossHp { get; set;}
+    public float BossHp { get; set;}
     public float BossAttackPower { get;set;}
     public float BossSpeed { get; set;}
 }
