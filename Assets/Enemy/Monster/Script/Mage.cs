@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,6 +7,9 @@ public class Mage : Monster, IDisableMagicBullet
 {
     [Header("SoulPosition")]
     [SerializeField] private GameObject m_DropSoulPosition;
+
+    [Header("FirePosition")]
+    [SerializeField] private GameObject m_FirePosition;
 
     private void OnEnable()
     {
@@ -59,8 +61,7 @@ public class Mage : Monster, IDisableMagicBullet
         set { isDead = value; }
     }
 
-    [Header("FirePosition")]
-    [SerializeField] private GameObject m_FirePosition;
+    
     private bool isDead = false;
     private Action OnDisableBulletHandler;
 

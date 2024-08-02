@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -16,6 +17,7 @@ public abstract class Monster : MonoBehaviour, IDamged
     protected Animator m_monsterAnim;
     protected Rigidbody m_monsterRigid;
     protected Material m_copyMaterial;
+    protected EnemyNode _node;
     protected GameObject m_player;
     protected MonsterData _data;
     protected Color m_saveColor;
