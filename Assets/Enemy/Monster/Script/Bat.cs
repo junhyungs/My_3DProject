@@ -20,9 +20,11 @@ public class Bat : Monster
 
     private void InitBat()
     {
-        m_monsterHealth = DataManager.Instance.GetMonsterData((int)MonsterData.Bat).MonsterHp;
-        m_monsterAttackPower = DataManager.Instance.GetMonsterData((int)MonsterData.Bat).MonsterAttackPower;
-        m_monsterSpeed = DataManager.Instance.GetMonsterData((int)MonsterData.Bat).MonsterSpeed;
+        _data = MonsterManager.Instance.GetMonsterData(MonsterType.Bat);
+
+        m_monsterHealth = _data._health;
+        m_monsterAttackPower = _data._attackPower;
+        m_monsterSpeed = _data._speed;
         m_monsterAgent.speed = m_monsterSpeed;
     }
 

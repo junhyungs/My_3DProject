@@ -25,11 +25,11 @@ public class DEKU_SCRUB : Monster
 
     private void InitDeku()
     {
-        int monsterID = (int)MonsterData.Deku;
+        _data = MonsterManager.Instance.GetMonsterData(MonsterType.Deku);
 
-        m_monsterHealth = DataManager.Instance.GetMonsterData(monsterID).MonsterHp;
-        m_monsterAttackPower = DataManager.Instance.GetMonsterData(monsterID).MonsterAttackPower;
-        m_monsterSpeed = DataManager.Instance.GetMonsterData(monsterID).MonsterSpeed;
+        m_monsterHealth = _data._health;
+        m_monsterAttackPower = _data._attackPower;
+        m_monsterSpeed = _data._speed;
         m_monsterAgent.speed = m_monsterSpeed;
         m_searchCollider = GetComponent<SphereCollider>();
         m_startPosition = transform.position;

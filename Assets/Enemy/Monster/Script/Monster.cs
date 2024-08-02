@@ -4,17 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public enum MonsterData
-{
-    Bat = 1,
-    Slime,
-    Mage = 3,
-    Pot,
-    Deku,
-    Ghoul
-
-}
-
 public abstract class Monster : MonoBehaviour, IDamged
 {
     [Header("SkinnedMeshRenderer")]
@@ -28,6 +17,7 @@ public abstract class Monster : MonoBehaviour, IDamged
     protected Rigidbody m_monsterRigid;
     protected Material m_copyMaterial;
     protected GameObject m_player;
+    protected MonsterData _data;
     protected Color m_saveColor;
     protected int m_monsterHealth;
     protected int m_monsterAttackPower;
@@ -44,8 +34,6 @@ public abstract class Monster : MonoBehaviour, IDamged
         m_monsterRigid = GetComponent<Rigidbody>();
         m_player = GameManager.Instance.Player;
     }
-
-
 
     protected IEnumerator IntensityChange(float powValue1, float powValue2)
     {

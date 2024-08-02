@@ -24,10 +24,11 @@ public class Mage : Monster, IDisableMagicBullet
 
     private void InitMage()
     {
-        int id = (int)MonsterData.Mage;
-        m_monsterHealth = DataManager.Instance.GetMonsterData(id).MonsterHp;
-        m_monsterAttackPower = DataManager.Instance.GetMonsterData(id).MonsterAttackPower;
-        m_monsterSpeed = DataManager.Instance.GetMonsterData(id).MonsterSpeed;
+        _data = MonsterManager.Instance.GetMonsterData(MonsterType.Mage);
+
+        m_monsterHealth = _data._health;
+        m_monsterAttackPower = _data._attackPower;
+        m_monsterSpeed = _data._speed;
         m_monsterAgent.speed = m_monsterSpeed;
     }
 

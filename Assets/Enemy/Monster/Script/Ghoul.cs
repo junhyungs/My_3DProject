@@ -42,10 +42,11 @@ public class Ghoul : Monster, IDisableArrow
 
     private void InitGhoul()
     {
-        int id = (int)MonsterData.Ghoul;
-        m_monsterHealth = DataManager.Instance.GetMonsterData(id).MonsterHp;
-        m_monsterAttackPower = DataManager.Instance.GetMonsterData(id).MonsterAttackPower;
-        m_monsterSpeed = DataManager.Instance.GetMonsterData(id).MonsterSpeed;
+        _data = MonsterManager.Instance.GetMonsterData(MonsterType.Ghoul);
+
+        m_monsterHealth = _data._health;
+        m_monsterAttackPower = _data._attackPower;
+        m_monsterSpeed = _data._speed;
         m_monsterAgent.speed = m_monsterSpeed;
         m_startPosition = transform.position;
         isAlive = true;
