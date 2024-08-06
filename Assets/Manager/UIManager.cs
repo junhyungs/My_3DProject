@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public enum InteractionUI_Type
@@ -37,11 +35,18 @@ public class UIManager : Singleton<UIManager>
         {
             GameObject ui = PoolManager.Instance.GetInteractionUI(interactionType);
 
-            ui.transform.position = itemTransform.position + new Vector3(1.5f, 0.5f, 0);
-
-            ui.transform.rotation = Quaternion.Euler(51f, 0, 0f);
-
-            ActiveUIInstance.Add(itemTransform, ui);
+            switch (interactionType)
+            {
+                case InteractionUI_Type.Use:
+                    InteractionUIPosition(ui, itemTransform, new Vector3(1.5f, 0.5f, 0f));
+                    break;
+                case InteractionUI_Type.Get:
+                    InteractionUIPosition(ui, itemTransform, new Vector3(1.7f, 0.5f, 0f));
+                    break;
+                case InteractionUI_Type.Ladder:
+                    InteractionUIPosition(ui, itemTransform, new Vector3(-1f, 0.5f, 0f));
+                    break;
+            }
         }
     }
 
@@ -52,6 +57,13 @@ public class UIManager : Singleton<UIManager>
             PoolManager.Instance.ReturnInteractionUI(ActiveUIInstance[itemTransform], interactionType);
             ActiveUIInstance.Remove(itemTransform);
         }
+    }
+
+    private void InteractionUIPosition(GameObject ui, Transform itemTransform, Vector3 position)
+    {
+        ui.transform.position = itemTransform.position + position;
+        ui.transform.rotation = Quaternion.Euler(51f, 0f, 0f);
+        ActiveUIInstance.Add(itemTransform, ui);
     }
 
     //Event

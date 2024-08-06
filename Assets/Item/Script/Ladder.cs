@@ -1,18 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Ladder : MonoBehaviour
+public class Ladder : MonoBehaviour, IInteractionItem
 {
-    // Start is called before the first frame update
-    void Start()
+    public void InteractionItem(bool isAddItem)
     {
-        
+        if (isAddItem)
+        {
+            UIManager.Instance.HideItemInteractionUI(transform, InteractionUI_Type.Ladder);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            UIManager.Instance.ItemInteractionUI(transform, InteractionUI_Type.Ladder);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            UIManager.Instance.HideItemInteractionUI(transform, InteractionUI_Type.Ladder);
+        }
     }
 }

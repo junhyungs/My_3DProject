@@ -24,6 +24,8 @@ public class ClimbStateBehaviour : StateMachineBehaviour
             m_moveContorller.IsAction = true;
             m_moveContorller.IsLadder = false;
         }
+
+        animator.gameObject.layer = LayerMask.NameToLayer("Player");
     }
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -33,6 +35,8 @@ public class ClimbStateBehaviour : StateMachineBehaviour
         m_attackController.IsAction = false;
         m_moveContorller.IsAction = false;
         m_moveContorller.IsLadder = true;
+
+        animator.gameObject.layer = LayerMask.NameToLayer("LadderPlayer");
 
         if (IsClimbExit(stateInfo))
         {
