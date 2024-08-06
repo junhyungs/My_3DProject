@@ -7,7 +7,8 @@ using UnityEngine;
 public enum InteractionUI_Type
 {
     Use,
-    Get
+    Get,
+    Ladder
 }
 
 public class UIManager : Singleton<UIManager>

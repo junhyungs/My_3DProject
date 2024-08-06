@@ -1,24 +1,25 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
+
+[System.Serializable]
+public enum GimikEnum
+{
+    OpenDoor = 1,
+    SpawnMonster = 2,
+    nextSceneDoor = 3,
+}
 
 public class GimikManager : Singleton<GimikManager>
 {
-    private Dictionary<int, Action<GameObject>> GimikEventDic = new Dictionary<int, Action<GameObject>>();
+    private Dictionary<GimikEnum, Action<GameObject>> GimikEventDic = new Dictionary<GimikEnum, Action<GameObject>>();
     private HashSet<GameObject> SpawnGimikHashSet = new HashSet<GameObject>();
     private bool isSpawnGimik;
 
-    private enum GimikEnum
-    {
-        OpenDoor = 1,
-        SpawnMonster = 2,
-        nextSceneDoor = 3,
-    }
+    
 
-    public Dictionary<int, Action<GameObject>> Gimik
+    public Dictionary<GimikEnum, Action<GameObject>> Gimik
     {
         get { return GimikEventDic;}
     }
@@ -30,8 +31,8 @@ public class GimikManager : Singleton<GimikManager>
 
     private void Awake()
     {
-        GimikEventDic.Add((int)GimikEnum.OpenDoor, OpenDoor);
-        GimikEventDic.Add((int)GimikEnum.SpawnMonster, SpawnEvent);
+        GimikEventDic.Add(GimikEnum.OpenDoor, OpenDoor);
+        GimikEventDic.Add(GimikEnum.SpawnMonster, SpawnEvent);
     }
 
     //DoorEvent

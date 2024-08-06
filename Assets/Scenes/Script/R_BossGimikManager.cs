@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
+
 
 
 public class R_BossGimikManager : MonoBehaviour
@@ -36,7 +34,7 @@ public class R_BossGimikManager : MonoBehaviour
             isClear = false;
             var gimik = GimikManager.Instance.Gimik;
 
-            if(gimik.TryGetValue(1,out Action<GameObject> gimikEvent))
+            if(gimik.TryGetValue(GimikEnum.OpenDoor,out Action<GameObject> gimikEvent))
             {
                 gimikEvent.Invoke(m_BossDoor);
             }

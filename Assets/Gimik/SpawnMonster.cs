@@ -8,10 +8,10 @@ using UnityEngine.Playables;
 public class SpawnMonster : MonoBehaviour
 {
     [Header("Key")]
-    [SerializeField] private int Key;
+    [SerializeField] private GimikEnum _key;
 
     [Header("SecondKey")]
-    [SerializeField] private int SecondKey;
+    [SerializeField] private GimikEnum _secondKey;
 
     [Header("SpwanPosition")]
     [SerializeField] private List<GameObject> SpawnPositionObjects;
@@ -22,7 +22,7 @@ public class SpawnMonster : MonoBehaviour
     [Header("SecondGimikObject")]
     [SerializeField] private GameObject SecondGimikObject;
 
-    [Header("Test")]
+    [Header("TimeLine")]
     [SerializeField] private PlayableDirector m_TimeLine;
 
     private SphereCollider m_triggerCollider;
@@ -54,11 +54,11 @@ public class SpawnMonster : MonoBehaviour
 
         var gimik = GimikManager.Instance.Gimik;
 
-        if(gimik.TryGetValue(Key, out Action<GameObject> gimikEvent))
+        if(gimik.TryGetValue(_key, out Action<GameObject> gimikEvent))
         {
             foreach (var obj in SpawnPositionObjects)
             {
-                gimikEvent.Invoke(obj);
+                gimikEvent?.Invoke(obj);
             }
         }
 
@@ -75,9 +75,9 @@ public class SpawnMonster : MonoBehaviour
                 if (SecondGimikObject == null)
                     yield break;
 
-                if(gimik.TryGetValue(SecondKey, out Action<GameObject> secondGimikEvent))
+                if(gimik.TryGetValue(_secondKey, out Action<GameObject> secondGimikEvent))
                 {
-                    secondGimikEvent.Invoke(SecondGimikObject);    
+                    secondGimikEvent?.Invoke(SecondGimikObject);    
                 }
                 
                 yield break;

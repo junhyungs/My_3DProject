@@ -82,12 +82,6 @@ public class PoolManager : Singleton<PoolManager>
     [SerializeField] private Transform m_MagePoolPosition;
     private Queue<GameObject> MagePool = new Queue<GameObject>();
 
-    [Header("Pot")]
-    [SerializeField] private GameObject m_PotPrefab;
-    [SerializeField] private int m_PotPrefabCount;
-    [SerializeField] private Transform m_PotPoolPosition;
-    private Queue<GameObject> PotPool = new Queue<GameObject>();
-
     [Header("Ghoul")]
     [SerializeField] private GameObject m_GhoulPrefab;
     [SerializeField] private int m_GhoulPrefabCount;
@@ -110,12 +104,15 @@ public class PoolManager : Singleton<PoolManager>
     [Header("UI")]
     [Header("InteractionUI")]
     [SerializeField] private GameObject m_UseUI;
-    [SerializeField] private GameObject m_GetUI;   
+    [SerializeField] private GameObject m_GetUI;
+    [SerializeField] private GameObject m_LadderUI;
+    [SerializeField] private Transform m_LadderUIPosition;
     [SerializeField] private Transform m_UseUIPosition;
     [SerializeField] private Transform m_GetUIPosition;
     [SerializeField] private int m_UICount;
     private Queue<GameObject> UseUIPool = new Queue<GameObject>();
     private Queue<GameObject> GetUIPool = new Queue<GameObject>();
+    private Queue<GameObject> LadderUIPool = new Queue<GameObject>();
    
 
     private void Awake()
@@ -202,13 +199,6 @@ public class PoolManager : Singleton<PoolManager>
             BatPool.Enqueue(bat);
         }
 
-        for(int i = 0; i < m_PotPrefabCount; i++)
-        {
-            GameObject pot = Instantiate(m_PotPrefab, m_PotPoolPosition);
-            pot.SetActive(false);
-            PotPool.Enqueue(pot);
-        }
-
         for(int i = 0; i < m_MagePrefabCount; i++)
         {
             GameObject mage = Instantiate(m_MagePrefab, m_MagePoolPosition);
@@ -241,12 +231,15 @@ public class PoolManager : Singleton<PoolManager>
         {
             GameObject useUi = Instantiate(m_UseUI, m_UseUIPosition);
             GameObject getUi = Instantiate(m_GetUI, m_GetUIPosition);
+            GameObject ladderUi = Instantiate(m_LadderUI, m_LadderUIPosition);
 
             useUi.SetActive(false);
             getUi.SetActive(false);
+            ladderUi.SetActive(false);
 
             UseUIPool.Enqueue(useUi);
             GetUIPool.Enqueue(getUi);
+            LadderUIPool.Enqueue(ladderUi);
            
         }
     }
@@ -378,14 +371,6 @@ public class PoolManager : Singleton<PoolManager>
         return mage;
     }
 
-    public GameObject GetPotMonster()
-    {
-        GameObject pot = PotPool.Dequeue();
-        PotPool.Enqueue(pot);
-        pot.SetActive(true);
-        return pot;
-    }
-
     public GameObject GetGhoulMonster()
     {
         GameObject ghoul = GhoulPool.Dequeue();
@@ -425,6 +410,11 @@ public class PoolManager : Singleton<PoolManager>
             case InteractionUI_Type.Get:
                 interactionUiObject = GetUIPool.Dequeue();
                 GetUIPool.Enqueue(interactionUiObject);
+                interactionUiObject.SetActive(true);
+                break;
+            case InteractionUI_Type.Ladder:
+                interactionUiObject = LadderUIPool.Dequeue();
+                LadderUIPool.Enqueue(interactionUiObject);
                 interactionUiObject.SetActive(true);
                 break;
         }
@@ -510,12 +500,6 @@ public class PoolManager : Singleton<PoolManager>
         mage.SetActive(false);
     }
 
-    public void ReturnPotMonster(GameObject pot)
-    {
-        pot.transform.SetParent(m_PotPoolPosition);
-        pot.SetActive(false);
-    }
-
     public void ReturnGhoulMonster(GameObject ghoul)
     {
         ghoul.transform.SetParent(m_GhoulPoolPosition); 
@@ -544,6 +528,10 @@ public class PoolManager : Singleton<PoolManager>
                 break;
             case InteractionUI_Type.Get:
                 interactionUI.transform.SetParent(m_GetUIPosition);
+                interactionUI.SetActive(false);
+                break;
+            case InteractionUI_Type.Ladder:
+                interactionUI.transform.SetParent(m_LadderUIPosition);
                 interactionUI.SetActive(false);
                 break;
         }
