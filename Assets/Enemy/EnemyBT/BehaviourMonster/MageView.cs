@@ -15,13 +15,14 @@ public class MageView : Monster, IDisableMagicBullet
 
     private Action _onDisableBulletHandler;
     private LayerMask _playerLayer;
-    private INode.State _teleportState = INode.State.Running;
     private bool check = false;
     private bool isDead = false;
-    private bool isTeleporting = false;
-    private bool canTeleport = true;
+    private bool isTeleporting = true;
 
-    private bool _canAttack = false;
+    private int _attackCount = 0;
+
+    private bool _isAttak;
+    private bool _canMove = false;
 
     private float _radius = 10f;
     private float _teleportDistance = 10f;
@@ -136,45 +137,45 @@ public class MageView : Monster, IDisableMagicBullet
         }
     }
 
+    public void OnTelePort()
+    {
+        _isAttak = false;
+    }
+
     void Update()
     {
         if (!isDead)
         {
             _node.Execute();
-
-            var rr = m_monsterAnim.GetCurrentAnimatorStateInfo(0);
-            Debug.Log(rr.IsName("ShootBT"));
         }
     }
 
 
     private INode SetUpTree()
     {
+        var canTeleportList = new List<INode>();
+        canTeleportList.Add(new EnemyAction(CanTelePort));
+        canTeleportList.Add(new EnemyAction(TelePort));
+        var canTelePortSequence = new EnemySequence(canTeleportList);
+
         var actionList = new List<INode>();
-        actionList.Add(new EnemyAction(TelePort));
+        actionList.Add(new EnemyAction(MoveToPlayer));
         actionList.Add(new EnemyAction(RotateToPlayer));
         actionList.Add(new EnemyAction(Attack));
-
         var attackSequence = new EnemySequence(actionList);
+   
+        var telePortAndAttackList = new List<INode>();
+        telePortAndAttackList.Add(canTelePortSequence);
+        telePortAndAttackList.Add(attackSequence);
+        var actionSelectorNode = new EnemySelector(telePortAndAttackList);
 
-        var moveList = new List<INode>();
-        moveList.Add(new EnemyAction(MoveToPlayer));
+        var actionAndcheckPlayerList = new List<INode>();
+        actionAndcheckPlayerList.Add(actionSelectorNode);
+        actionAndcheckPlayerList.Add(new EnemyAction(CheckPlayer));
 
-        var moveSequence = new EnemySelector(moveList);
+        var mageNode = new EnemySelector(actionAndcheckPlayerList);
 
-        var moveAndattackList = new List<INode>();
-        moveAndattackList.Add(attackSequence);
-        moveAndattackList.Add(moveSequence);
-
-        var moveAndattackSelector = new EnemySelector(moveAndattackList);
-
-        var selectorList = new List<INode>();
-        selectorList.Add(moveAndattackSelector);
-        selectorList.Add(new EnemyAction(CheckPlayer));
-
-        var selectorNode = new EnemySelector(selectorList);
-
-        return selectorNode;
+        return mageNode;
     }
 
     private INode.State CheckPlayer()
@@ -187,7 +188,7 @@ public class MageView : Monster, IDisableMagicBullet
         if (colliders.Length > 0)
         {
             check = true;
-            return INode.State.Success;
+            return INode.State.Fail;
         }
 
         return INode.State.Running;
@@ -195,38 +196,55 @@ public class MageView : Monster, IDisableMagicBullet
 
     private INode.State RotateToPlayer()
     {
-        if (!check)
-            return INode.State.Fail;
-
-        Vector3 targetDirection = (m_player.transform.position -transform.position).normalized;
-
-        Vector3 mageForward = transform.forward;
-
-        float angle = Vector3.SignedAngle(mageForward, targetDirection, Vector3.up);
-
-        if (Mathf.Abs(angle) < 5f)
-            return INode.State.Success;
-        else
+        if(_attackCount > 0)
         {
-            targetDirection.y = 0f;
-
-            Quaternion rotation = Quaternion.LookRotation(targetDirection);
-
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 10f * Time.deltaTime);
-
-            return INode.State.Running;
+            return INode.State.Success;
         }
-            
+
+        Vector3 targetDirection = (m_player.transform.position - transform.position).normalized;
+
+        targetDirection.y = 0f;
+
+        Quaternion rotation = Quaternion.LookRotation(targetDirection);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 10f * Time.deltaTime);
+
+        LayerMask targetLayer = LayerMask.GetMask("Player");
+
+        RaycastHit[] hit = Physics.RaycastAll(transform.position, transform.forward, 20f, targetLayer);
+
+        if(hit.Length > 0)
+        {
+            return INode.State.Success;
+        }
+
+        return INode.State.Running;
     }
 
     private INode.State Attack()
     {
-        if (!check)
+        if(_attackCount > 0)        
+        {
+            
+            if (!_isAttak)
+            {
+                isTeleporting = true;
+
+                _attackCount = 0;
+
+                return INode.State.Success;
+            }
+
             return INode.State.Fail;
+        }
 
         m_monsterAnim.SetTrigger("Attack");
 
-        return INode.State.Fail;
+        _isAttak = true;
+
+        _attackCount = 1;
+
+        return INode.State.Success;
     }
 
     private INode.State MoveToPlayer()
@@ -234,45 +252,43 @@ public class MageView : Monster, IDisableMagicBullet
         if(!check)
             return INode.State.Fail;
 
-        var animatorStateInfo = m_monsterAnim.GetCurrentAnimatorStateInfo(0);
-       
-        if (animatorStateInfo.IsName("ShootBT") && animatorStateInfo.normalizedTime < 1.0f)
+        if (!_canMove)
         {
-            float distance = Vector3.Distance(transform.position, m_player.transform.position);
+            return INode.State.Fail;
+        }
 
-            if (distance >= 8f)
-            {
-                m_monsterAgent.SetDestination(m_player.transform.position);
-            }
+        float currentDistance = Vector3.Distance(transform.position, m_player.transform.position);
 
-            return INode.State.Running;
-        }    
-        
-        isTeleporting = false;
+        if(currentDistance > m_monsterAgent.stoppingDistance)
+        {
+            m_monsterAgent.SetDestination(m_player.transform.position);
+        }
 
         return INode.State.Success;
     }
 
-    private INode.State TelePort()
+    private INode.State CanTelePort()
     {
-        if(!check)
+        if (!check)
+        {
             return INode.State.Fail;
+        }
 
         if (isTeleporting)
-            return _teleportState;
-
-        var animatorStateInfo = m_monsterAnim.GetCurrentAnimatorStateInfo(0);
-
-        if (animatorStateInfo.IsName("ShootBT") && animatorStateInfo.normalizedTime < 1.0f)
         {
-            return INode.State.Fail;
-        }
-        else
-        {
-            StartCoroutine(TelePortCoroutine());
+            isTeleporting = false;
 
-            return INode.State.Running;
+            return INode.State.Success;
         }
+
+        return INode.State.Fail;
+    }
+
+    private INode.State TelePort()
+    {
+        StartCoroutine(TelePortCoroutine());
+
+        return INode.State.Success;
     }
 
     private IEnumerator TelePortCoroutine()
@@ -285,9 +301,7 @@ public class MageView : Monster, IDisableMagicBullet
 
     private IEnumerator TelePort_In()
     {
-        _teleportState = INode.State.Running;
-
-        isTeleporting = true;
+        _canMove = false;
 
         m_monsterAnim.SetTrigger("TelePort");
 
@@ -320,7 +334,7 @@ public class MageView : Monster, IDisableMagicBullet
         {
             m_monsterAgent.Warp(hit.position);
 
-            Vector3 rotateToPlayer = m_player.transform.position - transform.position;
+            Vector3 rotateToPlayer = (m_player.transform.position - transform.position).normalized;
 
             rotateToPlayer.y = 0f;
 
@@ -350,7 +364,7 @@ public class MageView : Monster, IDisableMagicBullet
 
         m_monsterAnim.SetBool("TelePort_In", false);
 
-        _teleportState = INode.State.Success;
+        _canMove = true;
     }
 
 
