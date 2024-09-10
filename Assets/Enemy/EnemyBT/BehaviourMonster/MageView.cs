@@ -18,12 +18,9 @@ public class MageView : Monster, IDisableMagicBullet
     private bool check = false;
     private bool isDead = false;
     private bool isTeleporting = true;
-
     private int _attackCount = 0;
-
     private bool _isAttak;
     private bool _canMove = false;
-
     private float _radius = 10f;
     private float _teleportDistance = 10f;
 
@@ -207,7 +204,7 @@ public class MageView : Monster, IDisableMagicBullet
 
         Quaternion rotation = Quaternion.LookRotation(targetDirection);
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 10f * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 50f * Time.deltaTime);
 
         LayerMask targetLayer = LayerMask.GetMask("Player");
 
