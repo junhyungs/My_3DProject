@@ -104,10 +104,9 @@ public class BehaviourMonster : MonoBehaviour
     {
         GameObject soul = PoolManager.Instance.GetSoul();
         DropSoul component = soul.GetComponent<DropSoul>();
-        soul.transform.SetParent(soulTransform);
+        soul.transform.position = soulTransform.position;
         soul.SetActive(true);
         component.StartCoroutine(component.Fly());
-        soul.transform.parent = null;
     }
 
     public void IsSpawn(bool isSpawn)
