@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
 {
     private INode _node;
+    private bool _isDead;
     private Action _disableHandler;
 
     [Header("SoulPosition")]
@@ -28,7 +29,8 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
     public bool CanRotation { get; set; } = true;
     public bool CanAttack { get; set; } = true;
 
-    private void OnEnable()
+
+    private void Awake()
     {
         EventManager.Instance.RegisterDisableGhoulArrow(this);
     }
@@ -44,7 +46,10 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
 
     private void Update()
     {
-        _node.Evaluate();
+        if (!_isDead)
+        {
+            _node.Evaluate();
+        }
     }
 
     private INode SetBehaviourTree()
@@ -77,6 +82,8 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
 
         if(_currentHp <= 0)
         {
+            _isDead = true;
+
             Die(_soulTransform, _disableHandler);
         }
         else

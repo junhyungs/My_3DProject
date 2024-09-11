@@ -82,7 +82,7 @@ public class BehaviourMonster : MonoBehaviour
         StartCoroutine(FireShader(5f, 0.5f, -0.3f));
     }
 
-    private IEnumerator FireShader(float maxTime, float startValue, float endValue)
+    protected IEnumerator FireShader(float maxTime, float startValue, float endValue)
     {
         float elapsedTime = 0f;
 
@@ -100,7 +100,7 @@ public class BehaviourMonster : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
-    private void MonsterSoul(Transform soulTransform)
+    protected void MonsterSoul(Transform soulTransform)
     {
         GameObject soul = PoolManager.Instance.GetSoul();
         DropSoul component = soul.GetComponent<DropSoul>();

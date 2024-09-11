@@ -20,11 +20,12 @@ public class MageTelePort : INode
         _startValue = 0.5f;
         _endValue = -0.3f;
         _teleportDistance = 10f;
+
     }
 
     public INode.State Evaluate()
     {
-        _mage.StartCoroutine(TelePortCoroutine());
+        _mage.TelePort = _mage.StartCoroutine(TelePortCoroutine());
 
         return INode.State.Success;
     }
@@ -38,6 +39,8 @@ public class MageTelePort : INode
 
     private IEnumerator TelePort_In()
     {
+        _mage.gameObject.layer = LayerMask.NameToLayer("TelePort");
+
         _mage.CanMove = false;
 
         _mage.Animator.SetTrigger("TelePort");
@@ -100,6 +103,8 @@ public class MageTelePort : INode
         }
 
         _mage.Animator.SetBool("TelePort_In", false);
+
+        _mage.gameObject.layer = LayerMask.NameToLayer("Monster");
 
         _mage.CanMove = true;
     }

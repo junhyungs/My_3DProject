@@ -21,6 +21,7 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
     public bool IsTeleporting { get; set; } = true;
     public bool CanMove {  get; set; }
     public int AttackCount { get; set; }
+    public Coroutine TelePort { get; set; }
     #endregion
 
     [Header("SoulPosition")]
@@ -93,6 +94,13 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
         if(_currentHp <= 0)
         {
             _isDead = true;
+
+            if(TelePort != null)
+            {
+                StopCoroutine(TelePort);
+
+                TelePort = null;
+            }
 
             Die(_soulPosition, _disableHandler);
         }
