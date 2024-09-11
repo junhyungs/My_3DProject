@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
 {
@@ -19,6 +20,14 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
     [Header("BowMeshRenderer")]
     [SerializeField] private MeshRenderer _meshRenderer;
 
+    public NavMeshAgent Agent { get { return _agent; } }
+    public Animator Animator { get { return _animator; } }
+    public GameObject PlayerObject { get; set; }
+    public bool CheckPlayer { get; set; }
+    public bool CanMove { get; set; } = true;
+    public bool CanRotation { get; set; } = true;
+    public bool CanAttack { get; set; } = true;
+
     private void OnEnable()
     {
         EventManager.Instance.RegisterDisableGhoulArrow(this);
@@ -29,16 +38,30 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
         base.Start();
         SetData(MonsterType.Ghoul);
         SetMaterial();
+
+        _node = SetBehaviourTree();
     }
 
     private void Update()
     {
-        
+        _node.Evaluate();
     }
 
     private INode SetBehaviourTree()
     {
-        return _node;
+        INode node = new SelectorNode(new List<INode>
+        {
+            new SequenceNode(new List<INode>
+            {
+                new GhoulMoveToPlayer(this),
+                new GhoulRotateToPlayer(this),
+                new GhoulAttack(this)
+            }),
+
+            new GhoulCheckPlayer(this)
+        });
+
+        return node;
     }
 
     private void SetMaterial()
