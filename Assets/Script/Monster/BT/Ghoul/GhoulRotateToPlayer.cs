@@ -30,7 +30,7 @@ public class GhoulRotateToPlayer : INode
 
         _angle = Vector3.Angle(_ghoul.transform.forward, rotateDirection);
 
-        if(_angle >= 1f)
+        if (_angle >= 1f)
         {
             Quaternion rotation = Quaternion.LookRotation(rotateDirection);
 
