@@ -6,6 +6,7 @@ using UnityEngine;
 public class EventManager
 {
     private static EventManager instance;
+    private PlayerWeaponController _weaponController;
     private IWeaponEvent m_SetWeaponDataEvent;
     private IOnColliderEvent m_ActiveTriggerColliderEvent;
     private IHitEvent m_OverlapBoxEvent;
@@ -27,6 +28,11 @@ public class EventManager
     }
 
     //RegisterEvent-----------------------------------------------------------------------------------
+    public void SetWeaponController(PlayerWeaponController weaponController)
+    {
+        _weaponController = weaponController;
+    }
+
     public void RegisterSetWeaponDataEvent(IWeaponEvent setWeaponDataEvent)
     {
         m_SetWeaponDataEvent = setWeaponDataEvent;
@@ -103,5 +109,10 @@ public class EventManager
         {
             mageBullet.OnDisableMagicBullet(callBack);
         }
+    }
+
+    public void AddEvent_ActiveType(Action<ActiveType, bool> callBack, Action<bool, PlayerWeapon> action)
+    {
+        _weaponController.ActiveTypeCallBack(callBack, action);
     }
 }

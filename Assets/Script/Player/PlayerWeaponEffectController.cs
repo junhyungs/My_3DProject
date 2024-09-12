@@ -49,6 +49,11 @@ public class PlayerWeaponEffectController : MonoBehaviour
         InitColor();
     }
 
+    private void Start()
+    {
+        EventManager.Instance.AddEvent_ActiveType(WeaponActiveType, ColorChange);
+    }
+
     private void InitEffect()
     {
         CreateSwordEffect();
@@ -99,6 +104,18 @@ public class PlayerWeaponEffectController : MonoBehaviour
         swordEffect.transform.localPosition = Vector3.zero;
     }
 
+    private void WeaponActiveType(ActiveType type, bool isCharge)
+    {
+        if(type is ActiveType.Right)
+        {
+            ActiveSwordEffect_R(isCharge);
+        }
+        else
+        {
+            ActiveSwordEffect_L(isCharge);
+        }
+    }
+
     public void ActiveSwordEffect_L(bool isCharge)
     {
         float effectRange = isCharge ? m_chargeRange : m_normalRange;
@@ -129,6 +146,18 @@ public class PlayerWeaponEffectController : MonoBehaviour
     {
         yield return m_effectDelayTime;
         swordVfx.Play();
+    }
+
+    private void ColorChange(bool isActive, PlayerWeapon weapon)
+    {
+        if (isActive)
+        {
+            SetNewColor(weapon);
+        }
+        else
+        {
+            ResetColor(weapon);
+        }
     }
 
     public void SetNewColor(PlayerWeapon weapon)

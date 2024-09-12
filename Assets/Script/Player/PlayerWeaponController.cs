@@ -2,6 +2,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ActiveType
+{
+    Right,
+    Left
+}
+
 public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
 {
     
@@ -19,11 +25,11 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
 
     private Action m_Oncollider;
     private Action m_Offcollider;
+    private Action<ActiveType, bool> _activeTypeHandler;
+    private Action<bool, PlayerWeapon> _activeColorHandler;
     private Dictionary<int, Action<bool>> Animation_ActionDic = new Dictionary<int, Action<bool>>();
 
     private Animator m_weaponAnimation;
-    [SerializeField]
-    private PlayerWeaponEffectController m_effect;
 
     public Dictionary<int, Action<bool>> ActiveWeaponDic => Animation_ActionDic;
 
@@ -36,6 +42,11 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
     private int m_Charge_MaxL = Animator.StringToHash("Charge_max_L");
     private int m_Charge_MaxR = Animator.StringToHash("Charge_max_R");
     #endregion
+
+    private void OnEnable()
+    {
+        EventManager.Instance.SetWeaponController(this);
+    }
 
     private void Awake()
     {
@@ -62,15 +73,20 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
         Animation_ActionDic.Add(m_Charge_slash_L, ActiveChargeLeftWeapon);
         Animation_ActionDic.Add(m_Charge_slash_R, ActiveChargeRightWeapon);
     }
-   
 
+    public void ActiveTypeCallBack(Action<ActiveType, bool> typeAction, Action<bool, PlayerWeapon> colorAction)
+    {
+        _activeTypeHandler += typeAction;
+        _activeColorHandler += colorAction;
+    }
+   
     public void ActiveLeftWeapon(bool isCharge)
     {
         PlayerWeapon currentWeapon = WeaponManager.Instance.GetcurrentWeapon();
 
         LeftChargeObject[(int)currentWeapon].SetActive(false);
         LeftObject[(int)currentWeapon].SetActive(true);
-        m_effect.ActiveSwordEffect_L(isCharge);
+        _activeTypeHandler.Invoke(ActiveType.Left, isCharge);
         WeaponManager.Instance.ActiveIdleWeapon(false);
         m_Oncollider?.Invoke();
     }
@@ -79,7 +95,7 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
     {
         PlayerWeapon currentWeapon = WeaponManager.Instance.GetcurrentWeapon();
 
-        m_effect.SetNewColor(currentWeapon);
+        _activeColorHandler.Invoke(true, currentWeapon);
         LeftChargeObject[(int)currentWeapon].SetActive(true);
         WeaponManager.Instance.ActiveIdleWeapon(false);
     }
@@ -90,7 +106,7 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
 
         RightChargeObject[(int)currentWeapon].SetActive(false);
         RightObject[(int)currentWeapon].SetActive(true);
-        m_effect.ActiveSwordEffect_R(isCharge);
+        _activeTypeHandler.Invoke(ActiveType.Right, isCharge);
         WeaponManager.Instance.ActiveIdleWeapon(false);
         m_Oncollider?.Invoke();
     }
@@ -98,7 +114,7 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
     {
         PlayerWeapon currentWeapon = WeaponManager.Instance.GetcurrentWeapon();
 
-        m_effect.SetNewColor(currentWeapon);
+        _activeColorHandler.Invoke(true, currentWeapon);
         RightChargeObject[(int)currentWeapon].SetActive(true);
         WeaponManager.Instance.ActiveIdleWeapon(false);
     }
@@ -107,7 +123,7 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
     {
         PlayerWeapon currentWeapon = WeaponManager.Instance.GetcurrentWeapon();
 
-        m_effect.ResetColor(currentWeapon);
+        _activeColorHandler.Invoke(false, currentWeapon);
         RightObject[(int)currentWeapon].SetActive(false);
         WeaponManager.Instance.ActiveIdleWeapon(true);
         m_weaponAnimation.SetBool("NextAttack", true);
@@ -118,7 +134,7 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
     {
         PlayerWeapon currentWeapon = WeaponManager.Instance.GetcurrentWeapon();
 
-        m_effect.ResetColor(currentWeapon);
+        _activeColorHandler.Invoke(false, currentWeapon);
         LeftObject[(int)currentWeapon].SetActive(false);
         WeaponManager.Instance.ActiveIdleWeapon(true);
         m_weaponAnimation.SetBool("NextAttack", true);
@@ -129,7 +145,7 @@ public class PlayerWeaponController : MonoBehaviour, IOnColliderEvent
     {
         PlayerWeapon currentWeapon = WeaponManager.Instance.GetcurrentWeapon();
 
-        m_effect.ResetColor(currentWeapon);
+        _activeColorHandler.Invoke(false, currentWeapon);
         RightChargeObject[(int)currentWeapon].SetActive(false);
         LeftChargeObject[(int)currentWeapon].SetActive(false);
     }

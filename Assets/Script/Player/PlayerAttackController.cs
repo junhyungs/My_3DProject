@@ -159,7 +159,6 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
 
     private IEnumerator Hook(Vector3 targetPosition)
     {
-        Debug.Log(targetPosition);
         float hookSpeed = 15f;
         float maxDistance = 10f;
         float currentDistance = 0f;
@@ -180,6 +179,17 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
             {
                 m_attackAnimation.SetBool("HookEnd", false);
                 gameObject.layer = LayerMask.NameToLayer("Player");
+
+                Collider[] removeChain = Physics.OverlapSphere(transform.position, 1f, LayerMask.GetMask("Hook"));
+
+                if(removeChain.Length > 0)
+                {
+                    foreach (var chain in removeChain)
+                    {
+                        PoolManager.Instance.ReturnPlayerSegment(chain.gameObject);
+                    }
+                }
+
                 break;
             }
             else
