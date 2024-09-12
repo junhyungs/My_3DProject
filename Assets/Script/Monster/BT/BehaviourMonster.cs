@@ -46,7 +46,11 @@ public class BehaviourMonster : MonoBehaviour
         _currentPower = _data._attackPower;
         _currentSpeed = _data._speed;
 
-        _agent.speed = _currentSpeed;
+        if(_agent != null)
+        {
+            _agent.speed = _currentSpeed;
+        }
+        
     }
 
     protected IEnumerator IntensityChange(float baseValue, float power)
