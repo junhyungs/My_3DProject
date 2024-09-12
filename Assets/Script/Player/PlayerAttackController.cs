@@ -24,8 +24,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
    
     private bool chargeMax;
     private bool chargeAttackDirection = true;
-    private bool isAction = true;
-    private bool isFlying = false;
+    private bool isAction = true;   
 
     private bool _iscollide = false;
 

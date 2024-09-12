@@ -53,9 +53,15 @@ public class BatAttack : INode
         {
             Collider[] colliders = Physics.OverlapSphere(_bat.transform.position, 1f, _targetLayer);
 
-            IDamged hit = colliders[0].GetComponent<IDamged>();
+            if(colliders.Length > 0)
+            {
+                IDamged hit = colliders[0].GetComponent<IDamged>();
 
-            hit.TakeDamage(_bat.CurrentPower);
+                if (hit != null)
+                {
+                    hit.TakeDamage(_bat.CurrentPower);
+                }
+            }
         }
         
         _bat.transform.position = endPosition;
