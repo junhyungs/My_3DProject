@@ -20,7 +20,6 @@ public class HookObject : ProjectileObject, IHookPosition
 
     private void OnEnable()
     {
-        
         m_player = GameManager.Instance.Player;
         transform.gameObject.layer = LayerMask.NameToLayer("Default");
         isAnchor = false;

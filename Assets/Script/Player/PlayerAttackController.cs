@@ -26,7 +26,8 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
     private bool chargeAttackDirection = true;
     private bool isAction = true;
     private bool isFlying = false;
-   
+
+    private bool _iscollide = false;
 
     public bool IsAction
     {
@@ -150,59 +151,57 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
             m_attackAnimation.SetTrigger("HookStart");
             m_attackAnimation.SetBool("HookEnd", true);
             gameObject.layer = LayerMask.NameToLayer("fly");
-            StartCoroutine(HookMove(targetPos));
+            StartCoroutine(Hook(targetPos));
         }
         else
             m_attackAnimation.SetTrigger("HookFail");
     }
 
-
-
-    private IEnumerator HookMove(Vector3 targetPos)
+    private IEnumerator Hook(Vector3 targetPosition)
     {
-        float moveSpeed = 15.0f;
-        float StopDistance = 0.05f;
-        float maxMoveDistance = 10.0f;
-        float currentMoveDistance = 0.0f;
+        Debug.Log(targetPosition);
+        float hookSpeed = 15f;
+        float maxDistance = 10f;
+        float currentDistance = 0f;
 
-        Vector3 moveDirection = (targetPos - transform.position);
+        Vector3 hookDirection = (targetPosition - transform.position).normalized;
 
-        moveDirection.y = 0;
+        LayerMask targetLayer = LayerMask.GetMask("HookObject", "Monster");
 
-        moveDirection = moveDirection.normalized;
+        hookDirection.y = 0f;
 
-        isFlying = true;
+        _iscollide = false;
 
-        while (isFlying)
+        while (true)
         {
-            if ((m_hookPositionObject.transform.position - targetPos).sqrMagnitude < StopDistance * StopDistance)
+            _iscollide = Physics.CheckSphere(transform.position, 1f, targetLayer);
+
+            if (_iscollide)
             {
                 m_attackAnimation.SetBool("HookEnd", false);
                 gameObject.layer = LayerMask.NameToLayer("Player");
-                isFlying = false;
+                break;
             }
             else
             {
-                float distance = moveSpeed * Time.deltaTime;
+                float distance = hookSpeed * Time.deltaTime;
 
-                currentMoveDistance += distance;
+                currentDistance += distance;
 
-                if (currentMoveDistance >= maxMoveDistance)
+                if(currentDistance >= maxDistance)
                 {
                     m_attackAnimation.SetBool("HookEnd", false);
                     gameObject.layer = LayerMask.NameToLayer("Player");
-                    isFlying = false;
-                }
-                else
-                {
-                    m_playerController.Move(moveDirection * moveSpeed * Time.deltaTime);
+                    break;
                 }
 
+                Vector3 moveVector = hookDirection * hookSpeed * Time.deltaTime;
+
+                m_playerController.Move(moveVector);
+
+                yield return null;
             }
-
-            yield return null;
         }
-
     }
 
     private void OnChargeAttack(InputValue input)
