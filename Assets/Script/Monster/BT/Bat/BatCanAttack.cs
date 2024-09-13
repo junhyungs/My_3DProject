@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BatCanAttack : INode
 {
     private BatBehaviour _bat;
+    private NavMeshAgent _agent;
 
-    public BatCanAttack(BatBehaviour bat)
+    public BatCanAttack(BatBehaviour bat, NavMeshAgent agent)
     {
         _bat = bat;
+        _agent = agent;
     }
 
     public INode.State Evaluate()
@@ -24,12 +27,12 @@ public class BatCanAttack : INode
 
             float distance = Vector3.Distance(playerTransform.position, _bat.transform.position);
 
-            if(distance > _bat.Agent.stoppingDistance)
+            if(distance > _agent.stoppingDistance)
             {
                 return INode.State.Fail;
             }
 
-            _bat.Agent.SetDestination(_bat.transform.position);
+            _agent.SetDestination(_bat.transform.position);
 
             return INode.State.Success;
         }

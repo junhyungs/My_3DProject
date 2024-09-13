@@ -18,7 +18,7 @@ public class ForestMother : MonoBehaviour
     {
         Vector3 targetDir = (_target.transform.position - transform.position).normalized;
 
-        Quaternion rot = Quaternion.LookRotation(targetDir);
+        Quaternion rot = Quaternion.Euler(targetDir);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, rot, 10f * Time.deltaTime);
     }

@@ -5,12 +5,15 @@ using UnityEngine;
 public class BatAttack : INode
 {
     private BatBehaviour _bat;
+    private Animator _animator;
+
     private bool _canAttack = true;
     private LayerMask _targetLayer;
 
-    public BatAttack(BatBehaviour bat)
+    public BatAttack(BatBehaviour bat, Animator animator)
     {
         _bat = bat;
+        _animator = animator;
 
         _targetLayer = LayerMask.GetMask("Player");
     }
@@ -30,8 +33,8 @@ public class BatAttack : INode
     private IEnumerator Attack()
     {
         _bat.StartCoroutine(AttackCoolTime());
-        
-        _bat.Animator.SetTrigger("Attack");
+
+        _animator.SetTrigger("Attack");
 
         float moveDistance = 2f;
         Vector3 attackDirection = _bat.transform.forward;

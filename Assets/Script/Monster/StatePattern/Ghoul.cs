@@ -231,7 +231,7 @@ public class GhoulMoveState : GhoulState
 
     public override void StateUpdate()
     {
-       if(m_Ghoul.Agent.remainingDistance <= m_Ghoul.Agent.stoppingDistance)
+        if (m_Ghoul.Agent.remainingDistance <= m_Ghoul.Agent.stoppingDistance)
         {
             m_Ghoul.Anim.SetBool("Walk", false);
 

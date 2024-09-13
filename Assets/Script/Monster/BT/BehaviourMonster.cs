@@ -20,6 +20,9 @@ public class BehaviourMonster : MonoBehaviour
     protected bool _isSpawn;
     protected Color _saveColor;
     private WaitForSeconds _intensityTime = new WaitForSeconds(0.1f);
+
+    [Header("PartrolPoint")]
+    [SerializeField] protected List<Transform> _patrolList;
     #endregion
 
     #region Data

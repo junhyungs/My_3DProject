@@ -23,16 +23,13 @@ public class BatBehaviour : BehaviourMonster, IDamged
 
     private INode _node;
     private bool _isDead;
+
     #region Property
-    public NavMeshAgent Agent { get { return _agent; } }
-    public Animator Animator { get { return _animator; } }
-    public Rigidbody Rigidbody { get { return _rigidBody; } }
     public GameObject PlayerObject { get; set; }
     public bool CheckPlayer { get; set; }
     public bool IsAttack { get; set; }
     public float CurrentPower { get { return _currentPower; } }
     public float CurrentHP { get { return _currentHp; } }
-
     #endregion
 
     protected override void Start()
@@ -66,11 +63,11 @@ public class BatBehaviour : BehaviourMonster, IDamged
             {
                 new SequenceNode(new List<INode>
                 {
-                    new BatCanAttack(this),
+                    new BatCanAttack(this, _agent),
                     new BatRotateToPlayer(this),
-                    new BatAttack(this)
+                    new BatAttack(this, _animator)
                 }),
-                new BatMoveToPlayer(this)
+                new BatMoveToPlayer(this, _agent)
             }),
 
             new BatCheckPlayer(this)

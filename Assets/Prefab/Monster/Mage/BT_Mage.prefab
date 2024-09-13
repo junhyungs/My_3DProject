@@ -1957,6 +1957,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd776a2e8eb656940b0c0b03f8c8d064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _patrolArray: []
   _soulPosition: {fileID: 2896700150016747001}
   _firePosition: {fileID: 6757951653225865578}
   _skinnedMeshRenderer: {fileID: 5409392864339220198}
@@ -1975,7 +1976,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 180
-  m_StoppingDistance: 3
+  m_StoppingDistance: 5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
