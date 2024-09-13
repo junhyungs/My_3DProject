@@ -19,7 +19,7 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     [Header("AttackObject")]
     [SerializeField] private GameObject[] _objectArray;
     [Header("SkinnedMeshRenderer")]
-    [SerializeField] private SkinnedMeshRenderer _skinnedMeshRenderer;
+    [SerializeField] private SkinnedMeshRenderer[] _skinnedMeshRenderer;
     [Header("Material")]
     [SerializeField] private Material _originalMaterial;
 
@@ -56,7 +56,11 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     private void SetMaterial()
     {
         _copyMaterial = Instantiate(_originalMaterial);
-        _skinnedMeshRenderer.material = _copyMaterial;
+
+        for(int i = 0; i < _skinnedMeshRenderer.Length; i++)
+        {
+            _skinnedMeshRenderer[i].material = _copyMaterial;
+        }
     }
 
     private INode SetBehaviourTree()
@@ -93,6 +97,8 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
 
         if(_currentHp <= 0)
         {
+            _isDead = true;
+
             Die(_soulPosition);
         }
         else

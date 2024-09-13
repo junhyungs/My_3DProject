@@ -293,7 +293,7 @@ GameObject:
   - component: {fileID: 6934945476220796094}
   - component: {fileID: 8655375548035612302}
   - component: {fileID: 7309394270460398848}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BT_Slime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -370,8 +370,10 @@ MonoBehaviour:
   - {fileID: 4951559219645517069}
   - {fileID: 5364556135622715662}
   - {fileID: 5392431259153753868}
-  _skinnedMeshRenderer: {fileID: 4630127334970892315}
-  _originalMaterial: {fileID: 2100000, guid: 476f7920a9e0ea3478a789b3fcdbd40b, type: 2}
+  _skinnedMeshRenderer:
+  - {fileID: 3389365323906070843}
+  - {fileID: 4630127334970892315}
+  _originalMaterial: {fileID: 2100000, guid: 4aad278080eae6e4c868155ae6dad7dd, type: 2}
 --- !u!195 &6934945476220796094
 NavMeshAgent:
   m_ObjectHideFlags: 0
