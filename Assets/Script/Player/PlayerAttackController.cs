@@ -24,8 +24,8 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
    
     private bool chargeMax;
     private bool chargeAttackDirection = true;
-    private bool isAction = true;   
-
+    private bool isAction = true;
+    private bool _isFly;
     private bool _iscollide = false;
 
     public bool IsAction
@@ -174,7 +174,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
         {
             _iscollide = Physics.CheckSphere(transform.position, 1f, targetLayer);
 
-            if (_iscollide)
+            if (_iscollide && _isFly)
             {
                 m_attackAnimation.SetBool("HookEnd", false);
                 gameObject.layer = LayerMask.NameToLayer("Player");
@@ -189,10 +189,13 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
                     }
                 }
 
+                _isFly = false;
                 break;
             }
             else
             {
+                _isFly = true;
+
                 float distance = hookSpeed * Time.deltaTime;
 
                 currentDistance += distance;
@@ -201,6 +204,8 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
                 {
                     m_attackAnimation.SetBool("HookEnd", false);
                     gameObject.layer = LayerMask.NameToLayer("Player");
+
+                    _isFly = false;
                     break;
                 }
 

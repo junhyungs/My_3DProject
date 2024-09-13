@@ -54,10 +54,11 @@ public class HookObject : ProjectileObject, IHookPosition
 
     private void FireDistance()
     {
-        if (Vector3.Distance(transform.position, m_player.transform.position) >= m_maxDistance && !isAnchor)
-        {
-            isFire = false;
 
+        float currentDistance = Vector3.Distance(transform.position, m_player.transform.position);
+
+        if (currentDistance >= m_maxDistance && !isAnchor)
+        {
             Collider[] colliders = Physics.OverlapSphere(transform.position, 0.5f, LayerMask.GetMask("Hook"));
 
             foreach(var obj in colliders)
@@ -67,8 +68,13 @@ public class HookObject : ProjectileObject, IHookPosition
                 PoolManager.Instance.ReturnPlayerSegment(chain);
             }
 
+            isFire = false;
             transform.gameObject.layer = LayerMask.NameToLayer("Player");
-        }   
+        } 
+        else if(currentDistance >= m_maxDistance && isAnchor)
+        {
+            _hookEventHandler.Invoke(transform.position, true);
+        }
     }
 
 
@@ -77,10 +83,8 @@ public class HookObject : ProjectileObject, IHookPosition
         if(other.gameObject.tag == "Hook")
         {
             _hookEventHandler.Invoke(transform.position, true);
-
-            ReturnHook();
-
             isAnchor = true;
+            ReturnHook();
         }
 
         if(other.gameObject.layer == LayerMask.NameToLayer("Monster"))
@@ -94,9 +98,8 @@ public class HookObject : ProjectileObject, IHookPosition
 
             _hookEventHandler?.Invoke(transform.position, true);
 
-            ReturnHook();
-
             isAnchor = true;
+            ReturnHook();
         }
         
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
