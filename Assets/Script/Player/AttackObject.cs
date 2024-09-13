@@ -53,7 +53,7 @@ public class AttackObject : MonoBehaviour
         
         Vector3 boxSize = isCharge ? m_chargeRange : m_defaultRange;
 
-        Collider[] boxOverlap = Physics.OverlapBox(m_boxposition, boxSize / 2, transform.rotation, LayerMask.GetMask("Monster"));
+        Collider[] boxOverlap = Physics.OverlapBox(m_boxposition, boxSize / 2, transform.rotation, LayerMask.GetMask("Monster", "HitSwitch"));
 
         foreach (var box in boxOverlap)
         {
@@ -64,6 +64,7 @@ public class AttackObject : MonoBehaviour
     private void Hit(Collider other)
     {
         IDamged damged = other.gameObject.GetComponent<IDamged>();        
+        HitSwitch hitSwitch = other.gameObject.GetComponent<HitSwitch>();   
 
         if (damged != null)
         {
@@ -89,8 +90,11 @@ public class AttackObject : MonoBehaviour
 
                 hitEffectComponent.ReturnEffect();
             }
+        }
 
-           
+        if(hitSwitch != null)
+        {
+            hitSwitch.SwitchEvent();
         }
     }
 

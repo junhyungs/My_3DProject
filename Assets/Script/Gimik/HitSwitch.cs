@@ -19,21 +19,18 @@ public class HitSwitch : MonoBehaviour
 
     public bool IsHit {  get { return isHit; } }
 
-    private void OnTriggerEnter(Collider other)
+    public void SwitchEvent()
     {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Weapon"))
+        var gimik = GimikManager.Instance.Gimik;
+
+        if(gimik.TryGetValue(_key, out Action<GameObject> gimikEvent))
         {
-            var gimik = GimikManager.Instance.Gimik;
+            gimikEvent.Invoke(EventObject);
 
-            if (gimik.TryGetValue(_key, out Action<GameObject> gimikEvent))
-            {
-                gimikEvent.Invoke(EventObject);
+            PlayTimeLine();
 
-                PlayTimeLine();
-
-                isHit = true;
-            }
-        }    
+            isHit = true;
+        }
     }
 
     private void PlayTimeLine()
