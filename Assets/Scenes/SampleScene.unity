@@ -4609,7 +4609,7 @@ Animator:
   m_GameObject: {fileID: 1340901984378395826}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 0e83b9d69b64da84e9ee78a125ef04d2, type: 3}
-  m_Controller: {fileID: 9100000, guid: 31e048abd2dbb1143a682f8f5895904d, type: 2}
+  m_Controller: {fileID: 9100000, guid: abb0f5b0b489ffd40838208725805162, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -4630,12 +4630,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1859995358508992008}
   - component: {fileID: 1340901984378395825}
-  - component: {fileID: 1340901984378395837}
   - component: {fileID: 1340901984378395838}
   - component: {fileID: 1340901984378395836}
   - component: {fileID: 1340901984378395835}
   m_Layer: 6
-  m_Name: DEKU_SCRUB
+  m_Name: BT_Deku
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4691,22 +4690,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &1340901984378395837
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1340901984378395826}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6884af1049aab7548aec3d30748ae14e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_skinnedMeshRenderer: {fileID: 5679402788586448992}
-  m_originalMaterial: {fileID: 2100000, guid: f121f3282e7fcd548b9f0c63fff444a6, type: 2}
-  m_FirePosition: {fileID: 7803056540950185695}
-  m_DropSoulPosition: {fileID: 7629768476001838989}
 --- !u!195 &1340901984378395838
 NavMeshAgent:
   m_ObjectHideFlags: 0
