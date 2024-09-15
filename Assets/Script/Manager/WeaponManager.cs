@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,137 +13,38 @@ public enum PlayerWeapon
 }
 
 public class WeaponManager : Singleton<WeaponManager>
-{
-    [Header("IdleWeapon")]
-    [SerializeField] private GameObject[] IdleObject;
-
-    private Dictionary<PlayerWeapon, WeaponData> WeaponDataDic = new Dictionary<PlayerWeapon, WeaponData>();
-    private IWeapon m_currentWeapon;
-    private PlayerWeapon m_weaponType;
+{    
+    private PlayerWeaponEffectController _effectController;
+    private PlayerWeaponController _weaponController;
+    private PlayerWeapon _currentWeapon;
 
     private void Awake()
     {
-        InitializeWeaponData();
-        OnDisableIdleWeaponObject();
-        m_weaponType = PlayerWeapon.Sword;
-        SetWeapon(m_weaponType);
+        _effectController = gameObject.GetComponent<PlayerWeaponEffectController>();
     }
 
-    private void Start()
+    public void SetCurrentWeapon(PlayerWeapon weapon)
     {
-     
+        _currentWeapon = weapon;
     }
 
-    public void InitializeWeaponData()
+    public void SetWeaponController(PlayerWeaponController weaponController)
     {
-        InitWeapon(PlayerWeapon.Sword, "Sword");
-        InitWeapon(PlayerWeapon.Hammer, "Hammer");
-        InitWeapon(PlayerWeapon.Dagger, "Dagger");
-        InitWeapon(PlayerWeapon.GreatSword, "GreatSword");
-        InitWeapon(PlayerWeapon.Umbrella, "Umbrella");
+        _weaponController = weaponController;
     }
 
-    private void InitWeapon(PlayerWeapon weaponType, string weaponName)
+    public IEnumerator LoadWeaponData(string Id, Weapon weaponComponent)
     {
-        var weaponData = DataManager.Instance.GetWeaponData(weaponName);
-        WeaponData data = new WeaponData(
-            weaponData.WeaponName,
-            weaponData.AttackPower,
-            weaponData.ChargeAttackPower,
-            weaponData.NormalEffectRange,
-            weaponData.ChargeEffectRange,
-            weaponData.NormalAttackRange,
-            weaponData.ChargeAttackRange
-            );
-        
-        
-        WeaponDataDic.Add(weaponType, data);
-    }
-  
-    public void SetWeapon(PlayerWeapon weaponType)
-    {
-        
-        ActiveIdleWeapon(false);
-
-        m_weaponType = weaponType;
-
-        Component component = gameObject.GetComponent<IWeapon>() as Component;
-
-        if(component != null)
+        yield return new WaitWhile(() =>
         {
-            Destroy(component);
-        }
+            Debug.Log("무기 데이터를 가져오지 못했습니다");
+            return DataManager.Instance.GetData(Id) == null;
+        });
 
-        switch (weaponType)
-        {
-            case PlayerWeapon.Sword:
-                m_currentWeapon = gameObject.AddComponent<Sword>();
-                break;
-            case PlayerWeapon.Hammer:
-                m_currentWeapon = gameObject.AddComponent<Hammer>();
-                break;
-            case PlayerWeapon.Dagger:
-                m_currentWeapon = gameObject.AddComponent<Dagger>();
-                break;
-            case PlayerWeapon.GreatSword:
-                m_currentWeapon = gameObject.AddComponent<GreatSword>();
-                break;
-            case PlayerWeapon.Umbrella:
-                m_currentWeapon = gameObject.AddComponent<Umbrella>();
-                break;
-        }
+        var weaponData = DataManager.Instance.GetData(Id) as PlayerWeaponData;
 
-        ActiveIdleWeapon(true);
-    }
+        _effectController.SetEffectRange(weaponData.NormalEffectRange, weaponData.ChargeEffectRange);
 
-    public void ActiveIdleWeapon(bool active)
-    {
-        IdleObject[(int)m_weaponType].SetActive(active);
-    }
-
-    public WeaponData GetWeaponData(PlayerWeapon weaponType)
-    {
-        return WeaponDataDic[weaponType];
-    }
-
-    public PlayerWeapon GetcurrentWeapon()
-    {
-        return m_weaponType;
-    }
-
-    public void InitAttackObject()
-    {
-        m_currentWeapon.InitAttackObject();
-    }
-
-    private void OnDisableIdleWeaponObject()
-    {
-        foreach(var idleWeapon in IdleObject)
-        {
-            idleWeapon.SetActive(false);
-        }
-    }
-  
-}
-
-public struct WeaponData
-{
-    public string m_weaponName { get; }
-    public float m_defaultPower { get; }
-    public float m_chargePower { get; }
-    public float m_defaultEffectRange { get; }
-    public float m_chargeEffectRange { get; }
-    public Vector3 m_defaultAttackRange { get; }
-    public Vector3 m_chargeAttackRange { get; }
-    public WeaponData(string weaponName, float defaultPower, float chargePower, float defaultEffectRange, float chargeEffectRange, Vector3 defaultAttackRange, Vector3 chargeAttackRange)
-    {
-        m_weaponName =  weaponName;
-        m_defaultPower = defaultPower;
-        m_chargePower = chargePower;
-        m_defaultEffectRange = defaultEffectRange;
-        m_chargeEffectRange = chargeEffectRange;
-        m_defaultAttackRange = defaultAttackRange;
-        m_chargeAttackRange = chargeAttackRange;
+        weaponComponent.SetWeaponData(weaponData);
     }
 }
-

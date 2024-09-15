@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class Hammer : Weapon
 {
-   
-
-    private void OnEnable()
+  
+    public override void SetWeaponData(PlayerWeaponData weaponData)
     {
-        
+       
     }
 
-  
-    public override void InitAttackObject()
+    public override void UseWeapon(bool isCharge)
     {
- 
+       
     }
 }

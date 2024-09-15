@@ -6,17 +6,68 @@ using UnityEngine;
 
 public class Sword : Weapon
 {
-    private void OnEnable()
+    public override void SetWeaponData(PlayerWeaponData weaponData)
     {
-        EventManager.Instance.RegisterSetWeaponDataEvent(this);
-        m_weaponData = WeaponManager.Instance.GetWeaponData(PlayerWeapon.Sword);
-        m_weaponEffect = GetComponent<PlayerWeaponEffectController>();
-        m_weaponEffect.SetEffectRange(m_weaponData.m_defaultEffectRange, m_weaponData.m_chargeEffectRange);
+        _weaponData = weaponData;
+
+        _targetLayer = LayerMask.GetMask("Monster", "HitSwitch");
     }
 
-    public override void InitAttackObject()
+    public override void UseWeapon(bool isCharge)
     {
-        m_weaponRangeEvent.Invoke(m_weaponData.m_defaultPower, m_weaponData.m_chargePower,
-        m_weaponData.m_defaultAttackRange, m_weaponData.m_chargeAttackRange);
+        _forward = transform.forward;
+
+        _boxPosition = transform.position + _forward * 1.5f;
+
+        _currentPower = isCharge ? _weaponData.ChargePower : _weaponData.Power;
+
+        Vector3 boxSize = isCharge ? _weaponData.ChargeAttackRange : _weaponData.NormalAttackRange;
+
+        Collider[] colliders = Physics.OverlapBox(_boxPosition, boxSize / 2, transform.rotation, _targetLayer);
+
+        foreach(var target in  colliders)
+        {
+            Hit(target);
+        }
+    }
+
+    private void Hit(Collider other)
+    {
+        IDamged damged = other.gameObject.GetComponent<IDamged>();
+
+        if (damged != null)
+        {
+            damged.TakeDamage(_currentPower);
+
+            float effectCount = _weaponData.EffectCount;
+
+            for(int i = 0; i < effectCount; i++)
+            {
+                GameObject hitEffect = PoolManager.Instance.GetHitParticle();
+
+                HitEffect hitEffectComponent = hitEffect.GetComponent<HitEffect>();
+
+                ParticleSystem hitSystem = hitEffect.GetComponent<ParticleSystem>();
+
+                int randomRot = UnityEngine.Random.Range(20, 161);
+
+                hitEffect.transform.rotation = Quaternion.Euler(0, 0, randomRot);
+
+                hitEffect.transform.position = other.transform.position;
+
+                hitEffect.SetActive(true);
+
+                hitSystem.Play();
+
+                hitEffectComponent.ReturnEffect();
+            }
+        }
+
+        HitSwitch hitSwitch = other.gameObject.GetComponent<HitSwitch>();
+
+        if(hitSwitch != null)
+        {
+            hitSwitch.SwitchEvent();
+        }
     }
 }

@@ -3,25 +3,19 @@ using UnityEngine;
 
 
 
-public abstract class Weapon : MonoBehaviour, IWeapon, IWeaponEvent
+public abstract class Weapon : MonoBehaviour, IWeapon
 {
     protected PlayerWeaponEffectController m_weaponEffect;
-    protected Action<float, float, Vector3, Vector3> m_weaponRangeEvent;
-    protected WeaponData m_weaponData;
+    protected PlayerWeaponData _weaponData;
 
-    public void AddWeaponDataEvent(bool isAddEvent, Action<float, float, Vector3, Vector3> callBack)
-    {
-        if (isAddEvent)
-        {
-            m_weaponRangeEvent += callBack;
-        }
-        else
-        {
-            m_weaponRangeEvent -= callBack;
-        }
-    }
+    protected Vector3 _forward;
+    protected Vector3 _boxPosition;
 
-    public abstract void InitAttackObject();
+    protected LayerMask _targetLayer;
+    protected float _currentPower;
+
+    public abstract void SetWeaponData(PlayerWeaponData weaponData);
+    public abstract void UseWeapon(bool isCharge);
 }
 
 

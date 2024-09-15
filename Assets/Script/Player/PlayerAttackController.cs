@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-public class PlayerAttackController : MonoBehaviour, IHitEvent
+public class PlayerAttackController : MonoBehaviour
 {
     [Header("ProjectilePositionObject")]
     [SerializeField] private GameObject m_arrowPositionObject;
@@ -65,7 +65,6 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
         m_skillController = GetComponent<PlayerSkillController>();  
         m_playerController = GetComponent<CharacterController>();
         m_attackAnimation = GetComponent<Animator>();
-        EventManager.Instance.RegisterOverlapBoxEvent(this);
 
         m_PositionObject = new GameObject[4];
     }
@@ -97,7 +96,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
     {
         if (isPressed)
         {
-            m_weaponController.Attack();
+            m_weaponController.Attack(chargeMax);
             chargeAttackDirection = !chargeAttackDirection;
             LookAtMouse();
         }
@@ -245,7 +244,7 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
         if (chargeMax)
         {
             m_attackAnimation.SetBool("ChargeAttack", false);
-            m_weaponController.Attack();
+            m_weaponController.Attack(chargeMax);
             chargeAttackDirection = !chargeAttackDirection;
         }
         else
@@ -364,20 +363,4 @@ public class PlayerAttackController : MonoBehaviour, IHitEvent
         m_attackAnimation.SetBool("ChargeAttack", true);
     }
 
-    public void Hit()
-    {
-        m_hitEvent?.Invoke(chargeMax);
-    }
-
-    public void HitOverlapBox(bool isAddEvent, Action<bool> callBack)
-    {
-        if (isAddEvent)
-        {
-            m_hitEvent += callBack;
-        }
-        else
-        {
-            m_hitEvent -= callBack;
-        }
-    }
 }

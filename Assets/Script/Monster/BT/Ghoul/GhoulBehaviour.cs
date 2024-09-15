@@ -38,7 +38,7 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
     protected override void Start()
     {
         base.Start();
-        SetData(MonsterType.Ghoul);
+        StartCoroutine(LoadMonsterData("M106"));
         SetMaterial();
 
         _node = SetBehaviourTree();
@@ -46,7 +46,7 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
 
     private void Update()
     {
-        if (!_isDead)
+        if (!_isDead && _dataReady)
         {
             _node.Evaluate();
         }

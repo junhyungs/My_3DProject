@@ -14,23 +14,23 @@ public class BossManager : Singleton<BossManager>
 
     private void Awake()
     {
-        InitializeBossData(BossType.OldCrow, (int)BossType.OldCrow);
+       // InitializeBossData(BossType.OldCrow, (int)BossType.OldCrow);
     }
 
-    private void InitializeBossData(BossType bossType, int id)
-    {
-        var bossData = DataManager.Instance.GetBossData(id);
+    //private void InitializeBossData(BossType bossType, int id)
+    //{
+    //    var bossData = DataManager.Instance.GetBossData(id);
 
-        BossData data = new BossData(
-            bossData.BossId,
-            bossData.BossName,
-            bossData.BossHp,
-            bossData.BossAttackPower,
-            bossData.BossSpeed
-            );
+    //    BossData data = new BossData(
+    //        bossData.BossId,
+    //        bossData.BossName,
+    //        bossData.BossHp,
+    //        bossData.BossAttackPower,
+    //        bossData.BossSpeed
+    //        );
 
-        _bossDataDictionary.Add(bossType, data);
-    }
+    //    _bossDataDictionary.Add(bossType, data);
+    //}
 
     public BossData GetBossData(BossType type)
     {

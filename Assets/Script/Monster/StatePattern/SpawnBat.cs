@@ -23,11 +23,11 @@ public class SpawnBat : Monster
 
     private void InitBat()
     {
-        _data = MonsterManager.Instance.GetMonsterData(MonsterType.Bat);
+        //_data = MonsterManager.Instance.GetMonsterData(MonsterType.Bat);
 
-        m_monsterHealth = _data._health;
-        m_monsterAttackPower = _data._attackPower;
-        m_monsterSpeed = _data._speed;
+        //m_monsterHealth = _data._health;
+        //m_monsterAttackPower = _data._attackPower;
+        //m_monsterSpeed = _data._speed;
         m_monsterAgent.speed = m_monsterSpeed;
         m_hitCollider = m_AttakArea.GetComponent<BoxCollider>();
     }

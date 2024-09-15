@@ -19,7 +19,7 @@ public abstract class Monster : MonoBehaviour, IDamged
     protected Material m_copyMaterial;
     protected EnemyNode _node;
     protected GameObject m_player;
-    protected MonsterData _data;
+    //protected MonsterData _data;
     protected Color m_saveColor;
     protected int m_monsterHealth;
     protected int m_monsterAttackPower;

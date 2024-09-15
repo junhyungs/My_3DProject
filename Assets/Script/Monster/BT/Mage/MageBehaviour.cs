@@ -41,7 +41,7 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
     protected override void Start()
     {
         base.Start();
-        SetData(MonsterType.Mage);
+        StartCoroutine(LoadMonsterData("M103"));
         SetMaterial();
 
         _node = SetBehaviourTree();
@@ -49,7 +49,7 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
 
     private void Update()
     {
-        if (!_isDead)
+        if (!_isDead && _dataReady)
         {
             _node.Evaluate();
         }

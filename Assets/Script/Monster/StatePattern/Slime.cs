@@ -31,10 +31,10 @@ public class Slime : Monster
 
     private void InitSlime()
     {
-        _data = MonsterManager.Instance.GetMonsterData(MonsterType.Slime);
-        m_monsterHealth = _data._health;
-        m_monsterAttackPower = _data._attackPower;
-        m_monsterSpeed = _data._speed;
+        //_data = MonsterManager.Instance.GetMonsterData(MonsterType.Slime);
+        //m_monsterHealth = _data._health;
+        //m_monsterAttackPower = _data._attackPower;
+        //m_monsterSpeed = _data._speed;
     }
 
     public override void TakeDamage(float damage)

@@ -35,7 +35,7 @@ public class BatBehaviour : BehaviourMonster, IDamged
     protected override void Start()
     {
         base.Start();
-        SetData(MonsterType.Bat);
+        StartCoroutine(LoadMonsterData("M101"));
         SetMaterial();
 
         _node = SetBehaviourTree();
@@ -43,7 +43,7 @@ public class BatBehaviour : BehaviourMonster, IDamged
 
     private void Update()
     {
-        if (!_isDead)
+        if (!_isDead && _dataReady)
         {
             _node.Evaluate();
         }

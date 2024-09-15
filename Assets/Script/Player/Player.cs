@@ -51,7 +51,5 @@ public class Player : MonoBehaviour
 
             InventoryManager.Instance.SetSoulCount(soulValue);
         }
-
-       
     }
 }

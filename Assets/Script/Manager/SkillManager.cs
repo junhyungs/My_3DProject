@@ -30,33 +30,33 @@ public class SkillManager : Singleton<SkillManager>
 
     private void Awake()
     {
-        InitializeSkillData();
+      //  InitializeSkillData();
     }
 
-    private void InitializeSkillData()
-    {
-        InitSkill(PlayerSkill.Bow, "Bow");
-        InitSkill(PlayerSkill.FireBall, "FireBall");
-        InitSkill(PlayerSkill.Bomb, "Bomb");
-        InitSkill(PlayerSkill.Hook, "Hook");
+    //private void InitializeSkillData()
+    //{
+    //    InitSkill(PlayerSkill.Bow, "Bow");
+    //    InitSkill(PlayerSkill.FireBall, "FireBall");
+    //    InitSkill(PlayerSkill.Bomb, "Bomb");
+    //    InitSkill(PlayerSkill.Hook, "Hook");
 
-        m_skillCount = 4;
+    //    m_skillCount = 4;
 
-        UIManager.Instance.RequestChangeSkillCount(m_skillCount);
-    }
+    //    UIManager.Instance.RequestChangeSkillCount(m_skillCount);
+    //}
 
-    private void InitSkill(PlayerSkill skill, string skillName)
-    {
-        var skillData = DataManager.Instance.GetSkillData(skillName);
-        SkillData data = new SkillData(
-            skillData.SkillName,
-            skillData.SkillAttackPower,
-            skillData.ProjectileSpeed,
-            skillData.SkillRange,
-            skillData.Cost);
+    //private void InitSkill(PlayerSkill skill, string skillName)
+    //{
+    //    //var skillData = DataManager.Instance.GetSkillData(skillName);
+    //    SkillData data = new SkillData(
+    //        skillData.SkillName,
+    //        skillData.SkillAttackPower,
+    //        skillData.ProjectileSpeed,
+    //        skillData.SkillRange,
+    //        skillData.Cost);
 
-        SkillDictionary.Add(skill, data);
-    }
+    //    SkillDictionary.Add(skill, data);
+    //}
 
     public SkillData GetSkillData(PlayerSkill skill)
     {

@@ -19,7 +19,7 @@ public class DekuBehaviour : BehaviourMonster, IDamged
     protected override void Start()
     {
         base.Start();
-        SetData(MonsterType.Deku);
+        StartCoroutine(LoadMonsterData("M105"));
         SetMaterial();
 
         _node = SetBehaviourTree();
@@ -27,7 +27,7 @@ public class DekuBehaviour : BehaviourMonster, IDamged
 
     private void Update()
     {
-        if (!_isDead)
+        if (!_isDead && _dataReady)
         {
             _node.Evaluate();
         }

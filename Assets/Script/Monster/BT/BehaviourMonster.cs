@@ -18,6 +18,7 @@ public class BehaviourMonster : MonoBehaviour
     protected float _currentPower;
     protected float _currentSpeed;
     protected bool _isSpawn;
+    protected bool _dataReady = false;
     protected Color _saveColor;
     private WaitForSeconds _intensityTime = new WaitForSeconds(0.1f);
 
@@ -26,7 +27,7 @@ public class BehaviourMonster : MonoBehaviour
     #endregion
 
     #region Data
-    protected MonsterData _data;
+    protected BT_MonsterData _data;
     #endregion
 
     protected virtual void Start()
@@ -41,19 +42,27 @@ public class BehaviourMonster : MonoBehaviour
         _rigidBody = gameObject.GetComponent<Rigidbody>();
     }
 
-    protected void SetData(MonsterType monsterType)
+    protected IEnumerator LoadMonsterData(string id)
     {
-        _data = MonsterManager.Instance.GetMonsterData(monsterType);
+        yield return new WaitWhile(() => 
+        {
+            Debug.Log("몬스터 데이터를 가져오지 못했습니다.");
+            return DataManager.Instance.GetData(id) == null;
+        });
 
-        _currentHp = _data._health;
-        _currentPower = _data._attackPower;
-        _currentSpeed = _data._speed;
+        var data = DataManager.Instance.GetData(id) as BT_MonsterData;
+
+        _currentHp = data.Health;
+        _currentPower = data.Power;
+        _currentSpeed = data.Speed;
 
         if(_agent != null)
         {
             _agent.speed = _currentSpeed;
         }
-        
+
+        _data = data;
+        _dataReady = true;
     }
 
     protected IEnumerator IntensityChange(float baseValue, float power)

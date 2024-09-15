@@ -38,14 +38,14 @@ public class MageView : Monster, IDisableMagicBullet
 
     private void InitializeMage()
     {
-        _data = MonsterManager.Instance.GetMonsterData(MonsterType.Mage);
+        //_data = MonsterManager.Instance.GetMonsterData(MonsterType.Mage);
 
-        m_monsterHealth = _data._health;
-        m_monsterAttackPower = _data._attackPower;
-        m_monsterSpeed = _data._speed;
-        m_monsterAgent.speed = m_monsterSpeed;
-        _playerLayer = LayerMask.GetMask("Player");
-        _node = new EnemyNode(SetUpTree());
+        //m_monsterHealth = _data._health;
+        //m_monsterAttackPower = _data._attackPower;
+        //m_monsterSpeed = _data._speed;
+        //m_monsterAgent.speed = m_monsterSpeed;
+        //_playerLayer = LayerMask.GetMask("Player");
+        //_node = new EnemyNode(SetUpTree());
     }
 
     private void InitializeMaterial()

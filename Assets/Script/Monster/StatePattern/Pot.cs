@@ -34,11 +34,11 @@ public class Pot : Monster
 
     private void InitPot()
     {
-        _data = MonsterManager.Instance.GetMonsterData(MonsterType.Pot);
+        //_data = MonsterManager.Instance.GetMonsterData(MonsterType.Pot);
 
-        m_monsterHealth = _data._health;
-        m_monsterAttackPower = _data._attackPower;
-        m_monsterSpeed = _data._speed;
+        //m_monsterHealth = _data._health;
+        //m_monsterAttackPower = _data._attackPower;
+        //m_monsterSpeed = _data._speed;
         m_searchCollider = GetComponent<SphereCollider>();
         m_monsterAgent = GetComponent<NavMeshAgent>();
         m_monsterAnim = GetComponent<Animator>();

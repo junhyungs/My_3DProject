@@ -39,7 +39,7 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     protected override void Start()
     {
         base.Start();
-        SetData(MonsterType.Slime);
+        StartCoroutine(LoadMonsterData("M102"));
         SetMaterial();
 
         _node = SetBehaviourTree();
@@ -47,7 +47,7 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
 
     private void Update()
     {
-        if (!_isDead)
+        if (!_isDead && _dataReady)
         {
             _node.Evaluate();
         }
