@@ -12,7 +12,7 @@ public class SheetManager : MonoBehaviour
     const string _playerDataPath = "https://script.google.com/macros/s/AKfycbzMh0vG80vBfRFabsD6m2ZylqQ9KtwfKcpugyYHxWUNIxXRu7hwLHdMDT1jK0qDzugU/exec";
     const string _playerSkillPath = "https://script.google.com/macros/s/AKfycbxhWqsuLuLUq3v2fbhn5nsmBmw-6rlojQhwPqcVI7eyMnker25SHIBw_1OGixucLMd7/exec";
     const string _playerWeaponPath = "https://script.google.com/macros/s/AKfycbxbq7qDRyj1pAtfOzrkKGTi7erKqjpu7sIAXN1WeDu_ETys0dXQofrNXEGtpRte3AqA/exec";
-    const string _stringPath = "";
+    const string _PrefabPath = "https://script.google.com/macros/s/AKfycbxN2axOwanrYCeupzvIkWa-QHgbkBfYh8BjL2V8uNcQFCaq6er3uhauN3JhzsF-XiDl/exec";
 
     [Header("SaveJson")]
     [SerializeField] private bool _saveJson;
@@ -26,6 +26,7 @@ public class SheetManager : MonoBehaviour
             StartCoroutine(SaveJsonData(JsonName.Boss, _bossDataPath));
             StartCoroutine(SaveJsonData(JsonName.PlayerWeapon, _playerWeaponPath));
             StartCoroutine(SaveJsonData(JsonName.PlayerSkill, _playerSkillPath));
+            StartCoroutine(SaveJsonData(JsonName.PrefabPath, _PrefabPath));
         }
 
         StartCoroutine(LoadJsonData(JsonName.Monster, _monsterDataPath));
@@ -33,6 +34,7 @@ public class SheetManager : MonoBehaviour
         StartCoroutine(LoadJsonData(JsonName.Boss, _bossDataPath));
         StartCoroutine(LoadJsonData(JsonName.PlayerWeapon, _playerWeaponPath));
         StartCoroutine(LoadJsonData(JsonName.PlayerSkill, _playerSkillPath));
+        StartCoroutine(LoadJsonData(JsonName.PrefabPath, _PrefabPath));
     }
 
     public IEnumerator LoadJsonData(JsonName name, string url)

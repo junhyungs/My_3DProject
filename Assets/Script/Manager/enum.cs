@@ -18,7 +18,8 @@ public enum JsonName
     Boss,
     Player,
     PlayerSkill,
-    PlayerWeapon
+    PlayerWeapon,
+    PrefabPath
 }
 
 public enum PlayerWeapon

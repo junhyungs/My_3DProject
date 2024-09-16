@@ -48,6 +48,9 @@ public class DataManager
             case nameof(JsonName.PlayerWeapon):
                 ReadPlayerWeaponData(jsonData);
                 break;
+            case nameof(JsonName.PrefabPath):
+                ReadPrefabPathData(jsonData);
+                break;
         }
     }
 
@@ -183,6 +186,28 @@ public class DataManager
         catch(JsonException ex)
         {
             Debug.Log("<PlayerWeapon> 무기 데이터를 변환하지 못했습니다.");
+        }
+    }
+
+    private void ReadPrefabPathData(string jsonData)
+    {
+        try
+        {
+            JArray jsonArray = JArray.Parse(jsonData);
+
+            foreach(var item in jsonArray)
+            {
+                string id = item["ID"] != null ? item["ID"].ToString() : string.Empty;
+                string path = item["Path"] != null ? item["Path"].ToString() : string.Empty;
+
+                PrefabPath pathData = new PrefabPath(id, path);
+                _pathDictionary.Add(id, pathData);  
+                Debug.Log(pathData.Path);
+            }
+        }
+        catch (JsonException ex)
+        {
+            Debug.Log("<PrefabPath> 프리팹 경로 데이터를 가져오지 못했습니다.");
         }
     }
 
