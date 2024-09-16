@@ -17,7 +17,7 @@ public class Sword : Weapon
     {
         _forward = transform.forward;
 
-        _boxPosition = transform.position + _forward * 1.5f;
+        _boxPosition = transform.position + _forward + Vector3.up * 0.6f;
 
         _currentPower = isCharge ? _weaponData.ChargePower : _weaponData.Power;
 
@@ -69,5 +69,25 @@ public class Sword : Weapon
         {
             hitSwitch.SwitchEvent();
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+
+        Vector3 boxPosition = transform.position + transform.forward + Vector3.up * 0.6f;
+
+        Vector3 size = _weaponData.NormalAttackRange;
+
+        Quaternion boxrotation = transform.rotation;
+
+        Matrix4x4 originalMatrix = Gizmos.matrix;
+
+        Gizmos.matrix = Matrix4x4.TRS(boxPosition, boxrotation, Vector3.one);
+
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawWireCube(Vector3.zero, size);
+
+        Gizmos.matrix = originalMatrix;
     }
 }
