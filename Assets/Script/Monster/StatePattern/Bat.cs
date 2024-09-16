@@ -51,7 +51,7 @@ public class Bat : Monster
     {
         m_monsterHealth -= (int)damage;
 
-        SkillManager.Instance.AddSkillCount();
+        SkillManager.Instance.SkillCount++;
 
         if(m_monsterHealth <= 0)
         {

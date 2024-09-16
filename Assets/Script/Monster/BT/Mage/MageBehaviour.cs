@@ -89,7 +89,7 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
     {
         _currentHp -= (int)damage;
 
-        SkillManager.Instance.AddSkillCount();
+        SkillManager.Instance.SkillCount++;
 
         if(_currentHp <= 0)
         {

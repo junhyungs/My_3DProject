@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class Hook : Skill
 {
-    private void Start()
-    {
-        m_skillData = SkillManager.Instance.GetSkillData(PlayerSkill.Hook);
-    }
 
     public override void UseSkill(GameObject spawnPositionObj)
     {
@@ -15,7 +11,7 @@ public class Hook : Skill
 
         HookObject hookComponent = hook.GetComponent<HookObject>();
         hookComponent.IsFire(false);
-        hookComponent.SetProjectileObjectData(m_skillData.m_attackPower, m_skillData.m_projectileSpeed, m_skillData.m_projectileRange);
+        hookComponent.SetProjectileObjectData(_data.Power, _data.ProjectileSpeed, _data.SkillRange);
         hook.transform.SetParent(spawnPositionObj.transform);
         hook.transform.localPosition = Vector3.zero;
         hook.transform.localRotation = spawnPositionObj.transform.localRotation;
@@ -30,5 +26,15 @@ public class Hook : Skill
             hookComponent.IsFire(true);
             hook.transform.parent = null;
         }
+    }
+
+    public override void SetSkillData(PlayerSkillData skillData)
+    {
+        _data = skillData;
+    }
+
+    public override PlayerSkillData GetSkillData()
+    {
+        return _data;
     }
 }

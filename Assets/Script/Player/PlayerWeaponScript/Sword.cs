@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Sword : Weapon
@@ -9,15 +10,15 @@ public class Sword : Weapon
     public override void SetWeaponData(PlayerWeaponData weaponData)
     {
         _weaponData = weaponData;
-
-        _targetLayer = LayerMask.GetMask("Monster", "HitSwitch");
     }
 
     public override void UseWeapon(bool isCharge)
     {
+        _targetLayer = LayerMask.GetMask("Monster", "HitSwitch");
+
         _forward = transform.forward;
 
-        _boxPosition = transform.position + _forward + Vector3.up * 0.6f;
+        _boxPosition = transform.position +_forward + Vector3.up * 0.6f;
 
         _currentPower = isCharge ? _weaponData.ChargePower : _weaponData.Power;
 
@@ -25,13 +26,18 @@ public class Sword : Weapon
 
         Collider[] colliders = Physics.OverlapBox(_boxPosition, boxSize / 2, transform.rotation, _targetLayer);
 
+        if(colliders.Length <= 0)
+        {
+            return;
+        }
+        
         foreach(var target in  colliders)
         {
-            Hit(target);
+            AttackTarget(target);
         }
     }
 
-    private void Hit(Collider other)
+    private void AttackTarget(Collider other)
     {
         IDamged damged = other.gameObject.GetComponent<IDamged>();
 
@@ -76,7 +82,7 @@ public class Sword : Weapon
 
         Vector3 boxPosition = transform.position + transform.forward + Vector3.up * 0.6f;
 
-        Vector3 size = _weaponData.NormalAttackRange;
+        Vector3 size = _weaponData.ChargeAttackRange;
 
         Quaternion boxrotation = transform.rotation;
 

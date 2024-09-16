@@ -15,7 +15,7 @@ public class TestHitObject : MonoBehaviour, IDamged
     {
         HP -= (int)damage;
 
-        SkillManager.Instance.AddSkillCount();
+        SkillManager.Instance.SkillCount++;
 
         StartCoroutine(IntensityChange(2f,2f));
     }

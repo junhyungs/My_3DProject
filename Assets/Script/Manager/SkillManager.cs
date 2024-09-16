@@ -13,9 +13,10 @@ public enum PlayerSkill
 
 public class SkillManager : Singleton<SkillManager>
 {
-    private Dictionary<PlayerSkill, SkillData> SkillDictionary = new Dictionary<PlayerSkill, SkillData>();
     private HashSet<PlayerSkill> ObtainedSkill = new HashSet<PlayerSkill>();
+    private Dictionary<PlayerSkill, Skill> _skillDictionary = new Dictionary<PlayerSkill, Skill>();
     private PlayerSkill m_currentSkill;
+
     private int m_skillCount;
 
     public int SkillCount
@@ -23,44 +24,43 @@ public class SkillManager : Singleton<SkillManager>
         get { return m_skillCount; }
         set
         {
+            if (m_skillCount >= 4)
+            {
+                return;
+            }
+
             m_skillCount = value;
             UIManager.Instance.RequestChangeSkillCount(m_skillCount);
         }
     }
 
-    private void Awake()
+    public void Cost(PlayerSkill skill)
     {
-      //  InitializeSkillData();
+        if(m_skillCount <= 0)
+        {
+            return;
+        }
+
+        Skill currentSkill = _skillDictionary[skill];
+
+        int cost = currentSkill.GetSkillData().Cost;
+
+        m_skillCount -= cost;
+
+        UIManager.Instance.RequestChangeSkillCount(m_skillCount);
     }
 
-    //private void InitializeSkillData()
-    //{
-    //    InitSkill(PlayerSkill.Bow, "Bow");
-    //    InitSkill(PlayerSkill.FireBall, "FireBall");
-    //    InitSkill(PlayerSkill.Bomb, "Bomb");
-    //    InitSkill(PlayerSkill.Hook, "Hook");
-
-    //    m_skillCount = 4;
-
-    //    UIManager.Instance.RequestChangeSkillCount(m_skillCount);
-    //}
-
-    //private void InitSkill(PlayerSkill skill, string skillName)
-    //{
-    //    //var skillData = DataManager.Instance.GetSkillData(skillName);
-    //    SkillData data = new SkillData(
-    //        skillData.SkillName,
-    //        skillData.SkillAttackPower,
-    //        skillData.ProjectileSpeed,
-    //        skillData.SkillRange,
-    //        skillData.Cost);
-
-    //    SkillDictionary.Add(skill, data);
-    //}
-
-    public SkillData GetSkillData(PlayerSkill skill)
+    public IEnumerator LoadSkillData(string id, Skill skillComponent)
     {
-        return SkillDictionary[skill];
+        yield return new WaitWhile(() =>
+        {
+            Debug.Log("스킬 데이터를 가져오지 못했습니다.");
+            return DataManager.Instance.GetData(id) == null;
+        });
+
+        var skillData = DataManager.Instance.GetData(id) as PlayerSkillData;
+
+        skillComponent.SetSkillData(skillData);
     }
 
     public void SetCurretSkill(PlayerSkill skill)
@@ -68,24 +68,11 @@ public class SkillManager : Singleton<SkillManager>
         m_currentSkill = skill;
     }
 
-    public PlayerSkill GetCurrentSkill()
-    {
-        return m_currentSkill;
-    }
-
-    public void AddSkillCount()
-    {
-        if (m_skillCount >= 4)
-            return;
-
-        m_skillCount++;
-        UIManager.Instance.RequestChangeSkillCount(m_skillCount);
-    }
-
     public void AddSkill(PlayerSkill skill)
     {
         if (HasSkill(skill))
         {
+            GetSkillData(skill);
             ObtainedSkill.Add(skill);   
         }
     }
@@ -101,21 +88,36 @@ public class SkillManager : Singleton<SkillManager>
             return false;
         }
     }
-}
 
-public struct SkillData
-{
-    public string m_skillName { get; }
-    public float m_attackPower { get; }
-    public float m_projectileSpeed { get; }
-    public float m_projectileRange { get; }
-    public int m_cost { get; }
-    public SkillData(string skillName ,float attackPower,float projectileSpeed, float projectileRange, int cost)
+    private void GetSkillData(PlayerSkill skill)
     {
-        m_skillName = skillName;
-        m_attackPower = attackPower;
-        m_projectileSpeed = projectileSpeed;
-        m_projectileRange = projectileRange;
-        m_cost = cost;
+        switch(skill)
+        {
+            case PlayerSkill.Bow:
+                Skill bow = new Bow();
+                StartCoroutine(LoadSkillData("S101", bow));
+                _skillDictionary.Add(skill, bow);
+                break;
+            case PlayerSkill.FireBall:
+                Skill fireBall = new FireBall();
+                StartCoroutine(LoadSkillData("S102", fireBall));
+                _skillDictionary.Add(skill, fireBall);
+                break;
+            case PlayerSkill.Bomb:
+                Skill bomb = new Bomb();
+                StartCoroutine(LoadSkillData("S103", bomb));
+                _skillDictionary.Add(skill, bomb);
+                break;
+            case PlayerSkill.Hook:
+                Skill hook = new Hook();
+                StartCoroutine(LoadSkillData("S104", hook));
+                _skillDictionary.Add(skill, hook);
+                break;
+        }
+    }
+
+    public Skill GetSkill(PlayerSkill skill)
+    {
+        return _skillDictionary[skill];
     }
 }

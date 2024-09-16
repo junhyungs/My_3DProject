@@ -94,7 +94,7 @@ public class Mage : Monster, IDisableMagicBullet
     {
         m_monsterHealth -= (int)damage;
 
-        SkillManager.Instance.AddSkillCount();
+        SkillManager.Instance.SkillCount++;
 
         if(m_monsterHealth <= 0)
         {

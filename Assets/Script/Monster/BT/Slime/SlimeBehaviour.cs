@@ -93,7 +93,7 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     {
         _currentHp -= damage;
 
-        SkillManager.Instance.AddSkillCount();
+        SkillManager.Instance.SkillCount++;
 
         if(_currentHp <= 0)
         {

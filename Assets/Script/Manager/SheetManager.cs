@@ -14,16 +14,28 @@ public class SheetManager : MonoBehaviour
     const string _playerWeaponPath = "https://script.google.com/macros/s/AKfycbxbq7qDRyj1pAtfOzrkKGTi7erKqjpu7sIAXN1WeDu_ETys0dXQofrNXEGtpRte3AqA/exec";
     const string _stringPath = "";
 
-    private void Start()
+    [Header("SaveJson")]
+    [SerializeField] private bool _saveJson;
+
+    private void Awake()
     {
-        StartCoroutine(SaveJsonData(JsonName.Monster, _monsterDataPath));
-        StartCoroutine(SaveJsonData(JsonName.Player, _playerDataPath));
-        StartCoroutine(SaveJsonData(JsonName.Boss, _bossDataPath));
-        StartCoroutine(SaveJsonData(JsonName.PlayerWeapon, _playerWeaponPath));
-        StartCoroutine(SaveJsonData(JsonName.PlayerSkill, _playerSkillPath));
+        if (_saveJson)
+        {
+            StartCoroutine(SaveJsonData(JsonName.Monster, _monsterDataPath));
+            StartCoroutine(SaveJsonData(JsonName.Player, _playerDataPath));
+            StartCoroutine(SaveJsonData(JsonName.Boss, _bossDataPath));
+            StartCoroutine(SaveJsonData(JsonName.PlayerWeapon, _playerWeaponPath));
+            StartCoroutine(SaveJsonData(JsonName.PlayerSkill, _playerSkillPath));
+        }
+
+        StartCoroutine(LoadJsonData(JsonName.Monster, _monsterDataPath));
+        StartCoroutine(LoadJsonData(JsonName.Player, _playerDataPath));
+        StartCoroutine(LoadJsonData(JsonName.Boss, _bossDataPath));
+        StartCoroutine(LoadJsonData(JsonName.PlayerWeapon, _playerWeaponPath));
+        StartCoroutine(LoadJsonData(JsonName.PlayerSkill, _playerSkillPath));
     }
 
-    public IEnumerator SaveJsonData(JsonName name, string url)
+    public IEnumerator LoadJsonData(JsonName name, string url)
     {
         string fileName = name.ToString();
 
@@ -40,7 +52,7 @@ public class SheetManager : MonoBehaviour
 
             yield return unityWebRequest.SendWebRequest();
 
-            if(unityWebRequest.result != UnityWebRequest.Result.Success)
+            if (unityWebRequest.result != UnityWebRequest.Result.Success)
             {
                 Debug.Log("데이터를 가져오지 못했습니다");
             }
@@ -52,6 +64,28 @@ public class SheetManager : MonoBehaviour
 
                 ReadData(fileName);
             }
+        }
+    }
+    
+    public IEnumerator SaveJsonData(JsonName name, string url)
+    {
+        string fileName = name.ToString();
+
+        UnityWebRequest unityWebRequest = UnityWebRequest.Get(url);
+
+        yield return unityWebRequest.SendWebRequest();
+
+        if(unityWebRequest.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log("데이터를 가져오지 못했습니다");
+        }
+        else
+        {
+            string data = unityWebRequest.downloadHandler.text;
+
+            var path = Path.Combine(Application.dataPath, $"Resources/Data/{fileName}.json");
+
+            File.WriteAllText(path, data);
         }
     }
 

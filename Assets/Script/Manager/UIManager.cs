@@ -21,13 +21,9 @@ public class UIManager : Singleton<UIManager>
     private Action<int> PlayerSkillCountCallBack;
     private Action<int> PlayerHpIconChangeCallBack;
 
+    #region Interaction
     //Interaction UI Dic
     private Dictionary<Transform, GameObject> ActiveUIInstance = new Dictionary<Transform, GameObject>();
-
-    void Start()
-    {
-        m_currentSkill = SkillManager.Instance.GetCurrentSkill();
-    }
     
     public void ItemInteractionUI(Transform itemTransform, InteractionUI_Type interactionType)
     {
@@ -65,6 +61,7 @@ public class UIManager : Singleton<UIManager>
         ui.transform.rotation = Quaternion.Euler(51f, 0f, 0f);
         ActiveUIInstance.Add(itemTransform, ui);
     }
+    #endregion
 
     //Event
     //HP

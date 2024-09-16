@@ -101,6 +101,7 @@ public class PlayerWeaponController : MonoBehaviour
         _activeTypeHandler.Invoke(ActiveType.Right, isCharge);
         ActiveIdleWeapon(false);
     }
+
     public void ActiveChargeRightWeapon(bool isCharge)
     {
         _activeColorHandler.Invoke(true, _currentWeaponType);
@@ -200,10 +201,14 @@ public class PlayerWeaponController : MonoBehaviour
         ActiveIdleWeapon(true);
     }
 
-    public void Attack(bool isCharge)
+    public void Attack()
     {
         m_weaponAnimation.SetTrigger("Attack");
         m_weaponAnimation.SetBool("NextAttack", false);
+    }
+
+    public void OnHit(bool isCharge)
+    {
         _currentWeapon.UseWeapon(isCharge);
     }
 }

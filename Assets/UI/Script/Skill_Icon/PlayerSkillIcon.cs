@@ -32,7 +32,6 @@ public class PlayerSkillIcon : MonoBehaviour
 
     private void OnEnable()
     {
-        initIconDic();
         DisableCount_Icon();
 
         if (m_SkillView == null)
@@ -44,6 +43,8 @@ public class PlayerSkillIcon : MonoBehaviour
             m_SkillView.RegisterChangeSkillEventOnEnable();
 
             m_SkillView.RefreshViewModel();
+
+            initIconDic();
         }
 
     }

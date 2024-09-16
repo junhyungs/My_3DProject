@@ -96,7 +96,7 @@ public class PlayerAttackController : MonoBehaviour
     {
         if (isPressed)
         {
-            m_weaponController.Attack(chargeMax);
+            m_weaponController.Attack();
             chargeAttackDirection = !chargeAttackDirection;
             LookAtMouse();
         }
@@ -244,7 +244,7 @@ public class PlayerAttackController : MonoBehaviour
         if (chargeMax)
         {
             m_attackAnimation.SetBool("ChargeAttack", false);
-            m_weaponController.Attack(chargeMax);
+            m_weaponController.Attack();
             chargeAttackDirection = !chargeAttackDirection;
         }
         else
@@ -330,18 +330,14 @@ public class PlayerAttackController : MonoBehaviour
         if (SkillManager.Instance.SkillCount <= 0 && m_skillController.SkillType != PlayerSkill.Hook)
             return;
 
-        int cost;
-
         switch (m_skillController.SkillType)
         {
             case PlayerSkill.Bow:
-                cost = SkillManager.Instance.GetSkillData(PlayerSkill.Bow).m_cost;
-                SkillManager.Instance.SkillCount -= cost;
+                SkillManager.Instance.Cost(PlayerSkill.Bow);
                 m_skillController.UseSkill(m_arrowPositionObject);
                 break;
             case PlayerSkill.FireBall:
-                cost = SkillManager.Instance.GetSkillData(PlayerSkill.FireBall).m_cost;
-                SkillManager.Instance.SkillCount -= cost;   
+                SkillManager.Instance.Cost(PlayerSkill.FireBall);
                 m_skillController.UseSkill(m_firePositionObject);
                 break;
             case PlayerSkill.Hook:
@@ -349,8 +345,7 @@ public class PlayerAttackController : MonoBehaviour
                 OnSkill(PlayerSkill.Hook);
                 break;
             case PlayerSkill.Bomb:
-                cost = SkillManager.Instance.GetSkillData(PlayerSkill.Bomb).m_cost;
-                SkillManager.Instance.SkillCount -= cost;
+                SkillManager.Instance.Cost(PlayerSkill.Bomb);
                 m_skillController.UseSkill(m_bombPositionObject);
                 break;
         }
@@ -361,6 +356,12 @@ public class PlayerAttackController : MonoBehaviour
     public void OnCharge()
     {
         m_attackAnimation.SetBool("ChargeAttack", true);
+    }
+
+    public void Hit()
+    {
+        Debug.Log(chargeMax);
+        m_weaponController.OnHit(chargeMax);
     }
 
 }

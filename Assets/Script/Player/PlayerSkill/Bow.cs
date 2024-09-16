@@ -4,23 +4,17 @@ using UnityEngine;
 
 public class Bow : Skill
 {
-    private void Start()
-    {
-        m_skillData = SkillManager.Instance.GetSkillData(PlayerSkill.Bow);
-    }
-
     public override void UseSkill(GameObject spawnPositionObj)
     {
         GameObject arrowObj = PoolManager.Instance.GetArrow();
         
         ArrowObject arrowComponent = arrowObj.GetComponent<ArrowObject>();
         arrowComponent.IsFire(false);
-        arrowComponent.SetProjectileObjectData(m_skillData.m_attackPower, m_skillData.m_projectileSpeed, m_skillData.m_projectileRange);
+        arrowComponent.SetProjectileObjectData(_data.Power, _data.ProjectileSpeed, _data.SkillRange);
         arrowObj.transform.SetParent(spawnPositionObj.transform);
         arrowObj.transform.localPosition = Vector3.zero;
         arrowObj.transform.localRotation = spawnPositionObj.transform.localRotation;
     }
-
 
     public override void Fire(GameObject spawnPositionObj, bool isFire)
     {
@@ -31,5 +25,15 @@ public class Bow : Skill
             arrowComponent.IsFire(isFire);
             arrowObj.transform.parent = null;
         }
+    }
+
+    public override void SetSkillData(PlayerSkillData skillData)
+    {
+        _data = skillData;
+    }
+
+    public override PlayerSkillData GetSkillData()
+    {
+        return _data;
     }
 }

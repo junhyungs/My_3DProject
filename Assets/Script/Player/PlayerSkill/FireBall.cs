@@ -3,12 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FireBall : Skill
-{
-    private void Start()
-    {
-        m_skillData = SkillManager.Instance.GetSkillData(PlayerSkill.FireBall);
-    }
-    
+{    
     public override void UseSkill(GameObject spawnPositionObj)
     {
         GameObject fireBall = PoolManager.Instance.GetFireBall();
@@ -16,7 +11,7 @@ public class FireBall : Skill
 
         FireBallObject fireBallComponent = fireBall.GetComponent<FireBallObject>();
         fireBallComponent.IsFire(false);
-        fireBallComponent.SetProjectileObjectData(m_skillData.m_attackPower, m_skillData.m_projectileSpeed, m_skillData.m_projectileRange);
+        fireBallComponent.SetProjectileObjectData(_data.Power, _data.ProjectileSpeed, _data.SkillRange);
         fireBall.transform.SetParent(spawnPositionObj.transform);
         fireBall.transform.localPosition = Vector3.zero;
         spawnPositionObj.transform.localRotation = Quaternion.identity; 
@@ -34,5 +29,15 @@ public class FireBall : Skill
             fireBallComponent.IsFire(isFire);
             fireBall.transform.parent = null;
         }
+    }
+
+    public override void SetSkillData(PlayerSkillData skillData)
+    {
+        _data = skillData;
+    }
+
+    public override PlayerSkillData GetSkillData()
+    {
+        return _data;   
     }
 }

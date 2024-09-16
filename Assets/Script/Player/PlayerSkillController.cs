@@ -8,27 +8,32 @@ public class PlayerSkillController : MonoBehaviour
     [SerializeField] private GameObject[] SkillObject;
 
     private ISkill m_currentSkill;
-    private PlayerSkill m_skillType;
+    private PlayerSkill _currentSkillType;
     private Animator m_skillAnimation;
 
-    public ISkill CurrentSkill => m_currentSkill;
-    public PlayerSkill SkillType => m_skillType;    
+    public PlayerSkill SkillType => _currentSkillType;
 
     private void Awake()
     {
-        Init();
+        OnDisableSkillObject();
     }
 
-    private void Init()
+    private void Start()
     {
-        m_skillAnimation = GetComponent<Animator>();
-        OnDisableSkillObject();
-        m_skillType = PlayerSkill.Bow;
-        SkillManager.Instance.AddSkill(m_skillType);
+        InitializeSkillController();
+    }
+
+    private void InitializeSkillController()
+    {
+        m_skillAnimation = gameObject.GetComponent<Animator>();
+
+        SkillManager.Instance.AddSkill(PlayerSkill.Bow);
         SkillManager.Instance.AddSkill(PlayerSkill.FireBall);
-        SkillManager.Instance.AddSkill(PlayerSkill.Hook);
         SkillManager.Instance.AddSkill(PlayerSkill.Bomb);
-        SetSkill(m_skillType);
+        SkillManager.Instance.AddSkill(PlayerSkill.Hook);
+
+        _currentSkillType = PlayerSkill.Bow;
+        SetSkill(_currentSkillType);
     }
 
     public void SetSkill(PlayerSkill skillType)
@@ -39,38 +44,22 @@ public class PlayerSkillController : MonoBehaviour
             return;
         }
 
-        m_skillType = skillType;
+        _currentSkillType = skillType;
 
-        Component component = gameObject.GetComponent<ISkill>() as Component;
+        m_currentSkill = null;
 
-        if (component != null)
-        {
-            Destroy(component);
-        }
+        Skill newSkill = SkillManager.Instance.GetSkill(skillType);
 
-        switch (skillType)
-        {
-            case PlayerSkill.Bow:
-                m_currentSkill = gameObject.AddComponent<Bow>();
-                break;
-            case PlayerSkill.FireBall:
-                m_currentSkill = gameObject.AddComponent<FireBall>();
-                break;
-            case PlayerSkill.Bomb:
-                m_currentSkill = gameObject.AddComponent<Bomb>();
-                break;
-            case PlayerSkill.Hook:
-                m_currentSkill = gameObject.AddComponent<Hook>();
-                break;
-        }
+        m_currentSkill = newSkill;
 
-        UIManager.Instance.RequestChangeSkill(m_skillType);
-        SkillManager.Instance.SetCurretSkill(m_skillType);
+        UIManager.Instance.RequestChangeSkill(skillType);
+
+        SkillManager.Instance.SetCurretSkill(skillType);
     }
 
     public void CurrentSkillAnimation(bool isPressed)
     {
-        switch (m_skillType)
+        switch (_currentSkillType)
         {
             case PlayerSkill.Bow:
                 m_skillAnimation.SetBool("Arrow", isPressed);
@@ -89,7 +78,7 @@ public class PlayerSkillController : MonoBehaviour
 
     public void ActiveSkillObject(bool isPressed)
     {
-        SkillObject[(int)m_skillType].SetActive(isPressed);
+        SkillObject[(int)_currentSkillType].SetActive(isPressed);
     }
 
     public void Fire(GameObject FirePosition)

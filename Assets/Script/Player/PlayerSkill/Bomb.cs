@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class Bomb : Skill
 {
-    void Start()
-    {
-        m_skillData = SkillManager.Instance.GetSkillData(PlayerSkill.Bomb);
-    }
-
     public override void UseSkill(GameObject spawnPositionObj)
     {
         GameObject bomb = PoolManager.Instance.GetBomb();
@@ -16,7 +11,7 @@ public class Bomb : Skill
 
         BombObject bombComponent = bomb.GetComponent<BombObject>();
         bombComponent.IsFire(false);
-        bombComponent.SetProjectileObjectData(m_skillData.m_attackPower, m_skillData.m_projectileSpeed, m_skillData.m_projectileRange);
+        bombComponent.SetProjectileObjectData(_data.Power, _data.ProjectileSpeed, _data.SkillRange);
         bomb.transform.SetParent(spawnPositionObj.transform);
         bomb.transform.localPosition = Vector3.zero;
         bomb.transform.localRotation = spawnPositionObj.transform.localRotation;
@@ -35,5 +30,15 @@ public class Bomb : Skill
             bombComponent.IsFire(isFire);
             bomb.transform.parent = null;
         }
+    }
+
+    public override void SetSkillData(PlayerSkillData skillData)
+    {
+        _data = skillData;
+    }
+
+    public override PlayerSkillData GetSkillData()
+    {
+        return _data;
     }
 }
