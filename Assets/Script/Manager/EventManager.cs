@@ -6,7 +6,6 @@ using UnityEngine;
 public class EventManager
 {
     private static EventManager instance;
-    private PlayerWeaponController _weaponController;
 
     private List<IDisableArrow> m_OnDisableGhoulArrow = new List<IDisableArrow>();
     private List<IHookPosition> m_GetHookPositionEvetn = new List<IHookPosition>();
@@ -26,11 +25,6 @@ public class EventManager
     }
 
     //RegisterEvent-----------------------------------------------------------------------------------
-    public void SetWeaponController(PlayerWeaponController weaponController)
-    {
-        _weaponController = weaponController;
-    }
-
     public void RegisterHookPositionEvent(IHookPosition hookPositionEvent)
     {
         m_GetHookPositionEvetn.Add(hookPositionEvent);
@@ -72,10 +66,5 @@ public class EventManager
         {
             mageBullet.OnDisableMagicBullet(callBack);
         }
-    }
-
-    public void AddEvent_ActiveType(Action<ActiveType, bool> callBack, Action<bool, PlayerWeapon> action)
-    {
-        _weaponController.ActiveTypeCallBack(callBack, action);
     }
 }

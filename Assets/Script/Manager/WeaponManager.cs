@@ -3,25 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerWeapon
-{
-    Sword,
-    Hammer,
-    Dagger,
-    GreatSword,
-    Umbrella
-}
+
 
 public class WeaponManager : Singleton<WeaponManager>
 {    
-    private PlayerWeaponEffectController _effectController;
     private PlayerWeaponController _weaponController;
     private PlayerWeapon _currentWeapon;
-
-    private void Awake()
-    {
-        _effectController = gameObject.GetComponent<PlayerWeaponEffectController>();
-    }
 
     public void SetCurrentWeapon(PlayerWeapon weapon)
     {
@@ -33,7 +20,7 @@ public class WeaponManager : Singleton<WeaponManager>
         _weaponController = weaponController;
     }
 
-    public IEnumerator LoadWeaponData(string Id, Weapon weaponComponent)
+    public IEnumerator LoadWeaponData(string Id, Weapon weaponComponent, PlayerWeaponEffectController effectController)
     {
         yield return new WaitWhile(() =>
         {
@@ -43,7 +30,7 @@ public class WeaponManager : Singleton<WeaponManager>
 
         var weaponData = DataManager.Instance.GetData(Id) as PlayerWeaponData;
 
-        _effectController.SetEffectRange(weaponData.NormalEffectRange, weaponData.ChargeEffectRange);
+        effectController.SetEffectRange(weaponData.NormalEffectRange, weaponData.ChargeEffectRange);
 
         weaponComponent.SetWeaponData(weaponData);
     }

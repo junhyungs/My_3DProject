@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerSkillViewModel
 {
-    private PlayerSkill currentSkill;
+    private PlayerSkill currentSkill = PlayerSkill.None;
     public PlayerSkill CurrentSkill
     {
         get { return currentSkill; }

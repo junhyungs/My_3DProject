@@ -7,13 +7,10 @@ using Newtonsoft.Json;
 public class DataManager
 {
     private static DataManager instance;
-
     //public Dictionary<int, _Monster> LoadedMonsterList { get; private set; }
     //public Dictionary<int, _Boss> LoadedBossList { get; private set; }
     //public Dictionary<string, _PlayerSkill> LoadedPlayerSkillList { get; private set; }
     //public Dictionary<string, _PlayerWeapon> LoadedPlayerWeaponList { get; private set; }
-
-
     public Dictionary<string, string> _stringPathDictionary { get; private set; }
     private Dictionary<string, Data> _dataDictionary = new Dictionary<string, Data>(); 
 
@@ -244,7 +241,7 @@ public class DataManager
         return new Vector3(0f, 0f, 0f);
     }
 
-
+    #region XML
     //public void ReadAllDataAwake()
     //{
     //    ReadData(nameof(_Monster));
@@ -449,5 +446,5 @@ public class DataManager
 
     //    return skillDataList[skillName];
     //}
-
+    #endregion
 }

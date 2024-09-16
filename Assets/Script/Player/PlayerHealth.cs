@@ -9,9 +9,13 @@ public class PlayerHealth : MonoBehaviour, IDamged
 
     private void Awake()
     {
-        m_playerHp = 4;
-        UIManager.Instance.RequestChangeHp(m_playerHp);
         m_hitAnimator = GetComponent<Animator>();
+    }
+
+    public void SetHealthData(int hp)
+    {
+        m_playerHp = hp;
+        UIManager.Instance.RequestChangeHp(m_playerHp);
     }
 
     public int PlayerHP

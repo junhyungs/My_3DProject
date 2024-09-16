@@ -310,11 +310,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &181015404 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1816644686, guid: 45f8b07518a5df244aec5a257213fd9e, type: 3}
-  m_PrefabInstance: {fileID: 306534426}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &189619578
 GameObject:
   m_ObjectHideFlags: 0
@@ -1661,11 +1656,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 706619407}
   m_Mesh: {fileID: 2791149999112831213, guid: 487a147aa9f5fe24e914a037c4e37f56, type: 3}
---- !u!4 &809553326 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 537195200120203191, guid: 45f8b07518a5df244aec5a257213fd9e, type: 3}
-  m_PrefabInstance: {fileID: 306534426}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &810016004
 GameObject:
   m_ObjectHideFlags: 0
@@ -6749,14 +6739,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3325602472607899479, guid: 796033fcdbe4ccb499f2eb49be9e4fa0, type: 3}
-      propertyPath: m_SwordEffectTransform
-      value: 
-      objectReference: {fileID: 809553326}
-    - target: {fileID: 6574483347064889870, guid: 796033fcdbe4ccb499f2eb49be9e4fa0, type: 3}
-      propertyPath: m_RootOrder
-      value: 14
-      objectReference: {fileID: 0}
     - target: {fileID: 6574483347064889870, guid: 796033fcdbe4ccb499f2eb49be9e4fa0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6801,10 +6783,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Manager
       objectReference: {fileID: 0}
-    - target: {fileID: 8773625445916883438, guid: 796033fcdbe4ccb499f2eb49be9e4fa0, type: 3}
-      propertyPath: IdleObject.Array.data[0]
-      value: 
-      objectReference: {fileID: 181015404}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

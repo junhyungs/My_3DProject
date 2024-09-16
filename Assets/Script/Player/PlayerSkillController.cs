@@ -32,7 +32,6 @@ public class PlayerSkillController : MonoBehaviour
         SkillManager.Instance.AddSkill(PlayerSkill.Bomb);
         SkillManager.Instance.AddSkill(PlayerSkill.Hook);
 
-        _currentSkillType = PlayerSkill.Bow;
         SetSkill(_currentSkillType);
     }
 
@@ -52,7 +51,7 @@ public class PlayerSkillController : MonoBehaviour
 
         m_currentSkill = newSkill;
 
-        UIManager.Instance.RequestChangeSkill(skillType);
+        UIManager.Instance.RequestChangeSkill(_currentSkillType);
 
         SkillManager.Instance.SetCurretSkill(skillType);
     }

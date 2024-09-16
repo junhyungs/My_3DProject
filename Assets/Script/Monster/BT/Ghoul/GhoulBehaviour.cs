@@ -80,6 +80,8 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
     {
         _currentHp -= damage;
 
+        SkillManager.Instance.SkillCount++;
+
         if(_currentHp <= 0)
         {
             _isDead = true;

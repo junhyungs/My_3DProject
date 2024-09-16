@@ -20,3 +20,12 @@ public enum JsonName
     PlayerSkill,
     PlayerWeapon
 }
+
+public enum PlayerWeapon
+{
+    Sword,
+    Hammer,
+    Dagger,
+    GreatSword,
+    Umbrella
+}

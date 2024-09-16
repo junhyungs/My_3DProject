@@ -93,11 +93,6 @@ public class UIManager : Singleton<UIManager>
         PlayerSkillCountCallBack?.Invoke(skillCount);
     }
 
-    public void RefreshSkillInfo(Action<PlayerSkill> callBack)
-    {
-        callBack?.Invoke(m_currentSkill);
-    }
-
     public void RegisterChangeSkillCountCallBack(Action<int> skillCountCallBack)
     {
         PlayerSkillCountCallBack += skillCountCallBack;

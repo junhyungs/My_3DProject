@@ -11,14 +11,9 @@ public class PlayerMoveController : MonoBehaviour
     [Header("LadderInputSystem")]
     [SerializeField] private Vector2 m_playerLadderInput;
 
-    [Header("Speed")]
-    [SerializeField] private float m_walkSpeed;
-
-    [Header("ChangeSpeedValue")]
-    [SerializeField] private float m_changeSpeedValue;
-
-    [Header("Gravity")]
-    [SerializeField] private float m_gravity;
+    private float m_walkSpeed;
+    private float m_changeSpeedValue;
+    private float m_gravity;
 
     //Player CharacterControllerVelocity
     private float m_currentHorizontalSpeed;
@@ -27,7 +22,7 @@ public class PlayerMoveController : MonoBehaviour
     //Player Speed
     private float m_mySpeed;
     //SpeedOffSet
-    private float m_speedOffSet = 0.1f;
+    private float m_speedOffSet;
     //GroundCheck
     private bool isGround;
     //VerticalVelocity
@@ -39,10 +34,10 @@ public class PlayerMoveController : MonoBehaviour
     //Roll
     private bool isRoll = false;
     //RollSpeed
-    private float m_rollSpeed = 15.0f;
+    private float m_rollSpeed;
     //Ladder
     private bool isLadder;
-    private float m_radderSpeed = 5.0f;
+    private float m_radderSpeed;
     private bool isLadderDirection = true;
     private Vector3 m_currentPositionY;
     private Vector3 m_previousPositionY;
@@ -87,6 +82,17 @@ public class PlayerMoveController : MonoBehaviour
             OnLadder();
         }
 
+    }
+
+    public void SetMoveData(float walkSpeed, float rollSpeed, float ladderSpeed, float speedChangeValue,
+        float speedOffSet, float gravity)
+    {
+        m_walkSpeed = walkSpeed;
+        m_rollSpeed = rollSpeed;
+        m_radderSpeed = ladderSpeed;
+        m_changeSpeedValue = speedChangeValue;
+        m_speedOffSet = speedOffSet;
+        m_gravity = gravity;
     }
 
     

@@ -8,7 +8,9 @@ public enum PlayerSkill
     Bow,
     FireBall,
     Bomb,
-    Hook
+    Hook,
+
+    None
 }
 
 public class SkillManager : Singleton<SkillManager>

@@ -42,8 +42,6 @@ public class PlayerSkillIcon : MonoBehaviour
 
             m_SkillView.RegisterChangeSkillEventOnEnable();
 
-            m_SkillView.RefreshViewModel();
-
             initIconDic();
         }
 
