@@ -11,8 +11,9 @@ public class DataManager
     //public Dictionary<int, _Boss> LoadedBossList { get; private set; }
     //public Dictionary<string, _PlayerSkill> LoadedPlayerSkillList { get; private set; }
     //public Dictionary<string, _PlayerWeapon> LoadedPlayerWeaponList { get; private set; }
-    public Dictionary<string, string> _stringPathDictionary { get; private set; }
+
     private Dictionary<string, Data> _dataDictionary = new Dictionary<string, Data>(); 
+    private Dictionary<string, PathData> _pathDictionary = new Dictionary<string, PathData>();
 
     public static DataManager Instance
     {
@@ -197,6 +198,20 @@ public class DataManager
             return null;
         }
     }
+
+    public PathData GetPath(string Id)
+    {
+        if(_pathDictionary.TryGetValue(Id, out PathData data))
+        {
+            return data;
+        }
+        else
+        {
+            Debug.Log("경로 데이터를 가져오지 못했습니다.");
+            return null;
+        }
+    }
+
 
     private float ParseFloat(JToken json)
     {

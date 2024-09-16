@@ -29,3 +29,40 @@ public enum PlayerWeapon
     GreatSword,
     Umbrella
 }
+
+public enum MapType
+{
+    Lobby,
+    Stage_1,
+    Stage_2,
+    Boss
+}
+
+public enum ObjectName
+{
+    Player,
+    PlayerArrow,
+    PlayerFireBall,
+    PlayerHook,
+    PlayerSegment,
+    PlayerBomb,
+    HitEffect,
+
+    MageBullet,
+    OldCrowSegment,
+    GhoulArrow,
+    DekuProjectile,
+
+    Bat,
+    Mage,
+    Ghoul,
+    Deku,
+    Slime,
+
+    Soul,
+    UseUI,
+    GetUI,
+    LadderUI,
+
+    Null
+}

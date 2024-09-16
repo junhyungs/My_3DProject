@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class DekuBehaviour : BehaviourMonster, IDamged
 {
+    /*
+                                                            [Selector] 
+                
+                                   [Selector]                                          [Selector]
+     
+                      [Sequence]                [Sequence]                    [CheckPlayer] [Hide] [Move]
+
+        [CanAttack]  [Rotation]   [Attack]   [Rotation]    [Move]
+     */
+
+
     [Header("SkinnedMeshRenderer")]
     [SerializeField] private SkinnedMeshRenderer _skinnedMeshRenderer;
     [Header("Material")]
@@ -15,6 +26,13 @@ public class DekuBehaviour : BehaviourMonster, IDamged
 
     private INode _node;
     private bool _isDead;
+
+    #region Property
+    public GameObject PlayerObject { get; set; }
+    public bool CheckPlayer { get; set; }
+    public bool IsAttack { get;set; }
+    public bool IsReturn { get; set; }
+    #endregion
 
     protected override void Start()
     {
@@ -41,7 +59,27 @@ public class DekuBehaviour : BehaviourMonster, IDamged
     
     private INode SetBehaviourTree()
     {
-        return _node;
+        INode newNode = new SelectorNode(new List<INode>
+        {
+            new SelectorNode(new List<INode>
+            {
+                new SequenceNode(new List<INode>
+                {
+                    new DekuCanAttack(this),
+                    new DekuRotation(this),
+                    new DekuAttack(this)
+                }),
+                new DekuMove(this)
+            }),
+            new SelectorNode(new List<INode>
+            {
+                new DekuCheckPlayer(this),
+                new DekuHide(this),
+                new DekuReturn(this)
+            })
+        });
+
+        return newNode;
     }
 
     public void TakeDamage(float damage)
