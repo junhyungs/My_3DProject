@@ -17,7 +17,14 @@ public class GimikManager : Singleton<GimikManager>
     private HashSet<GameObject> SpawnGimikHashSet = new HashSet<GameObject>();
     private bool isSpawnGimik;
 
-    
+    private void Start()
+    {
+        ObjectPool.Instance.CreatePool(ObjectName.Bat);
+        ObjectPool.Instance.CreatePool(ObjectName.Mage);
+        ObjectPool.Instance.CreatePool(ObjectName.Slime);
+        ObjectPool.Instance.CreatePool(ObjectName.Ghoul);
+    }
+
 
     public Dictionary<GimikEnum, Action<GameObject>> Gimik
     {
@@ -87,30 +94,39 @@ public class GimikManager : Singleton<GimikManager>
 
     private void Spawn(Transform SpawnTransform)
     {
-        int randomMonster = UnityEngine.Random.Range(1, 4);
+        int randomMonster = UnityEngine.Random.Range(1, 5);
 
         switch(randomMonster)
         {
             case 1:
-                GameObject bat = PoolManager.Instance.GetBatMonster();
-                SpawnBat batComponent = bat.GetComponent<SpawnBat>();
+                GameObject bat = ObjectPool.Instance.DequeueObject(ObjectName.Bat);
+                BatBehaviour batComponent = bat.GetComponent<BatBehaviour>();
                 batComponent.IsSpawn(true);
                 RegisterMonster(bat);
                 bat.transform.position = SpawnTransform.position;
                 break;
             case 2:
-                GameObject mage = PoolManager.Instance.GetMageMonster();
-                Mage mageComponent = mage.GetComponent<Mage>();
+                GameObject mage = ObjectPool.Instance.DequeueObject(ObjectName.Mage);
+                MageBehaviour mageComponent = mage.GetComponent<MageBehaviour>();
                 mageComponent.IsSpawn(true);
                 RegisterMonster(mage);
                 mage.transform.position = SpawnTransform.position;
                 break;
             case 3:
-                GameObject ghoul = PoolManager.Instance.GetGhoulMonster();
-                Ghoul ghoulComponent = ghoul.GetComponent<Ghoul>();
+                GameObject ghoul = ObjectPool.Instance.DequeueObject(ObjectName.Ghoul);
+                GhoulBehaviour ghoulComponent = ghoul.GetComponent<GhoulBehaviour>();   
                 ghoulComponent.IsSpawn(true);
                 RegisterMonster(ghoul);
                 ghoul.transform.position = SpawnTransform.position;
+                break;
+            case 4:
+                GameObject slime = ObjectPool.Instance.DequeueObject(ObjectName.Slime);
+                float sizeRandom = UnityEngine.Random.Range(0.1f, 1.5f);
+                slime.transform.localScale = new Vector3(sizeRandom, sizeRandom, sizeRandom);
+                SlimeBehaviour slimeComponent = slime.GetComponent<SlimeBehaviour>();
+                slimeComponent.IsSpawn(true);
+                RegisterMonster(slime);
+                slime.transform.position = SpawnTransform.position;
                 break;
         }
     }

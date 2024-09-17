@@ -64,7 +64,7 @@ public class FireBallObject : ProjectileObject
 
     private void ReturnFireBall()
     {
-        PoolManager.Instance.ReturnFireBall(this.gameObject);
+        ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.PlayerFireBall);
     }
 
     

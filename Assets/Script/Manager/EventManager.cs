@@ -6,7 +6,7 @@ using UnityEngine;
 public class EventManager
 {
     private static EventManager instance;
-
+    private PlayerAttackController attackController;
     private List<IDisableArrow> m_OnDisableGhoulArrow = new List<IDisableArrow>();
     private List<IHookPosition> m_GetHookPositionEvetn = new List<IHookPosition>();
     private List<IDisableMagicBullet> m_OnDisableMageBullet = new List<IDisableMagicBullet>();
@@ -24,10 +24,17 @@ public class EventManager
         }
     }
 
+    public void SetAttackContorller(PlayerAttackController controller)
+    {
+        attackController = controller;
+    }
+
     //RegisterEvent-----------------------------------------------------------------------------------
     public void RegisterHookPositionEvent(IHookPosition hookPositionEvent)
     {
-        m_GetHookPositionEvetn.Add(hookPositionEvent);
+        IHookPosition hookPosition = hookPositionEvent;
+        hookPosition.HookPositionEvent(true, attackController.OnHookCollied);
+        //m_GetHookPositionEvetn.Add(hookPositionEvent);    
     }
 
     public void RegisterDisableGhoulArrow(IDisableArrow disableArrowEvent)
@@ -46,7 +53,7 @@ public class EventManager
    
     public void AddEvent_HookPositionEvent(bool addEvent, Action<Vector3, bool> callBack)
     {
-        foreach(var evtObj in m_GetHookPositionEvetn)
+        foreach (var evtObj in m_GetHookPositionEvetn)
         {
             evtObj.HookPositionEvent(addEvent, callBack);
         }

@@ -85,7 +85,7 @@ public class ArrowObject : ProjectileObject
 
     private void ReturnArrow()
     {
-        PoolManager.Instance.ReturnArrow(this.gameObject);
+        ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.PlayerArrow);
     }
 
 }

@@ -6,7 +6,7 @@ public class Ladder : MonoBehaviour, IInteractionItem
     {
         if (isAddItem)
         {
-            UIManager.Instance.HideItemInteractionUI(transform, InteractionUI_Type.Ladder);
+            UIManager.Instance.HideItemInteractionUI(transform, ObjectName.LadderUI);
         }
     }
 
@@ -14,7 +14,7 @@ public class Ladder : MonoBehaviour, IInteractionItem
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            UIManager.Instance.ItemInteractionUI(transform, InteractionUI_Type.Ladder);
+            UIManager.Instance.ItemInteractionUI(transform, ObjectName.LadderUI);
         }
     }
 
@@ -22,7 +22,7 @@ public class Ladder : MonoBehaviour, IInteractionItem
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            UIManager.Instance.HideItemInteractionUI(transform, InteractionUI_Type.Ladder);
+            UIManager.Instance.HideItemInteractionUI(transform, ObjectName.LadderUI);
         }
     }
 }

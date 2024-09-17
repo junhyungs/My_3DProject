@@ -53,15 +53,14 @@ public class DrawSegment : MonoBehaviour
     {
         if (isDraw)
         {
-            GameObject segment = PoolManager.Instance.GetPlayerSegment(position, rotation);
+            GameObject segment = ObjectPool.Instance.GetPlayerSegment(position, rotation, ObjectName.PlayerSegment);
             segments.Add(segment);
         }
         
 
         if (segments.Count > maxSegment)
         {
-        
-            PoolManager.Instance.ReturnPlayerSegment(segments[0]);
+            ObjectPool.Instance.EnqueueObject(segments[0], ObjectName.PlayerSegment);
             segments.RemoveAt(0);
         }
 

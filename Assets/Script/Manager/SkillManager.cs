@@ -21,6 +21,20 @@ public class SkillManager : Singleton<SkillManager>
 
     private int m_skillCount;
 
+    private void Awake()
+    {
+    }
+
+    private void Start()
+    {
+        ObjectPool.Instance.CreatePool(ObjectName.PlayerHook);
+        ObjectPool.Instance.CreatePool(ObjectName.PlayerSegment);
+        ObjectPool.Instance.CreatePool(ObjectName.PlayerArrow);
+        ObjectPool.Instance.CreatePool(ObjectName.PlayerBomb);
+        ObjectPool.Instance.CreatePool(ObjectName.PlayerFireBall);
+        ObjectPool.Instance.CreatePool(ObjectName.HitEffect);
+    }
+
     public int SkillCount
     {
         get { return m_skillCount; }

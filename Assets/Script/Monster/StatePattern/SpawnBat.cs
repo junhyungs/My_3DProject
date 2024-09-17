@@ -87,7 +87,7 @@ public class SpawnBat : Monster
             isSpawn = false;
         }
 
-        GameObject soul = PoolManager.Instance.GetSoul();
+        GameObject soul = ObjectPool.Instance.DequeueObject(ObjectName.Soul);
         DropSoul soulComponent = soul.GetComponent<DropSoul>();
         soul.transform.SetParent(m_DropSoulPosition.transform);
         soul.transform.localPosition = Vector3.zero;
@@ -194,7 +194,7 @@ public class SpawnBat_AttackState : SpawnBatState
 
         hitArea.SetAttackPower(m_Bat.AttackPower);
 
-        if(Vector3.Distance(m_Bat.transform.position, m_Bat.Player.transform.position) > 1f && !m_Bat.IsDie)
+        if (Vector3.Distance(m_Bat.transform.position, m_Bat.Player.transform.position) > 1f && !m_Bat.IsDie)
         {
             m_Bat.StartCoroutine(AttackMovement());
         }
@@ -228,7 +228,7 @@ public class SpawnBat_AttackState : SpawnBatState
 
         float moveTime = 0.5f;
         float startTime = Time.time;
-        
+
         Vector3 startPosition = m_Bat.transform.position;
         Vector3 endPosition = startPosition + (direction * moveDistance);
 

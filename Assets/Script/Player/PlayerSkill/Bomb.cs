@@ -6,7 +6,7 @@ public class Bomb : Skill
 {
     public override void UseSkill(GameObject spawnPositionObj)
     {
-        GameObject bomb = PoolManager.Instance.GetBomb();
+        GameObject bomb = ObjectPool.Instance.DequeueObject(ObjectName.PlayerBomb);
         GameObject bombParticle = bomb.transform.GetChild(0).gameObject;
 
         BombObject bombComponent = bomb.GetComponent<BombObject>();

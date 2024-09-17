@@ -14,6 +14,6 @@ public class HitEffect : MonoBehaviour
 
     private void ReturnPool()
     {
-        PoolManager.Instance.ReturnHitParticle(this.gameObject);
+        ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.HitEffect);
     }
 }

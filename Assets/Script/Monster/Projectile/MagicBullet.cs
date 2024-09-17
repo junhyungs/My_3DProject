@@ -49,7 +49,7 @@ public class MagicBullet : MonoBehaviour
 
     private void ReturnMagicBullet()
     {
-        PoolManager.Instance.ReturnMagicBullet(this.gameObject);
+        ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.MageBullet);
     }
 
     private void OnTriggerEnter(Collider other)

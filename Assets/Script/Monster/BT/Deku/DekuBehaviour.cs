@@ -36,6 +36,7 @@ public class DekuBehaviour : BehaviourMonster, IDamged
 
     protected override void Start()
     {
+        ObjectPool.Instance.CreatePool(ObjectName.DekuProjectile, 30);
         base.Start();
         StartCoroutine(LoadMonsterData("M105"));
         SetMaterial();
@@ -100,7 +101,7 @@ public class DekuBehaviour : BehaviourMonster, IDamged
 
     public void DekuProjectile()
     {
-        GameObject bullet = PoolManager.Instance.GetDekuProjectile();
+        GameObject bullet = ObjectPool.Instance.DequeueObject(ObjectName.DekuProjectile);
 
         bullet.transform.position = _fireTransform.position;
         bullet.transform.rotation = _fireTransform.rotation;

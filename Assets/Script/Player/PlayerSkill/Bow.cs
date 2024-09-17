@@ -6,7 +6,7 @@ public class Bow : Skill
 {
     public override void UseSkill(GameObject spawnPositionObj)
     {
-        GameObject arrowObj = PoolManager.Instance.GetArrow();
+        GameObject arrowObj = ObjectPool.Instance.DequeueObject(ObjectName.PlayerArrow);
         
         ArrowObject arrowComponent = arrowObj.GetComponent<ArrowObject>();
         arrowComponent.IsFire(false);

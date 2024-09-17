@@ -9,7 +9,7 @@ public class ChainDeactive : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Player")
             || other.gameObject.layer == LayerMask.NameToLayer("fly"))
         {
-            PoolManager.Instance.ReturnPlayerSegment(this.gameObject);
+            ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.PlayerSegment);
         }
     }
 

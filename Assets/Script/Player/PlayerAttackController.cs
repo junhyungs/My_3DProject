@@ -46,7 +46,7 @@ public class PlayerAttackController : MonoBehaviour
 
     private void Start()
     {
-        EventManager.Instance.AddEvent_HookPositionEvent(true, OnHookCollied);
+        //EventManager.Instance.AddEvent_HookPositionEvent(true, OnHookCollied);
     }
 
     private void OnDestroy()
@@ -61,6 +61,7 @@ public class PlayerAttackController : MonoBehaviour
 
     private void Init()
     {
+        EventManager.Instance.SetAttackContorller(this);
         m_weaponController = GetComponent<PlayerWeaponController>();   
         m_skillController = GetComponent<PlayerSkillController>();  
         m_playerController = GetComponent<CharacterController>();
@@ -184,7 +185,7 @@ public class PlayerAttackController : MonoBehaviour
                 {
                     foreach (var chain in removeChain)
                     {
-                        PoolManager.Instance.ReturnPlayerSegment(chain.gameObject);
+                        ObjectPool.Instance.EnqueueObject(chain.gameObject, ObjectName.PlayerSegment);
                     }
                 }
 

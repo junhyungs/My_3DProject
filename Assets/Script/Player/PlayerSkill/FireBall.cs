@@ -6,7 +6,7 @@ public class FireBall : Skill
 {    
     public override void UseSkill(GameObject spawnPositionObj)
     {
-        GameObject fireBall = PoolManager.Instance.GetFireBall();
+        GameObject fireBall = ObjectPool.Instance.DequeueObject(ObjectName.PlayerFireBall);
         GameObject fireBallParticle = fireBall.transform.GetChild(0).gameObject;
 
         FireBallObject fireBallComponent = fireBall.GetComponent<FireBallObject>();

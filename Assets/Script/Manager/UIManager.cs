@@ -24,33 +24,41 @@ public class UIManager : Singleton<UIManager>
     #region Interaction
     //Interaction UI Dic
     private Dictionary<Transform, GameObject> ActiveUIInstance = new Dictionary<Transform, GameObject>();
-    
-    public void ItemInteractionUI(Transform itemTransform, InteractionUI_Type interactionType)
+
+    private void Start()
+    {
+        ObjectPool.Instance.CreatePool(ObjectName.UseUI);
+        ObjectPool.Instance.CreatePool(ObjectName.GetUI);
+        ObjectPool.Instance.CreatePool(ObjectName.LadderUI);
+    }
+
+    public void ItemInteractionUI(Transform itemTransform, ObjectName uiName)
     {
         if (!ActiveUIInstance.ContainsKey(itemTransform))
         {
-            GameObject ui = PoolManager.Instance.GetInteractionUI(interactionType);
-
-            switch (interactionType)
+            switch (uiName)
             {
-                case InteractionUI_Type.Use:
-                    InteractionUIPosition(ui, itemTransform, new Vector3(1.5f, 0.5f, 0f));
+                case ObjectName.UseUI:
+                    GameObject useUI = ObjectPool.Instance.DequeueObject(ObjectName.UseUI);
+                    InteractionUIPosition(useUI, itemTransform, new Vector3(1.5f, 0.5f, 0f));
                     break;
-                case InteractionUI_Type.Get:
-                    InteractionUIPosition(ui, itemTransform, new Vector3(1.7f, 0.5f, 0f));
+                case ObjectName.GetUI:
+                    GameObject getUI = ObjectPool.Instance.DequeueObject(ObjectName.GetUI);
+                    InteractionUIPosition(getUI, itemTransform, new Vector3(1.7f, 0.5f, 0f));
                     break;
-                case InteractionUI_Type.Ladder:
-                    InteractionUIPosition(ui, itemTransform, new Vector3(-1f, 0.5f, 0f));
+                case ObjectName.LadderUI:
+                    GameObject ladderUI = ObjectPool.Instance.DequeueObject(ObjectName.LadderUI);
+                    InteractionUIPosition(ladderUI, itemTransform, new Vector3(-1f, 0.5f, 0f));
                     break;
             }
         }
     }
 
-    public void HideItemInteractionUI(Transform itemTransform ,InteractionUI_Type interactionType)
+    public void HideItemInteractionUI(Transform itemTransform ,ObjectName uiType)
     {
         if(ActiveUIInstance.ContainsKey(itemTransform))
         {
-            PoolManager.Instance.ReturnInteractionUI(ActiveUIInstance[itemTransform], interactionType);
+            ObjectPool.Instance.EnqueueObject(ActiveUIInstance[itemTransform], uiType);
             ActiveUIInstance.Remove(itemTransform);
         }
     }

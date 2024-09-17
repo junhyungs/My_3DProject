@@ -49,7 +49,7 @@ public class Sword : Weapon
 
             for(int i = 0; i < effectCount; i++)
             {
-                GameObject hitEffect = PoolManager.Instance.GetHitParticle();
+                GameObject hitEffect = ObjectPool.Instance.DequeueObject(ObjectName.HitEffect);
 
                 HitEffect hitEffectComponent = hitEffect.GetComponent<HitEffect>();
 

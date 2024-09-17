@@ -40,6 +40,7 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
 
     protected override void Start()
     {
+        ObjectPool.Instance.CreatePool(ObjectName.MageBullet);
         base.Start();
         StartCoroutine(LoadMonsterData("M103"));
         SetMaterial();
@@ -112,7 +113,7 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
 
     public void MagicBullet()
     {
-        GameObject magicBullet = PoolManager.Instance.GetMagicBullet();
+        GameObject magicBullet = ObjectPool.Instance.DequeueObject(ObjectName.MageBullet);
 
         MagicBullet component = magicBullet.GetComponent<MagicBullet>();
         component.IsFire(false);

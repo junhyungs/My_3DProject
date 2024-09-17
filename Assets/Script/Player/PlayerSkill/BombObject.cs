@@ -126,6 +126,6 @@ public class BombObject : ProjectileObject
 
     private void ReturnBomb()
     {
-        PoolManager.Instance.ReturnBombObject(this.gameObject);
+        ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.PlayerBomb);
     }
 }

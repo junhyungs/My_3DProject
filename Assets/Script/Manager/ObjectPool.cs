@@ -63,6 +63,11 @@ public class ObjectPool : Singleton<ObjectPool>
     #region CreatePool
     public void CreatePool(ObjectName name, int count = 20)
     {
+        if(name is ObjectName.PlayerHook)
+        {
+            Debug.Log("뀨");
+        }
+
         if (!_poolDataReady)
         {
             _poolDelayAction += () => CreatePool(name, count);
@@ -134,6 +139,7 @@ public class ObjectPool : Singleton<ObjectPool>
     {
         if (!_poolDataReady)
         {
+            //TODO CSV같은 파일 하나 만들어서 거기에도 패스를 넣어서 만약 데이터 로드전이면 그거 가져오도록 해야겠음.
             Debug.Log("데이터가 로드되지 않았습니다.");
             return null;
         }
@@ -146,13 +152,9 @@ public class ObjectPool : Singleton<ObjectPool>
 
         if (_objectPool[name]._queue.Count == 0)
         {
-            GameObject previousObject = _objectDictionary[name];
+            GameObject newObject = CreateItem(name);
 
-            GameObject newObject = Instantiate(previousObject, _objectPool[name]._transform);
-
-            newObject.SetActive(true);
-
-            return newObject;
+            return newObject;   
         }
 
         GameObject item = _objectPool[name]._queue.Dequeue();
@@ -161,6 +163,37 @@ public class ObjectPool : Singleton<ObjectPool>
 
         return item;
     }
+
+    private GameObject CreateItem(ObjectName name)
+    {
+        GameObject previousObject = _objectDictionary[name];
+
+        GameObject newObject = Instantiate(previousObject, _objectPool[name]._transform);
+
+        newObject.SetActive(true);
+
+        return newObject;
+    }
+
+    public GameObject GetPlayerSegment(Vector3 position, Quaternion rotation, ObjectName name)
+    {
+        if (_objectPool[name]._queue.Count > 0)
+        {
+            GameObject playerSegment = DequeueObject(name);
+            playerSegment.transform.position = position;
+            playerSegment.transform.rotation = rotation;
+            playerSegment.SetActive(true);
+            return playerSegment;
+        }
+        else
+        {
+            GameObject newSegment = CreateItem(name);
+            newSegment.transform.position = position;
+            newSegment.transform.rotation = rotation;
+            return newSegment;
+        }
+    }
+
 
     #region CoroutinePool
     //풀 생성 코루틴

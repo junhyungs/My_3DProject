@@ -86,7 +86,7 @@ public class Ghoul : Monster, IDisableArrow
             isSpawn = false;
         }
 
-        GameObject soul = PoolManager.Instance.GetSoul();
+        GameObject soul = ObjectPool.Instance.DequeueObject(ObjectName.Soul);
         DropSoul soulComponent = soul.GetComponent<DropSoul>();
         soul.transform.SetParent(m_DropSoulPosition.transform);
         soul.transform.localPosition = Vector3.zero;
@@ -150,7 +150,7 @@ public class Ghoul : Monster, IDisableArrow
     {
         if (isAlive)
         {
-            GameObject arrow = PoolManager.Instance.GetMonsterArrow();
+            GameObject arrow = ObjectPool.Instance.DequeueObject(ObjectName.GhoulArrow);
 
             GhoulArrow arrowComponent = arrow.GetComponent<GhoulArrow>();
             arrowComponent.IsFire(false);

@@ -6,7 +6,7 @@ public class HealthItem : MonoBehaviour, IInteractionItem
     {
         if(isAddItem)
         {
-            UIManager.Instance.HideItemInteractionUI(transform, InteractionUI_Type.Get);
+            UIManager.Instance.HideItemInteractionUI(transform, ObjectName.GetUI);
             InventoryManager.Instance.SetHealthCount(1);
             gameObject.SetActive(false);
         }
@@ -17,7 +17,7 @@ public class HealthItem : MonoBehaviour, IInteractionItem
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            UIManager.Instance.ItemInteractionUI(transform, InteractionUI_Type.Get);
+            UIManager.Instance.ItemInteractionUI(transform, ObjectName.GetUI);
         }
     }
 
@@ -25,7 +25,7 @@ public class HealthItem : MonoBehaviour, IInteractionItem
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            UIManager.Instance.HideItemInteractionUI(transform, InteractionUI_Type.Get);
+            UIManager.Instance.HideItemInteractionUI(transform, ObjectName.GetUI);
         }
     }
 }

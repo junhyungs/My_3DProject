@@ -40,6 +40,8 @@ public class BehaviourMonster : MonoBehaviour
         _agent = gameObject.GetComponent<NavMeshAgent>();
         _animator = gameObject.GetComponent<Animator>();
         _rigidBody = gameObject.GetComponent<Rigidbody>();
+
+        ObjectPool.Instance.CreatePool(ObjectName.Soul, 100);
     }
 
     protected IEnumerator LoadMonsterData(string id)
@@ -118,7 +120,7 @@ public class BehaviourMonster : MonoBehaviour
 
     protected void MonsterSoul(Transform soulTransform)
     {
-        GameObject soul = PoolManager.Instance.GetSoul();
+        GameObject soul = ObjectPool.Instance.DequeueObject(ObjectName.Soul);
         DropSoul component = soul.GetComponent<DropSoul>();
         soul.transform.position = soulTransform.position;
         soul.SetActive(true);

@@ -61,6 +61,6 @@ public class DekuBullet : MonoBehaviour
 
     private void ReturnBullet()
     {
-        PoolManager.Instance.ReturnDekuProjectile(this.gameObject);
+        ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.DekuProjectile);
     }
 }

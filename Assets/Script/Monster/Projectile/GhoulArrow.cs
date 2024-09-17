@@ -27,7 +27,7 @@ public class GhoulArrow : MonoBehaviour
 
         if (this.isFire)
         {
-            Invoke(nameof(ReturnArrow), 4.0f);
+            Invoke(nameof(ReturnArrow), 3.0f);
             m_collider.enabled = true;
         }
     }
@@ -63,8 +63,6 @@ public class GhoulArrow : MonoBehaviour
 
     private void ReturnArrow()
     {
-        PoolManager.Instance.ReturnMonsterArrow(this.gameObject);
+        ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.GhoulArrow);
     }
-
-    
 }

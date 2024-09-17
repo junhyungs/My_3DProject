@@ -62,7 +62,7 @@ public class DropSoul : MonoBehaviour
 
     private void ReturnSoul()
     {
-        PoolManager.Instance.ReturnSoul(this.gameObject);
+        ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.Soul);
     }
 
 }

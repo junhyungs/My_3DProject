@@ -64,8 +64,7 @@ public class HookObject : ProjectileObject, IHookPosition
             foreach(var obj in colliders)
             {
                 GameObject chain = obj.gameObject;
-
-                PoolManager.Instance.ReturnPlayerSegment(chain);
+                ObjectPool.Instance.EnqueueObject(chain, ObjectName.PlayerSegment);
             }
 
             isFire = false;
@@ -120,7 +119,7 @@ public class HookObject : ProjectileObject, IHookPosition
 
     private void ReturnHook()
     {
-        PoolManager.Instance.ReturnHookObject(this.gameObject);
+        ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.PlayerHook);
     }
 
     public void HookPositionEvent(bool isAddEvent, Action<Vector3, bool> callBack)

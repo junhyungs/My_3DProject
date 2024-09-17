@@ -7,7 +7,7 @@ public class Hook : Skill
 
     public override void UseSkill(GameObject spawnPositionObj)
     {
-        GameObject hook = PoolManager.Instance.GetHook();
+        GameObject hook = ObjectPool.Instance.DequeueObject(ObjectName.PlayerHook);
 
         HookObject hookComponent = hook.GetComponent<HookObject>();
         hookComponent.IsFire(false);

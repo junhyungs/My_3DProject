@@ -37,6 +37,7 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
 
     protected override void Start()
     {
+        ObjectPool.Instance.CreatePool(ObjectName.GhoulArrow, 50);
         base.Start();
         StartCoroutine(LoadMonsterData("M106"));
         SetMaterial();
@@ -101,7 +102,7 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
 
     public void Arrow()
     {
-        GameObject arrow = PoolManager.Instance.GetMonsterArrow();
+        GameObject arrow = ObjectPool.Instance.DequeueObject(ObjectName.GhoulArrow);
 
         GhoulArrow arrowComponent = arrow.GetComponent<GhoulArrow>();
         arrowComponent.IsFire(false);

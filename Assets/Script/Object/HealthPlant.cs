@@ -36,7 +36,7 @@ public class HealthPlant : MonoBehaviour, IInteractionItem
 
             m_playerHp.PlayerHP = 4;
 
-            UIManager.Instance.HideItemInteractionUI(gameObject.transform, InteractionUI_Type.Use);
+            UIManager.Instance.HideItemInteractionUI(gameObject.transform, ObjectName.UseUI);
         }
     }
 
@@ -46,7 +46,7 @@ public class HealthPlant : MonoBehaviour, IInteractionItem
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            UIManager.Instance.ItemInteractionUI(gameObject.transform, InteractionUI_Type.Use);
+            UIManager.Instance.ItemInteractionUI(gameObject.transform, ObjectName.UseUI);
 
             m_playerHp = other.gameObject.GetComponent<PlayerHealth>(); 
         }
@@ -56,7 +56,7 @@ public class HealthPlant : MonoBehaviour, IInteractionItem
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            UIManager.Instance.HideItemInteractionUI(gameObject.transform, InteractionUI_Type.Use);
+            UIManager.Instance.HideItemInteractionUI(gameObject.transform, ObjectName.UseUI);
         }
     }
 
