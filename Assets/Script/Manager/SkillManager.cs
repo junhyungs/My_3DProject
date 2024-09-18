@@ -21,13 +21,14 @@ public class SkillManager : Singleton<SkillManager>
 
     private int m_skillCount;
 
-    private void Awake()
-    {
-    }
-
     private void Start()
     {
-        ObjectPool.Instance.CreatePool(ObjectName.PlayerHook);
+        CreateSkillObject();
+    }
+
+    private void CreateSkillObject()
+    {
+        ObjectPool.Instance.CreatePool(ObjectName.PlayerHook, 1);
         ObjectPool.Instance.CreatePool(ObjectName.PlayerSegment);
         ObjectPool.Instance.CreatePool(ObjectName.PlayerArrow);
         ObjectPool.Instance.CreatePool(ObjectName.PlayerBomb);

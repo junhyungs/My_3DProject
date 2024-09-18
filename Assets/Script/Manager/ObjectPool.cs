@@ -63,11 +63,7 @@ public class ObjectPool : Singleton<ObjectPool>
     #region CreatePool
     public void CreatePool(ObjectName name, int count = 20)
     {
-        if(name is ObjectName.PlayerHook)
-        {
-            Debug.Log("²ó");
-        }
-
+       
         if (!_poolDataReady)
         {
             _poolDelayAction += () => CreatePool(name, count);

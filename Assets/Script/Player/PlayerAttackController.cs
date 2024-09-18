@@ -44,16 +44,6 @@ public class PlayerAttackController : MonoBehaviour
         Init();
     }
 
-    private void Start()
-    {
-        //EventManager.Instance.AddEvent_HookPositionEvent(true, OnHookCollied);
-    }
-
-    private void OnDestroy()
-    {
-        EventManager.Instance.AddEvent_HookPositionEvent(false, OnHookCollied);
-    }
-
     private void Update()
     {
         OnUpdate();
@@ -62,6 +52,7 @@ public class PlayerAttackController : MonoBehaviour
     private void Init()
     {
         EventManager.Instance.SetAttackContorller(this);
+
         m_weaponController = GetComponent<PlayerWeaponController>();   
         m_skillController = GetComponent<PlayerSkillController>();  
         m_playerController = GetComponent<CharacterController>();

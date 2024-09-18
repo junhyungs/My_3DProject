@@ -8,8 +8,9 @@ public class EventManager
     private static EventManager instance;
     private PlayerAttackController attackController;
     private List<IDisableArrow> m_OnDisableGhoulArrow = new List<IDisableArrow>();
-    private List<IHookPosition> m_GetHookPositionEvetn = new List<IHookPosition>();
     private List<IDisableMagicBullet> m_OnDisableMageBullet = new List<IDisableMagicBullet>();
+
+    private IHookPosition _hook;
 
     public static EventManager Instance
     {
@@ -32,8 +33,13 @@ public class EventManager
     //RegisterEvent-----------------------------------------------------------------------------------
     public void RegisterHookPositionEvent(IHookPosition hookPositionEvent)
     {
-        IHookPosition hookPosition = hookPositionEvent;
-        hookPosition.HookPositionEvent(true, attackController.OnHookCollied);
+        if(_hook != null)
+        {
+            _hook = null;
+        }
+
+        _hook = hookPositionEvent;
+        _hook.HookPositionEvent(true, attackController.OnHookCollied);
         //m_GetHookPositionEvetn.Add(hookPositionEvent);    
     }
 
@@ -50,14 +56,14 @@ public class EventManager
     //RegisterEvent-----------------------------------------------------------------------------------
 
     //AddEvent----------------------------------------------------------------------------------------
-   
-    public void AddEvent_HookPositionEvent(bool addEvent, Action<Vector3, bool> callBack)
-    {
-        foreach (var evtObj in m_GetHookPositionEvetn)
-        {
-            evtObj.HookPositionEvent(addEvent, callBack);
-        }
-    }
+
+    //public void AddEvent_HookPositionEvent(bool addEvent, Action<Vector3, bool> callBack)
+    //{
+    //    foreach (var evtObj in m_GetHookPositionEvetn)
+    //    {
+    //        evtObj.HookPositionEvent(addEvent, callBack);
+    //    }
+    //}
 
     public void AddEvent_DisableGhoulArrowEvent(Action callBack)
     {

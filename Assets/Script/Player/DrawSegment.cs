@@ -57,12 +57,11 @@ public class DrawSegment : MonoBehaviour
             segments.Add(segment);
         }
         
-
-        if (segments.Count > maxSegment)
-        {
-            ObjectPool.Instance.EnqueueObject(segments[0], ObjectName.PlayerSegment);
-            segments.RemoveAt(0);
-        }
+        //if (segments.Count > maxSegment)
+        //{
+        //    ObjectPool.Instance.EnqueueObject(segments[0], ObjectName.PlayerSegment);
+        //    segments.RemoveAt(0);
+        //}
 
         //GameObject newSegment = new GameObject("TrailSegment");
         //newSegment.transform.position = position;

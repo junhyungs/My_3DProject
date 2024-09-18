@@ -13,16 +13,18 @@ public class HookObject : ProjectileObject, IHookPosition
     private float m_maxDistance = 10.0f;
     private bool isAnchor;
 
-    protected override void Awake()
-    {
-        EventManager.Instance.RegisterHookPositionEvent(this);
-    }
-
     private void OnEnable()
     {
+        EventManager.Instance.RegisterHookPositionEvent(this);
+
         m_player = GameManager.Instance.Player;
         transform.gameObject.layer = LayerMask.NameToLayer("Default");
         isAnchor = false;
+    }
+
+    private void OnDisable()
+    {
+        _hookEventHandler = null;
     }
 
     public override void IsFire(bool fire)
@@ -70,10 +72,7 @@ public class HookObject : ProjectileObject, IHookPosition
             isFire = false;
             transform.gameObject.layer = LayerMask.NameToLayer("Player");
         } 
-        else if(currentDistance >= m_maxDistance && isAnchor)
-        {
-            _hookEventHandler.Invoke(transform.position, true);
-        }
+        
     }
 
 
