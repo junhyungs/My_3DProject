@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GhoulMoveToPlayer : INode
 {
     private GhoulBehaviour _ghoul;
+    private NavMeshAgent _agent;
+    private Animator _animator;
 
     private float _returnDistance;
     private float _stoppingDistance;
@@ -14,88 +17,49 @@ public class GhoulMoveToPlayer : INode
     public GhoulMoveToPlayer(GhoulBehaviour ghoul)
     {
         _ghoul = ghoul;
+        _agent = _ghoul.GetComponent<NavMeshAgent>();
+        _animator = _ghoul.GetComponent<Animator>();
 
         _returnDistance = 15f;
-        _stoppingDistance = _ghoul.Agent.stoppingDistance;
+        _stoppingDistance = _agent.stoppingDistance;
         _startPosition = _ghoul.transform.position;
     }
 
     public INode.State Evaluate()
     {
-        if (!_ghoul.CheckPlayer)
+        if(!_ghoul.CheckPlayer)
         {
             return INode.State.Fail;
         }
 
-        if (!_ghoul.CanMove)
+        _animator.SetBool("TraceWalk", true);
+
+        if (_ghoul.IsReturn)
         {
-            return INode.State.Success;
-        }
+            _agent.stoppingDistance = 0f;
 
-        Transform playerTransform = _ghoul.PlayerObject.transform;
+            _agent.SetDestination(_startPosition);
 
-        float currentDistance = Vector3.Distance(_ghoul.transform.position, playerTransform.position);
-
-        if (!_isReturn)
-        {
-            if(currentDistance > _returnDistance)
+            if(_agent.remainingDistance <= _agent.stoppingDistance)
             {
-                _isReturn = true;
+                _agent.stoppingDistance = _stoppingDistance;
 
-                _ghoul.Agent.stoppingDistance = 0f;
+                _agent.isStopped = true;
 
-                return INode.State.Fail;
-            }
+                _ghoul.CheckPlayer = false;
 
-            if(currentDistance > _ghoul.Agent.stoppingDistance)
-            {
-                _ghoul.Animator.SetBool("TraceWalk", true);
-
-                _ghoul.Agent.SetDestination(playerTransform.position);
-
-                return INode.State.Running;
-            }
-
-            _ghoul.Animator.SetBool("TraceWalk", false);
-
-            _ghoul.Agent.SetDestination(_ghoul.transform.position);
-
-            return INode.State.Success;
-        }
-        else
-        {
-            if(currentDistance < _stoppingDistance)
-            {
-                _isReturn = false;
-
-                _ghoul.Agent.stoppingDistance = _stoppingDistance;
-
-                _ghoul.Animator.SetBool("TraceWalk", false);
-
-                _ghoul.Agent.SetDestination(_ghoul.transform.position);
+                _animator.SetBool("TraceWalk", false);
 
                 return INode.State.Success;
             }
 
-            _ghoul.Animator.SetBool("TraceWalk", true);
-
-            _ghoul.Agent.SetDestination(_startPosition);
-
-            if(_ghoul.Agent.remainingDistance <= _ghoul.Agent.stoppingDistance)
-            {
-                _isReturn = false;
-
-                _ghoul.CheckPlayer = false;
-
-                _ghoul.Animator.SetBool("TraceWalk", false);
-
-                _ghoul.Agent.stoppingDistance = _stoppingDistance;
-
-                return INode.State.Fail;    
-            }
-
             return INode.State.Running;
         }
-    }
 
+        Transform playerTransform = _ghoul.PlayerObject.transform;
+
+        _agent.SetDestination(playerTransform.position);
+
+        return INode.State.Running;
+    }
 }

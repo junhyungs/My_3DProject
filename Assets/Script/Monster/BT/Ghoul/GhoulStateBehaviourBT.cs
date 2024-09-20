@@ -15,16 +15,10 @@ public class GhoulStateBehaviourBT : StateMachineBehaviour
         }
     }
 
-    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        _ghoul.CanRotation = false;        
-    }
-
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.ResetTrigger("Attack");
 
-        _ghoul.CanRotation = true;
-        _ghoul.CanMove = true;
+        _ghoul.IsAttack = false;
     }
 }

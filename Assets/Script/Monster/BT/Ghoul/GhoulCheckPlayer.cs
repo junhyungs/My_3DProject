@@ -31,10 +31,9 @@ public class GhoulCheckPlayer : INode
 
             _ghoul.CheckPlayer = true;
 
-            return INode.State.Fail;
+            return INode.State.Success;
         }
 
-        return INode.State.Running;
-
+        return INode.State.Fail;
     }
 }

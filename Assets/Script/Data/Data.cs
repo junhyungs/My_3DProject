@@ -10,7 +10,7 @@ public class BT_MonsterData : Data
     public string Name { get; set; }    
     public int Health { get; set; }
     public float Power { get; set; } 
-    public float Speed { get; set; }    
+    public float Speed { get; set; }
 
     public BT_MonsterData(string id, string name, int health, float power, float speed)
     {
@@ -20,6 +20,29 @@ public class BT_MonsterData : Data
         Power = power;
         Speed = speed;
     }
+}
+
+public class BT_MonsterTraceData : Data
+{
+    public string ID { get; set; }
+    public float TrackingDistance { get; set; }
+    public float StopTrackingDistance { get; set; }
+    public float AgentStopDistance { get; set; }
+
+    public BT_MonsterTraceData(string iD, float trackingDistance, float stopTrackingDistance
+        , float agentStopDistance)
+    {
+        ID = iD;
+        TrackingDistance = trackingDistance;
+        StopTrackingDistance = stopTrackingDistance;
+        AgentStopDistance = agentStopDistance;
+    }
+}
+
+public class BT_MonsterDropObjectData : Data
+{
+    public string ID { get; set; }
+    public Vector3 Scale { get; set; }
 }
 
 public class PlayerData : Data
@@ -124,5 +147,21 @@ public class PrefabPath : PathData
     {
         Id = id;
         Path = path;
+    }
+}
+
+public class ItemData : Data
+{
+    public string ID { get; set; }
+    public string ItemName { get; set; }
+    public string Description { get; set; }
+    public bool Equip { get; set; }
+
+    public ItemData(string iD, string itemName, string description, bool equip)
+    {
+        ID = iD;
+        ItemName = itemName;
+        Description = description;
+        Equip = equip;
     }
 }

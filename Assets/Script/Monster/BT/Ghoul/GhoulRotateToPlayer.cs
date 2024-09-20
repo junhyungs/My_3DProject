@@ -8,6 +8,8 @@ public class GhoulRotateToPlayer : INode
     private float _rotationSpeed;
     private float _angle;
 
+    private Quaternion _rotation;
+
     public GhoulRotateToPlayer(GhoulBehaviour ghoul)
     {
         _ghoul = ghoul;
@@ -17,27 +19,23 @@ public class GhoulRotateToPlayer : INode
 
     public INode.State Evaluate()
     {
-        if (!_ghoul.CanRotation)
-        {
-            return INode.State.Fail;
-        }
-
         Transform playerTransform = _ghoul.PlayerObject.transform;
 
         Vector3 rotateDirection = (playerTransform.position - _ghoul.transform.position).normalized;
 
-        rotateDirection.y = 0f;
-
         _angle = Vector3.Angle(_ghoul.transform.forward, rotateDirection);
 
-        if (_angle >= 1f)
+        if(_angle > 2f)
         {
-            Quaternion rotation = Quaternion.LookRotation(rotateDirection);
+            _rotation = Quaternion.LookRotation(rotateDirection);
 
-            _ghoul.transform.rotation = Quaternion.Slerp(_ghoul.transform.rotation, rotation, _rotationSpeed * Time.deltaTime);
+            _ghoul.transform.rotation = Quaternion.Slerp(_ghoul.transform.rotation,
+                _rotation, _rotationSpeed * Time.deltaTime);
 
             return INode.State.Running;
         }
+
+        _ghoul.transform.rotation = Quaternion.LookRotation(rotateDirection);
 
         return INode.State.Success;
     }

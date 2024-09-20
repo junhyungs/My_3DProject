@@ -6,6 +6,20 @@ using UnityEngine.AI;
 
 public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
 {
+    /*
+                                      [Selector] 
+
+                    
+                       [Selector]                   [Selector]
+
+        [Sequence]               move        checkplayer,  partrol
+
+ canAttack, rotation, attack
+
+     */
+
+
+
     private INode _node;
     private bool _isDead;
     private Action _disableHandler;
@@ -27,7 +41,8 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
     public bool CheckPlayer { get; set; }
     public bool CanMove { get; set; } = true;
     public bool CanRotation { get; set; } = true;
-    public bool CanAttack { get; set; } = true;
+    public bool IsAttack { get; set; } = false;
+    public bool IsReturn { get; set; }
 
 
     private void Awake()
@@ -57,14 +72,22 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
     {
         INode node = new SelectorNode(new List<INode>
         {
-            new SequenceNode(new List<INode>
+            new SelectorNode(new List<INode>()
             {
+                new SequenceNode(new List<INode>
+                {
+                    new GhoulCanAttack(this),
+                    new GhoulRotateToPlayer(this),
+                    new GhoulAttack(this)
+                }),
                 new GhoulMoveToPlayer(this),
-                new GhoulRotateToPlayer(this),
-                new GhoulAttack(this)
             }),
 
-            new GhoulCheckPlayer(this)
+            new SelectorNode(new List<INode>
+            {
+                new GhoulCheckPlayer(this),
+                new GhoulPatrol(this),
+            })
         });
 
         return node;
