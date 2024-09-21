@@ -7,12 +7,16 @@ using UnityEngine.AI;
 public class SlimeMoveStateBehaviour : StateMachineBehaviour
 {
     private SlimeBehaviour _slime;
-    private Transform _moveTransform;
+    private Vector3 _movePosition;
     private NavMeshAgent _agent;
-    private List<Transform> _patrolList;
-    private List<Transform> _shuffleList;
+    private List<Vector3> _walkPositionList;
+    private List<Vector3> _randomPositionList;
 
-    private int _currentIndex;
+    private int _gridSize;
+    private float _minDistance;
+    private int _currentIndex = 0;
+
+    private LayerMask _targetLayer;
 
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -25,7 +29,7 @@ public class SlimeMoveStateBehaviour : StateMachineBehaviour
         {
             _agent.stoppingDistance = 3f;
 
-            _moveTransform = _slime.PlayerObject.transform;
+            _movePosition = _slime.PlayerObject.transform.position;
         }
         else
         {
@@ -37,7 +41,7 @@ public class SlimeMoveStateBehaviour : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        _agent.SetDestination(_moveTransform.position);
+        _agent.SetDestination(_movePosition);
 
         if (stateInfo.normalizedTime >= 0.3f && stateInfo.normalizedTime <= 0.6f)
         {
@@ -65,52 +69,113 @@ public class SlimeMoveStateBehaviour : StateMachineBehaviour
             _slime = animator.GetComponent<SlimeBehaviour>();
             _agent = _slime.GetComponent<NavMeshAgent>();
 
-            _patrolList = _slime.PatrolList;
-            _currentIndex = 0;
-
-            Shuffle();
+            _gridSize = 20;
+            _minDistance = 5f;
+            _targetLayer = LayerMask.GetMask("Player", "Default");
         }
     }
 
     private void Patrol()
     {
-        Initialize();
+        if(_currentIndex == 0)
+        {
+            _randomPositionList = new List<Vector3>(GetRandomPositionList());
 
-        _moveTransform = _shuffleList[_currentIndex];
+            _walkPositionList = new List<Vector3>(GetMovePositionList(_randomPositionList));
 
-        if(Vector3.Distance(_moveTransform.position, _slime.transform.position) <= 0.1f)
+            if(_walkPositionList.Count > 0)
+            {
+                _currentIndex++;
+
+                _movePosition = _walkPositionList[_currentIndex];
+            }
+        }
+
+        float remainingDistance = Vector3.Distance(_slime.transform.position, _movePosition);
+
+        if(remainingDistance <= 0.1f)
         {
             _currentIndex++;
 
-            Initialize();
+            if(_currentIndex < _walkPositionList.Count)
+            {
+                _movePosition = _walkPositionList[_currentIndex];
+            }
+            else
+            {
+                _currentIndex = 0;
 
-            _moveTransform = _shuffleList[_currentIndex];
+                Patrol();
+            }
         }
     }
 
-    private void Initialize()
+    private List<Vector3> GetMovePositionList(List<Vector3> randomPositionList)
     {
-        if (_currentIndex >= _shuffleList.Count)
-        {
-            Shuffle();
+        List<Vector3> removeList = new List<Vector3>();
 
-            _currentIndex = 0;
+        Collider[] colliders = Physics.OverlapSphere(_slime.transform.position, _gridSize, _targetLayer);
+
+        foreach(var target in colliders)
+        {
+            Renderer targetRenderer = target.gameObject.GetComponent<Renderer>();
+
+            if(targetRenderer != null)
+            {
+                Bounds targetBounds = targetRenderer.bounds;
+
+                for(int i = 0; i < randomPositionList.Count; i++)
+                {
+                    Vector3 pos = randomPositionList[i];
+
+                    if (targetBounds.Contains(pos))
+                    {
+                        removeList.Add(pos);
+                    }
+                }
+
+                if(removeList.Count > 0)
+                {
+                    foreach(var removeTarget in removeList)
+                    {
+                        randomPositionList.Remove(removeTarget);
+                    }
+                }
+
+            }
         }
+
+        return randomPositionList;
     }
 
-    private void Shuffle()
+    private List<Vector3> GetRandomPositionList()
     {
-        _shuffleList = new List<Transform>(_patrolList);
+        List<Vector3> vector3list = new List<Vector3>();
 
-        for(int i = 0; i < _shuffleList.Count; i++)
+        int maxLoop = 10;
+        int currentLoop = 0;
+
+        vector3list.Add(_slime.transform.position);
+
+        _slime.SetGrid(_slime.transform.position, _gridSize);//µð¹ö±ë ÄÚµå
+
+        while (vector3list.Count < 5 && currentLoop < maxLoop)
         {
-            Transform point = _shuffleList[i];
+            float randomPositionX = Random.Range(-_gridSize / 2, _gridSize / 2);
+            float randomPositionZ = Random.Range(-_gridSize / 2, _gridSize / 2);
 
-            int randomIndex = Random.Range(i, _shuffleList.Count);
+            Vector3 randomPosition = new Vector3(randomPositionX + _slime.transform.position.x, _slime.transform.position.y
+                , randomPositionZ + _slime.transform.position.z);
 
-            _shuffleList[i] = _shuffleList[randomIndex];
+            if (Vector3.Distance(randomPosition, vector3list[vector3list.Count - 1]) > _minDistance)
+            {
+                vector3list.Add(randomPosition);
+            }
 
-            _shuffleList[randomIndex] = point;
+            currentLoop++;
         }
+
+        return vector3list;
     }
+
 }

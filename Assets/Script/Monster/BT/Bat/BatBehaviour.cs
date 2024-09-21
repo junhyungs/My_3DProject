@@ -8,9 +8,9 @@ public class BatBehaviour : BehaviourMonster, IDamged
     /*
                                                                                         [Selector]
 
-                                                   [Selector]                                                      [CheckPlayer]
+                                                   [Selector]                                                      [Selector]
                                                                            
-                               [Sequence]                               [Move]             
+                               [Sequence]                               [Move]                            checkPlayer        patrol
 
                    [CanAttack] [Rotation]  [Attack]                   
      */
@@ -27,9 +27,8 @@ public class BatBehaviour : BehaviourMonster, IDamged
     #region Property
     public GameObject PlayerObject { get; set; }
     public bool CheckPlayer { get; set; }
-    public bool IsAttack { get; set; }
-    public float CurrentPower { get { return _currentPower; } }
-    public float CurrentHP { get { return _currentHp; } }
+    public bool IsAttack { get; set; } = false;
+    public bool IsReturn { get; set; } = false;
     #endregion
 
     protected override void Start()
@@ -63,14 +62,19 @@ public class BatBehaviour : BehaviourMonster, IDamged
             {
                 new SequenceNode(new List<INode>
                 {
-                    new BatCanAttack(this, _agent),
+                    new BatCanAttack(this),
                     new BatRotateToPlayer(this),
-                    new BatAttack(this, _animator)
+                    new BatAttack(this)
                 }),
-                new BatMoveToPlayer(this, _agent)
-            }),
 
-            new BatCheckPlayer(this)
+                new BatMoveToPlayer(this)
+            }),
+            new SelectorNode(new List<INode>
+            {
+                new BatCheckPlayer(this),
+                new BatPatrol(this)
+            })
+
         }); ;
 
         return node;
@@ -89,6 +93,24 @@ public class BatBehaviour : BehaviourMonster, IDamged
         else
         {
             StartCoroutine(IntensityChange(2f, 3f));
+        }
+    }
+
+    private Vector3 _gridCenter;
+    private float _gridSize;
+
+    public void SetGrid(Vector3 center, float size)
+    {
+        _gridCenter = center;
+        _gridSize = size;
+    } 
+
+    private void OnDrawGizmos()
+    {
+        if(_gridCenter != Vector3.zero)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(_gridCenter, new Vector3(_gridSize,transform.position.y, _gridSize));
         }
     }
 }

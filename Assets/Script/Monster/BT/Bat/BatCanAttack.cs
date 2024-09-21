@@ -7,36 +7,49 @@ public class BatCanAttack : INode
 {
     private BatBehaviour _bat;
     private NavMeshAgent _agent;
+    private float _stopTrackingDistance;
 
-    public BatCanAttack(BatBehaviour bat, NavMeshAgent agent)
+    public BatCanAttack(BatBehaviour bat)
     {
         _bat = bat;
-        _agent = agent;
+        _agent = _bat.GetComponent<NavMeshAgent>();
+
+        _stopTrackingDistance = 20f;
     }
 
     public INode.State Evaluate()
     {
-        if (!_bat.CheckPlayer)
+        if (!_bat.CheckPlayer || _bat.IsReturn)
         {
             return INode.State.Fail;
         }
 
-        if (!_bat.IsAttack)
+        if (_bat.IsAttack)
         {
-            Transform playerTransform = _bat.PlayerObject.transform;
+            return INode.State.Running;
+        }
 
-            float distance = Vector3.Distance(playerTransform.position, _bat.transform.position);
+        Transform playerTransform = _bat.PlayerObject.transform;
 
-            if(distance > _agent.stoppingDistance)
+        float currentDistance = Vector3.Distance(_bat.transform.position,
+            playerTransform.position);
+
+        if(currentDistance > _stopTrackingDistance)
+        {
+            _bat.IsReturn = true;
+
+            return INode.State.Fail;
+        }
+        else
+        {
+            if(currentDistance <= _agent.stoppingDistance)
+            {
+                return INode.State.Success;
+            }
+            else
             {
                 return INode.State.Fail;
             }
-
-            _agent.SetDestination(_bat.transform.position);
-
-            return INode.State.Success;
         }
-
-        return INode.State.Fail;
     }
 }

@@ -8,10 +8,14 @@ public class BatMoveToPlayer : INode
     private BatBehaviour _bat;
     private NavMeshAgent _agent;
 
-    public BatMoveToPlayer(BatBehaviour bat, NavMeshAgent agent)
+    private Vector3 _startPosition;
+
+    public BatMoveToPlayer(BatBehaviour bat)
     {
         _bat = bat;
-        _agent = agent;
+        _agent = _bat.GetComponent<NavMeshAgent>();
+
+        _startPosition = _bat.transform.position;
     }
 
     public INode.State Evaluate()
@@ -21,9 +25,26 @@ public class BatMoveToPlayer : INode
             return INode.State.Fail;
         }
 
-        if (_bat.IsAttack)
+        if (_bat.IsReturn)
         {
-            return INode.State.Fail;
+            _agent.stoppingDistance = 0f;
+
+            _agent.SetDestination(_startPosition);
+
+            float currentDistance = Vector3.Distance(_bat.transform.position, _startPosition);
+
+            if(currentDistance <= _agent.stoppingDistance)
+            {
+                _agent.SetDestination(_bat.transform.position);
+
+                _bat.IsReturn = false;
+
+                _bat.CheckPlayer = false;
+
+                return INode.State.Success;
+            }
+
+            return INode.State.Running;
         }
 
         Transform playerTransform = _bat.PlayerObject.transform;

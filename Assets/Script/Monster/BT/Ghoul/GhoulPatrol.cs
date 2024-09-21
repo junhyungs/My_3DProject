@@ -8,13 +8,13 @@ public class GhoulPatrol : INode
     private GhoulBehaviour _ghoul;
     private Animator _animator;
     private NavMeshAgent _agent;
-    private int _gridSize;
-    private float _minDistance;
-
     private List<Vector3> _walkPositionList;
     private List<Vector3> _randomPositionList;
 
+    private int _gridSize;
     private int _currentIndex = 0;
+    private float _minDistance;
+    private bool _isCoolTime;
     private LayerMask _targetLayer;
 
     public GhoulPatrol(GhoulBehaviour ghoul)
@@ -25,7 +25,8 @@ public class GhoulPatrol : INode
 
         _gridSize = 20;
         _minDistance = 5f;
-        _targetLayer = LayerMask.GetMask("Player", "Default");
+        _isCoolTime = false;
+        _targetLayer = LayerMask.GetMask("Default");
     }
 
     public INode.State Evaluate()
@@ -38,35 +39,67 @@ public class GhoulPatrol : INode
             
             if (_walkPositionList.Count  > 0)
             {
+                _currentIndex++;
+
                 _animator.SetBool("TraceWalk", true);
 
                 _agent.SetDestination(_walkPositionList[_currentIndex]);
             }
         }
 
-        if(_agent.remainingDistance <= _agent.stoppingDistance)
+        if(_agent.remainingDistance <= _agent.stoppingDistance && !_agent.pathPending)
         {
-            ++_currentIndex;
-
-            if(_currentIndex < _walkPositionList.Count)
-            {
-                _animator.SetBool("TraceWalk", true);
-
-                _agent.SetDestination(_walkPositionList[_currentIndex]);
-            }
-            else
+            if (!_isCoolTime)
             {
                 _animator.SetBool("TraceWalk", false);
 
                 _agent.SetDestination(_ghoul.transform.position);
 
-                _currentIndex = 0;
-
-                return INode.State.Success;
+                _ghoul.StartCoroutine(PatrolCoolTime());
             }
+            //++_currentIndex;
+
+            //if(_currentIndex < _walkPositionList.Count)
+            //{
+            //    _animator.SetBool("TraceWalk", true);
+
+            //    _agent.SetDestination(_walkPositionList[_currentIndex]);
+            //}
+            //else
+            //{
+            //    _animator.SetBool("TraceWalk", false);
+
+            //    _agent.SetDestination(_ghoul.transform.position);
+
+            //    _currentIndex = 0;
+
+            //    return INode.State.Success;
+            //}
         }
 
         return INode.State.Running;
+    }
+
+    private IEnumerator PatrolCoolTime()
+    {
+        _isCoolTime = true;
+
+        yield return new WaitForSeconds(3f);
+
+        _isCoolTime = false;
+
+        _currentIndex++;
+
+        if(_currentIndex < _walkPositionList.Count)
+        {
+            _animator.SetBool("TraceWalk", true);
+
+            _agent.SetDestination(_walkPositionList[_currentIndex]);
+        }
+        else
+        {
+            _currentIndex = 0;
+        }
     }
 
     private List<Vector3> GetMovePositionList(List<Vector3> randomPositionList)
@@ -82,6 +115,8 @@ public class GhoulPatrol : INode
             if (targetRenderer != null)
             {
                 Bounds targetBounds = targetRenderer.bounds;
+
+                _ghoul.SetBounds(targetBounds); //µð¹ö±ë ÄÚµå
 
                 for(int i = 0; i < randomPositionList.Count; i++)
                 {
@@ -114,7 +149,9 @@ public class GhoulPatrol : INode
         int currentLoop = 0;
 
         vector3list.Add(_ghoul.transform.position);
-        
+
+        _ghoul.SetGrid(_ghoul.transform.position, _gridSize);//µð¹ö±ë ÄÚµå
+
         while (vector3list.Count < 5 && currentLoop < maxLoop)
         {
             float randomPositionX = Random.Range(-_gridSize / 2, _gridSize / 2);

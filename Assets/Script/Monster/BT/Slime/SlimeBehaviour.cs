@@ -28,8 +28,6 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
 
     #region Property
     public GameObject PlayerObject { get; set; }
-    public List<Transform> PatrolList { get { return _patrolList; } }
-    public float SlimeSpeed { get { return _currentSpeed; } }
     public bool CheckPlayer { get; set; }
     public bool CanRotation { get; set; } = true;
     public bool CanMove { get; set; } = true;
@@ -125,6 +123,23 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
             }
 
             _objectArray[i].SetActive(true);
+        }
+    }
+
+    private Vector3 _gridCenter;
+    private float _size;
+    public void SetGrid(Vector3 gridCenter, float size)
+    {
+        _gridCenter = gridCenter;
+        _size = size;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if(_gridCenter != Vector3.zero)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(_gridCenter, new Vector3(_size, transform.position.y, _size));
         }
     }
 }

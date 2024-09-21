@@ -12,13 +12,11 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
                     
                        [Selector]                   [Selector]
 
-        [Sequence]               move        checkplayer,  partrol
+        [Sequence]               move        checkplayer,  patrol
 
  canAttack, rotation, attack
 
      */
-
-
 
     private INode _node;
     private bool _isDead;
@@ -35,12 +33,8 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
     [Header("BowMeshRenderer")]
     [SerializeField] private MeshRenderer _meshRenderer;
 
-    public NavMeshAgent Agent { get { return _agent; } }
-    public Animator Animator { get { return _animator; } }
     public GameObject PlayerObject { get; set; }
     public bool CheckPlayer { get; set; }
-    public bool CanMove { get; set; } = true;
-    public bool CanRotation { get; set; } = true;
     public bool IsAttack { get; set; } = false;
     public bool IsReturn { get; set; }
 
@@ -144,5 +138,39 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
             arrowComponent.IsFire(true);
             arrow.transform.parent = null;
         }
+    }
+    private Vector3 _boundsCenter;
+    private Vector3 _boundsSize;
+
+    private Vector3 _girdCenter;
+    private float _gridSize;
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+
+        if(_boundsCenter != Vector3.zero)
+        {
+            Gizmos.DrawWireCube( _boundsCenter, _boundsSize);
+        }
+
+        if(_girdCenter != Vector3.zero)
+        {
+            Vector3 gridSize = new Vector3(_gridSize, transform.position.y, _gridSize);
+
+            Gizmos.DrawWireCube(_girdCenter, gridSize);
+        }
+    }
+
+    public void SetBounds(Bounds bounds)
+    {
+        _boundsCenter = bounds.center;
+        _boundsSize = bounds.size;
+    }
+
+    public void SetGrid(Vector3 center, float size)
+    {
+        _girdCenter = center;
+        _gridSize = size;
     }
 }

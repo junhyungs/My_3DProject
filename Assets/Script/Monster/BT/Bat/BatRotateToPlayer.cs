@@ -6,6 +6,9 @@ public class BatRotateToPlayer : INode
 {
     private BatBehaviour _bat;
     private float _rotationSpeed;
+    private float _angle;
+
+    private Quaternion _rotation;
 
     public BatRotateToPlayer(BatBehaviour bat)
     {
@@ -21,16 +24,18 @@ public class BatRotateToPlayer : INode
 
         rotateDirection.y = 0f;
 
-        float angle = Vector3.Angle(_bat.transform.forward, rotateDirection);
+        _angle = Vector3.Angle(_bat.transform.forward, rotateDirection);
 
-        if(angle > 2f)
+        if(_angle > 10f)
         {
-            Quaternion rotation = Quaternion.LookRotation(rotateDirection);
+            _rotation = Quaternion.LookRotation(rotateDirection);
 
-            _bat.transform.rotation = Quaternion.Slerp(_bat.transform.rotation, rotation, _rotationSpeed * Time.deltaTime);
+            _bat.transform.rotation = Quaternion.Slerp(_bat.transform.rotation, _rotation, _rotationSpeed * Time.deltaTime);
 
             return INode.State.Running;
         }
+
+        _bat.transform.rotation = Quaternion.LookRotation(rotateDirection);
 
         return INode.State.Success;
     }

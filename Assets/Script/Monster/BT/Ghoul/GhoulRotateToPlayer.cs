@@ -23,9 +23,11 @@ public class GhoulRotateToPlayer : INode
 
         Vector3 rotateDirection = (playerTransform.position - _ghoul.transform.position).normalized;
 
-        _angle = Vector3.Angle(_ghoul.transform.forward, rotateDirection);
+        rotateDirection.y = 0f;
 
-        if(_angle > 2f)
+        _angle = Vector3.Angle(_ghoul.transform.forward, rotateDirection);
+        
+        if(_angle > 10f)
         {
             _rotation = Quaternion.LookRotation(rotateDirection);
 

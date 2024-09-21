@@ -1,16 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BatCheckPlayer : INode
 {
     private BatBehaviour _bat;
+    private NavMeshAgent _agent;
+
     private float _radius;
     private LayerMask _targetLayer;
 
     public BatCheckPlayer(BatBehaviour bat)
     {
         _bat = bat;
+        _agent = _bat.GetComponent<NavMeshAgent>();
+
         _radius = 10f;
         _targetLayer = LayerMask.GetMask("Player");
     }
@@ -26,6 +31,8 @@ public class BatCheckPlayer : INode
 
         if(colliders.Length > 0)
         {
+            _agent.stoppingDistance = 2.5f;
+
             _bat.PlayerObject = colliders[0].gameObject;
 
             _bat.CheckPlayer = true;
@@ -33,6 +40,8 @@ public class BatCheckPlayer : INode
             return INode.State.Success;
         }
 
-        return INode.State.Running;
+        _agent.stoppingDistance = 0f;
+
+        return INode.State.Fail;
     }
 }

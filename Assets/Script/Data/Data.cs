@@ -11,31 +11,19 @@ public class BT_MonsterData : Data
     public int Health { get; set; }
     public float Power { get; set; } 
     public float Speed { get; set; }
+    public float TrackingDistance { get; set; }
+    public float StopTrackingDistance { get; set; }
 
-    public BT_MonsterData(string id, string name, int health, float power, float speed)
+
+    public BT_MonsterData(string id, string name, int health, float power, float speed, float trackingDistance, float stopTrackingDistance)
     {
         ID = id;
         Name = name;
         Health = health;
         Power = power;
         Speed = speed;
-    }
-}
-
-public class BT_MonsterTraceData : Data
-{
-    public string ID { get; set; }
-    public float TrackingDistance { get; set; }
-    public float StopTrackingDistance { get; set; }
-    public float AgentStopDistance { get; set; }
-
-    public BT_MonsterTraceData(string iD, float trackingDistance, float stopTrackingDistance
-        , float agentStopDistance)
-    {
-        ID = iD;
         TrackingDistance = trackingDistance;
         StopTrackingDistance = stopTrackingDistance;
-        AgentStopDistance = agentStopDistance;
     }
 }
 

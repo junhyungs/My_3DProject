@@ -9,9 +9,6 @@ public class GhoulMoveToPlayer : INode
     private NavMeshAgent _agent;
     private Animator _animator;
 
-    private float _returnDistance;
-    private float _stoppingDistance;
-    private bool _isReturn;
     private Vector3 _startPosition;
 
     public GhoulMoveToPlayer(GhoulBehaviour ghoul)
@@ -20,8 +17,6 @@ public class GhoulMoveToPlayer : INode
         _agent = _ghoul.GetComponent<NavMeshAgent>();
         _animator = _ghoul.GetComponent<Animator>();
 
-        _returnDistance = 15f;
-        _stoppingDistance = _agent.stoppingDistance;
         _startPosition = _ghoul.transform.position;
     }
 
@@ -42,13 +37,13 @@ public class GhoulMoveToPlayer : INode
 
             if(_agent.remainingDistance <= _agent.stoppingDistance)
             {
-                _agent.stoppingDistance = _stoppingDistance;
-
-                _agent.isStopped = true;
+                _agent.SetDestination(_ghoul.transform.position);
 
                 _ghoul.CheckPlayer = false;
 
                 _animator.SetBool("TraceWalk", false);
+
+                _ghoul.IsReturn = false;
 
                 return INode.State.Success;
             }

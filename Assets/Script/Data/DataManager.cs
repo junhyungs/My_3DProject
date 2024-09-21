@@ -68,8 +68,11 @@ public class DataManager
                 int hp = ParseInt(item["HP"]);
                 float power = ParseFloat(item["Power"]);
                 float speed = ParseFloat(item["Speed"]);
+                float trackingDistance = ParseFloat(item["TrackingDistance"]);
+                float stopTrackingDistance = ParseFloat(item["StopTrackingDistance"]);
 
-                BT_MonsterData monsterData = new BT_MonsterData(id, name, hp, power, speed);
+                BT_MonsterData monsterData = new BT_MonsterData(id, name, hp, power, speed, 
+                    trackingDistance, stopTrackingDistance);
                 _dataDictionary.Add(id, monsterData);
             }
         }

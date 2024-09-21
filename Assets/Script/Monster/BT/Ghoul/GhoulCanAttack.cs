@@ -1,19 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GhoulCanAttack : INode
 {
     private GhoulBehaviour _ghoul;
     private Animator _animator;
+    private NavMeshAgent _agent;
 
     private float _stopTrackingDistance;
     public GhoulCanAttack(GhoulBehaviour ghoul)
     {
         _ghoul = ghoul;
         _animator = _ghoul.GetComponent<Animator>();
+        _agent = _ghoul.GetComponent<NavMeshAgent>();
 
-        _stopTrackingDistance = 15f;
+        _stopTrackingDistance = 20f;
     }
 
     public INode.State Evaluate()
@@ -41,7 +44,7 @@ public class GhoulCanAttack : INode
         }
         else
         {
-            if(currentDistance <= _ghoul.Agent.stoppingDistance)
+            if(currentDistance <= _agent.stoppingDistance)
             {
                 _animator.SetBool("TraceWalk", false);
 
