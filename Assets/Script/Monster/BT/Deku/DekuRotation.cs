@@ -6,14 +6,12 @@ using UnityEngine.AI;
 public class DekuRotation : INode
 {
     private DekuBehaviour _deku;
-    private NavMeshAgent _agent;
     private float _rotationSpeed;
+    private float _angle;
 
     public DekuRotation(DekuBehaviour deku)
     {
         _deku = deku;
-        _agent = _deku.GetComponent<NavMeshAgent>();
-
         _rotationSpeed = 20f;
     }
 
@@ -23,11 +21,9 @@ public class DekuRotation : INode
 
         Vector3 rotateDirection = (playerTransform.position - _deku.transform.position).normalized;
 
-        rotateDirection.y = 0f;
+        _angle = Vector3.Angle(_deku.transform.forward, rotateDirection);
 
-        float angle = Vector3.Angle(_deku.transform.forward, rotateDirection);
-
-        if(angle > 1.5f)
+        if(_angle > 10f)
         {
             Quaternion rotation = Quaternion.LookRotation(rotateDirection);
 
@@ -35,6 +31,8 @@ public class DekuRotation : INode
 
             return INode.State.Running;
         }
+
+        _deku.transform.rotation = Quaternion.LookRotation(rotateDirection);
 
         return INode.State.Success;
     }

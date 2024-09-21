@@ -23,8 +23,6 @@ public class GhoulRotateToPlayer : INode
 
         Vector3 rotateDirection = (playerTransform.position - _ghoul.transform.position).normalized;
 
-        rotateDirection.y = 0f;
-
         _angle = Vector3.Angle(_ghoul.transform.forward, rotateDirection);
         
         if(_angle > 10f)

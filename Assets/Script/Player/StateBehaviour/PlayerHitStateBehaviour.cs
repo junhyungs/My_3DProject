@@ -5,26 +5,21 @@ using UnityEngine.Animations.Rigging;
 
 public class PlayerHitStateBehaviour : StateMachineBehaviour
 {
-    private int m_playerLayer;
     private PlayerMoveController m_moveContorller;
-
     private int m_Hit_back = Animator.StringToHash("Hit_back");
-    private int m_Hit_idle = Animator.StringToHash("Hit_idle");
     private int m_Hit_Recover = Animator.StringToHash("Hit_Recover");
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (m_moveContorller == null)
+        {
             m_moveContorller = animator.GetComponent<PlayerMoveController>();
-
+        }
+            
         if (stateInfo.shortNameHash == m_Hit_back)
         {
-            m_playerLayer = animator.gameObject.layer;
-
             animator.gameObject.layer = LayerMask.NameToLayer("HitPlayer");
         }
-
-        
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -36,7 +31,8 @@ public class PlayerHitStateBehaviour : StateMachineBehaviour
     {
         if(stateInfo.shortNameHash == m_Hit_Recover)
         {
-            animator.gameObject.layer = m_playerLayer;
+            animator.gameObject.layer = LayerMask.NameToLayer("Player");
+
             m_moveContorller.IsAction = true;
         }
     }

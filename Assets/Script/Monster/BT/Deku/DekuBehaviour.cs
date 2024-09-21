@@ -7,11 +7,11 @@ public class DekuBehaviour : BehaviourMonster, IDamged
     /*
                                                             [Selector] 
                 
-                                   [Selector]                                          [Selector]
+                                   [Selector]                                     [Selector]
      
-                      [Sequence]                [Sequence]                    [CheckPlayer] [Hide] [Move]
+                      [Sequence]                [Move]                   [CheckPlayer]     [Hide]
 
-        [CanAttack]  [Rotation]   [Attack]   [Rotation]    [Move]
+        [CanAttack]  [Rotation]   [Attack]      
      */
 
 
@@ -30,8 +30,8 @@ public class DekuBehaviour : BehaviourMonster, IDamged
     #region Property
     public GameObject PlayerObject { get; set; }
     public bool CheckPlayer { get; set; }
-    public bool IsAttack { get;set; }
-    public bool IsReturn { get; set; }
+    public bool IsAttack { get; set; } = false;
+    public bool IsReturn { get; set; } = false;
     #endregion
 
     protected override void Start()
@@ -76,7 +76,6 @@ public class DekuBehaviour : BehaviourMonster, IDamged
             {
                 new DekuCheckPlayer(this),
                 new DekuHide(this),
-                new DekuReturn(this)
             })
         });
 

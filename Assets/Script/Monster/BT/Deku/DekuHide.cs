@@ -15,11 +15,6 @@ public class DekuHide : INode
 
     public INode.State Evaluate()
     {
-        if (_deku.IsReturn)
-        {
-            return INode.State.Fail;
-        }
-
         _animator.SetBool("Hide", true);
 
         return INode.State.Success;

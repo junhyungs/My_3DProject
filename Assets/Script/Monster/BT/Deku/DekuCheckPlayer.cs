@@ -1,19 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class DekuCheckPlayer : INode
 {
     private DekuBehaviour _deku;
     private Animator _animator;
+    private NavMeshAgent _agent;
+
     private float _radius;
+    private LayerMask _targetLayer;
 
     public DekuCheckPlayer(DekuBehaviour deku)
     {
         _deku = deku;
-        _animator = _deku.GetComponent<Animator>(); 
+        _animator = _deku.GetComponent<Animator>();
+        _agent = _deku.GetComponent<NavMeshAgent>();
 
         _radius = 10f;
+        _targetLayer = LayerMask.GetMask("Player");
     }
 
     public INode.State Evaluate()
@@ -23,15 +29,12 @@ public class DekuCheckPlayer : INode
             return INode.State.Success;
         }
 
-        if (_deku.IsReturn)
-        {
-            return INode.State.Fail;
-        }
-
-        Collider[] colliders = Physics.OverlapSphere(_deku.transform.position, _radius, LayerMask.GetMask("Player"));
+        Collider[] colliders = Physics.OverlapSphere(_deku.transform.position, _radius, _targetLayer);
 
         if(colliders.Length > 0 )
         {
+            _agent.stoppingDistance = 5f;
+
             _animator.SetBool("Hide", false);
 
             _deku.PlayerObject = colliders[0].gameObject;

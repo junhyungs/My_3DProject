@@ -26,6 +26,7 @@ public class BatBehaviour : BehaviourMonster, IDamged
 
     #region Property
     public GameObject PlayerObject { get; set; }
+    public float Power => _currentPower;
     public bool CheckPlayer { get; set; }
     public bool IsAttack { get; set; } = false;
     public bool IsReturn { get; set; } = false;
@@ -107,7 +108,12 @@ public class BatBehaviour : BehaviourMonster, IDamged
 
     private void OnDrawGizmos()
     {
-        if(_gridCenter != Vector3.zero)
+        Vector3 boxPosition = transform.position + transform.TransformDirection(new Vector3(0, 1f,0f)) +
+            transform.forward;
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(boxPosition, new Vector3(1, 1, 1));
+
+        if (_gridCenter != Vector3.zero)
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireCube(_gridCenter, new Vector3(_gridSize,transform.position.y, _gridSize));

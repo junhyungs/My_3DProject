@@ -6,7 +6,6 @@ public class DekuAttack : INode
 {
     private DekuBehaviour _deku;
     private Animator _animator;
-    private bool _canAttack = true;
 
     public DekuAttack(DekuBehaviour deku)
     {
@@ -16,26 +15,10 @@ public class DekuAttack : INode
 
     public INode.State Evaluate()
     {
-        if(_canAttack)
-        {
-            _deku.IsAttack = true;
+        _deku.IsAttack = true;
 
-            _animator.SetTrigger("Attack");
+        _animator.SetTrigger("Attack");
 
-            _deku.StartCoroutine(CoolTime());
-
-            return INode.State.Success;
-        }
-
-        return INode.State.Fail;
-    }
-
-    private IEnumerator CoolTime()
-    {
-        _canAttack = false;
-
-        yield return new WaitForSeconds(1.0f);
-
-        _canAttack = true;
+        return INode.State.Success;
     }
 }

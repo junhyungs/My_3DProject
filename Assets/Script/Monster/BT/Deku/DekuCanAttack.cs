@@ -9,16 +9,20 @@ public class DekuCanAttack : INode
     private NavMeshAgent _agent;
     private Animator _animator;
 
+    private float _stopTrackingDistance;
+
     public DekuCanAttack(DekuBehaviour deku)
     {
         _deku = deku;
         _agent = _deku.GetComponent<NavMeshAgent>();    
         _animator = _deku.GetComponent<Animator>();
+
+        _stopTrackingDistance = 20f;
     }
 
     public INode.State Evaluate()
     {
-        if (!_deku.CheckPlayer)
+        if (!_deku.CheckPlayer || _deku.IsReturn)
         {
             return INode.State.Fail;
         }
@@ -30,29 +34,27 @@ public class DekuCanAttack : INode
 
         Transform playerTransform = _deku.PlayerObject.transform;
 
-        float distance = Vector3.Distance(playerTransform.position, _deku.transform.position);
+        float distance = Vector3.Distance(playerTransform.position, 
+            _deku.transform.position);
 
-        if(distance > 11f)
+        if(distance >= _stopTrackingDistance)
         {
-            _deku.CheckPlayer = false;
-
-            _deku.PlayerObject = null;
-
             _deku.IsReturn = true;
-
-            _agent.stoppingDistance = 0f;
 
             return INode.State.Fail;
         }
-        else if(distance <= _agent.stoppingDistance)
+        else
         {
-            _agent.SetDestination(_deku.transform.position);
+            if(distance <= _agent.stoppingDistance)
+            {
+                _animator.SetBool("Walk", false);
 
-            _animator.SetBool("Walk", false);
-
-            return INode.State.Success;
+                return INode.State.Success;
+            }
+            else
+            {
+                return INode.State.Fail;
+            }
         }
-
-        return INode.State.Fail;
     }
 }

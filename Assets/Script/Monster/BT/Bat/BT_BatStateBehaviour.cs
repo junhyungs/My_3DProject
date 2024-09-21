@@ -7,8 +7,12 @@ public class BatAttackStateBehaviour : StateMachineBehaviour
 {
     private BatBehaviour batBehaviour;
     private NavMeshAgent _agent;
-    private Vector3 _currentPlayerPosition;
 
+    private Vector3 _currentPlayerPosition;
+    private Vector3 _transformDirection;
+    private Vector3 _boxSize;
+
+    private LayerMask _targetLayer;
     private float _stoppingDistance;
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -17,6 +21,10 @@ public class BatAttackStateBehaviour : StateMachineBehaviour
         {
             batBehaviour = animator.GetComponent<BatBehaviour>();
             _agent = batBehaviour.GetComponent<NavMeshAgent>();
+
+            _transformDirection = new Vector3(0f, 1f, 0f);
+            _boxSize = new Vector3(1f, 1f, 1f);
+            _targetLayer = LayerMask.GetMask("Player");
         }
 
         _stoppingDistance = _agent.stoppingDistance;
@@ -33,10 +41,14 @@ public class BatAttackStateBehaviour : StateMachineBehaviour
         if(stateInfo.normalizedTime >= 0.1f && stateInfo.normalizedTime <= 0.5f)
         {
             _agent.acceleration = 100f;
+            _agent.speed = 10f;
+
+            OverlapBox();
         }
         else
         {
             _agent.acceleration = 8f;
+            _agent.speed = 4f;
         }
     }
 
@@ -49,5 +61,25 @@ public class BatAttackStateBehaviour : StateMachineBehaviour
         _agent.stoppingDistance = _stoppingDistance;
 
         batBehaviour.IsAttack = false;
+    }
+
+    private void OverlapBox()
+    {
+        Vector3 boxPosition = batBehaviour.transform.position +
+            batBehaviour.transform.TransformDirection(_transformDirection) + 
+            batBehaviour.transform.forward;
+
+        Collider[] colliders = Physics.OverlapBox(boxPosition, _boxSize/2,
+            batBehaviour.transform.rotation, _targetLayer);
+
+        if(colliders.Length > 0 )
+        {
+            IDamged damaged = colliders[0].gameObject.GetComponent<IDamged>();
+
+            if( damaged != null )
+            {
+                damaged.TakeDamage(batBehaviour.Power);
+            }
+        }
     }
 }

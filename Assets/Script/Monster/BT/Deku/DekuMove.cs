@@ -9,11 +9,15 @@ public class DekuMove : INode
     private NavMeshAgent _agent;
     private Animator _animator;
 
+    private Vector3 _startPosition;
+
     public DekuMove(DekuBehaviour deku)
     {
         _deku = deku;
         _agent = _deku.GetComponent<NavMeshAgent>();
         _animator = _deku.GetComponent<Animator>();
+
+        _startPosition = _deku.transform.position;
     }
 
     public INode.State Evaluate()
@@ -23,19 +27,34 @@ public class DekuMove : INode
             return INode.State.Fail;
         }
 
-        Transform playerTransform = _deku.PlayerObject.transform;
+        _animator.SetBool("Walk", true);
 
-        float distance = Vector3.Distance(playerTransform.position, _deku.transform.position);
-
-        if(distance > _agent.stoppingDistance)
+        if (_deku.IsReturn)
         {
-            _animator.SetBool("Walk", true);
+            _agent.stoppingDistance = 0f;
 
-            _agent.SetDestination(playerTransform.position);
+            _agent.SetDestination(_startPosition);
+
+            if(_agent.remainingDistance <= _agent.stoppingDistance)
+            {
+                _agent.SetDestination(_deku.transform.position);
+
+                _deku.CheckPlayer = false;
+
+                _animator.SetBool("Walk", false);
+
+                _deku.IsReturn = false;
+
+                return INode.State.Success;
+            }
 
             return INode.State.Running;
         }
 
-        return INode.State.Success;
+        Transform playerTransform = _deku.PlayerObject.transform;
+
+        _agent.SetDestination(playerTransform.position);
+
+        return INode.State.Running;
     }
 }
