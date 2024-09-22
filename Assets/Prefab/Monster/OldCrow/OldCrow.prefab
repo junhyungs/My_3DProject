@@ -4477,6 +4477,7 @@ GameObject:
   m_Component:
   - component: {fileID: 64695268475651716}
   - component: {fileID: 8699409176196810153}
+  - component: {fileID: 8835241686035269123}
   m_Layer: 0
   m_Name: OldCrow
   m_TagString: Untagged
@@ -4521,6 +4522,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8835241686035269123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5628109619876799160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fb9ce25ea3848440a93d7a35ca19a1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5672442266245577680
 GameObject:
   m_ObjectHideFlags: 0

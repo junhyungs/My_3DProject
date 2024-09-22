@@ -11,19 +11,10 @@ public enum InteractionUI_Type
 
 public class UIManager : Singleton<UIManager>
 {
-    [Header("InteractionCanvas")]
-    [SerializeField] private Canvas m_InteractionCanvas;
-
     private PlayerSkill m_currentSkill;
-    private PlayerWeapon m_currentWeapon;    
-
     private Action<PlayerSkill> SkillChangeCallBack;
     private Action<int> PlayerSkillCountCallBack;
     private Action<int> PlayerHpIconChangeCallBack;
-
-    #region Interaction
-    //Interaction UI Dic
-    private Dictionary<Transform, GameObject> ActiveUIInstance = new Dictionary<Transform, GameObject>();
 
     private void Start()
     {
@@ -31,6 +22,11 @@ public class UIManager : Singleton<UIManager>
         ObjectPool.Instance.CreatePool(ObjectName.GetUI);
         ObjectPool.Instance.CreatePool(ObjectName.LadderUI);
     }
+
+    #region Interaction
+    //Interaction UI Dic
+    private Dictionary<Transform, GameObject> ActiveUIInstance = new Dictionary<Transform, GameObject>();
+
 
     public void ItemInteractionUI(Transform itemTransform, ObjectName uiName)
     {

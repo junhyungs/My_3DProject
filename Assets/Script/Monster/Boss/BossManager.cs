@@ -2,56 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BossType
-{
-    OldCrow = 1,
-    ForestMother
-}
 
 public class BossManager : Singleton<BossManager>
 {
-    private Dictionary<BossType, BossData> _bossDataDictionary = new Dictionary<BossType, BossData>();
+    private BT_BossData _data;
 
-    private void Awake()
+    public BT_BossData Data => _data;
+
+    private void Start()
     {
-       // InitializeBossData(BossType.OldCrow, (int)BossType.OldCrow);
+        StartCoroutine(LoadBossData());
     }
 
-    //private void InitializeBossData(BossType bossType, int id)
-    //{
-    //    var bossData = DataManager.Instance.GetBossData(id);
-
-    //    BossData data = new BossData(
-    //        bossData.BossId,
-    //        bossData.BossName,
-    //        bossData.BossHp,
-    //        bossData.BossAttackPower,
-    //        bossData.BossSpeed
-    //        );
-
-    //    _bossDataDictionary.Add(bossType, data);
-    //}
-
-    public BossData GetBossData(BossType type)
+    private IEnumerator LoadBossData()
     {
-        return _bossDataDictionary[type];   
-    }
-}
+        yield return new WaitWhile(() =>
+        {
+            Debug.Log("보스 데이터를 가져오지 못했습니다.");
+            return DataManager.Instance.GetData("B101") == null;
+        });
 
-public struct BossData
-{
-    public int _id { get; }
-    public string _name { get; }
-    public float _hp { get; }
-    public float _power { get; }
-    public float _speed { get; }
+        var data = DataManager.Instance.GetData("B101") as BT_BossData;
 
-    public BossData(int id, string name, float hp, float power, float speed)
-    {
-        _id = id;
-        _name = name;
-        _hp = hp;
-        _power = power;
-        _speed = speed;
+        _data = data;
     }
 }
