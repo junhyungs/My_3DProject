@@ -127,11 +127,19 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     }
 
     private Vector3 _gridCenter;
+    private Vector3 _spherePosition;
+    private float _radius;
     private float _size;
     public void SetGrid(Vector3 gridCenter, float size)
     {
         _gridCenter = gridCenter;
         _size = size;
+    }
+
+    public void SetSphere(Vector3 spherePosition, float radius)
+    {
+        _spherePosition = spherePosition;
+        _radius = radius;
     }
 
     private void OnDrawGizmos()
@@ -141,5 +149,13 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
             Gizmos.color = Color.red;
             Gizmos.DrawWireCube(_gridCenter, new Vector3(_size, transform.position.y, _size));
         }
+
+        if( _spherePosition != Vector3.zero)
+        {
+            Gizmos.color = Color.white;
+            Gizmos.DrawWireSphere(_spherePosition, _radius);
+        }
     }
+
+
 }

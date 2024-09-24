@@ -7,16 +7,19 @@ using UnityEngine.AI;
 public class SlimeMoveStateBehaviour : StateMachineBehaviour
 {
     private SlimeBehaviour _slime;
-    private Vector3 _movePosition;
     private NavMeshAgent _agent;
+    private NavMeshPath _agentPath;
     private List<Vector3> _walkPositionList;
     private List<Vector3> _randomPositionList;
 
     private int _gridSize;
-    private float _minDistance;
     private int _currentIndex = 0;
+    private float _minDistance;
+    private float _maxSampleDistance;
 
+    private Vector3 _movePosition;
     private LayerMask _targetLayer;
+    private Bounds _myBounds;
 
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -68,10 +71,13 @@ public class SlimeMoveStateBehaviour : StateMachineBehaviour
         {
             _slime = animator.GetComponent<SlimeBehaviour>();
             _agent = _slime.GetComponent<NavMeshAgent>();
+            _agentPath = new NavMeshPath();
 
             _gridSize = 20;
             _minDistance = 5f;
+            _maxSampleDistance = 0.1f;
             _targetLayer = LayerMask.GetMask("Player", "Default");
+            _myBounds = _slime.transform.GetComponentInChildren<SkinnedMeshRenderer>().bounds;
         }
     }
 
@@ -110,38 +116,56 @@ public class SlimeMoveStateBehaviour : StateMachineBehaviour
         }
     }
 
+    private bool CanAgentMove(Vector3 targetPosition)
+    {
+        if(NavMesh.SamplePosition(targetPosition, out NavMeshHit hit, _maxSampleDistance, NavMesh.AllAreas))
+        {
+            Vector3 spherePosition = new Vector3(targetPosition.x, targetPosition.y +
+                _slime.transform.position.y, targetPosition.z);
+
+            Collider[] colliders = Physics.OverlapSphere(spherePosition, _myBounds.extents.magnitude, _targetLayer);
+
+            if(colliders.Length == 0)
+            {
+                bool canAgentMove = AgentPath(hit.position);
+
+                return canAgentMove;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool AgentPath(Vector3 hitPosition)
+    {
+        _agent.CalculatePath(hitPosition, _agentPath);
+
+        return _agentPath.status == NavMeshPathStatus.PathComplete;
+    }
+
     private List<Vector3> GetMovePositionList(List<Vector3> randomPositionList)
     {
         List<Vector3> removeList = new List<Vector3>();
 
-        Collider[] colliders = Physics.OverlapSphere(_slime.transform.position, _gridSize, _targetLayer);
-
-        foreach(var target in colliders)
+        foreach(var randomPosition in  randomPositionList)
         {
-            Renderer targetRenderer = target.gameObject.GetComponent<Renderer>();
-
-            if(targetRenderer != null)
+            if (!CanAgentMove(randomPosition))
             {
-                Bounds targetBounds = targetRenderer.bounds;
+                removeList.Add(randomPosition);
+            }
+        }
 
-                for(int i = 0; i < randomPositionList.Count; i++)
-                {
-                    Vector3 pos = randomPositionList[i];
-
-                    if (targetBounds.Contains(pos))
-                    {
-                        removeList.Add(pos);
-                    }
-                }
-
-                if(removeList.Count > 0)
-                {
-                    foreach(var removeTarget in removeList)
-                    {
-                        randomPositionList.Remove(removeTarget);
-                    }
-                }
-
+        if(removeList.Count > 0)
+        {
+            foreach(var removePosition in removeList)
+            {
+                randomPositionList.Remove(removePosition);
             }
         }
 

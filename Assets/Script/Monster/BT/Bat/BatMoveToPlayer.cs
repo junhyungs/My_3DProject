@@ -31,9 +31,7 @@ public class BatMoveToPlayer : INode
 
             _agent.SetDestination(_startPosition);
 
-            float currentDistance = Vector3.Distance(_bat.transform.position, _startPosition);
-
-            if(currentDistance <= _agent.stoppingDistance)
+            if(_agent.remainingDistance <= _agent.stoppingDistance)
             {
                 _agent.SetDestination(_bat.transform.position);
 

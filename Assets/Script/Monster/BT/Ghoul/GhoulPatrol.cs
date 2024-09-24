@@ -8,29 +8,44 @@ public class GhoulPatrol : INode
     private GhoulBehaviour _ghoul;
     private Animator _animator;
     private NavMeshAgent _agent;
+    private NavMeshPath _agentPath;
+
     private List<Vector3> _walkPositionList;
     private List<Vector3> _randomPositionList;
 
     private int _gridSize;
     private int _currentIndex = 0;
     private float _minDistance;
+    private float _maxSampleDistance;
     private bool _isCoolTime;
+
     private LayerMask _targetLayer;
+    private Bounds _myBounds;
 
     public GhoulPatrol(GhoulBehaviour ghoul)
     {
         _ghoul = ghoul;
-        _agent = _ghoul.GetComponent<NavMeshAgent>();   
+        _agent = _ghoul.GetComponent<NavMeshAgent>();
+        _agentPath = new NavMeshPath();
         _animator = _ghoul.GetComponent<Animator>();
 
         _gridSize = 20;
         _minDistance = 5f;
+        _maxSampleDistance = 0.1f;
         _isCoolTime = false;
         _targetLayer = LayerMask.GetMask("Default");
+        _myBounds = _ghoul.transform.GetComponentInChildren<SkinnedMeshRenderer>().bounds;
     }
 
     public INode.State Evaluate()
     {
+        if (_ghoul.CheckPlayer)
+        {
+            _currentIndex = 0;
+
+            return INode.State.Success;
+        }
+
         if(_currentIndex == 0)
         {
             _randomPositionList = new List<Vector3>(GetRandomPositionList());
@@ -102,39 +117,56 @@ public class GhoulPatrol : INode
         }
     }
 
+    private bool CanAgentMove(Vector3 targetPosition)
+    {
+        if (NavMesh.SamplePosition(targetPosition, out NavMeshHit hit, _maxSampleDistance, NavMesh.AllAreas))
+        {
+            Vector3 spherePosition = new Vector3(targetPosition.x, targetPosition.y +
+                _ghoul.transform.position.y, targetPosition.z);
+
+            Collider[] colliders = Physics.OverlapSphere(spherePosition, _myBounds.extents.magnitude, _targetLayer);
+
+            if (colliders.Length == 0)
+            {
+                bool canAgentMove = AgentPath(hit.position);
+
+                return canAgentMove;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+    private bool AgentPath(Vector3 hitPosition)
+    {
+        _agent.CalculatePath(hitPosition, _agentPath);
+
+        return _agentPath.status == NavMeshPathStatus.PathComplete;
+    }
+
+
     private List<Vector3> GetMovePositionList(List<Vector3> randomPositionList)
     {
         List<Vector3> removeList = new List<Vector3>();
 
-        Collider[] colliders = Physics.OverlapSphere(_ghoul.transform.position, _gridSize, _targetLayer);
-
-        foreach (var target in colliders)
+        foreach (var randomPosition in randomPositionList)
         {
-            Renderer targetRenderer = target.gameObject.GetComponent<Renderer>();
-
-            if (targetRenderer != null)
+            if (!CanAgentMove(randomPosition))
             {
-                Bounds targetBounds = targetRenderer.bounds;
+                removeList.Add(randomPosition);
+            }
+        }
 
-                _ghoul.SetBounds(targetBounds); //µð¹ö±ë ÄÚµå
-
-                for(int i = 0; i < randomPositionList.Count; i++)
-                {
-                    Vector3 pos = randomPositionList[i];
-
-                    if(targetBounds.Contains(pos))
-                    {
-                        removeList.Add(pos);
-                    }
-                }
-
-                if(removeList.Count > 0)
-                {
-                    foreach (var removeTarget in removeList)
-                    {
-                        randomPositionList.Remove(removeTarget);
-                    }
-                }
+        if (removeList.Count > 0)
+        {
+            foreach (var removePosition in removeList)
+            {
+                randomPositionList.Remove(removePosition);
             }
         }
 

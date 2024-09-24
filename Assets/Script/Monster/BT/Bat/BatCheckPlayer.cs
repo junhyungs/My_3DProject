@@ -37,7 +37,7 @@ public class BatCheckPlayer : INode
 
             _bat.CheckPlayer = true;
 
-            return INode.State.Success;
+            return INode.State.Fail;
         }
 
         _agent.stoppingDistance = 0f;
