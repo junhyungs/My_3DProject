@@ -5,29 +5,35 @@ using UnityEngine;
 
 public class ForestMother : MonoBehaviour
 {
-    [SerializeField]
-    GameObject _target;
-    // Start is called before the first frame update
+    private Transform _playerTransform;
+    private Vector3 _forward;
+
     void Start()
     {
-        
+        _playerTransform = GameManager.Instance.Player.transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 targetDir = (_target.transform.position - transform.position).normalized;
+        Vector3 targetDirection = (_playerTransform.position - transform.position).normalized;
 
-        Quaternion rot = Quaternion.Euler(targetDir);
+        targetDirection.y = 0f;
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, rot, 10f * Time.deltaTime);
+        float angle = Vector3.SignedAngle(transform.forward, targetDirection , Vector3.up);
+
+        if(angle > 100)
+        {
+            
+            Quaternion rotation = Quaternion.LookRotation(targetDirection);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 5f * Time.deltaTime);
+        }
+
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-
-        Vector3 position = this.gameObject.transform.forward;
-        Gizmos.DrawWireSphere(position, 1f);
+        
     }
 }
