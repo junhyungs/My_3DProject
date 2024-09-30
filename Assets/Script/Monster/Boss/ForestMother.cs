@@ -27,7 +27,7 @@ public class ForestMother : MonoBehaviour
             
             Quaternion rotation = Quaternion.LookRotation(targetDirection);
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 5f * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, 0.1f * Time.deltaTime);
         }
 
     }

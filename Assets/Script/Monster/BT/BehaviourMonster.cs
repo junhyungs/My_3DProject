@@ -64,7 +64,7 @@ public class BehaviourMonster : MonoBehaviour
         _dataReady = true;
     }
 
-    protected IEnumerator IntensityChange(float baseValue, float power)
+    public IEnumerator IntensityChange(float baseValue, float power)
     {
         Color currentColor = _copyMaterial.GetColor("_Color");
 
@@ -77,7 +77,7 @@ public class BehaviourMonster : MonoBehaviour
         _copyMaterial.SetColor("_Color", currentColor);
     }
 
-    protected void Die(Transform soulTransform, Action objectEvent = null)
+    public void Die(Transform soulTransform, Action objectEvent = null)
     {
         if (_isSpawn)
         {
@@ -97,7 +97,7 @@ public class BehaviourMonster : MonoBehaviour
         StartCoroutine(FireShader(5f, 0.5f, -0.3f));
     }
 
-    protected IEnumerator FireShader(float maxTime, float startValue, float endValue)
+    public IEnumerator FireShader(float maxTime, float startValue, float endValue)
     {
         float elapsedTime = 0f;
 
@@ -115,7 +115,7 @@ public class BehaviourMonster : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
-    protected void MonsterSoul(Transform soulTransform)
+    public void MonsterSoul(Transform soulTransform)
     {
         GameObject soul = ObjectPool.Instance.DequeueObject(ObjectName.Soul);
         DropSoul component = soul.GetComponent<DropSoul>();
