@@ -37,7 +37,7 @@ public class DataManager
                 ReadMonsterData(jsonData);
                 break;
             case nameof(JsonName.Boss):
-                ReadBossData(jsonData);
+                ReadForestMotherData(jsonData);
                 break;
             case nameof(JsonName.Player):
                 ReadPlayerData(jsonData);
@@ -82,7 +82,7 @@ public class DataManager
         }
     }
 
-    private void ReadBossData(string jsonData)
+    private void ReadForestMotherData(string jsonData)
     {
         try
         {
@@ -95,8 +95,9 @@ public class DataManager
                 float health = ParseFloat(item["Health"]);
                 float power = ParseFloat(item["Power"]);
                 float speed = ParseFloat(item["Speed"]);
+                float vineHealth = ParseFloat(item["VineHealth"]);
 
-                BT_BossData data = new BT_BossData(id, name, health, power, speed);
+                ForestMotherData data = new ForestMotherData(id, name, health, power, speed, vineHealth);
 
                 _dataDictionary.Add(id, data);
             }

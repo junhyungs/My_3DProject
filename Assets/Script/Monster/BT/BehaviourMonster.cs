@@ -38,7 +38,7 @@ public class BehaviourMonster : MonoBehaviour
         _animator = gameObject.GetComponent<Animator>();
         _rigidBody = gameObject.GetComponent<Rigidbody>();
 
-        ObjectPool.Instance.CreatePool(ObjectName.Soul, 100);
+        ObjectPool.Instance.CreatePool(ObjectName.Soul, 20);
     }
 
     protected IEnumerator LoadMonsterData(string id)

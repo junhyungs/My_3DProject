@@ -21,6 +21,7 @@ public class PlayerAttackController : MonoBehaviour
     private Animator m_attackAnimation;
 
     private Action<bool> m_hitEvent;
+    public GameObject[] PositionObject => m_PositionObject;
    
     private bool chargeMax;
     private bool chargeAttackDirection = true;
@@ -58,7 +59,11 @@ public class PlayerAttackController : MonoBehaviour
         m_playerController = GetComponent<CharacterController>();
         m_attackAnimation = GetComponent<Animator>();
 
-        m_PositionObject = new GameObject[4];
+        m_PositionObject = new GameObject[3];
+
+        m_PositionObject[0] = m_arrowPositionObject;
+        m_PositionObject[1] = m_firePositionObject;
+        m_PositionObject[2] = m_bombPositionObject;
     }
 
     private void OnUpdate()
@@ -294,7 +299,6 @@ public class PlayerAttackController : MonoBehaviour
                 m_skillController.Fire(m_bombPositionObject);
                 break;
         }
-
     }
 
     private void LookAtMouse()

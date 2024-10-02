@@ -61,21 +61,24 @@ public class PlayerData : Data
     }
 }
 
-public class BT_BossData : Data
+public class ForestMotherData : Data
 {
     public string ID { get; set; }
     public string Name { get; set; }
     public float Health {  get; set; }
     public float Power { get; set; }
     public float Speed { get; set; }
+    public float VineHealth { get; set; }
 
-    public BT_BossData(string iD, string name, float health, float power, float speed)
+    public ForestMotherData(string iD, string name, float health, 
+        float power, float speed, float vineHealth)
     {
-        ID=iD;
-        Name=name;
-        Health=health;
-        Power=power;
-        Speed=speed;
+        ID = iD;
+        Name = name;
+        Health = health;
+        Power = power;
+        Speed = speed;
+        VineHealth = vineHealth;  
     }
 }
 
