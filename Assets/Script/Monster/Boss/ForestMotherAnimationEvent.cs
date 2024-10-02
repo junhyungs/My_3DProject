@@ -7,6 +7,7 @@ public class ForestMotherAnimationEvent : MonoBehaviour
     private Animator _animator;
 
     private readonly int _slam = Animator.StringToHash("Slam");
+    private readonly int _slamRotation = Animator.StringToHash("SlamRotation");
     private readonly int _spinIdle = Animator.StringToHash("SpinIdle");
     private readonly int _shoot = Animator.StringToHash("Shoot");
 
@@ -15,11 +16,7 @@ public class ForestMotherAnimationEvent : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    public void StartSlam()
-    {
-        _animator.SetTrigger(_slam);
-    }
-
+    #region Lift
     public void UpperWeightZero()
     {
         _animator.SetLayerWeight(1, 0f);
@@ -29,4 +26,16 @@ public class ForestMotherAnimationEvent : MonoBehaviour
     {
         _animator.SetLayerWeight(1, 1f);
     }
+    #endregion
+
+    #region Slam
+    public void LowerWeightZero() => _animator.SetLayerWeight(2, 0f);
+    public void LowerWeight() => _animator.SetLayerWeight(2, 1f);
+    public void StartSlamRotation() => _animator.SetTrigger(_slamRotation);
+    public void StartSlam() => _animator.SetTrigger(_slam);
+    #endregion
+
+    #region Shoot
+
+    #endregion
 }
