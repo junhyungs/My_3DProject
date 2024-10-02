@@ -15,9 +15,6 @@ public class ForestMother : MonoBehaviour, IDamged
     [Header("Material")]
     [SerializeField] private Material _material;
 
-    public GameObject tt;
-    private Vector3 _rotateDirection = Vector3.up;
-
     #region Component
     private Material _copyMaterial;
     private WaitForSeconds _intensityTime = new WaitForSeconds(0.1f);
@@ -37,17 +34,6 @@ public class ForestMother : MonoBehaviour, IDamged
         InitializeForestMother();
         InitializeData();
         InitializeProperty();
-    }
-
-    private void Update()
-    {
-
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            Quaternion rotation = Quaternion.Euler(_rotateDirection);
-
-            tt.transform.rotation = Quaternion.Slerp(tt.transform.rotation, rotation, 10f * Time.deltaTime);
-        }
     }
 
     private void InitializeForestMother()
