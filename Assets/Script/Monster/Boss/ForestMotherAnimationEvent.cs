@@ -10,27 +10,36 @@ public class ForestMotherAnimationEvent : MonoBehaviour
     private readonly int _slamRotation = Animator.StringToHash("SlamRotation");
     private readonly int _spinIdle = Animator.StringToHash("SpinIdle");
     private readonly int _shoot = Animator.StringToHash("Shoot");
+    private readonly int _hyper = Animator.StringToHash("Hyper");
 
     private void Start()
     {
         _animator = GetComponent<Animator>();
     }
 
-    #region Lift
-    public void UpperWeightZero()
+    #region SpinIdle
+    //SpinIdle => Hyper
+    public void StartSpinIdle() => _animator.SetBool(_spinIdle, true);
+    public void StopSpinIdle() => _animator.SetBool(_spinIdle, false);
+    public void ActiveSpinIdle(bool isActive)
     {
-        _animator.SetLayerWeight(1, 0f);
-    }
-
-    public void UpperWeight()
-    {
-        _animator.SetLayerWeight(1, 1f);
+        _animator.SetBool(_spinIdle, isActive);
     }
     #endregion
 
+    #region Hyper
+    //Hyper 시작 -> HyperSpin(Trigger) Hyper 종료 -> Hyper(SetBool(false))
+    public void StartHyper() => _animator.SetBool(_hyper, true);
+    public void StopHyper() => _animator.SetBool(_hyper, false);    
+    #endregion
+
+    #region Lift
+    public void UpperWeightZero() => _animator.SetLayerWeight(1, 0f);
+    public void UpperWeight() => _animator.SetLayerWeight(1, 1f);
+    #endregion
+
     #region Slam
-    public void LowerWeightZero() => _animator.SetLayerWeight(2, 0f);
-    public void LowerWeight() => _animator.SetLayerWeight(2, 1f);
+    //Slam 시작 -> SlamSpin(Trigger)
     public void StartSlamRotation() => _animator.SetTrigger(_slamRotation);
     public void StartSlam() => _animator.SetTrigger(_slam);
     #endregion
