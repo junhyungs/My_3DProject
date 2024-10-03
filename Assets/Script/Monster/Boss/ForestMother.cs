@@ -86,7 +86,7 @@ public class ForestMother : MonoBehaviour, IDamged
         }
     }
 
-    private IEnumerator IntensityChange(float baseValue, float power)
+    public IEnumerator IntensityChange(float baseValue, float power)
     {
         Color currentColor = _copyMaterial.GetColor("_Color");
 

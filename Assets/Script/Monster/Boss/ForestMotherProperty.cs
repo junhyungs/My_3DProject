@@ -1,9 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.Animations.Rigging;
 
 public class ForestMotherProperty
 {
+    public Queue<IMotherPattern> PatternQueue { get; set; }
     public GameObject PlayerObject { get; set; }
     public Transform SoulTransform { get; set; }
     public float CurrentHP { get; set; }
