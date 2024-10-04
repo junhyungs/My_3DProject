@@ -22,14 +22,14 @@ public class Mother_PlayPattern : Action
     {
         _currentPattern = _property.CurrentPattern;
 
-        _currentPattern.InitializePattern(_mother);
+        _currentPattern.OnStart();
     }
 
     public override TaskStatus OnUpdate()
     {
-        _currentPattern.PlayPattern();
+        _currentPattern.OnUpdate();
 
-        if (_currentPattern.IsPlay())
+        if (_currentPattern.IsRunning())
         {
             return TaskStatus.Running;
         }
@@ -39,6 +39,16 @@ public class Mother_PlayPattern : Action
 
     public override void OnEnd()
     {
-        _currentPattern.EndPattern();
+        _currentPattern.OnEnd();
+    }
+
+    public override void OnTriggerEnter(Collider other)
+    {
+        if(_currentPattern is Mother_Hyper)
+        {
+            Mother_Hyper hyper = _currentPattern as Mother_Hyper;
+
+            hyper.Colliding(other);
+        }
     }
 }

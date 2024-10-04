@@ -9,33 +9,13 @@ public class Mother_Initialize : Action
     private ForestMother _mother;
     private ForestMotherProperty _property;
 
-    private bool _initialized;
-
     private TaskStatus _status = TaskStatus.Success;
 
     public override void OnAwake()
     {
         _mother = Owner.gameObject.GetComponent<ForestMother>();
 
-        InitializeMother();
-    }
-
-    public override void OnStart()
-    {
-        if (!_initialized)
-        {
-            List<IMotherPattern> patternList = new List<IMotherPattern>();
-
-            Mother_Slam slamPattern = new Mother_Slam();
-            Mother_SlamSlow slamSlowPattern = new Mother_SlamSlow();
-
-            patternList.Add(slamPattern);
-            patternList.Add(slamSlowPattern);
-
-            _property.PatternList = patternList;
-
-            _initialized = true;
-        }
+        InitializeMother(_mother);
     }
 
     public override TaskStatus OnUpdate()
@@ -43,7 +23,7 @@ public class Mother_Initialize : Action
         return _status;
     }
 
-    private void InitializeMother()
+    private void InitializeMother(ForestMother mother)
     {
         _property = new ForestMotherProperty();
 
@@ -54,6 +34,26 @@ public class Mother_Initialize : Action
         _property.CurrentSpeed = data.Speed;
         _property.PlayerObject = GameManager.Instance.Player;
 
-        _mother.Property = _property;
+        mother.Property = _property;
+
+        InitializePattern(mother, mother.Property);
+    }
+
+    private void InitializePattern(ForestMother mother, ForestMotherProperty property)
+    {
+        List<IMotherPattern> newPatternList = new List<IMotherPattern>
+        {
+            new Mother_Slam(),
+            new Mother_Slam(),
+            new Mother_SlamSlow(),
+            new Mother_Hyper()
+        };
+
+        foreach(var pattern in newPatternList)
+        {
+            pattern.InitializeOnAwake(mother, property);
+        }
+
+        property.PatternList = newPatternList;
     }
 }

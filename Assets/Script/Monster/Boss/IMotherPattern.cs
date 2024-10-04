@@ -4,8 +4,10 @@ using UnityEngine;
 
 public interface IMotherPattern
 {
-    public void InitializePattern(ForestMother mother);
-    public void PlayPattern();
-    public void EndPattern();
-    public bool IsPlay();
+    public void InitializeOnAwake(ForestMother mother, 
+        ForestMotherProperty property);
+    public void OnStart();
+    public void OnUpdate();
+    public void OnEnd();
+    public bool IsRunning();
 }

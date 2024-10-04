@@ -85,6 +85,8 @@ public class ArrowObject : ProjectileObject
 
     private void ReturnArrow()
     {
+        m_projectileRigidbody.velocity = Vector3.zero;
+
         ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.PlayerArrow);
     }
 

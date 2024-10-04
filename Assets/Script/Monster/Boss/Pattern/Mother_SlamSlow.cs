@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-public class Mother_SlamSlow : IMotherPattern
+public class Mother_SlamSlow : Mother, IMotherPattern
 {
-    private ForestMother _mother;
-    private ForestMotherProperty _property;
-    private Animator _animator;
-
     private Rig _motherRig;
+    private Transform _playerTransform;
+    private WaitForSeconds _rotateDelayTime;
 
     private Vector3 _rotateDirection;
+    private Vector3 _directionToPlayer;
 
-    private readonly int _slamSlow = Animator.StringToHash("SlamSlow");
-    private readonly int _startSlow = Animator.StringToHash("Slow");
-
+    private float _currentAngle;
     private float _startTime;
     private float _currentTime;
     private float _maxRotationTime = 5f;
@@ -23,47 +20,29 @@ public class Mother_SlamSlow : IMotherPattern
 
     private bool _rotation;
 
-    public void InitializePattern(ForestMother mother)
+    public void InitializeOnAwake(ForestMother mother, ForestMotherProperty property)
     {
-        Debug.Log("SlamSlow √ ±‚»≠");
-        if(_mother == null)
-        {
-            _mother = mother;
-            _property = _mother.Property;
+        _mother = mother;
+        _property = property;
+        _animator = mother.GetComponent<Animator>();
+        _motherRig = mother.transform.GetComponentInChildren<Rig>();
+        _rotateDelayTime = new WaitForSeconds(0.5f);
+    }
 
-            _motherRig = _mother.transform.GetComponentInChildren<Rig>();
-            _animator = _mother.GetComponent<Animator>();
-        }
-
+    public void OnStart()
+    {
         _property.IsPlaying = true;
 
         _motherRig.weight = 0f;
 
-        _animator.SetTrigger(_slamSlow);
+        _animator.SetTrigger(_slamSlowTrigger);
 
-        _animator.SetBool(_startSlow, true);
+        _animator.SetBool(_slamSlowBool, true);
 
-        Transform playerTransform = _property.PlayerObject.transform;
-
-        Vector3 direction = playerTransform.position - _mother.transform.position;
-
-        float angle = Vector3.SignedAngle(_mother.transform.forward, direction, Vector3.up);
-
-        if(angle > 0)
-        {
-            _rotateDirection = Vector3.up;
-        }
-        else
-        {
-            _rotateDirection = Vector3.down;
-        }
-
-        _startTime = Time.time;
-
-        _mother.StartCoroutine(RotationDelay());
+        RotateDirection();
     }
 
-    public bool IsPlay()
+    public bool IsRunning()
     {
         bool isPlaying = _property.IsPlaying;
         
@@ -75,7 +54,7 @@ public class Mother_SlamSlow : IMotherPattern
         return false;
     }
 
-    public void PlayPattern()
+    public void OnUpdate()
     {
         if (_rotation)
         {
@@ -90,12 +69,12 @@ public class Mother_SlamSlow : IMotherPattern
             }
             else
             {
-                _animator.SetBool(_startSlow, false);
+                _animator.SetBool(_slamSlowBool, false);
             }
         }
     }
 
-    public void EndPattern()
+    public void OnEnd()
     {
         _startTime = 0f;
 
@@ -117,9 +96,31 @@ public class Mother_SlamSlow : IMotherPattern
             return stateInfo.IsName("Slam_slow_idle");
         });
 
-        yield return new WaitForSeconds(0.5f);
+        yield return _rotateDelayTime;
 
         _rotation = true;
+    }
+
+    private void RotateDirection()
+    {
+        _playerTransform = _property.PlayerObject.transform;
+
+        _directionToPlayer = _playerTransform.position - _mother.transform.position;
+
+        _currentAngle = Vector3.SignedAngle(_mother.transform.forward, _directionToPlayer, Vector3.up);
+
+        if (_currentAngle > 0)
+        {
+            _rotateDirection = Vector3.up;
+        }
+        else
+        {
+            _rotateDirection = Vector3.down;
+        }
+
+        _startTime = Time.time;
+
+        _mother.StartCoroutine(RotationDelay());
     }
 
 }

@@ -16,7 +16,6 @@ public class SlamSlowStateBehaviour : StateMachineBehaviour
 
         if (stateInfo.IsName(_slam_slow_idle))
         {
-            Debug.Log("코루틴 동작");
             _mother.StartCoroutine(OnSpinIdleAnimation(true));
         }
     }
