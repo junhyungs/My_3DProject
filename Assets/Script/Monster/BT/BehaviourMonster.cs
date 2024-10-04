@@ -77,6 +77,19 @@ public class BehaviourMonster : MonoBehaviour
         _copyMaterial.SetColor("_Color", currentColor);
     }
 
+    public IEnumerator Test(float baseValue, float power)
+    {
+        Color currentColor = _copyMaterial.GetColor("_Color");
+
+        Color intensityUpColor = currentColor * Mathf.Pow(baseValue, power);
+
+        _copyMaterial.SetColor("_Color", intensityUpColor);
+
+        yield return _intensityTime;
+
+        _copyMaterial.SetColor("_Color", currentColor);
+    }
+
     public void Die(Transform soulTransform, Action objectEvent = null)
     {
         if (_isSpawn)

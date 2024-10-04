@@ -4,7 +4,8 @@ using UnityEngine;
 
 public interface IMotherPattern
 {
-    public void InitialzePattern(ForestMother mother);
+    public void InitializePattern(ForestMother mother);
     public void PlayPattern();
+    public void EndPattern();
     public bool IsPlay();
 }

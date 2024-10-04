@@ -6,8 +6,6 @@ using UnityEngine.Animations.Rigging;
 
 public class ForestMother : MonoBehaviour, IDamged
 {
-    [Header("SoulPosition")]
-    [SerializeField] private Transform _soulTransform;
     [Header("SkinnedMeshRenderer")]
     [SerializeField] private SkinnedMeshRenderer[] _skinnedMeshRenderer;
     [Header("LowerBodyMesh")]
@@ -18,22 +16,21 @@ public class ForestMother : MonoBehaviour, IDamged
     #region Component
     private Material _copyMaterial;
     private WaitForSeconds _intensityTime = new WaitForSeconds(0.1f);
-    private ForestMotherProperty _property;
     private Animator _animator;
-    public ForestMotherProperty Property => _property;
-    #endregion
-
-    #region Value
-    private float _currentHp;
-    private float _currentSpeed;
-    private float _currentPower;
+    public ForestMotherProperty Property { get; set; }
     #endregion
 
     private void Start()
     {
         InitializeForestMother();
-        InitializeData();
-        InitializeProperty();
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Property.isStunned = true;
+        }
     }
 
     private void InitializeForestMother()
@@ -41,25 +38,6 @@ public class ForestMother : MonoBehaviour, IDamged
         _animator = gameObject.GetComponent<Animator>();
 
         SetMaterial();
-    }
-
-    private void InitializeData()
-    {
-        var data = BossManager.Instance.MotherData;
-
-        _currentHp = data.Health;
-        _currentSpeed = data.Speed;
-        _currentPower = data.Power;
-    }
-
-    private void InitializeProperty()
-    {
-        _property = new ForestMotherProperty();
-
-        _property.CurrentHP = _currentHp;
-        _property.CurrentSpeed = _currentSpeed;
-        _property.CurrentPower = _currentPower;
-        _property.SoulTransform = _soulTransform;
     }
 
     private void SetMaterial()
@@ -76,11 +54,11 @@ public class ForestMother : MonoBehaviour, IDamged
 
     public void TakeDamage(float damage)
     {
-        _currentHp -= damage;
+        Property.CurrentHP -= damage;
 
         SkillManager.Instance.SkillCount++;
 
-        if (_currentHp > 0)
+        if (Property.CurrentHP > 0)
         {
             StartCoroutine(IntensityChange(2f, 3f));
         }
@@ -99,10 +77,8 @@ public class ForestMother : MonoBehaviour, IDamged
         _copyMaterial.SetColor("_Color", currentColor);
     }
 
-    public void Die(Transform soulTransform)
+    public void Die()
     {
-        MonsterSoul(soulTransform);
-
         this.gameObject.layer = LayerMask.NameToLayer("DeadMonster");
 
         _animator.SetTrigger("Die");
@@ -124,14 +100,5 @@ public class ForestMother : MonoBehaviour, IDamged
 
             yield return null;
         }
-    }
-
-    private void MonsterSoul(Transform soulTransform)
-    {
-        GameObject soul = ObjectPool.Instance.DequeueObject(ObjectName.Soul);
-        DropSoul component = soul.GetComponent<DropSoul>();
-        soul.transform.position = soulTransform.position;
-        soul.SetActive(true);
-        component.StartCoroutine(component.Fly());
     }
 }

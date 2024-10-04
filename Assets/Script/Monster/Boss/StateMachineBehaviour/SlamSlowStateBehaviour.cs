@@ -8,23 +8,27 @@ public class SlamSlowStateBehaviour : StateMachineBehaviour
     private ForestMother _mother;
     private ForestMotherAnimationEvent _animationEvent;
 
-    private const string _slam_slowRotation = "Slam_slowRotation";
+    private const string _slam_slow_idle = "Slam_slow_idle";
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         GetMotherComponent(animator);
 
-        _mother.StartCoroutine(OnSpinIdleAnimation(stateInfo, true));
-    }
-
-    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        //TODO 여기서 코드로 회전시켜도 될 것 같음. 고려해봅시다.
+        if (stateInfo.IsName(_slam_slow_idle))
+        {
+            Debug.Log("코루틴 동작");
+            _mother.StartCoroutine(OnSpinIdleAnimation(true));
+        }
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        SpinIdleAnimation(stateInfo, false);
+        if (stateInfo.IsName(_slam_slow_idle))
+        {
+            _mother.Property.IsPlaying = false;
+
+            SpinIdleAnimation(false);
+        }
     }
 
     private void GetMotherComponent(Animator animator)
@@ -36,18 +40,15 @@ public class SlamSlowStateBehaviour : StateMachineBehaviour
         }
     }
 
-    private IEnumerator OnSpinIdleAnimation(AnimatorStateInfo stateInfo, bool isActive)
+    private IEnumerator OnSpinIdleAnimation(bool isActive)
     {
         yield return new WaitForSeconds(0.5f);
 
-        SpinIdleAnimation(stateInfo, isActive);
+        SpinIdleAnimation(isActive);
     }
 
-    private void SpinIdleAnimation(AnimatorStateInfo stateInfo, bool isActive)
+    private void SpinIdleAnimation(bool isActive)
     {
-        if (stateInfo.IsName(_slam_slowRotation))
-        {
-            _animationEvent.ActiveSpinIdle(isActive);
-        }
+        _animationEvent.ActiveSpinIdle(isActive);
     }
 }

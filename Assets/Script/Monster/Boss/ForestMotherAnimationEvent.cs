@@ -21,10 +21,7 @@ public class ForestMotherAnimationEvent : MonoBehaviour
     //SpinIdle => Hyper
     public void StartSpinIdle() => _animator.SetBool(_spinIdle, true);
     public void StopSpinIdle() => _animator.SetBool(_spinIdle, false);
-    public void ActiveSpinIdle(bool isActive)
-    {
-        _animator.SetBool(_spinIdle, isActive);
-    }
+    public void ActiveSpinIdle(bool isActive) => _animator.SetBool(_spinIdle, isActive);
     #endregion
 
     #region Hyper
