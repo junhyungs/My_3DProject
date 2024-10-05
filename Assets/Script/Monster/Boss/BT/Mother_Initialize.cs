@@ -32,6 +32,7 @@ public class Mother_Initialize : Action
         _property.CurrentHP = data.Health;
         _property.CurrentPower = data.Power;
         _property.CurrentSpeed = data.Speed;
+        _property.DownHealth = data.DownHealth;
         _property.PlayerObject = GameManager.Instance.Player;
 
         mother.Property = _property;
@@ -44,9 +45,8 @@ public class Mother_Initialize : Action
         List<IMotherPattern> newPatternList = new List<IMotherPattern>
         {
             new Mother_Slam(),
-            new Mother_Slam(),
-            new Mother_SlamSlow(),
-            new Mother_Hyper()
+            new Mother_Hyper(),
+            new Mother_Lift()
         };
 
         foreach(var pattern in newPatternList)

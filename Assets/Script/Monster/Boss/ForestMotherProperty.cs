@@ -12,4 +12,5 @@ public class ForestMotherProperty
     public float CurrentHP { get; set; }
     public float CurrentSpeed { get; set; }
     public float CurrentPower { get; set; }
+    public float DownHealth { get; set; }
 }

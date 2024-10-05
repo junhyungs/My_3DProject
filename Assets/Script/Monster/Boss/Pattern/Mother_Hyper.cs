@@ -1,3 +1,4 @@
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,18 +20,15 @@ public class Mother_Hyper : Mother, IMotherPattern
     private int _collidingCount;
     private float _rotationSpeed;
     private bool _rotation;
+    private bool _isEnd;
 
     public void InitializeOnAwake(ForestMother mother, ForestMotherProperty property)
     {
-        _mother = mother;
-        _property = property;
-        _animator = mother.GetComponent<Animator>();
-        _agent = mother.GetComponent<NavMeshAgent>();
-        _motherCollider = mother.GetComponent<CapsuleCollider>();
-        _motherRig = mother.transform.GetComponentInChildren<Rig>();
+        GetComponent(mother, property);
+
         _hyperDelayTime = new WaitForSeconds(0.5f);
-        
         _agent.speed = _property.CurrentSpeed;
+        _agent.updateRotation = false;
         _myPosition = mother.transform.position;    
         _collidingCount = 0;
         _rotationSpeed = 360f;
@@ -55,21 +53,32 @@ public class Mother_Hyper : Mother, IMotherPattern
 
     public void OnUpdate()
     {
-        RotateHyper();
-
         if (_collidingCount > 2)
         {
             _agent.SetDestination(_myPosition);
 
             float distance = Vector3.Distance(_mother.transform.position, _myPosition);
 
-            if (distance <= 0.1f)
+            if (distance <= 0.1f && !_isEnd)
             {
+                _rotation = false;
+
                 _animator.SetBool(_hyperBool, false);
 
-                _property.IsPlaying = false;
+                _mother.StartCoroutine(EndAnimation());
             }
         }
+
+        RotateHyper();
+    }
+
+    private IEnumerator EndAnimation()
+    {
+        _isEnd = true;
+
+        yield return new WaitForSeconds(2.0f);
+
+        _property.IsPlaying = false;
     }
 
     public bool IsRunning()
@@ -88,9 +97,21 @@ public class Mother_Hyper : Mother, IMotherPattern
     {
         _collidingCount = 0;
 
-        _rotation = false;
-
         _motherCollider.isTrigger = false;
+
+        _motherRig.weight = 1f;
+
+        _isEnd = false;
+    }
+
+    private void GetComponent(ForestMother mother, ForestMotherProperty property)
+    {
+        _mother = mother;
+        _property = property;
+        _animator = mother.GetComponent<Animator>();
+        _agent = mother.GetComponent<NavMeshAgent>();
+        _motherCollider = mother.GetComponent<CapsuleCollider>();
+        _motherRig = mother.transform.GetComponentInChildren<Rig>();
     }
 
     private IEnumerator HyperDelay(Vector3 movePosition)
@@ -107,7 +128,7 @@ public class Mother_Hyper : Mother, IMotherPattern
         yield return _hyperDelayTime;
 
         _rotation = true;
-        _agent.updateRotation = false;
+        
         _agent.SetDestination(movePosition);
     }
 
@@ -140,7 +161,7 @@ public class Mother_Hyper : Mother, IMotherPattern
         Vector3 rayPosition = _mother.transform.position + new Vector3(0f, 0.5f, 0f);
 
         RaycastHit[] hits = Physics.RaycastAll(rayPosition, rayDirection, 50f, LayerMask.GetMask("Wall"));
-        Debug.DrawRay(rayPosition, rayDirection, Color.red);
+
         if(hits.Length > 0)
         {
             float backDistance = 2f;

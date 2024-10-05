@@ -69,9 +69,10 @@ public class ForestMotherData : Data
     public float Power { get; set; }
     public float Speed { get; set; }
     public float VineHealth { get; set; }
+    public float DownHealth { get; set; }
 
     public ForestMotherData(string iD, string name, float health, 
-        float power, float speed, float vineHealth)
+        float power, float speed, float vineHealth, float downHealth)
     {
         ID = iD;
         Name = name;
@@ -79,6 +80,7 @@ public class ForestMotherData : Data
         Power = power;
         Speed = speed;
         VineHealth = vineHealth;  
+        DownHealth = downHealth;
     }
 }
 

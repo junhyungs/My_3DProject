@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,10 @@ public class BossManager : Singleton<BossManager>
 {
     private ForestMotherData _data;
     public ForestMotherData MotherData => _data;
+
+    #region interface
+    private List<ISendVineEvent> _vineEvent;
+    #endregion
 
     private void Start()
     {
@@ -22,5 +27,23 @@ public class BossManager : Singleton<BossManager>
 
         var data = DataManager.Instance.GetData(id) as ForestMotherData;
         _data = data;
+    }
+
+    public void RegisetVine(ISendVineEvent vineEvent)
+    {
+        if(_vineEvent == null)
+        {
+            _vineEvent  = new List<ISendVineEvent>();
+        }
+
+        _vineEvent.Add(vineEvent);
+    }
+
+    public void AddVineEvent(Action<Vine, float> callBack, bool isRegistered)
+    {
+        foreach(var vine in  _vineEvent)
+        {
+            vine.AddVineEvent(callBack, isRegistered);
+        }
     }
 }

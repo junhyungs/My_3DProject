@@ -9,7 +9,7 @@ public enum Vine
     Right
 }
 
-public class ForestMotherVine : MonoBehaviour, IDamged
+public class ForestMotherVine : MonoBehaviour, IDamged, ISendVineEvent
 {
     [Header("VineType")]
     [SerializeField] private Vine _vineType;
@@ -24,7 +24,12 @@ public class ForestMotherVine : MonoBehaviour, IDamged
 
     private float _currentVineHealth;
     private float _vineHealth;
-    
+
+    private void OnEnable()
+    {
+        BossManager.Instance.RegisetVine(this);
+    }
+
     void Start()
     {
         InitializeVine();
@@ -56,7 +61,7 @@ public class ForestMotherVine : MonoBehaviour, IDamged
     public void TakeDamage(float damage)
     {
         _currentVineHealth -= damage;
-
+        
         if(_currentVineHealth >= 0)
         {
             _sendVine?.Invoke(_vineType, _currentVineHealth);
@@ -81,5 +86,17 @@ public class ForestMotherVine : MonoBehaviour, IDamged
         yield return _intensityTime;
 
         _copyMaterial.SetColor("_Color", currentColor);
+    }
+
+    public void AddVineEvent(Action<Vine, float> callBack, bool isRegistered)
+    {
+        if (isRegistered)
+        {
+            _sendVine += callBack;
+        }
+        else
+        {
+            _sendVine -= callBack;
+        }
     }
 }

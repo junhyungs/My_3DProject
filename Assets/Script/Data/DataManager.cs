@@ -96,8 +96,9 @@ public class DataManager
                 float power = ParseFloat(item["Power"]);
                 float speed = ParseFloat(item["Speed"]);
                 float vineHealth = ParseFloat(item["VineHealth"]);
+                float downHealth = ParseFloat(item["DownHealth"]);
 
-                ForestMotherData data = new ForestMotherData(id, name, health, power, speed, vineHealth);
+                ForestMotherData data = new ForestMotherData(id, name, health, power, speed, vineHealth, downHealth);
 
                 _dataDictionary.Add(id, data);
             }
