@@ -1,27 +1,27 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Mother_Lift : Mother, IMotherPattern
 {
-    private float _currentTime;
-    private float _startTime;
-    private float _maxTime;
-    private float _overlapRadius;
-    private float _startShootTime;
-    private float _shootTime;
-    private float _currentShootTime;
+    private CapsuleCollider _motherCollider;
 
+    private float _currentLiftTime;
+    private float _startLiftTime;
+    private float _maxLiftTime;
+    
     private bool _startLift;
+    private bool _clear;
+    private bool _canShoot;
 
     public void InitializeOnAwake(ForestMother mother, ForestMotherProperty property)
     {
         _mother = mother;
         _property = property;
         _animator = mother.GetComponent<Animator>();
+        _motherCollider = mother.GetComponent<CapsuleCollider>();
 
-        _maxTime = 20f;
-        _shootTime = 3f;
+        _maxLiftTime = 20f;
+        _canShoot = true;
     }
 
     public void OnStart()
@@ -37,29 +37,20 @@ public class Mother_Lift : Mother, IMotherPattern
 
     public void OnUpdate()
     {
-        if (_startLift)
+        if (_startLift && !_clear)
         {
-            _currentTime = Time.time;
+            _currentLiftTime = Time.time;
 
-            if (_currentTime - _startTime > _maxTime)
+            if (_currentLiftTime - _startLiftTime > _maxLiftTime)
             {
-                
-                Collider[] colliders = Physics.OverlapSphere(_mother.transform.position, _overlapRadius,
-                    LayerMask.GetMask("Player"));
-
-                if(colliders.Length > 0)
-                {
-                    IDamged hit = colliders[0].gameObject.GetComponent<IDamged>();
-
-                    hit.TakeDamage(3f);
-                }
-                
                 _animator.SetTrigger(_liftFailTrigger);
 
-                _mother.StartCoroutine(ChangeDelay());
-
                 _startLift = false;
+
+                _mother.StartCoroutine(ChangeDelay());
             }
+
+            MotherShoot();
         }
     }
 
@@ -79,6 +70,10 @@ public class Mother_Lift : Mother, IMotherPattern
     {
         _startLift = false;
 
+        _canShoot = true;
+
+        _clear = false;
+
         BossManager.Instance.AddVineEvent(ReceiveVine, false);
     }
 
@@ -95,43 +90,34 @@ public class Mother_Lift : Mother, IMotherPattern
 
         _startLift = true;
 
-        _startTime = Time.time;
-
-        _mother.StartCoroutine(Shoot());
+        _startLiftTime = Time.time;
     }
 
-    private IEnumerator Shoot()
+    private void MotherShoot()
     {
-        _startShootTime = Time.time;
-
-        yield return new WaitWhile(() =>
+        if(_canShoot)
         {
-            _currentShootTime = Time.time;
+            _animator.SetTrigger(_shootTrigger);
 
-            int layerIndex = _animator.GetLayerIndex("BaseLayer");
+            _mother.StartCoroutine(CanShoot());
+        }
+    }
 
-            var stateInfo = _animator.GetCurrentAnimatorStateInfo(layerIndex);
+    private IEnumerator CanShoot()
+    {
+        _canShoot = false;
 
-            if(_currentShootTime - _startShootTime > _shootTime)
-            {
-                _animator.SetTrigger(_shootTrigger);
-            }
+        yield return new WaitForSeconds(8f);
 
-            return stateInfo.IsName("LiftIdle");
-        });
-
-        _animator.ResetTrigger(_shootTrigger);
-
-        _startShootTime = 0f;
-        _currentShootTime = 0f;
+        _canShoot = true;
     }
 
     public void ReceiveVine(Vine vineType, float currentHealth)
     {
-        Debug.Log(vineType);
-        Debug.Log(currentHealth);
         if(currentHealth == _property.DownHealth)
         {
+            _clear = true;
+
             LiftDamageAnimation(vineType, true);
         }
 
