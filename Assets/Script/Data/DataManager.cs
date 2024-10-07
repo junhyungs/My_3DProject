@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
@@ -50,6 +51,9 @@ public class DataManager
                 break;
             case nameof(JsonName.PrefabPath):
                 ReadPrefabPathData(jsonData);
+                break;
+            case nameof(JsonName.BossProjectile):
+                ReadForestMotherProjectileData(jsonData);
                 break;
         }
     }
@@ -106,6 +110,43 @@ public class DataManager
         catch(JsonException ex)
         {
             Debug.Log("<Boss> 데이터를 변환하지 못했습니다.");
+        }
+    }
+
+    private void ReadForestMotherProjectileData(string jsonData)
+    {
+        try
+        {
+            JArray jsonArray = JArray.Parse(jsonData);
+
+            foreach(var item in jsonArray)
+            {
+                string id = item["ID"] != null ? item["ID"].ToString() : string.Empty;
+                float forcePower = ParseFloat(item["ForcePower"]);
+                float sphereRadius = ParseFloat(item["SphereRadius"]);
+                float damage = ParseFloat(item["Damage"]);
+
+                string replace = Regex.Replace(item["LayerList"].ToString(), "[{}\"]", "");
+                string[] replaceArray = replace.Split('/');
+
+                List<int>layerList = new List<int>();
+
+                for(int i = 0; i < replaceArray.Length; i++)
+                {
+                    int layer = LayerMask.NameToLayer(replaceArray[i].Trim());
+
+                    layerList.Add(layer);
+                }
+
+                ForestMotherProjectileData data = new ForestMotherProjectileData(id,forcePower,
+                    sphereRadius, damage, layerList);
+
+                _dataDictionary.Add(id, data);
+            }
+        }
+        catch(JsonException ex)
+        {
+            Debug.Log("<BossProjectile> 데이터를 변환하지 못했습니다.");
         }
     }
 

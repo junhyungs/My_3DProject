@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Animations.Rigging;
 
 public class Mother
 {
@@ -9,6 +10,7 @@ public class Mother
     protected ForestMotherProperty _property;
     protected Animator _animator;
     protected NavMeshAgent _agent;
+    protected Rig _motherRig;
 
     protected readonly int _slamTrigger = Animator.StringToHash("SlamSpin");
     protected readonly int _slamSlowTrigger = Animator.StringToHash("SlamSlow");

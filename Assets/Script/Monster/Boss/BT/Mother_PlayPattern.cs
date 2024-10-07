@@ -8,12 +8,14 @@ public class Mother_PlayPattern : Action
 {
     private ForestMother _mother;
     private ForestMotherProperty _property;
+    private ForestMotherVine _vine;
 
     private IMotherPattern _currentPattern;
 
     public override void OnAwake()
     {
         _mother = Owner.gameObject.GetComponent<ForestMother>();
+        _vine = _mother.transform.GetComponentInChildren<ForestMotherVine>();
 
         _property = _mother.Property;
     }

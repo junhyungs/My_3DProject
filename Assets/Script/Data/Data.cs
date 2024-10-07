@@ -84,6 +84,24 @@ public class ForestMotherData : Data
     }
 }
 
+public class ForestMotherProjectileData : Data
+{
+    public string ID { get; set; }
+    public float ForcePower { get; set; }
+    public float SphereRadius { get; set; }
+    public float Damage { get; set; }
+    public List<int> LayerList { get; set; }
+    public ForestMotherProjectileData(string iD, float forcePower, float sphereRadius,
+        float damage, List<int> layerList)
+    {
+        ID = iD;
+        ForcePower = forcePower;
+        SphereRadius = sphereRadius;
+        Damage = damage;
+        LayerList = layerList;
+    }
+}
+
 public class PlayerSkillData : Data
 {
     public string ID { get; set; }

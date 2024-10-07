@@ -19,7 +19,8 @@ public enum JsonName
     Player,
     PlayerSkill,
     PlayerWeapon,
-    PrefabPath
+    PrefabPath,
+    BossProjectile
 }
 
 public enum PlayerWeapon
@@ -53,6 +54,7 @@ public enum ObjectName
     OldCrowSegment,
     GhoulArrow,
     DekuProjectile,
+    MotherProjectile,
 
     Bat,
     Mage,
@@ -66,4 +68,10 @@ public enum ObjectName
     LadderUI,
 
     Null
+}
+
+public enum VineType
+{
+    Right,
+    Left,
 }

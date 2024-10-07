@@ -5,7 +5,6 @@ using UnityEngine.Animations.Rigging;
 
 public class Mother_SlamSlow : Mother, IMotherPattern
 {
-    private Rig _motherRig;
     private Transform _playerTransform;
     private WaitForSeconds _rotateDelayTime;
 
@@ -15,7 +14,7 @@ public class Mother_SlamSlow : Mother, IMotherPattern
     private float _currentAngle;
     private float _startTime;
     private float _currentTime;
-    private float _maxRotationTime = 5f;
+    private float _maxRotationTime = 10f;
     private float _rotationSpeed = 30f;
 
     private bool _rotation;
@@ -25,15 +24,12 @@ public class Mother_SlamSlow : Mother, IMotherPattern
         _mother = mother;
         _property = property;
         _animator = mother.GetComponent<Animator>();
-        _motherRig = mother.transform.GetComponentInChildren<Rig>();
         _rotateDelayTime = new WaitForSeconds(0.5f);
     }
 
     public void OnStart()
     {
         _property.IsPlaying = true;
-
-        _motherRig.weight = 0f;
 
         _animator.SetTrigger(_slamSlowTrigger);
 
@@ -79,8 +75,6 @@ public class Mother_SlamSlow : Mother, IMotherPattern
         _startTime = 0f;
 
         _currentTime = 0f;
-
-        _motherRig.weight = 1f;
 
         _rotation = false;
     }

@@ -45,6 +45,8 @@ public class Mother_Initialize : Action
         List<IMotherPattern> newPatternList = new List<IMotherPattern>
         {
             new Mother_Slam(),
+            new Mother_Slam(),
+            new Mother_SlamSlow(),
             new Mother_Hyper(),
             new Mother_Lift()
         };

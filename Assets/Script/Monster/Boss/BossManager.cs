@@ -6,7 +6,9 @@ using UnityEngine;
 public class BossManager : Singleton<BossManager>
 {
     private ForestMotherData _data;
+    private ForestMotherProjectileData _projectileData;
     public ForestMotherData MotherData => _data;
+    public ForestMotherProjectileData ProjectileData => _projectileData;
 
     #region interface
     private List<ISendVineEvent> _vineEvent;
@@ -15,6 +17,7 @@ public class BossManager : Singleton<BossManager>
     private void Start()
     {
         StartCoroutine(LoadMotherData("B101"));
+        StartCoroutine(LoadMotherProjectileData("BP101"));
     }
 
     private IEnumerator LoadMotherData(string id)
@@ -29,6 +32,22 @@ public class BossManager : Singleton<BossManager>
         _data = data;
     }
 
+    private IEnumerator LoadMotherProjectileData(string id)
+    {
+        yield return new WaitWhile(() =>
+        {
+            Debug.Log("ForestMotherProjectile 데이터를 가져오지 못했습니다.");
+            return DataManager.Instance.GetData(id) == null;
+        });
+
+        var data = DataManager.Instance.GetData(id) as ForestMotherProjectileData;
+
+        _projectileData = data;
+
+        ObjectPool.Instance.CreatePool(ObjectName.MotherProjectile, 10);
+    }
+
+    #region SendVine
     public void RegisetVine(ISendVineEvent vineEvent)
     {
         if(_vineEvent == null)
@@ -46,4 +65,5 @@ public class BossManager : Singleton<BossManager>
             vine.AddVineEvent(callBack, isRegistered);
         }
     }
+    #endregion
 }

@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Animations.Rigging;
 
 public class ForestMother : MonoBehaviour, IDamged
 {
@@ -20,7 +17,7 @@ public class ForestMother : MonoBehaviour, IDamged
     public ForestMotherProperty Property { get; set; }
     #endregion
 
-    private void Start()
+    private void Awake()
     {
         InitializeForestMother();
     }

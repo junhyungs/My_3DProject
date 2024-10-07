@@ -11,7 +11,6 @@ public class Mother_Hyper : Mother, IMotherPattern
     private Transform _playerTransform;
     private CapsuleCollider _motherCollider;
     private WaitForSeconds _hyperDelayTime;
-    private Rig _motherRig;
 
     private Vector3 _movePosition;
     private Vector3 _myPosition;
@@ -38,17 +37,13 @@ public class Mother_Hyper : Mother, IMotherPattern
     {
         _property.IsPlaying = true;
 
-        _motherRig.weight = 0f;
-
         _playerTransform = _property.PlayerObject.transform;
 
         _motherCollider.isTrigger = true;        
 
         _animator.SetTrigger(_hyperTrigger);
 
-        _movePosition = MoveToPlayer(_playerTransform);
-
-        _mother.StartCoroutine(HyperDelay(_movePosition));
+        _mother.StartCoroutine(HyperDelay());
     }
 
     public void OnUpdate()
@@ -99,8 +94,6 @@ public class Mother_Hyper : Mother, IMotherPattern
 
         _motherCollider.isTrigger = false;
 
-        _motherRig.weight = 1f;
-
         _isEnd = false;
     }
 
@@ -114,7 +107,7 @@ public class Mother_Hyper : Mother, IMotherPattern
         _motherRig = mother.transform.GetComponentInChildren<Rig>();
     }
 
-    private IEnumerator HyperDelay(Vector3 movePosition)
+    private IEnumerator HyperDelay()
     {
         yield return new WaitUntil(() =>
         {
@@ -128,8 +121,10 @@ public class Mother_Hyper : Mother, IMotherPattern
         yield return _hyperDelayTime;
 
         _rotation = true;
-        
-        _agent.SetDestination(movePosition);
+
+        _movePosition = MoveToPlayer(_playerTransform);
+
+        _agent.SetDestination(_movePosition);
     }
 
     public void Colliding(Collider other)

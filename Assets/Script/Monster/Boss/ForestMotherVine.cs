@@ -1,12 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 
 public enum Vine
 {
     Left,
-    Right
+    Right,
+    Null
 }
 
 public class ForestMotherVine : MonoBehaviour, IDamged, ISendVineEvent
@@ -15,12 +15,12 @@ public class ForestMotherVine : MonoBehaviour, IDamged, ISendVineEvent
     [SerializeField] private Vine _vineType;
     [Header("VineSkinnedMeshRenderer")]
     [SerializeField] private SkinnedMeshRenderer _skinnedMeshRenderer;
-    [Header("Material")]
-    [SerializeField] private Material _material;
 
-    private Material _copyMaterial;
     private WaitForSeconds _intensityTime;
     private Action<Vine, float> _sendVine;
+    private CapsuleCollider _vineCollider;
+    private Material _saveMaterial;
+    private Material _newMaterial;
 
     private float _currentVineHealth;
     private float _vineHealth;
@@ -38,8 +38,10 @@ public class ForestMotherVine : MonoBehaviour, IDamged, ISendVineEvent
     private void InitializeVine()
     {       
         _intensityTime = new WaitForSeconds(0.1f);
+        _vineCollider = GetComponent<CapsuleCollider>();
+        _newMaterial = new Material(_skinnedMeshRenderer.sharedMaterial);
 
-        GetVineHealthData();        
+        GetVineHealthData();
     }
 
     private void GetVineHealthData()
@@ -51,13 +53,6 @@ public class ForestMotherVine : MonoBehaviour, IDamged, ISendVineEvent
         _currentVineHealth = _vineHealth;
     }
 
-    public void SetMaterial()
-    {
-        _copyMaterial = Instantiate(_material);
-
-        _skinnedMeshRenderer.material = _copyMaterial;
-    }
-
     public void TakeDamage(float damage)
     {
         _currentVineHealth -= damage;
@@ -66,26 +61,40 @@ public class ForestMotherVine : MonoBehaviour, IDamged, ISendVineEvent
         {
             _sendVine?.Invoke(_vineType, _currentVineHealth);
 
-            IntensityChange(2f, 3f);
+            StartCoroutine(IntensityChange(2f, 3f));
 
-            if(_currentVineHealth == 0)
+            if (_currentVineHealth == 0)
             {
                 _currentVineHealth = _vineHealth;
             }
         }
     }
 
+    public void SaveMaterial()
+    {
+        _saveMaterial = _skinnedMeshRenderer.sharedMaterial;
+    }
+
+    public void EnabledCollider(bool enabled)
+    {
+        _vineCollider.enabled = enabled;
+    }
+
     private IEnumerator IntensityChange(float baseValue, float power)
     {
-        Color currentColor = _copyMaterial.GetColor("_Color");
+        _skinnedMeshRenderer.material = _newMaterial;
 
+        Color currentColor = _newMaterial.GetColor("_Color");
+        
         Color intensityUpColor = currentColor * Mathf.Pow(baseValue, power);
 
-        _copyMaterial.SetColor("_Color", intensityUpColor);
+        _newMaterial.SetColor("_Color", intensityUpColor);
 
         yield return _intensityTime;
 
-        _copyMaterial.SetColor("_Color", currentColor);
+        _newMaterial.SetColor("_Color", currentColor);
+
+        _skinnedMeshRenderer.material = _saveMaterial;
     }
 
     public void AddVineEvent(Action<Vine, float> callBack, bool isRegistered)

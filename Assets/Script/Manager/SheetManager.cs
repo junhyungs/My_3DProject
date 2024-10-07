@@ -9,6 +9,7 @@ public class SheetManager : MonoBehaviour
 {
     const string _monsterDataPath = "https://script.google.com/macros/s/AKfycbwQFqkt8VSFxyAAm-WVklWQJeC7Qe83SDwx-eVLxMRov16002ukbPQRpOPWiM1otWmOtQ/exec";
     const string _bossDataPath = "https://script.google.com/macros/s/AKfycbxW6S5vqRPWTEODXXg5wH8YMeCL8bcQtxoZYEIgMDhFCZy1oEtTSdpdxR5ZSeTpJskx/exec";
+    const string _bossProjectilePath = "https://script.google.com/macros/s/AKfycbwbMtYcLvktX_C7LzfUixOe1t7WnImnCFjXUF38B727H2cogk8F8NmBEWAd6o-NzJWw1A/exec";
     const string _playerDataPath = "https://script.google.com/macros/s/AKfycbzMh0vG80vBfRFabsD6m2ZylqQ9KtwfKcpugyYHxWUNIxXRu7hwLHdMDT1jK0qDzugU/exec";
     const string _playerSkillPath = "https://script.google.com/macros/s/AKfycbxhWqsuLuLUq3v2fbhn5nsmBmw-6rlojQhwPqcVI7eyMnker25SHIBw_1OGixucLMd7/exec";
     const string _playerWeaponPath = "https://script.google.com/macros/s/AKfycbxbq7qDRyj1pAtfOzrkKGTi7erKqjpu7sIAXN1WeDu_ETys0dXQofrNXEGtpRte3AqA/exec";
@@ -27,6 +28,7 @@ public class SheetManager : MonoBehaviour
             StartCoroutine(SaveJsonData(JsonName.PlayerWeapon, _playerWeaponPath));
             StartCoroutine(SaveJsonData(JsonName.PlayerSkill, _playerSkillPath));
             StartCoroutine(SaveJsonData(JsonName.PrefabPath, _PrefabPath));
+            StartCoroutine(SaveJsonData(JsonName.BossProjectile, _bossProjectilePath));
         }
 
         StartCoroutine(LoadJsonData(JsonName.Monster, _monsterDataPath));
@@ -35,6 +37,7 @@ public class SheetManager : MonoBehaviour
         StartCoroutine(LoadJsonData(JsonName.PlayerWeapon, _playerWeaponPath));
         StartCoroutine(LoadJsonData(JsonName.PlayerSkill, _playerSkillPath));
         StartCoroutine(LoadJsonData(JsonName.PrefabPath, _PrefabPath));
+        StartCoroutine(LoadJsonData(JsonName.BossProjectile, _bossProjectilePath));
     }
 
     public IEnumerator LoadJsonData(JsonName name, string url)
