@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class ForestMother : MonoBehaviour, IDamged
 {
@@ -26,7 +27,7 @@ public class ForestMother : MonoBehaviour, IDamged
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            Property.isStunned = true;
+            Property.CurrentHP = 0;
         }
     }
 
@@ -78,24 +79,10 @@ public class ForestMother : MonoBehaviour, IDamged
     {
         this.gameObject.layer = LayerMask.NameToLayer("DeadMonster");
 
-        _animator.SetTrigger("Die");
+        //PlayableDirector motherTimeLine = TimeLineManager.Instance.GetTimeLine(TimeLineType.ForestMother);
 
-        StartCoroutine(FireShader(5f, 0.5f, -0.3f));
-    }
+        //motherTimeLine.Play();
 
-    private IEnumerator FireShader(float maxTime, float startValue, float endValue)
-    {
-        float elapsedTime = 0f;
-
-        while (elapsedTime < maxTime)
-        {
-            elapsedTime += Time.deltaTime;
-
-            float colorValue = Mathf.Lerp(startValue, endValue, elapsedTime / maxTime);
-
-            _copyMaterial.SetFloat("_Float", colorValue);
-
-            yield return null;
-        }
+        gameObject.SetActive(false);
     }
 }

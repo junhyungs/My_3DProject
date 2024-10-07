@@ -6,7 +6,8 @@ public enum InteractionUI_Type
 {
     Use,
     Get,
-    Ladder
+    Ladder,
+    Dialogue
 }
 
 public class UIManager : Singleton<UIManager>
@@ -67,8 +68,7 @@ public class UIManager : Singleton<UIManager>
     }
     #endregion
 
-    //Event
-    //HP
+    #region MVVM_HP
     public void RequestChangeHp(int hp)
     {
         PlayerHpIconChangeCallBack?.Invoke(hp);
@@ -83,8 +83,9 @@ public class UIManager : Singleton<UIManager>
     {
         PlayerHpIconChangeCallBack -= hpCallBack;
     }
+    #endregion
 
-    //Skill
+    #region MVVM_Skill
     public void RequestChangeSkill(PlayerSkill changeSkill)
     {
         m_currentSkill = changeSkill;
@@ -116,5 +117,5 @@ public class UIManager : Singleton<UIManager>
     {
         SkillChangeCallBack -= skillChangeCallBack;
     }
-   
+    #endregion
 }

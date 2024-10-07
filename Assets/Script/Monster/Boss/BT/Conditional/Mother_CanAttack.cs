@@ -18,7 +18,7 @@ public class Mother_CanAttack : Conditional
 
     public override TaskStatus OnUpdate()
     {
-        if (_property.isStunned)
+        if (_property.CurrentHP <= 0)
         {
             return TaskStatus.Failure;
         }

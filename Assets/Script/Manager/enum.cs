@@ -75,3 +75,8 @@ public enum VineType
     Right,
     Left,
 }
+
+public enum TimeLineType
+{//타임라인 이름 명확하게
+    ForestMother,
+}

@@ -6,6 +6,8 @@ public class MotherProjectile : MonoBehaviour
     private Rigidbody _rigidBody;
     private Transform _playerTransform;
     private ForestMotherProjectileData _data;
+    private MeshRenderer _meshRenderer;
+    private Material _material;
 
     private Vector3 _targetDirection;
 
@@ -14,6 +16,7 @@ public class MotherProjectile : MonoBehaviour
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody>();
+        _meshRenderer = GetComponent<MeshRenderer>();
         _playerTransform = GameManager.Instance.Player.transform;
         _data = BossManager.Instance.ProjectileData;
     }
@@ -21,6 +24,10 @@ public class MotherProjectile : MonoBehaviour
     private void OnEnable()
     {
         _explosion = true;
+
+        _material = _meshRenderer.material;
+
+        _material.SetFloat("_Float", 1f);
     }
 
     public void ProjectileMove()
@@ -45,6 +52,8 @@ public class MotherProjectile : MonoBehaviour
 
     private void Explosion()
     {
+        _material.SetFloat("_Float", 0f);
+
         ParticleSystem explosion = transform.GetChild(0).GetComponent<ParticleSystem>();
         explosion.Play();
 
@@ -70,6 +79,7 @@ public class MotherProjectile : MonoBehaviour
     {
         yield return new WaitForSeconds(2.0f);
 
+        _rigidBody.velocity = Vector3.zero; 
         ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.MotherProjectile);
     }
 }
