@@ -135,7 +135,7 @@ public class BatPatrol : INode
     {
         List<Vector3> vector3list = new List<Vector3>();
 
-        int maxLoop = 10;
+        int maxLoop = 20;
         int currentLoop = 0;
 
         vector3list.Add(_bat.transform.position);
