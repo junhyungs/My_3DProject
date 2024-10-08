@@ -119,13 +119,18 @@ public class DialogueManager : Singleton<DialogueManager>
     {
         string id = npc.ToString();
 
-        _dialogueName.text = string.Empty;
-
-        _dialogueName.text = GetName(id);
+        OnActorName(id);
 
         List<string> dialogList = GetList(id, order);
 
         StartCoroutine(ReadMessage(dialogList, currentNPC));
+    }
+
+    private void OnActorName(string id)
+    {
+        _dialogueName.text = string.Empty;
+
+        _dialogueName.text = GetName(id);
     }
 
     private IEnumerator ReadMessage(List<string> messageList, _NPC currentNPC)
