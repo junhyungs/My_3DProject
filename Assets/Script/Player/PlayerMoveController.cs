@@ -77,7 +77,7 @@ public class PlayerMoveController : MonoBehaviour
             PlayerMove();
         }
 
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             OnLadder();
         }

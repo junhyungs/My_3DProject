@@ -176,3 +176,17 @@ public class ItemData : Data
         Equip = equip;
     }
 }
+
+public class DialogueData : Data
+{
+    public string ID { get; set; }
+    public List<string> StoryMessage { get; set; }
+    public List<string> LoopMessage { get; set; }
+
+    public DialogueData(string iD, List<string> storyMessage, List<string> loopMessage)
+    {
+        ID = iD;
+        StoryMessage = storyMessage;
+        LoopMessage = loopMessage;
+    }
+}

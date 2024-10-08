@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Mother_VineHandler : VineHandler
 {
-    public override void Initialize(ForestMotherAnimationEvent aniEvent, int index, 
-        float damage, HashSet<int> overlapHashSet)
+    public override void Initialize(MotherVine motherVine, int index, float damage)
     {
-        base.Initialize(aniEvent, index, damage, overlapHashSet);
+        base.Initialize(motherVine, index, damage);
     }
 
     private void OnTriggerEnter(Collider other)

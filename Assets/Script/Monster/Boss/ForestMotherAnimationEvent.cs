@@ -2,23 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class MotherVine
+{
+    [Header("VineType")]
+    public VineType _vineType;
+    [Header("VineCollider")]
+    public GameObject[] _colliderArray;
+
+    [HideInInspector]
+    public SphereCollider[] _sphereColliders;
+    [HideInInspector]
+    public HashSet<int> _overlapHashSet;
+}
+
 public class ForestMotherAnimationEvent : MonoBehaviour
 {
-    [System.Serializable]
-    public class MotherVine
-    {
-        [Header("VineType")]
-        public VineType _vineType;
-        [Header("VineCollider")]
-        public GameObject[] _colliderArray;
-
-        [HideInInspector]
-        public SphereCollider[] _sphereColliders;
-        [HideInInspector]
-        public HashSet<int> _overlapHashSet;
-    }
-
-
     [Header("ShootTransform")]
     [SerializeField] private Transform _shootTransform;
     [Header("ColliderClass")]
@@ -100,7 +99,7 @@ public class ForestMotherAnimationEvent : MonoBehaviour
                 if(colliderObject != null)
                 {
                     AddComponents(motherVine._sphereColliders,
-                        colliderObject, i, motherVine._overlapHashSet);
+                        colliderObject, i, motherVine);
                 }
             }
 
@@ -126,7 +125,7 @@ public class ForestMotherAnimationEvent : MonoBehaviour
         _vineColliderDictionary[vineType].Add(motherVine);
     }
 
-    private void AddComponents(SphereCollider[] sphereColliders ,GameObject colliderObject, int index, HashSet<int> overlapSet)
+    private void AddComponents(SphereCollider[] sphereColliders ,GameObject colliderObject, int index, MotherVine motherVine)
     {
         colliderObject.AddComponent<SphereCollider>();
 
@@ -135,7 +134,7 @@ public class ForestMotherAnimationEvent : MonoBehaviour
         collider.radius = 0.5f;
         collider.enabled = false;
 
-        colliderObject.AddComponent<Mother_VineHandler>().Initialize(this, index, _data.Power, overlapSet);
+        colliderObject.AddComponent<Mother_VineHandler>().Initialize(motherVine, index, _data.Power);
         sphereColliders[index] = collider;
     }
 

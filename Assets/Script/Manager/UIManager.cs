@@ -2,14 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum InteractionUI_Type
-{
-    Use,
-    Get,
-    Ladder,
-    Dialogue
-}
-
 public class UIManager : Singleton<UIManager>
 {
     private PlayerSkill m_currentSkill;
@@ -22,6 +14,7 @@ public class UIManager : Singleton<UIManager>
         ObjectPool.Instance.CreatePool(ObjectName.UseUI);
         ObjectPool.Instance.CreatePool(ObjectName.GetUI);
         ObjectPool.Instance.CreatePool(ObjectName.LadderUI);
+        ObjectPool.Instance.CreatePool(ObjectName.InteractionDialogueUI);
     }
 
     #region Interaction
@@ -48,6 +41,18 @@ public class UIManager : Singleton<UIManager>
                     InteractionUIPosition(ladderUI, itemTransform, new Vector3(-1f, 0.5f, 0f));
                     break;
             }
+        }
+    }
+
+    public void InteractionDialogueUI(Transform npcTransform)
+    {
+        if (!ActiveUIInstance.ContainsKey(npcTransform))
+        {
+            Vector3 newVector3 = new Vector3(1.5f, 1f, 0f);
+
+            GameObject dialogUI = ObjectPool.Instance.DequeueObject(ObjectName.InteractionDialogueUI);
+
+            InteractionUIPosition(dialogUI, npcTransform, newVector3);
         }
     }
 

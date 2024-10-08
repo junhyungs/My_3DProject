@@ -20,7 +20,8 @@ public enum JsonName
     PlayerSkill,
     PlayerWeapon,
     PrefabPath,
-    BossProjectile
+    BossProjectile,
+    Dialogue
 }
 
 public enum PlayerWeapon
@@ -66,6 +67,8 @@ public enum ObjectName
     UseUI,
     GetUI,
     LadderUI,
+    InteractionDialogueUI,
+    InteractionDialogueBoxUI,
 
     Null
 }
@@ -79,4 +82,16 @@ public enum VineType
 public enum TimeLineType
 {//타임라인 이름 명확하게
     ForestMother,
+}
+
+public enum DialogueOrder
+{
+    Story,
+    Loop,
+}
+
+public enum NPC
+{//클래스 이름
+    TestNPC,
+
 }

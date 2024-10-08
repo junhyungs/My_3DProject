@@ -55,9 +55,38 @@ public class DataManager
             case nameof(JsonName.BossProjectile):
                 ReadForestMotherProjectileData(jsonData);
                 break;
+            case nameof(JsonName.Dialogue):
+                ReadDialogueData(jsonData);
+                break;
         }
     }
 
+    private void ReadDialogueData(string jsonData)
+    {
+        try
+        {
+            JArray jsonArray = JArray.Parse(jsonData);
+
+            foreach(var item in jsonArray)
+            {
+                string id = item["ID"] != null ? item["ID"].ToString() : string.Empty;
+
+                List<string> stroyList = ParseDialogue(item["StoryMessage"]);
+
+                List<string> loopList = ParseDialogue(item["LoopMessage"]);
+
+                DialogueData data = new DialogueData(id, stroyList, loopList);
+
+                _dataDictionary.Add(id, data);
+            }
+        }
+        catch(JsonException ex)
+        {
+            Debug.Log("<Dialogue> 데이터를 변환하지 못했습니다.");
+        }
+    }
+
+    
 
     private void ReadMonsterData(string jsonData)
     {
@@ -281,6 +310,22 @@ public class DataManager
             Debug.Log("경로 데이터를 가져오지 못했습니다.");
             return null;
         }
+    }
+
+    private List<string> ParseDialogue(JToken item)
+    {
+        string stringData = item.ToString();
+
+        string[] splitArray = stringData.Split("{E}");
+
+        List<string> dialogueList = new List<string>();
+
+        foreach (var splitData in splitArray)
+        {
+            dialogueList.Add(splitData);
+        }
+
+        return dialogueList;
     }
 
 

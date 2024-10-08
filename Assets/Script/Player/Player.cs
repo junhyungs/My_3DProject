@@ -47,6 +47,29 @@ public class Player : MonoBehaviour
         {
             OnInteraction();
         }
+        else if (Input.GetKeyDown(KeyCode.G))
+        {
+            OnInteractionDialogue();
+        }
+    }
+
+    private void OnInteractionDialogue()
+    {
+        Vector3 spherePosition = transform.position + new Vector3(0f, 0.5f, 0f);
+
+        float sphereRadius = 0.5f;
+
+        Collider[] colliders = Physics.OverlapSphere(spherePosition, sphereRadius);
+
+        foreach (var target in colliders)
+        {
+            IInteractionDialogue interaction = target.gameObject.GetComponent<IInteractionDialogue>();
+
+            if(interaction != null)
+            {
+                interaction.TriggerDialogue();
+            }
+        }
     }
 
     private void OnInteraction()
