@@ -9,9 +9,11 @@ public class _NPC : MonoBehaviour
     [Header("NPC_Name")]
     [SerializeField] private NPC _npcName;
 
-    protected bool _story;
+    protected bool _story = true;
+    protected bool _onTrigger = false;
+    protected Player _player;
 
-    protected IEnumerator CinemachineBlending(_NPC currentNPC)
+    protected IEnumerator CinemachineBlending(_NPC currentNPC, DialogueOrder order)
     {
         CinemachineBrain brain = Camera.main.GetComponent<CinemachineBrain>();
 
@@ -19,12 +21,16 @@ public class _NPC : MonoBehaviour
 
         yield return new WaitForSeconds(time);
 
-        DialogueManager.Instance.StartDialogue(currentNPC, _npcName, DialogueOrder.Story);
+        DialogueManager.Instance.StartDialogue(currentNPC, _npcName, order);
     }
 
     public void ToggleNPC(bool toggle)
     {
-        if(_npcCamaraObject != null)
+        CursorLock(toggle);
+
+        _player.DialogueLock(toggle);
+
+        if (_npcCamaraObject != null)
         {
             _npcCamaraObject.SetActive(toggle);
         }
@@ -33,5 +39,10 @@ public class _NPC : MonoBehaviour
         {
             UIManager.Instance.HideItemInteractionUI(transform, ObjectName.InteractionDialogueUI);
         }
+    }
+
+    private void CursorLock(bool toggle)
+    {
+        Cursor.lockState = toggle ? CursorLockMode.Locked : CursorLockMode.None;
     }
 }

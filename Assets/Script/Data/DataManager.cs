@@ -71,11 +71,13 @@ public class DataManager
             {
                 string id = item["ID"] != null ? item["ID"].ToString() : string.Empty;
 
+                string name = item["Name"] != null ? item["Name"].ToString() : string.Empty;
+
                 List<string> stroyList = ParseDialogue(item["StoryMessage"]);
 
                 List<string> loopList = ParseDialogue(item["LoopMessage"]);
 
-                DialogueData data = new DialogueData(id, stroyList, loopList);
+                DialogueData data = new DialogueData(id, name, stroyList, loopList);
 
                 _dataDictionary.Add(id, data);
             }

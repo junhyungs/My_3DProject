@@ -5,6 +5,7 @@ public class Player : MonoBehaviour
 {
     private PlayerHealth _healthComponent;
     private PlayerMoveController _moveController;
+    private PlayerAttackController _attackController;
     
     private void OnEnable()
     {
@@ -15,6 +16,7 @@ public class Player : MonoBehaviour
     {
         _healthComponent = gameObject.GetComponent<PlayerHealth>();
         _moveController = gameObject.GetComponent<PlayerMoveController>();
+        _attackController = gameObject.GetComponent<PlayerAttackController>();
     }
 
     private void Start()
@@ -91,6 +93,13 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void DialogueLock(bool dialogueLock)
+    {
+        bool playerLock = dialogueLock ? false : true;
+
+        _moveController.IsAction = playerLock;
+        _attackController.IsAction = playerLock;
+    }
 
     private void OnDrawGizmos()
     {

@@ -4,20 +4,36 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+
 
 public class DialogueManager : Singleton<DialogueManager>
 {
     [Header("DialogueUI")]
     [SerializeField] private Image _dialogueUI;
 
+    [Header("DialogueName")]
+    [SerializeField] private TextMeshProUGUI _dialogueName;
+
     [Header("DialogueText")]
     [SerializeField] private TextMeshProUGUI _dialogueText;
 
+    #region DoTween
+    private RectTransform _uiRect;
+    private float _durationTime = 0.5f;
+    private Vector3 _maxScale = new Vector3(1f,1f,1f);
+    private Vector3 _minScale = Vector3.zero;
+    #endregion
+
     private Dictionary<string, Dictionary<DialogueOrder, List<string>>> _dialogueDictionary
         = new Dictionary<string, Dictionary<DialogueOrder, List<string>>>();
+
+    private Dictionary<string, string> _nameDictionary = new Dictionary<string, string>();
     
     void Start()
     {
+       _uiRect = _dialogueUI.gameObject.GetComponent<RectTransform>();
+
        StartCoroutine(LoadDialogueData());
     }
 
@@ -38,8 +54,18 @@ public class DialogueManager : Singleton<DialogueManager>
 
                 var data = DataManager.Instance.GetData(id) as DialogueData;
 
+                AddName(data);
+
                 return AddData(data);
             });
+        }
+    }
+
+    private void AddName(DialogueData data)
+    {
+        if (!_nameDictionary.ContainsKey(data.ID))
+        {
+            _nameDictionary.Add(data.ID, data.Name);
         }
     }
 
@@ -61,6 +87,19 @@ public class DialogueManager : Singleton<DialogueManager>
         return false;
     }
 
+    private string GetName(string id)
+    {
+        if (!_nameDictionary.ContainsKey(id))
+        {
+            Debug.Log("데이터가 Name 딕셔너리에 없습니다.");
+            return null;
+        }
+
+        string name = _nameDictionary[id];
+
+        return name;
+    }
+
     private List<string> GetList(string id, DialogueOrder order)
     {
         if (!_dialogueDictionary.ContainsKey(id))
@@ -80,14 +119,13 @@ public class DialogueManager : Singleton<DialogueManager>
     {
         string id = npc.ToString();
 
+        _dialogueName.text = string.Empty;
+
+        _dialogueName.text = GetName(id);
+
         List<string> dialogList = GetList(id, order);
 
         StartCoroutine(ReadMessage(dialogList, currentNPC));
-    }
-
-    public void EndDialogue()
-    {
-        Debug.Log("끝남");
     }
 
     private IEnumerator ReadMessage(List<string> messageList, _NPC currentNPC)
@@ -95,6 +133,8 @@ public class DialogueManager : Singleton<DialogueManager>
         _dialogueUI.gameObject.SetActive(true);
 
         _dialogueText.text = string.Empty;
+
+        yield return _uiRect.DOScale(_maxScale, _durationTime).WaitForCompletion();
 
         foreach(var message in messageList)
         {
@@ -106,11 +146,12 @@ public class DialogueManager : Singleton<DialogueManager>
             });
         }
 
-        EndDialogue();
+        yield return _uiRect.DOScale(_minScale, _durationTime).WaitForCompletion();
 
         currentNPC.ToggleNPC(false);
 
         _dialogueUI.gameObject.SetActive(false);
+
     }
 
     private IEnumerator Message(string message)

@@ -180,12 +180,14 @@ public class ItemData : Data
 public class DialogueData : Data
 {
     public string ID { get; set; }
+    public string Name { get; set; }
     public List<string> StoryMessage { get; set; }
     public List<string> LoopMessage { get; set; }
 
-    public DialogueData(string iD, List<string> storyMessage, List<string> loopMessage)
+    public DialogueData(string iD, string name, List<string> storyMessage, List<string> loopMessage)
     {
         ID = iD;
+        Name = name;
         StoryMessage = storyMessage;
         LoopMessage = loopMessage;
     }
