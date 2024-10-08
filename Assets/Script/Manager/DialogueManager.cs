@@ -115,7 +115,7 @@ public class DialogueManager : Singleton<DialogueManager>
         return dialogList;
     }
 
-    public void StartDialogue(_NPC currentNPC ,NPC npc, DialogueOrder order)
+    public void StartDialogue(NPC npc, DialogueOrder order, _NPC currentNPC = null)
     {
         string id = npc.ToString();
 

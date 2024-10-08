@@ -93,5 +93,7 @@ public enum DialogueOrder
 public enum NPC
 {//클래스 이름
     TestNPC,
-
+    BusNPC,
+    TelePhoneNPC,
+    HallCrow_1
 }

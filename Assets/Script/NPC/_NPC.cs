@@ -8,9 +8,10 @@ public class _NPC : MonoBehaviour
     [SerializeField] private GameObject _npcCamaraObject;
     [Header("NPC_Name")]
     [SerializeField] private NPC _npcName;
-
+    
     protected bool _story = true;
     protected bool _onTrigger = false;
+
     protected Player _player;
 
     protected IEnumerator CinemachineBlending(_NPC currentNPC, DialogueOrder order)
@@ -21,7 +22,7 @@ public class _NPC : MonoBehaviour
 
         yield return new WaitForSeconds(time);
 
-        DialogueManager.Instance.StartDialogue(currentNPC, _npcName, order);
+        DialogueManager.Instance.StartDialogue(_npcName, order, currentNPC);
     }
 
     public void ToggleNPC(bool toggle)
