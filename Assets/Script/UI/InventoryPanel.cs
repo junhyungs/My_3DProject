@@ -1,31 +1,33 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class InventoryPanel : MonoBehaviour
 {
-
     [Header("TriggerAction")]
     [SerializeField] private InputActionReference _triggerAction;
 
     [Header("TriggerButtonComponent")]
     [SerializeField] private List<TriggerButton> _buttonComponent;
 
-    private GameObject _currentButton;
+    [Header("Panels")]
+    [SerializeField] private List<GameObject> _panels;
+
     private int _buttonIndex = 0;
 
     private void OnEnable()
     {
-        Time.timeScale = 0;
+        DisableUI();
 
-        InitializeSelectButton();
+        _buttonIndex = 0;
 
+        _buttonComponent[_buttonIndex].OnEnableUI();
+        
         _triggerAction.action.Enable();
 
         _triggerAction.action.performed += SelectOnButton;
+
+        Time.timeScale = 0;
     }
 
     private void OnDisable()
@@ -33,19 +35,17 @@ public class InventoryPanel : MonoBehaviour
         Time.timeScale = 1;
     }
 
-    private void InitializeSelectButton()
+    private void DisableUI()
     {
-        if (_currentButton == null)
+        foreach(var panel in _panels)
         {
-            _buttonComponent[0].OnEnableUI();
+            panel.gameObject.SetActive(false);
         }
-        else
-        {
-            _buttonComponent[_buttonIndex].OnEnableUI();
-        }
+
+        TriggerButtonDisableUI();
     }
 
-    private void Test()
+    private void TriggerButtonDisableUI()
     {
         foreach(var buttonComponent in  _buttonComponent)
         {
@@ -59,7 +59,7 @@ public class InventoryPanel : MonoBehaviour
         {
             if (Keyboard.current.zKey.wasPressedThisFrame)
             {
-                Test();
+                TriggerButtonDisableUI();
 
                 _buttonIndex--;
 
@@ -72,7 +72,7 @@ public class InventoryPanel : MonoBehaviour
             }
             else if (Keyboard.current.xKey.wasPressedThisFrame)
             {
-                Test();
+                TriggerButtonDisableUI();
 
                 _buttonIndex++;
 
