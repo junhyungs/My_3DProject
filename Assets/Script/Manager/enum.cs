@@ -97,3 +97,21 @@ public enum NPC
     TelePhoneNPC,
     HallCrow_1
 }
+
+public enum DescriptionType
+{
+    Witch,
+    Swampking,
+    Betty,
+    CrystalHP,
+    CrystalMagic,
+    Sword,
+    Hammer,
+    Dagger,
+    GreatSword,
+    Umbrella,
+    Ring,
+    RustyKey,
+    Teddy,
+    Trowel
+}
