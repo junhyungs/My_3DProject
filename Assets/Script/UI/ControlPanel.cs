@@ -6,31 +6,31 @@ using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.EventSystems;
 
+[System.Serializable]
+public class PanelButtons
+{
+    [Header("Button")]
+    public Button _button;
+
+    [Header("RightImage/RectTransform")]
+    public GameObject _rightImageObject;
+    public RectTransform _rightRectTransform;
+
+    [Header("LeftImage/RectTransform")]
+    public GameObject _leftImageObject;
+    public RectTransform _leftRectTransform;
+
+    [Header("ButtonEvent")]
+    public UnityEngine.Events.UnityEvent onClick;
+
+    [HideInInspector]
+    public Vector2 _initRightPosition;
+    [HideInInspector]
+    public Vector2 _initLeftPosition;
+}
+
 public class ControlPanel : MonoBehaviour
 {
-    [System.Serializable]
-    public class ControlPanelButtons
-    {
-        [Header("Button")]
-        public Button _button;
-
-        [Header("RightImage/RectTransform")]
-        public GameObject _rightImageObject;
-        public RectTransform _rightRectTransform;
-
-        [Header("LeftImage/RectTransform")]
-        public GameObject _leftImageObject;
-        public RectTransform _leftRectTransform;
-
-        [Header("ButtonEvent")]
-        public UnityEngine.Events.UnityEvent onClick;
-
-        [HideInInspector]
-        public Vector2  _initRightPosition;
-        [HideInInspector]
-        public Vector2 _initLeftPosition;
-    }
-
     [Header("NavigateAction")]
     [SerializeField] private InputActionReference _navigateAction;
 
@@ -41,7 +41,7 @@ public class ControlPanel : MonoBehaviour
     [SerializeField] private float _moveDuration;
 
     [Header("ButtonList")]
-    [SerializeField] private List<ControlPanelButtons> _buttons;
+    [SerializeField] private List<PanelButtons> _buttons;
 
     [Header("MouseDelta")]
     [SerializeField] private GameObject _mouseDelta;
@@ -62,6 +62,16 @@ public class ControlPanel : MonoBehaviour
 
         PerformedAction();
 
+        OnControlPanel();
+    }
+
+    private void OnDisable()
+    {
+        _navigateAction.action.performed -= SetNextButton;
+    }
+
+    private void OnControlPanel()
+    {
         _currentIndex = 0;
 
         EventSystem.current.SetSelectedGameObject(_buttons[_currentIndex]._button.gameObject);
@@ -84,7 +94,7 @@ public class ControlPanel : MonoBehaviour
         }
     }
 
-    private void SetActiveImage(ControlPanelButtons buttons, bool isActive)
+    private void SetActiveImage(PanelButtons buttons, bool isActive)
     {
         buttons._rightImageObject.SetActive(isActive);
 
@@ -133,7 +143,7 @@ public class ControlPanel : MonoBehaviour
         }
     }
 
-    private void AnimationImage(ControlPanelButtons button)
+    private void AnimationImage(PanelButtons button)
     {
         int index = _buttons.IndexOf(button);
 
@@ -164,9 +174,6 @@ public class ControlPanel : MonoBehaviour
             float targetX_left = controlButton._leftRectTransform.position.x - _moveDistance;
             float targetX_right = controlButton._rightRectTransform.position.x + _moveDistance;
 
-            Debug.Log(targetX_right);
-            Debug.Log(targetX_left);
-
             _leftTweeners.Add(controlButton._leftRectTransform.DOMoveX(targetX_left, _moveDuration)
                 .SetLoops(-1, LoopType.Yoyo).SetUpdate(true));
             _rightTweeners.Add(controlButton._rightRectTransform.DOMoveX(targetX_right, _moveDuration)
@@ -177,10 +184,14 @@ public class ControlPanel : MonoBehaviour
     public void OnMouseDelta()
     {
         _mouseDelta.SetActive(true);
+
+        gameObject.SetActive(false);
     }
 
     public void OnKeyboardOption()
     {
         _keyboardOption.SetActive(true);
+
+        gameObject.SetActive(false);
     }
 }

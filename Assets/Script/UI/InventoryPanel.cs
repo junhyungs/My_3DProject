@@ -85,4 +85,16 @@ public class InventoryPanel : MonoBehaviour
             }
         }
     }
+
+    public void DisableTriggerAction(bool disable)
+    {
+        if (disable)
+        {
+            _triggerAction.action.performed -= SelectOnButton;
+        }
+        else
+        {
+            _triggerAction.action.performed += SelectOnButton;
+        }
+    }
 }

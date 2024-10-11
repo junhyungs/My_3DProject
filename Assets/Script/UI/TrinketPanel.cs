@@ -17,6 +17,9 @@ public class TrinketPanel : MonoBehaviour
     [Header("Description")]
     [SerializeField] private TextMeshProUGUI _descriptionText;
 
+    [Header("GridLayOut")]
+    [SerializeField] private GridLayoutGroup _layoutGroup;
+
     private List<Button> _buttonObjects;
 
     private void OnEnable()
@@ -58,8 +61,8 @@ public class TrinketPanel : MonoBehaviour
         int panelWidth = (int)_panelRectTransform.rect.width;
         int panelHeight = (int)_panelRectTransform.rect.height;
 
-        int slotWidth = 150;
-        int slotHeight = 150;
+        int slotWidth = (int)_layoutGroup.cellSize.x;
+        int slotHeight = (int)_layoutGroup.cellSize.y;
 
         int row = panelWidth / slotWidth;   
         int column = panelHeight / slotHeight;

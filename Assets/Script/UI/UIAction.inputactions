@@ -25,7 +25,7 @@
                 },
                 {
                     "name": "MouseDelta",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "7f4f3fce-6ed3-43c5-8c9a-697a4ffe5c9d",
                     "expectedControlType": "Vector2",
                     "processors": "",
@@ -54,6 +54,15 @@
                     "name": "SubmitNavigate",
                     "type": "Button",
                     "id": "7d73d85d-9589-4163-a6be-819c0c1179f3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Back",
+                    "type": "Button",
+                    "id": "3aae1250-1ec3-41b2-b0ac-86312af4708c",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -311,6 +320,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SubmitNavigate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "64a0a223-07b5-4b36-8143-98c3d468ecd2",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Back",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
