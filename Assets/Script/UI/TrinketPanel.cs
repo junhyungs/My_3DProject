@@ -24,19 +24,38 @@ public class TrinketPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        PerformedAction();
+        OnEnableTrinketPanel();
+    }
+
+    private void OnEnableTrinketPanel()
+    {
+        PerformedAction(true);
+
         GetButtonComponent();
 
         EventSystem.current.SetSelectedGameObject(_buttonObjects[0].gameObject);
     }
 
-    private void PerformedAction()
+    private void OnDisable()
     {
-        _navigateAction.action.Enable();
-
-        _navigateAction.action.performed += SetActiveDescription;
+        PerformedAction(false);
     }
 
+    private void PerformedAction(bool onEnable)
+    {
+        if (onEnable)
+        {
+            _navigateAction.action.Enable();
+
+            _navigateAction.action.performed += SetActiveDescription;
+
+            return;
+        }
+
+        _navigateAction.action.performed -= SetActiveDescription;
+    }
+
+    #region InitializeTrinketPanel
     private void GetButtonComponent()
     {
         if(_buttonObjects != null)
@@ -136,6 +155,7 @@ public class TrinketPanel : MonoBehaviour
             }
         }
     }
+    #endregion
 
     private void SetActiveDescription(InputAction.CallbackContext context)
     {

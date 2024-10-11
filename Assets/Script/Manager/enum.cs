@@ -21,7 +21,8 @@ public enum JsonName
     PlayerWeapon,
     PrefabPath,
     BossProjectile,
-    Dialogue
+    Dialogue,
+    Item
 }
 
 public enum PlayerWeapon
@@ -113,5 +114,15 @@ public enum DescriptionType
     Ring,
     RustyKey,
     Teddy,
-    Trowel
+    Trowel,
+    Surveillance
+}
+
+public enum ItemType
+{
+    Ring,
+    RustyKey,
+    Teddy,
+    Trowel,
+    Surveillance
 }

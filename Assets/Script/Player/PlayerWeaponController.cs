@@ -74,13 +74,11 @@ public class PlayerWeaponController : MonoBehaviour
         LeftChargeObject[(int)_currentWeaponType].SetActive(false);
         LeftObject[(int)_currentWeaponType].SetActive(true);
         _effectController.ActiveSwordEffect_L(isCharge);
-        //_activeTypeHandler.Invoke(ActiveType.Left, isCharge);
         ActiveIdleWeapon(false);
     }
 
     public void ActiveChargeLeftWeapon(bool isCharge)
     {
-        //_activeColorHandler.Invoke(true, _currentWeaponType);
         _effectController.SetNewColor(_currentWeaponType);
         LeftChargeObject[(int)_currentWeaponType].SetActive(true);     
         ActiveIdleWeapon(false);
@@ -90,14 +88,12 @@ public class PlayerWeaponController : MonoBehaviour
     {
         RightChargeObject[(int)_currentWeaponType].SetActive(false);
         RightObject[(int)_currentWeaponType].SetActive(true);
-        //_activeTypeHandler.Invoke(ActiveType.Right, isCharge);
         _effectController.ActiveSwordEffect_R(isCharge);
         ActiveIdleWeapon(false);
     }
 
     public void ActiveChargeRightWeapon(bool isCharge)
     {
-        //_activeColorHandler.Invoke(true, _currentWeaponType);
         _effectController.SetNewColor(_currentWeaponType);
         RightChargeObject[(int)_currentWeaponType].SetActive(true);
         ActiveIdleWeapon(false);
@@ -105,7 +101,6 @@ public class PlayerWeaponController : MonoBehaviour
 
     public void DeActiveRightWeapon()
     {
-        //_activeColorHandler.Invoke(false, _currentWeaponType);
         _effectController.ResetColor(_currentWeaponType);
         RightObject[(int)_currentWeaponType].SetActive(false);
         ActiveIdleWeapon(true);
@@ -114,7 +109,6 @@ public class PlayerWeaponController : MonoBehaviour
 
     public void DeActiveLeftWeapon()
     {
-        //_activeColorHandler.Invoke(false, _currentWeaponType);
         _effectController.ResetColor(_currentWeaponType);
         LeftObject[(int)_currentWeaponType].SetActive(false);    
         ActiveIdleWeapon(true);
@@ -123,7 +117,6 @@ public class PlayerWeaponController : MonoBehaviour
 
     public void ChargeAttackReset()
     {
-        //_activeColorHandler.Invoke(false, _currentWeaponType);
         _effectController.ResetColor(_currentWeaponType);
         RightChargeObject[(int)_currentWeaponType].SetActive(false);
         LeftChargeObject[(int)_currentWeaponType].SetActive(false);
@@ -194,7 +187,6 @@ public class PlayerWeaponController : MonoBehaviour
                 break;
         }
 
-        WeaponManager.Instance.SetCurrentWeapon(newWeapon);
         ActiveIdleWeapon(true);
     }
 

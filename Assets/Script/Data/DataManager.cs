@@ -58,6 +58,38 @@ public class DataManager
             case nameof(JsonName.Dialogue):
                 ReadDialogueData(jsonData);
                 break;
+            case nameof(JsonName.Item):
+                ReadItemData(jsonData);
+                break;
+        }
+    }
+
+    private void ReadItemData(string jsonData)
+    {
+        try
+        {
+            JArray jsonArray = JArray.Parse(jsonData);
+
+            foreach(var item in jsonArray)
+            {
+                string id = item["ID"] != null ? item["ID"].ToString() : string.Empty;
+
+                string itemName = item["ItemName"] != null ? item["ItemName"].ToString() : string.Empty;
+
+                string Replace = item["Description"] != null ? item["Description"].ToString() : string.Empty;
+
+                string description = Replace.Replace("\\n", "\n");
+
+                bool equip = ParseBool(item["Equip"]);
+
+                ItemData data = new ItemData(id, itemName, description, equip);
+
+                _dataDictionary.Add(id, data);
+            }
+        }
+        catch(JsonException ex)
+        {
+            Debug.Log("<Item> 데이터를 변환하지 못했습니다.");
         }
     }
 
@@ -312,6 +344,28 @@ public class DataManager
             Debug.Log("경로 데이터를 가져오지 못했습니다.");
             return null;
         }
+    }
+
+    private bool ParseBool(JToken json)
+    {
+        if(json == null)
+        {
+            Debug.Log("<ParseBool> 현재 null인 데이터가 있습니다.");
+            return false;
+        }
+
+        if(json.Type == JTokenType.Boolean)
+        {
+            return (bool)json;
+        }
+
+        if(bool.TryParse(json.ToString(), out bool value))
+        {
+            return value;
+        }
+
+        Debug.Log("Bool 데이터 중 변환하지 못한 데이터가 있습니다. return false!");
+        return false;
     }
 
     private List<string> ParseDialogue(JToken item)

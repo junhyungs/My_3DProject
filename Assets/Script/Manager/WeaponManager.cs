@@ -6,13 +6,12 @@ using UnityEngine;
 
 
 public class WeaponManager : Singleton<WeaponManager>
-{    
+{
     private PlayerWeaponController _weaponController;
-    private PlayerWeapon _currentWeapon;
 
-    public void SetCurrentWeapon(PlayerWeapon weapon)
+    public void ChangeWeapon(PlayerWeapon weapon)
     {
-        _currentWeapon = weapon;
+        _weaponController.SetWeapon(weapon);
     }
 
     public void SetWeaponController(PlayerWeaponController weaponController)
@@ -29,7 +28,7 @@ public class WeaponManager : Singleton<WeaponManager>
         });
 
         var weaponData = DataManager.Instance.GetData(Id) as PlayerWeaponData;
-
+        
         effectController.SetEffectRange(weaponData.NormalEffectRange, weaponData.ChargeEffectRange);
 
         weaponComponent.SetWeaponData(weaponData);

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.IO;
+using Newtonsoft.Json;
+using System;
 
 
 public class SheetManager : MonoBehaviour
@@ -21,6 +23,10 @@ public class SheetManager : MonoBehaviour
     const string _dialoguePath = "https://script.google.com/macros/s/AKfycbw75qKMaJlorm7F7D1MGmliZCFX_lPYAOuk-k9QISSpejEfYgaQ0SiZN0QdD_qJ7HOD/exec";
     #endregion
 
+    #region Item
+    const string _itemDataPath = "https://script.google.com/macros/s/AKfycbxvjrAtBLmy0WiiQIMxDADV2APHNpKifaW3F_idjogUQkHlbzmuAJQjFHunRYJAXf7_7Q/exec";
+    #endregion
+
     [Header("SaveJson")]
     [SerializeField] private bool _saveJson;
 
@@ -29,6 +35,8 @@ public class SheetManager : MonoBehaviour
         if (_saveJson)
         {
             SaveJson();
+
+            return;
         }
 
         LoadJson();
@@ -44,6 +52,7 @@ public class SheetManager : MonoBehaviour
         StartCoroutine(SaveJsonData(JsonName.PrefabPath, _PrefabPath));
         StartCoroutine(SaveJsonData(JsonName.BossProjectile, _bossProjectilePath));
         StartCoroutine(SaveJsonData(JsonName.Dialogue, _dialoguePath));
+        StartCoroutine(SaveJsonData(JsonName.Item, _itemDataPath));
     }
 
     private void LoadJson()
@@ -56,6 +65,7 @@ public class SheetManager : MonoBehaviour
         StartCoroutine(LoadJsonData(JsonName.PrefabPath, _PrefabPath));
         StartCoroutine(LoadJsonData(JsonName.BossProjectile, _bossProjectilePath));
         StartCoroutine(LoadJsonData(JsonName.Dialogue, _dialoguePath));
+        StartCoroutine(LoadJsonData(JsonName.Item, _itemDataPath));
     }
 
     public IEnumerator LoadJsonData(JsonName name, string url)
@@ -66,7 +76,7 @@ public class SheetManager : MonoBehaviour
 
         if(File.Exists(path))
         {
-            Debug.Log(" 이미 해당 파일이 존재합니다.");
+            Debug.Log(" 이미 해당 파일이 존재합니다." + fileName);
             ReadData(fileName);
         }
         else
@@ -106,9 +116,25 @@ public class SheetManager : MonoBehaviour
         {
             string data = unityWebRequest.downloadHandler.text;
 
-            var path = Path.Combine(Application.dataPath, $"Resources/Data/{fileName}.json");
+            try
+            {
+                //포맷팅을 위해 string제이슨 데이터를 객체로 변환
+                var jsonObject = JsonConvert.DeserializeObject(data);
+                //포맷팅 : 객체를 들여쓰기를 적용해서 다시 제이슨 문자열로 변환
+                string formattedJson = JsonConvert.SerializeObject(jsonObject, Formatting.Indented);
 
-            File.WriteAllText(path, data);
+                Debug.Log(formattedJson);
+
+                var path = Path.Combine(Application.dataPath, $"Resources/Data/{fileName}.json");
+
+                File.WriteAllText(path, data);
+
+                ReadData(fileName);
+            }
+            catch(Exception ex)
+            {
+                Debug.LogError("제이슨 변환 중 문제가 발생했습니다." +  ex.Message);
+            }
         }
     }
 
@@ -146,6 +172,32 @@ public class SheetManager : MonoBehaviour
     //        jsonData.push(rowData); //데이터를 저장하는 배열에 추가
     //    }
     //    var jsonOut = JSON.stringify(jsonData); //제이슨으로 변환
+
+    //    return ContentService.createTextOutput(jsonOut).setMimeType(ContentService.MimeType.JSON);
+    //}
+
+    //들여쓰기
+    //function doGet(e)
+    //{
+    //    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("시트1");
+
+    //    var data = sheet.getDataRange().getValues();
+
+    //    var headers = data[0];
+
+    //    var jsonData = [];
+
+    //    for (var i = 1; i < data.length; i++)
+    //    {
+    //        var rowData = { };
+
+    //        for (var j = 0; j < headers.length; j++)
+    //        {
+    //            rowData[headers[j]] = data[i][j];
+    //        }
+    //        jsonData.push(rowData);
+    //    }
+    //    var jsonOut = JSON.stringify(jsonData, null, 2);
 
     //    return ContentService.createTextOutput(jsonOut).setMimeType(ContentService.MimeType.JSON);
     //}

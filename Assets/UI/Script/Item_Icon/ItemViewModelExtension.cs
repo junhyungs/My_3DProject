@@ -4,8 +4,6 @@ using UnityEngine;
 
 public static class ItemViewModelExtension
 {
-    
-
     public static void RegisterChangeValueEventOnEnable(this ItemViewModel itemVm)
     {
         InventoryManager.Instance.RegisterChangeSoulValueCallBack(itemVm.OnResponseChangeSoul);
