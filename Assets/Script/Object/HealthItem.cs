@@ -2,14 +2,11 @@ using UnityEngine;
 
 public class HealthItem : MonoBehaviour, IInteractionItem
 {
-    public void InteractionItem(bool isAddItem)
+    public void InteractionItem()
     {
-        if(isAddItem)
-        {
-            UIManager.Instance.HideItemInteractionUI(transform, ObjectName.GetUI);
-            InventoryManager.Instance.SetHealthCount(1);
-            gameObject.SetActive(false);
-        }
+        UIManager.Instance.HideItemInteractionUI(transform, ObjectName.GetUI);
+        InventoryManager.Instance.SetHealthCount(1);
+        gameObject.SetActive(false);
     }
 
     

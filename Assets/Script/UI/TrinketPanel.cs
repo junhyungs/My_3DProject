@@ -17,10 +17,35 @@ public class TrinketPanel : MonoBehaviour
     [Header("Description")]
     [SerializeField] private TextMeshProUGUI _descriptionText;
 
+    [Header("Description")]
+    [SerializeField] private TextMeshProUGUI _descriptionName;
+
     [Header("GridLayOut")]
     [SerializeField] private GridLayoutGroup _layoutGroup;
 
+    [Header("Slot")]
+    [SerializeField] private TrinketSlot[] _slotArray;
+
     private List<Button> _buttonObjects;
+
+    private Dictionary<GameObject, TrinketSlot> _slotDictioary;
+    private TrinketSlot _currentSlot;
+
+    private void Awake()
+    {
+        GetButtonComponent();
+
+        _slotDictioary = new Dictionary<GameObject, TrinketSlot>();
+
+        for(int i = 0; i < _buttonObjects.Count; i++)
+        {
+            GameObject slotObject = _buttonObjects[i].gameObject;
+
+            TrinketSlot slotComponent = _slotArray[i];
+
+            _slotDictioary.Add(slotObject, slotComponent);
+        }
+    }
 
     private void OnEnable()
     {
@@ -31,9 +56,9 @@ public class TrinketPanel : MonoBehaviour
     {
         PerformedAction(true);
 
-        GetButtonComponent();
-
         EventSystem.current.SetSelectedGameObject(_buttonObjects[0].gameObject);
+
+        RefreshTrinketPanel(_buttonObjects[0].gameObject);
     }
 
     private void OnDisable()
@@ -159,9 +184,69 @@ public class TrinketPanel : MonoBehaviour
 
     private void SetActiveDescription(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        GameObject selectObject = EventSystem.current.currentSelectedGameObject;
+
+        RefreshTrinketPanel(selectObject);
+    }
+
+    //비활성화 상태에서 호출되는 메서드.
+    public void SetTrinketType(TrinketItemType type, ItemData data)
+    {
+        for(int i = 0; i < _slotArray.Length; i++)
         {
-            
+            if (_slotArray[i].Type == type &&!_slotArray[i].OnSlot)
+            {
+                _slotArray[i].OnSlot = true;
+
+                _slotArray[i].Data = data;
+
+                return;
+            }
         }
+    }
+
+    private void ResetText()
+    {
+        if(_currentSlot != null)
+        {
+            _currentSlot.InvokeEvent(false);
+        }
+
+        _descriptionText.text = string.Empty;
+
+        _descriptionName.text = string.Empty;
+    }
+
+    private TrinketSlot GetSlotComponent(GameObject selectObject)
+    {
+        if (!_slotDictioary.ContainsKey(selectObject))
+        {
+            Debug.Log("슬롯 컴포넌트를 반환하지 못했습니다.");
+            return null;
+        }
+
+        return _slotDictioary[selectObject];
+    }
+
+    private void RefreshTrinketPanel(GameObject selectObject)
+    {
+        ResetText();
+
+        var slotComponent = GetSlotComponent(selectObject);
+
+        if (!slotComponent.OnSlot)
+        {
+            return;
+        }
+
+        var data = slotComponent.Data;
+
+        _descriptionText.text = data.Description;
+
+        _descriptionName.text = data.ItemName;
+
+        _currentSlot = slotComponent;
+
+        slotComponent.InvokeEvent(true);
     }
 }

@@ -15,6 +15,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Submit",
+                    "type": "Button",
+                    "id": "a9ed859c-1a9b-4713-ac00-cf3d52c7d399",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Cancel",
                     "type": "Button",
                     "id": "ba704430-feb3-4559-828c-a8ddd6c3894a",
@@ -63,6 +72,15 @@
                     "name": "Back",
                     "type": "Button",
                     "id": "3aae1250-1ec3-41b2-b0ac-86312af4708c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SubmitNavigateRightLeft",
+                    "type": "Button",
+                    "id": "e177b276-ea0c-4afd-9396-671f6814da49",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -331,6 +349,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "Back",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "70ae7f29-a74e-44bb-8b45-e0500e901da6",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SubmitNavigateRightLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bb9c3a77-8a82-4f2c-898d-c5b649694616",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SubmitNavigateRightLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e5b0317b-449a-4a03-a7c5-06e900cc3631",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SubmitNavigateRightLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b1195486-d01a-41c7-9557-f63e476a446a",
+                    "path": "*/{Submit}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Submit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

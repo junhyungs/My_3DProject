@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public enum MonsterType
 {
@@ -23,15 +20,6 @@ public enum JsonName
     BossProjectile,
     Dialogue,
     Item
-}
-
-public enum PlayerWeapon
-{
-    Sword,
-    Hammer,
-    Dagger,
-    GreatSword,
-    Umbrella
 }
 
 public enum MapType
@@ -99,26 +87,26 @@ public enum NPC
     HallCrow_1
 }
 
-public enum DescriptionType
+public enum PlayerWeapon
+{
+    Sword,
+    Hammer,
+    Dagger,
+    GreatSword,
+    Umbrella
+}
+
+public enum BaseItemType
 {
     Witch,
     Swampking,
     Betty,
     CrystalHP,
     CrystalMagic,
-    Sword,
-    Hammer,
-    Dagger,
-    GreatSword,
-    Umbrella,
-    Ring,
-    RustyKey,
-    Teddy,
-    Trowel,
-    Surveillance
+    Sword
 }
 
-public enum ItemType
+public enum TrinketItemType
 {
     Ring,
     RustyKey,

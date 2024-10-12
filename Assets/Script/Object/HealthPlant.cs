@@ -17,9 +17,9 @@ public class HealthPlant : MonoBehaviour, IInteractionItem
 
         m_healthPlantAnim = GetComponent<Animator>();
     }
-    public void InteractionItem(bool isAddItem)
+    public void InteractionItem()
     {
-        if (isAddItem && !isGrow && InventoryManager.Instance.UseHealthItem())
+        if (!isGrow && InventoryManager.Instance.UseHealthItem())
         {
             isGrow = true;
 
@@ -28,7 +28,7 @@ public class HealthPlant : MonoBehaviour, IInteractionItem
             return;
         }
 
-        if(isAddItem && !isUse && isGrow)
+        if(!isUse && isGrow)
         {
             isUse = true;
             

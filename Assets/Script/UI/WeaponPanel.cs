@@ -19,8 +19,14 @@ public class WeaponPanel : MonoBehaviour
     [Header("NavigateAction")]
     [SerializeField] private InputActionReference _navigateAction;
 
+    [Header("SubmitAction")]
+    [SerializeField] private InputActionReference _subMitAction;
+
     [Header("ButtonObject")]
     [SerializeField] private GameObject[] _buttonObject;
+
+    [Header("Slot")]
+    [SerializeField] private WeaponSlot[] _slotArray;
 
     [Header("Description")]
     [SerializeField] private TextMeshProUGUI _descriptionText;
@@ -28,11 +34,9 @@ public class WeaponPanel : MonoBehaviour
     [Header("DescriptionName")]
     [SerializeField] private TextMeshProUGUI _descriptionName;
 
-    [Header("AbilitieValue")]
-    [SerializeField] private TextMeshProUGUI[] _abilitieText;
-
-    private Dictionary<GameObject, PlayerWeapon> _typeDictionary;
-    private Dictionary<TextMeshProUGUI, AbilitieType> _textTypeDictionary;
+    private Dictionary<GameObject, WeaponSlot> _slotDictionary;
+    
+    private WeaponSlot _currentSlot;
 
     private void Awake()
     {
@@ -41,18 +45,15 @@ public class WeaponPanel : MonoBehaviour
 
     private void OnAwakeWeaponPanel()
     {
-        _typeDictionary = new Dictionary<GameObject, PlayerWeapon>();
+        _slotDictionary = new Dictionary<GameObject, WeaponSlot>();
 
-        _textTypeDictionary = new Dictionary<TextMeshProUGUI, AbilitieType>();
-
-        for(int i = 0; i <  _buttonObject.Length; i++)
+        for(int i = 0; i < _buttonObject.Length; i++)
         {
-            _typeDictionary.Add(_buttonObject[i], (PlayerWeapon)i);
-        }
+            GameObject slotObject = _buttonObject[i];
 
-        for(int i = 0; i < _abilitieText.Length; i++)
-        {
-            _textTypeDictionary.Add(_abilitieText[i], (AbilitieType)i);
+            WeaponSlot slotComponent = slotObject.GetComponent<WeaponSlot>();
+
+            _slotDictionary.Add(slotObject, slotComponent);
         }
     }
 
@@ -65,9 +66,9 @@ public class WeaponPanel : MonoBehaviour
     {
         PerformedAction(true);
 
-        EventSystem.current.SetSelectedGameObject(_buttonObject[(int)PlayerWeapon.Sword]);
+        EventSystem.current.SetSelectedGameObject(_buttonObject[0]);
 
-        RefreshDescription(_buttonObject[(int)PlayerWeapon.Sword]);
+        RefreshDescription(_buttonObject[0]);
     }
 
     private void OnDisable()
@@ -81,101 +82,95 @@ public class WeaponPanel : MonoBehaviour
         {
             _navigateAction.action.Enable();
 
+            _subMitAction.action.Enable();
+
+            _subMitAction.action.performed += SetActiveChildImage;
+
             _navigateAction.action.performed += SetActiveChildImage;
 
             return;
         }
 
+        _subMitAction.action.performed -= SetActiveChildImage;
+
         _navigateAction.action.performed -= SetActiveChildImage;
+    }
+
+    //인벤토리 매니저에서 비활성화 상태일 때 호출.
+    public void SetWeaponType(PlayerWeapon weapon, ItemData data)
+    {
+        for(int i = 0; i < _slotArray.Length; i++)
+        {
+            if (_slotArray[i].Type == weapon && !_slotArray[i].OnSlot)
+            {
+                _slotArray[i].OnSlot = true;
+
+                _slotArray[i].Data = data;
+
+                return;
+            }
+        }
     }
 
     private void RefreshDescription(GameObject selectObject)
     {
         ResetText();
-        //TODO 서브밋 액션을 넣어서 해당 버튼이 눌리면 웨폰 매니저의 ChangeWeapon 호출하면 무기 바뀜.
-        //무기 아이템을 얻으면 아이템 매니저의 SetWeapon 호출해서 무기 타입 넣어줘야함.
-        bool isWeapon = IsWeapon(selectObject);
+        
+        var slotComponent = GetWeaponSlot(selectObject);
 
-        if (!isWeapon)
+        if (!slotComponent.OnSlot)
         {
             return;
         }
 
-        var dataKey = GetWeapons(selectObject);
+        var data = slotComponent.Data;
 
-        if(InventoryManager.Instance.DataDictionary.TryGetValue(dataKey, out ItemData data))
-        {
-            _descriptionText.text = data.Description;
+        _descriptionText.text = data.Description;
 
-            _descriptionName.text = data.ItemName;
+        _descriptionName.text = data.ItemName;
 
-            return;
-        }
+        _currentSlot = slotComponent;
 
-        ExceptionData(dataKey);
+        slotComponent.InvokeEvent(true);
     }
 
-    private string GetWeapons(GameObject selectObject)
+    private WeaponSlot GetWeaponSlot(GameObject selectObject)
     {
-        if(_typeDictionary.TryGetValue(selectObject, out PlayerWeapon value))
+        if(_slotDictionary.TryGetValue(selectObject, out WeaponSlot slot))
         {
-            return value.ToString();    
+            return slot;
         }
 
-        var newKey = ExceptionWeapon(selectObject);
-
-        return newKey.ToString();
-    }
-
-    private bool IsWeapon(GameObject selectObject)
-    {
-        var weapon = _typeDictionary[selectObject];
-
-        if (InventoryManager.Instance.WeaponSet.Contains(weapon))
-        {
-            return true;
-        }
-
-        return false;
+        return null;
     }
 
     private void ResetText()
     {
+        if(_currentSlot != null)
+        {
+            _currentSlot.InvokeEvent(false);
+        }
+
         _descriptionText.text = string.Empty;
 
         _descriptionName.text = string.Empty;
-
-        foreach(var abilitieText in _abilitieText)
-        {
-            abilitieText.text = string.Empty;
-        }
     }
 
     private void SetActiveChildImage(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        var selectObject = EventSystem.current.currentSelectedGameObject;
+
+        if (Keyboard.current.enterKey.wasPressedThisFrame)
         {
-            var selectObject = EventSystem.current.currentSelectedGameObject;
+            var slot = GetWeaponSlot(selectObject);
 
-            RefreshDescription(selectObject);
+            if (slot.OnSlot)
+            {
+                WeaponManager.Instance.ChangeWeapon(slot.Type);
+            }
         }
+
+        RefreshDescription(selectObject);
     }
 
-    private PlayerWeapon ExceptionWeapon(GameObject selectObject)
-    {
-        int index = Array.IndexOf(_buttonObject, selectObject);
-
-        _typeDictionary.Add(selectObject, (PlayerWeapon)index);
-
-        return _typeDictionary[selectObject];
-    }
-
-    private void ExceptionData(string key)
-    {
-        var itemData = DataManager.Instance.GetData(key) as ItemData;
-
-        _descriptionText.text = itemData.Description;
-
-        _descriptionName.text = itemData.ItemName;
-    }
 }

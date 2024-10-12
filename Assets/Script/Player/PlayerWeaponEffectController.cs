@@ -58,10 +58,14 @@ public class PlayerWeaponEffectController : MonoBehaviour
     {
         WeaponMaterialDic.Add(PlayerWeapon.Sword, m_SwordMaterial);
         WeaponColorDic.Add(PlayerWeapon.Sword, m_SwordMaterial.GetColor("_Color"));
-        //WeaponMaterialDic.Add(PlayerWeapon.Hammer, m_HammerMaterial);
-        //WeaponMaterialDic.Add(PlayerWeapon.Dagger, m_DaggerMaterial);
-        //WeaponMaterialDic.Add(PlayerWeapon.GreatSword, m_GreatSwordMaterial);
-        //WeaponMaterialDic.Add(PlayerWeapon.Umbrella, m_UmbrellaMaterial);
+        WeaponMaterialDic.Add(PlayerWeapon.Hammer, m_SwordMaterial);
+        WeaponColorDic.Add(PlayerWeapon.Hammer, m_SwordMaterial.GetColor("_Color"));
+        WeaponMaterialDic.Add(PlayerWeapon.Dagger, m_SwordMaterial);
+        WeaponColorDic.Add(PlayerWeapon.Dagger, m_SwordMaterial.GetColor("_Color"));
+        WeaponMaterialDic.Add(PlayerWeapon.GreatSword, m_SwordMaterial);
+        WeaponColorDic.Add(PlayerWeapon.GreatSword, m_SwordMaterial.GetColor("_Color"));
+        WeaponMaterialDic.Add(PlayerWeapon.Umbrella, m_SwordMaterial);
+        WeaponColorDic.Add(PlayerWeapon.Umbrella, m_SwordMaterial.GetColor("_Color"));
     }
 
     public void SetEffectRange(float normalRange, float chargeRange)
@@ -73,11 +77,6 @@ public class PlayerWeaponEffectController : MonoBehaviour
     private GameObject GetEffect(Effect effect)
     {
         return EffectDic[effect];
-    }
-
-    public void SetMaterial(PlayerWeapon weapon, Color newColor)
-    {
-        WeaponMaterialDic[weapon].SetColor("_Color", newColor);
     }
 
     public Material GetMaterial(PlayerWeapon weapon)

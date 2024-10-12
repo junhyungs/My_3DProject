@@ -88,7 +88,7 @@ public class Player : MonoBehaviour
 
             if(interaction != null)
             {
-                interaction.InteractionItem(true);
+                interaction.InteractionItem();
             }
         }
     }

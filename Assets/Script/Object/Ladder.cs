@@ -2,12 +2,9 @@ using UnityEngine;
 
 public class Ladder : MonoBehaviour, IInteractionItem
 {
-    public void InteractionItem(bool isAddItem)
+    public void InteractionItem()
     {
-        if (isAddItem)
-        {
-            UIManager.Instance.HideItemInteractionUI(transform, ObjectName.LadderUI);
-        }
+        UIManager.Instance.HideItemInteractionUI(transform, ObjectName.LadderUI);
     }
 
     private void OnTriggerEnter(Collider other)

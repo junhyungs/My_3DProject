@@ -115,12 +115,9 @@ public class BelongingsPanel : MonoBehaviour
 
     private void SetActiveChildImage(InputAction.CallbackContext context)
     {
-        if (context.performed)
-        {
-            var selectObject = EventSystem.current.currentSelectedGameObject;
-
-            RefreshDescription(selectObject);
-        }
+        var selectObject = EventSystem.current.currentSelectedGameObject;
+        
+        RefreshDescription(selectObject);
     }
 
     private void ExceptionData(string key)

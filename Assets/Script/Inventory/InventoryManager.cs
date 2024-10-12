@@ -5,19 +5,63 @@ using UnityEngine;
 
 public class InventoryManager : Singleton<InventoryManager>
 {
-    private int m_soulCount;
-    private int m_HealthCount;
-
+    #region MVVM
     private Action<int> PlayerSoulItemCallBack;
     private Action<int> PlayerHealthItemCallBack;
 
-    private Dictionary<string, ItemData> _dataDictionary;
+    private int m_soulCount;
+    private int m_HealthCount;
+    #endregion
+
+    #region Event
+    private Action<TrinketItemType, bool> _globalTrinketAction;
+    private Action<PlayerWeapon, bool> _globalWeaponAction;
+    private List<ITrinketCameraEvent> _trinketEventList = new List<ITrinketCameraEvent>();
+    private List<IWeaponCameraEvent> _weaponEventList = new List<IWeaponCameraEvent>();
+    #endregion
+
+    #region Data
+    private Dictionary<string, ItemData> _baseDictionary;
+    private Dictionary<PlayerWeapon, ItemData> _weaponDictionary;
+    private Dictionary<TrinketItemType, ItemData> _trinketDictionary;
+
     private HashSet<PlayerWeapon> _weaponSet;
-    private HashSet<ItemType> _itemSet;
+    private HashSet<TrinketItemType> _trinketItemSet;
+
+    private TrinketPanel _trinketPanel;
+    private WeaponPanel _weaponPanel;
+    #endregion
+
+    #region Property
+    public Dictionary<PlayerWeapon, ItemData> WeaponDictionary
+    {
+        get
+        {
+            if(_weaponDictionary == null)
+            {
+                _weaponDictionary = new Dictionary<PlayerWeapon, ItemData>();
+            }
+
+            return _weaponDictionary;
+        }
+    }
+
+    public Dictionary<TrinketItemType, ItemData> TrinketDictionary
+    {
+        get
+        {
+            if(_trinketDictionary == null)
+            {
+                _trinketDictionary = new Dictionary<TrinketItemType, ItemData>();
+            }
+
+            return _trinketDictionary;  
+        }
+    }
 
     public Dictionary<string, ItemData> DataDictionary
     {
-        get { return _dataDictionary; }
+        get { return _baseDictionary; }
     }
 
     public HashSet<PlayerWeapon> WeaponSet
@@ -25,18 +69,19 @@ public class InventoryManager : Singleton<InventoryManager>
         get { return _weaponSet; }
     }
 
-    public HashSet<ItemType> ItemSet
+    public HashSet<TrinketItemType> TrinketSet
     {
-        get { return _itemSet; }
+        get { return _trinketItemSet; }
     }
+    #endregion
 
     private void Awake()
     {
         _weaponSet = new HashSet<PlayerWeapon>();
+        _trinketItemSet = new HashSet<TrinketItemType>();
 
-        _itemSet = new HashSet<ItemType>();
-
-        SetWeapon(PlayerWeapon.Sword);
+        _trinketPanel = transform.GetComponentInChildren<TrinketPanel>(true);
+        _weaponPanel = transform.GetComponentInChildren<WeaponPanel>(true);
     }
 
     private void Start()
@@ -46,16 +91,16 @@ public class InventoryManager : Singleton<InventoryManager>
 
     private IEnumerator LoadItemData()
     {
-        _dataDictionary = new Dictionary<string, ItemData>();
+        _baseDictionary = new Dictionary<string, ItemData>();
 
-        string waitKey = DescriptionType.Witch.ToString();
+        string waitKey = BaseItemType.Witch.ToString();
 
         yield return new WaitWhile(() =>
         {
             return DataManager.Instance.GetData(waitKey) == null;
         });
 
-        Array enumArray = Enum.GetValues(typeof(DescriptionType));
+        Array enumArray = Enum.GetValues(typeof(BaseItemType));
 
         for(int i = 0; i < enumArray.Length; i++)
         {
@@ -63,26 +108,81 @@ public class InventoryManager : Singleton<InventoryManager>
 
             var data = DataManager.Instance.GetData(id) as ItemData;
 
-            _dataDictionary.Add(id, data);
+            _baseDictionary.Add(id, data);
         }
     }
 
-    //무기 획득 시 호출
-    public void SetWeapon(PlayerWeapon weapon)
+    #region Event
+    public void RegisterTrinketEvent(ITrinketCameraEvent trinketEvent)
     {
-        if(!_weaponSet.Contains(weapon))
+        _trinketEventList.Add(trinketEvent); 
+
+        if(_globalTrinketAction != null) //레지스터가 나중에 불렸지만 글로벌 액션에 메서드를 등록했기 때문에 이 글로벌 액션을 통해 바인딩함.
         {
-            _weaponSet.Add(weapon);
+            trinketEvent.TrinketCameraEvent(_globalTrinketAction, true);
         }
+    }
+
+    public void BindTrinketEvent(Action<TrinketItemType, bool> action)
+    {
+        _globalTrinketAction = action; //이 메서드가 먼저 호출된다면 글로벌 액션에 현재 바인딩 하려는 메서드를 저장함.
+
+        foreach(var item in _trinketEventList) //레지스터 이벤트가 먼저 호출되었다면 포이치 실행.
+        {
+            item.TrinketCameraEvent(_globalTrinketAction, true);
+        }
+    }
+
+    public void RegisterWeaponEvent(IWeaponCameraEvent weaponEvent)
+    {
+        _weaponEventList.Add(weaponEvent);
+
+        if(_globalWeaponAction != null)
+        {
+            weaponEvent.WeaponCameraEvent(_globalWeaponAction, true);
+        }
+    }
+
+    public void BindWeaponEvent(Action<PlayerWeapon, bool> action)
+    {
+        _globalWeaponAction = action;
+
+        foreach(var item in _weaponEventList)
+        {
+            item.WeaponCameraEvent(action, true);
+        }
+    }
+
+    #endregion
+
+    //무기 획득 시 호출
+    public void SetWeapon(PlayerWeapon weapon, ItemData data)
+    {
+        if(_weaponSet.Contains(weapon))
+        {
+            return;
+        }
+
+        _weaponSet.Add(weapon);
+
+        WeaponDictionary.Add(weapon, data);
+
+        _weaponPanel.SetWeaponType(weapon, data);
     }
 
     //아이템 획득 시 호출
-    public void SetItem(ItemType item)
+    public void SetItem(TrinketItemType item, ItemData data)
     {
-        if (!_itemSet.Contains(item))
+        if (_trinketItemSet.Contains(item))
         {
-            _itemSet.Add(item);
+            return;
         }
+
+        _trinketItemSet.Add(item);
+
+        TrinketDictionary.Add(item, data);
+
+        _trinketPanel.SetTrinketType(item, data);
     }
 
     public void SetSoulCount(int soulCount)
