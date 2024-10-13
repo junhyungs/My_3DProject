@@ -34,8 +34,11 @@ public class WeaponPanel : MonoBehaviour
     [Header("DescriptionName")]
     [SerializeField] private TextMeshProUGUI _descriptionName;
 
+    [Header("AbilitieDescription")]
+    [SerializeField] private TextMeshProUGUI[] _abilitieText;
+
     private Dictionary<GameObject, WeaponSlot> _slotDictionary;
-    
+
     private WeaponSlot _currentSlot;
 
     private void Awake()
@@ -97,7 +100,7 @@ public class WeaponPanel : MonoBehaviour
     }
 
     //인벤토리 매니저에서 비활성화 상태일 때 호출.
-    public void SetWeaponType(PlayerWeapon weapon, ItemData data)
+    public void SetWeaponType(PlayerWeapon weapon, ItemData data, PlayerWeaponData weaponData)
     {
         for(int i = 0; i < _slotArray.Length; i++)
         {
@@ -106,6 +109,8 @@ public class WeaponPanel : MonoBehaviour
                 _slotArray[i].OnSlot = true;
 
                 _slotArray[i].Data = data;
+
+                _slotArray[i].WeaponData = weaponData;  
 
                 return;
             }
@@ -128,6 +133,16 @@ public class WeaponPanel : MonoBehaviour
         _descriptionText.text = data.Description;
 
         _descriptionName.text = data.ItemName;
+
+        var weaponData = slotComponent.WeaponData;
+
+        _abilitieText[(int)AbilitieType.Damage].text = weaponData.Power.ToString() + "X";
+
+        _abilitieText[(int)AbilitieType.Range].text = weaponData.NormalEffectRange.ToString() + "X";
+
+        _abilitieText[(int)AbilitieType.Critical].text = weaponData.ChargePower.ToString() + "X";
+
+        _abilitieText[(int)AbilitieType.Speed].text = 1f.ToString() + "X";    
 
         _currentSlot = slotComponent;
 
@@ -154,6 +169,11 @@ public class WeaponPanel : MonoBehaviour
         _descriptionText.text = string.Empty;
 
         _descriptionName.text = string.Empty;
+
+        foreach(var abilitieDescription in _abilitieText)
+        {
+            abilitieDescription.text = string.Empty;    
+        }
     }
 
     private void SetActiveChildImage(InputAction.CallbackContext context)

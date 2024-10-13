@@ -17,6 +17,8 @@ public class WeaponSlot : MonoBehaviour, IWeaponCameraEvent
     private bool _onSlot = false;
 
     public ItemData Data { get; set; }
+    public PlayerWeaponData WeaponData {get;set; }
+
     public PlayerWeapon Type
     {
         get { return _weaponType; }

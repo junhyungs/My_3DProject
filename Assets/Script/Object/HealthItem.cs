@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class HealthItem : MonoBehaviour, IInteractionItem
 {
+    [Header("UI_Position")]
+    [SerializeField] private Vector3 _uiPosition;
+
     public void InteractionItem()
     {
         UIManager.Instance.HideItemInteractionUI(transform, ObjectName.GetUI);
@@ -9,12 +12,11 @@ public class HealthItem : MonoBehaviour, IInteractionItem
         gameObject.SetActive(false);
     }
 
-    
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            UIManager.Instance.ItemInteractionUI(transform, ObjectName.GetUI);
+            UIManager.Instance.ItemInteractionUI(transform, _uiPosition, ObjectName.GetUI);
         }
     }
 

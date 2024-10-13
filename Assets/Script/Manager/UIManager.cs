@@ -22,7 +22,7 @@ public class UIManager : Singleton<UIManager>
     private Dictionary<Transform, GameObject> ActiveUIInstance = new Dictionary<Transform, GameObject>();
 
 
-    public void ItemInteractionUI(Transform itemTransform, ObjectName uiName)
+    public void ItemInteractionUI(Transform itemTransform, Vector3 uiPosition, ObjectName uiName)
     {
         if (!ActiveUIInstance.ContainsKey(itemTransform))
         {
@@ -30,15 +30,15 @@ public class UIManager : Singleton<UIManager>
             {
                 case ObjectName.UseUI:
                     GameObject useUI = ObjectPool.Instance.DequeueObject(ObjectName.UseUI);
-                    InteractionUIPosition(useUI, itemTransform, new Vector3(1.5f, 0.5f, 0f));
+                    InteractionUIPosition(useUI, itemTransform, uiPosition);
                     break;
                 case ObjectName.GetUI:
                     GameObject getUI = ObjectPool.Instance.DequeueObject(ObjectName.GetUI);
-                    InteractionUIPosition(getUI, itemTransform, new Vector3(1.7f, 0.5f, 0f));
+                    InteractionUIPosition(getUI, itemTransform, uiPosition);
                     break;
                 case ObjectName.LadderUI:
                     GameObject ladderUI = ObjectPool.Instance.DequeueObject(ObjectName.LadderUI);
-                    InteractionUIPosition(ladderUI, itemTransform, new Vector3(-1f, 0.5f, 0f));
+                    InteractionUIPosition(ladderUI, itemTransform, uiPosition);
                     break;
             }
         }

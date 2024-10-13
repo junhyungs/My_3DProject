@@ -1,8 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Burst;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Sword : Weapon

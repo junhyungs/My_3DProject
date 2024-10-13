@@ -72,14 +72,16 @@ public class PlayerWeaponController : MonoBehaviour
     public void ActiveLeftWeapon(bool isCharge)
     {
         LeftChargeObject[(int)_currentWeaponType].SetActive(false);
+
         LeftObject[(int)_currentWeaponType].SetActive(true);
-        _effectController.ActiveSwordEffect_L(isCharge);
+
+        _effectController.ActiveSwordEffect_L(isCharge, _currentWeaponType);
+
         ActiveIdleWeapon(false);
     }
 
     public void ActiveChargeLeftWeapon(bool isCharge)
     {
-        _effectController.SetNewColor(_currentWeaponType);
         LeftChargeObject[(int)_currentWeaponType].SetActive(true);     
         ActiveIdleWeapon(false);
     }
@@ -88,20 +90,18 @@ public class PlayerWeaponController : MonoBehaviour
     {
         RightChargeObject[(int)_currentWeaponType].SetActive(false);
         RightObject[(int)_currentWeaponType].SetActive(true);
-        _effectController.ActiveSwordEffect_R(isCharge);
+        _effectController.ActiveSwordEffect_R(isCharge, _currentWeaponType);
         ActiveIdleWeapon(false);
     }
 
     public void ActiveChargeRightWeapon(bool isCharge)
     {
-        _effectController.SetNewColor(_currentWeaponType);
         RightChargeObject[(int)_currentWeaponType].SetActive(true);
         ActiveIdleWeapon(false);
     }
 
     public void DeActiveRightWeapon()
     {
-        _effectController.ResetColor(_currentWeaponType);
         RightObject[(int)_currentWeaponType].SetActive(false);
         ActiveIdleWeapon(true);
         m_weaponAnimation.SetBool("NextAttack", true);
@@ -109,7 +109,6 @@ public class PlayerWeaponController : MonoBehaviour
 
     public void DeActiveLeftWeapon()
     {
-        _effectController.ResetColor(_currentWeaponType);
         LeftObject[(int)_currentWeaponType].SetActive(false);    
         ActiveIdleWeapon(true);
         m_weaponAnimation.SetBool("NextAttack", true);
@@ -117,7 +116,6 @@ public class PlayerWeaponController : MonoBehaviour
 
     public void ChargeAttackReset()
     {
-        _effectController.ResetColor(_currentWeaponType);
         RightChargeObject[(int)_currentWeaponType].SetActive(false);
         LeftChargeObject[(int)_currentWeaponType].SetActive(false);
     }
@@ -163,27 +161,32 @@ public class PlayerWeaponController : MonoBehaviour
             case PlayerWeapon.Sword:
                 _currentWeapon = gameObject.AddComponent<Sword>();
                 Sword swordComponent = _currentWeapon as Sword;
-                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W101", swordComponent, _effectController));
+                _effectController.ChageColor(PlayerWeapon.Sword);
+                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W101", swordComponent));
                 break;
             case PlayerWeapon.Hammer:
                 _currentWeapon = gameObject.AddComponent<Hammer>();
                 Hammer hammerComponent = _currentWeapon as Hammer;
-                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W102", hammerComponent, _effectController));
+                _effectController.ChageColor(PlayerWeapon.Hammer);
+                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W102", hammerComponent));
                 break;
             case PlayerWeapon.Dagger:
                 _currentWeapon = gameObject.AddComponent<Dagger>();
                 Dagger daggerComponent = _currentWeapon as Dagger;
-                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W103", daggerComponent, _effectController));
+                _effectController.ChageColor(PlayerWeapon.Dagger);
+                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W103", daggerComponent));
                 break;
             case PlayerWeapon.GreatSword:
                 _currentWeapon = gameObject.AddComponent<GreatSword>();
                 GreatSword greatSwordComponent = _currentWeapon as GreatSword;
-                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W104", greatSwordComponent, _effectController));
+                _effectController.ChageColor(PlayerWeapon.GreatSword);
+                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W104", greatSwordComponent));
                 break;
             case PlayerWeapon.Umbrella:
                 _currentWeapon = gameObject.AddComponent<Umbrella>();
                 Umbrella umbrellaComponent = _currentWeapon as Umbrella;
-                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W105", umbrellaComponent, _effectController));
+                _effectController.ChageColor(PlayerWeapon.Umbrella);
+                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W105", umbrellaComponent));
                 break;
         }
 

@@ -96,6 +96,24 @@ public enum PlayerWeapon
     Umbrella
 }
 
+public enum PlayerWeaponID
+{
+    W101,
+    W102,
+    W103,
+    W104,
+    W105
+}
+
+public enum Effect
+{
+    Sword,
+    Hammer,
+    Dagger,
+    GreatSword,
+    Umbrella
+}
+
 public enum BaseItemType
 {
     Witch,

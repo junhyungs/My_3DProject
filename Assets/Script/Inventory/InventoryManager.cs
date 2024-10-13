@@ -156,7 +156,7 @@ public class InventoryManager : Singleton<InventoryManager>
     #endregion
 
     //π´±‚ »πµÊ Ω√ »£√‚
-    public void SetWeapon(PlayerWeapon weapon, ItemData data)
+    public void SetWeapon(PlayerWeapon weapon, ItemData data, PlayerWeaponData weaponData)
     {
         if(_weaponSet.Contains(weapon))
         {
@@ -165,9 +165,7 @@ public class InventoryManager : Singleton<InventoryManager>
 
         _weaponSet.Add(weapon);
 
-        WeaponDictionary.Add(weapon, data);
-
-        _weaponPanel.SetWeaponType(weapon, data);
+        _weaponPanel.SetWeaponType(weapon, data, weaponData);
     }
 
     //æ∆¿Ã≈€ »πµÊ Ω√ »£√‚

@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Ladder : MonoBehaviour, IInteractionItem
 {
+    [Header("UI_Position")]
+    [SerializeField] private Vector3 _uiPosition;
+
     public void InteractionItem()
     {
         UIManager.Instance.HideItemInteractionUI(transform, ObjectName.LadderUI);
@@ -11,7 +14,7 @@ public class Ladder : MonoBehaviour, IInteractionItem
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            UIManager.Instance.ItemInteractionUI(transform, ObjectName.LadderUI);
+            UIManager.Instance.ItemInteractionUI(transform, _uiPosition, ObjectName.LadderUI);
         }
     }
 

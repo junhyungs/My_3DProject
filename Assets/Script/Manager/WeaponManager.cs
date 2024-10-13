@@ -19,7 +19,7 @@ public class WeaponManager : Singleton<WeaponManager>
         _weaponController = weaponController;
     }
 
-    public IEnumerator LoadWeaponData(string Id, Weapon weaponComponent, PlayerWeaponEffectController effectController)
+    public IEnumerator LoadWeaponData(string Id, Weapon weaponComponent)
     {
         yield return new WaitWhile(() =>
         {
@@ -28,8 +28,6 @@ public class WeaponManager : Singleton<WeaponManager>
         });
 
         var weaponData = DataManager.Instance.GetData(Id) as PlayerWeaponData;
-        
-        effectController.SetEffectRange(weaponData.NormalEffectRange, weaponData.ChargeEffectRange);
 
         weaponComponent.SetWeaponData(weaponData);
     }

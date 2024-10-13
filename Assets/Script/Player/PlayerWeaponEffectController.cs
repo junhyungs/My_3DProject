@@ -3,146 +3,150 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public enum Effect
-{
-    Sword,
-    Hammer,
-    Dagger,
-    GreatSword,
-    Umbrella
-}
-
 public class PlayerWeaponEffectController : MonoBehaviour
 {
-    [Header("LeftDirectionValue")]
-    [SerializeField] private float m_LeftDirectionValue;
-
-    [Header("RightDirectionValue")]
-    [SerializeField] private float m_RightDirectionValue;
-
-    [Header("SwordEffect")]
-    [SerializeField] private GameObject m_SwordEffect;
-    [SerializeField] private Transform m_SwordEffectTransform;
-
-    [Header("HammerEffect")]
-
-    [Header("DaggerEffect")]
-
-    [Header("GreatSwordEffect")]
-
-    [Header("UmbrellaEffect")]
-
-    [Header("WeaponMaterial")]
-    [SerializeField] private Material m_SwordMaterial;
-
-    private Dictionary<Effect, GameObject> EffectDic = new Dictionary<Effect, GameObject>();
-    private Dictionary<PlayerWeapon, Material> WeaponMaterialDic = new Dictionary<PlayerWeapon, Material>(); 
-    private Dictionary<PlayerWeapon, Color> WeaponColorDic = new Dictionary<PlayerWeapon, Color>();
-    private WaitForSeconds m_effectDelayTime = new WaitForSeconds(0.1f);
-
-    private float m_normalRange;
-    private float m_chargeRange;
-
-    private void Awake()
+    private enum Range
     {
-        InitEffect();
-        InitColor();
+        Normal,
+        Charge
     }
 
-    private void InitEffect()
+    [Header("Transform")]
+    [SerializeField] private Transform _effectTransform;
+
+    private Dictionary<PlayerWeapon, Color> _colorValueDictionary;
+    private Dictionary<PlayerWeapon, List<Vector3>> _rangeDictionary;
+
+    private GameObject _effectObject;
+    private ParticleSystem _effectPaticleSystem;
+    private Material _effectMaterial;
+
+    private void Start()
     {
-        CreateSwordEffect();
+        InitializeEffect();
     }
 
-    public void InitColor()
+    private void InitializeEffect()
     {
-        WeaponMaterialDic.Add(PlayerWeapon.Sword, m_SwordMaterial);
-        WeaponColorDic.Add(PlayerWeapon.Sword, m_SwordMaterial.GetColor("_Color"));
-        WeaponMaterialDic.Add(PlayerWeapon.Hammer, m_SwordMaterial);
-        WeaponColorDic.Add(PlayerWeapon.Hammer, m_SwordMaterial.GetColor("_Color"));
-        WeaponMaterialDic.Add(PlayerWeapon.Dagger, m_SwordMaterial);
-        WeaponColorDic.Add(PlayerWeapon.Dagger, m_SwordMaterial.GetColor("_Color"));
-        WeaponMaterialDic.Add(PlayerWeapon.GreatSword, m_SwordMaterial);
-        WeaponColorDic.Add(PlayerWeapon.GreatSword, m_SwordMaterial.GetColor("_Color"));
-        WeaponMaterialDic.Add(PlayerWeapon.Umbrella, m_SwordMaterial);
-        WeaponColorDic.Add(PlayerWeapon.Umbrella, m_SwordMaterial.GetColor("_Color"));
+        InitializeColorDictionary();
+
+        InitializeMaterial();
+
+        InitializeEffectObject();
+
+        StartCoroutine(InitializeRangeDictionary());
     }
 
-    public void SetEffectRange(float normalRange, float chargeRange)
+    private void InitializeEffectObject()
     {
-        m_normalRange = normalRange;
-        m_chargeRange = chargeRange;
+        GameObject loadObject = Resources.Load<GameObject>("Prefab/Player/Slash");
+
+        GameObject effectObject = Instantiate(loadObject, _effectTransform);
+
+        effectObject.transform.localPosition = Vector3.zero; 
+
+        _effectPaticleSystem = effectObject.GetComponent<ParticleSystem>();
+
+        _effectObject = effectObject;
     }
 
-    private GameObject GetEffect(Effect effect)
+    private void InitializeMaterial()
     {
-        return EffectDic[effect];
+        Material material = Resources.Load<Material>("Prefab/Player/FX/SwordSlash");
+
+        Color color = GetWeaponColor(PlayerWeapon.Sword);
+
+        material.SetColor("_AddColor", color);
+
+        _effectMaterial = material;
     }
 
-    public Material GetMaterial(PlayerWeapon weapon)
+    private void InitializeColorDictionary()
     {
-        return WeaponMaterialDic[weapon];
+        _colorValueDictionary = new Dictionary<PlayerWeapon, Color>
+        {
+            {PlayerWeapon.Sword, new Color(1f, 13f / 255f, 8f / 255f)},
+            {PlayerWeapon.Hammer, new Color(0f, 1f, 1f) },
+            {PlayerWeapon.Dagger, new Color(38f / 255f, 1f, 18f / 255f) },
+            {PlayerWeapon.GreatSword, new Color(1f, 0f, 228f / 255f) },
+            {PlayerWeapon.Umbrella, new Color(0f, 4f / 255f, 1f) }
+        };
     }
 
-    public Color GetColor(PlayerWeapon weapon)
+    private IEnumerator InitializeRangeDictionary()
     {
-        return WeaponColorDic[weapon];  
+        _rangeDictionary = new Dictionary<PlayerWeapon, List<Vector3>>();
+
+        yield return new WaitWhile(() =>
+        {
+            return DataManager.Instance.GetData("W101") == null;
+        });
+
+        for(int i = 0; i < 5; i++)
+        {
+            var data = DataManager.Instance.GetData($"W10{i+1}") as PlayerWeaponData;
+
+            float normalRange = data.NormalEffectRange;
+
+            float chargeRange = data.ChargeEffectRange;
+
+            List<Vector3> rangeList = new List<Vector3>
+            {
+                new Vector3(normalRange, normalRange, normalRange),
+                new Vector3(chargeRange, chargeRange, chargeRange)
+            };
+
+            _rangeDictionary.Add((PlayerWeapon)i, rangeList);
+        }
     }
 
-    private void CreateSwordEffect()
+    private Color GetWeaponColor(PlayerWeapon weapon)
     {
-        GameObject swordEffect = Instantiate(m_SwordEffect, m_SwordEffectTransform);
-        VisualEffect swordVfx = swordEffect.GetComponent<VisualEffect>();
-        swordVfx.Stop();
-        EffectDic.Add(Effect.Sword, swordEffect);
-        swordEffect.transform.localPosition = Vector3.zero;
+        if (_colorValueDictionary.ContainsKey(weapon))
+        {
+            return _colorValueDictionary[weapon];
+        }
+
+        return Color.white;
     }
 
-    public void ActiveSwordEffect_L(bool isCharge)
+    private Vector3 GetEffectRange(bool isCharge ,PlayerWeapon currentWeapon)
     {
-        float effectRange = isCharge ? m_chargeRange : m_normalRange;
-        GameObject swordEffect = GetEffect(Effect.Sword);
-        VisualEffect swordVfx = swordEffect.GetComponent<VisualEffect>();
-        swordVfx.SetFloat("Size", effectRange);
-        swordVfx.SetFloat("Diretion", m_LeftDirectionValue);
-        StartCoroutine(ActiveDelay_L(swordVfx));
+        if (_rangeDictionary.ContainsKey(currentWeapon))
+        {
+            List<Vector3> rangeList = _rangeDictionary[currentWeapon];
+
+            Vector3 range = isCharge ? rangeList[(int)Range.Charge] : rangeList[(int)Range.Charge];
+
+            return range;
+        }
+
+        Debug.Log("정상적인 이펙트 범위를 리턴하지 못했습니다.");
+        return Vector3.zero;
     }
 
-    private IEnumerator ActiveDelay_L(VisualEffect swordVfx)
+    public void ChageColor(PlayerWeapon weapon)
     {
-        yield return m_effectDelayTime;
-        swordVfx.Play();
+        Color newColor = GetWeaponColor(weapon);
+
+        _effectMaterial.SetColor("_AddColor", newColor);
     }
 
-    public void ActiveSwordEffect_R(bool isCharge)
+    public void ActiveSwordEffect_L(bool isCharge, PlayerWeapon currentWeapon)
     {
-        float effectRange = isCharge ? m_chargeRange : m_normalRange;
-        GameObject swordEffect = GetEffect(Effect.Sword);
-        VisualEffect swordVfx = swordEffect.GetComponent<VisualEffect>();
-        swordVfx.SetFloat("Size", effectRange);
-        swordVfx.SetFloat("Diretion", m_RightDirectionValue);
-        StartCoroutine(ActiveDelay_R(swordVfx));
+        Vector3 effectRange = GetEffectRange(isCharge, currentWeapon);
+
+        _effectObject.transform.localScale = effectRange;
+        _effectObject.transform.localRotation = Quaternion.identity;
+        _effectPaticleSystem.Play();
     }
 
-    private IEnumerator ActiveDelay_R(VisualEffect swordVfx)
+    public void ActiveSwordEffect_R(bool isCharge, PlayerWeapon currentWeapon)
     {
-        yield return m_effectDelayTime;
-        swordVfx.Play();
+        Vector3 effectRange = GetEffectRange(isCharge, currentWeapon);
+
+        _effectObject.transform.localScale = effectRange;
+        _effectObject.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
+        _effectPaticleSystem.Play();
     }
-
-    public void SetNewColor(PlayerWeapon weapon)
-    {
-        Color currentColor = GetMaterial(weapon).GetColor("_Color");
-        Color newColor = currentColor * Mathf.Pow(2f, 3f);
-        Material weaponMaterial = GetMaterial(weapon);
-        weaponMaterial.SetColor("_Color", newColor);
-    }
-
-    public void ResetColor(PlayerWeapon weapon)
-    {
-        Material weaponMaterial = GetMaterial(weapon);
-        weaponMaterial.SetColor("_Color",GetColor(weapon));
-    }
-
-
 }

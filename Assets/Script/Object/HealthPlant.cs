@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class HealthPlant : MonoBehaviour, IInteractionItem
 {
+    [Header("UI_Position")]
+    [SerializeField] private Vector3 _uiPosition;
+
     private bool isUse;
     private bool isGrow;
     private Animator m_healthPlantAnim;
@@ -46,7 +49,7 @@ public class HealthPlant : MonoBehaviour, IInteractionItem
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            UIManager.Instance.ItemInteractionUI(gameObject.transform, ObjectName.UseUI);
+            UIManager.Instance.ItemInteractionUI(gameObject.transform, _uiPosition, ObjectName.UseUI);
 
             m_playerHp = other.gameObject.GetComponent<PlayerHealth>(); 
         }
