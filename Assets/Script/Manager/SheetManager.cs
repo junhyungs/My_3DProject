@@ -27,6 +27,10 @@ public class SheetManager : MonoBehaviour
     const string _itemDataPath = "https://script.google.com/macros/s/AKfycbxvjrAtBLmy0WiiQIMxDADV2APHNpKifaW3F_idjogUQkHlbzmuAJQjFHunRYJAXf7_7Q/exec";
     #endregion
 
+    #region Ability
+    const string _abilityPath = "https://script.google.com/macros/s/AKfycbwNnQuNy1jfiNOpvZjGQDS7zFpY3aEzKhxghg02c_5VcumV0bREp7Q7r0S8HH9R0WIJ/exec";
+    #endregion
+
     [Header("SaveJson")]
     [SerializeField] private bool _saveJson;
 
@@ -53,6 +57,7 @@ public class SheetManager : MonoBehaviour
         StartCoroutine(SaveJsonData(JsonName.BossProjectile, _bossProjectilePath));
         StartCoroutine(SaveJsonData(JsonName.Dialogue, _dialoguePath));
         StartCoroutine(SaveJsonData(JsonName.Item, _itemDataPath));
+        StartCoroutine(SaveJsonData(JsonName.Ability, _abilityPath));
     }
 
     private void LoadJson()
@@ -66,6 +71,7 @@ public class SheetManager : MonoBehaviour
         StartCoroutine(LoadJsonData(JsonName.BossProjectile, _bossProjectilePath));
         StartCoroutine(LoadJsonData(JsonName.Dialogue, _dialoguePath));
         StartCoroutine(LoadJsonData(JsonName.Item, _itemDataPath));
+        StartCoroutine(LoadJsonData(JsonName.Ability, _abilityPath));
     }
 
     public IEnumerator LoadJsonData(JsonName name, string url)

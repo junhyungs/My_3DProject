@@ -19,7 +19,8 @@ public enum JsonName
     PrefabPath,
     BossProjectile,
     Dialogue,
-    Item
+    Item,
+    Ability
 }
 
 public enum MapType
