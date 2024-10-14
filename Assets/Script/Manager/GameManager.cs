@@ -1,48 +1,33 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameManager : Singleton<GameManager>
 {
-    private bool isGameOver = false;
-
+    #region Player
+    private PlayerInput _playerInput;
     public GameObject Player { get; set; }
+    #endregion
+
+    #region GameOver
+    private bool isGameOver = false;
     public bool IsGameOver { get {  return isGameOver; } set { isGameOver = value; } }
+    #endregion
 
-    [Header("RespawnPosition")]
-    [SerializeField] private Transform m_respawnTransform;
-    public Transform RespawnTransform { get { return m_respawnTransform;} }
-
-    
-    public void RespawnPlayer()
+    private void Start()
     {
-        if (isGameOver)
-        {
-            StartCoroutine(Respawn());
-        }
+        _playerInput = Player.GetComponent<PlayerInput>();
     }
 
-    private IEnumerator Respawn()
+    public void PlayerLock(bool isLock)
     {
-        yield return new WaitForSeconds(2.0f);
-
-        PlayerHealth playerHealth = Player.GetComponent<PlayerHealth>();
-
-        playerHealth.PlayerHP = 4;
-
-        Animator playerAnim = Player.GetComponent<Animator>();
-
-        playerAnim.SetBool("Die", false);
-
-        PlayerMoveController playerMoveController = Player.GetComponent<PlayerMoveController>();
-
-        playerMoveController.IsAction = true;
-
-        Player.transform.position = m_respawnTransform.position;
-
-        Player.SetActive(true);
-
-        isGameOver = false;
+        _playerInput.enabled = isLock ? false : true;
     }
 
+    public void GameOver()
+    {
+
+    }
 }

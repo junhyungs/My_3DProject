@@ -85,7 +85,8 @@ public enum NPC
     TestNPC,
     BusNPC,
     TelePhoneNPC,
-    HallCrow_1
+    HallCrow_1,
+    Banker
 }
 
 public enum PlayerWeapon

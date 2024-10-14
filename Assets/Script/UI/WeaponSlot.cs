@@ -9,6 +9,11 @@ public class WeaponSlot : MonoBehaviour, IWeaponCameraEvent
     [Header("RawImage")]
     [SerializeField] private RawImage _rawImage;
 
+    [Header("RenderTexture")]
+    [SerializeField] private RenderTexture _renderTexture;
+
+    private Texture2D _texture2D;
+
     [Header("WeaponType")]
     [SerializeField] private PlayerWeapon _weaponType;
 
@@ -50,6 +55,29 @@ public class WeaponSlot : MonoBehaviour, IWeaponCameraEvent
         {
             _weaponAction -= callBack;
         }
+    }
+
+    public void LiveImage()
+    {
+        _rawImage.texture = _renderTexture;
+    }
+
+    public void CaptureImage()
+    {
+        if (_texture2D == null)
+        {
+            RenderTexture.active = _renderTexture;
+
+            _texture2D = new Texture2D(_renderTexture.width, _renderTexture.height, TextureFormat.RGB24, false);
+
+            _texture2D.ReadPixels(new Rect(0, 0, _renderTexture.width, _renderTexture.height), 0, 0);
+
+            _texture2D.Apply();
+
+            RenderTexture.active = null;
+        }
+
+        _rawImage.texture = _texture2D;
     }
 
     public void InvokeEvent(bool isActive)

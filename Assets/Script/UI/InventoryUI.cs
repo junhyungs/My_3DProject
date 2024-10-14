@@ -8,8 +8,7 @@ public class InventoryUI : MonoBehaviour
 {
     [Header("CancelAction")]
     [SerializeField] private InputActionReference _cancelAction;
-    [Header("PlayerAttackAction")]
-    [SerializeField] private InputActionAsset _playerActionAsset;
+
     [Header("PlayerUI")]
     [SerializeField] private PlayerUI _playerUI;
 
@@ -39,7 +38,7 @@ public class InventoryUI : MonoBehaviour
 
     private void OnEnableInventoryUI()
     {
-        _playerActionAsset.Disable();
+        GameManager.Instance.PlayerLock(true);
 
         _inventoryPanel.SetActive(true);
 
@@ -48,10 +47,22 @@ public class InventoryUI : MonoBehaviour
 
     private void OnDisableInventoryUI()
     {
-        _playerActionAsset.Enable();
+        GameManager.Instance.PlayerLock(false);
 
         _inventoryPanel.SetActive(false);
 
         _playerUI.MovePlayerUI(false);
+    }
+
+    public void ActionControl(bool control)
+    {
+        if (control)
+        {
+            _cancelAction.action.performed -= OnCancel;
+
+            return;
+        }
+
+        _cancelAction.action.performed += OnCancel; 
     }
 }

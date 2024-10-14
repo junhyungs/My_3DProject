@@ -1,7 +1,17 @@
+using System.Collections;
 using UnityEngine;
 
 public class TestNPC : _NPC, IInteractionDialogue
 {
+    [Header("NPC_Camera")]
+    [SerializeField] private GameObject _npcCamaraObject;
+
+    [Header("NPC_Name")]
+    [SerializeField] private NPC _npcName;
+
+    [Header("UIPosition")]
+    [SerializeField] private Vector3 _uiPosition;
+
     public void TriggerDialogue()
     {
         if (_onTrigger)
@@ -11,30 +21,34 @@ public class TestNPC : _NPC, IInteractionDialogue
 
         _onTrigger = true;
 
-        ToggleNPC(true);
+        ToggleNPC(true, _npcCamaraObject);
 
         if (_story)
         {
             _story = false;
 
-            StartCoroutine(CinemachineBlending(this, DialogueOrder.Story));
+            StartCoroutine(StartDialogue(DialogueOrder.Story));
         }
         else
         {
-            StartCoroutine(CinemachineBlending(this, DialogueOrder.Loop));
+            StartCoroutine(StartDialogue(DialogueOrder.Loop));
         }
+    }
+
+    protected override IEnumerator StartDialogue(DialogueOrder order)
+    {
+        yield return CinemachineBlending();
+
+        yield return StartCoroutine(DialogueManager.Instance.StartNormalNPC_Dialogue(_npcName, order));
+
+        ToggleNPC(false, _npcCamaraObject);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            if(_player == null)
-            {
-                _player = other.GetComponent<Player>();
-            }
-
-            UIManager.Instance.InteractionDialogueUI(transform);
+            UIManager.Instance.InteractionDialogueUI(transform, _uiPosition);
         }
     }
 

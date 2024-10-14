@@ -18,6 +18,8 @@ public class InventoryManager : Singleton<InventoryManager>
     private Action<PlayerWeapon, bool> _globalWeaponAction;
     private List<ITrinketCameraEvent> _trinketEventList = new List<ITrinketCameraEvent>();
     private List<IWeaponCameraEvent> _weaponEventList = new List<IWeaponCameraEvent>();
+
+    private InventoryUI _inventoryUI;
     #endregion
 
     #region Data
@@ -82,6 +84,7 @@ public class InventoryManager : Singleton<InventoryManager>
 
         _trinketPanel = transform.GetComponentInChildren<TrinketPanel>(true);
         _weaponPanel = transform.GetComponentInChildren<WeaponPanel>(true);
+        _inventoryUI = GetComponent<InventoryUI>();
     }
 
     private void Start()
@@ -154,6 +157,11 @@ public class InventoryManager : Singleton<InventoryManager>
     }
 
     #endregion
+
+    public void OnInventoryTabAction(bool onAction)
+    {
+        _inventoryUI.ActionControl(onAction);
+    }
 
     //¹«±â È¹µæ ½Ã È£Ãâ
     public void SetWeapon(PlayerWeapon weapon, ItemData data, PlayerWeaponData weaponData)

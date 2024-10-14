@@ -2,38 +2,32 @@ using Cinemachine;
 using System.Collections;
 using UnityEngine;
 
-public class _NPC : MonoBehaviour
-{
-    [Header("NPC_Camera")]
-    [SerializeField] private GameObject _npcCamaraObject;
-    [Header("NPC_Name")]
-    [SerializeField] private NPC _npcName;
-    
+public abstract class _NPC : MonoBehaviour
+{    
     protected bool _story = true;
     protected bool _onTrigger = false;
 
-    protected Player _player;
 
-    protected IEnumerator CinemachineBlending(_NPC currentNPC, DialogueOrder order)
+    protected abstract IEnumerator StartDialogue(DialogueOrder order);
+
+    protected IEnumerator CinemachineBlending()
     {
         CinemachineBrain brain = Camera.main.GetComponent<CinemachineBrain>();
 
         float time = brain.m_DefaultBlend.m_Time;
 
         yield return new WaitForSeconds(time);
-
-        DialogueManager.Instance.StartDialogue(_npcName, order, currentNPC);
     }
 
-    public void ToggleNPC(bool toggle)
+    public void ToggleNPC(bool toggle, GameObject npcCamera)
     {
         CursorLock(toggle);
 
-        _player.DialogueLock(toggle);
+        GameManager.Instance.PlayerLock(toggle);
 
-        if (_npcCamaraObject != null)
+        if (npcCamera != null)
         {
-            _npcCamaraObject.SetActive(toggle);
+            npcCamera.SetActive(toggle);
         }
 
         if (toggle)

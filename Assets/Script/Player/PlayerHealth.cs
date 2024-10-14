@@ -48,6 +48,6 @@ public class PlayerHealth : MonoBehaviour, IDamged
 
         GameManager.Instance.IsGameOver = true;
 
-        GameManager.Instance.RespawnPlayer();
+        GameManager.Instance.GameOver();
     }
 }

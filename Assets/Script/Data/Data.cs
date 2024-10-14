@@ -192,3 +192,19 @@ public class DialogueData : Data
         LoopMessage = loopMessage;
     }
 }
+
+public class AbilityData : Data
+{
+    public string ID { get; set; }
+    public string DescriptionName { get; set; }
+    public string Description { get; set; }
+    public List<int> PriceList { get; set; }
+
+    public AbilityData(string iD, string descriptionName, string description, List<int> priceList)
+    {
+        ID = iD;
+        DescriptionName = descriptionName;
+        Description = description;
+        PriceList = priceList;
+    }
+}

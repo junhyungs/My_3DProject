@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class UIManager : Singleton<UIManager>
 {
+    public static event Action _onAbilityUI;
+
     private PlayerSkill m_currentSkill;
     private Action<PlayerSkill> SkillChangeCallBack;
     private Action<int> PlayerSkillCountCallBack;
@@ -17,10 +19,14 @@ public class UIManager : Singleton<UIManager>
         ObjectPool.Instance.CreatePool(ObjectName.InteractionDialogueUI);
     }
 
+    public void OnAbilityUI()
+    {
+        _onAbilityUI.Invoke();
+    }
+
     #region Interaction
     //Interaction UI Dic
     private Dictionary<Transform, GameObject> ActiveUIInstance = new Dictionary<Transform, GameObject>();
-
 
     public void ItemInteractionUI(Transform itemTransform, Vector3 uiPosition, ObjectName uiName)
     {
@@ -44,15 +50,13 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    public void InteractionDialogueUI(Transform npcTransform)
+    public void InteractionDialogueUI(Transform npcTransform, Vector3 uiPosition)
     {
         if (!ActiveUIInstance.ContainsKey(npcTransform))
         {
-            Vector3 newVector3 = new Vector3(1.5f, 1f, 0f);
-
             GameObject dialogUI = ObjectPool.Instance.DequeueObject(ObjectName.InteractionDialogueUI);
 
-            InteractionUIPosition(dialogUI, npcTransform, newVector3);
+            InteractionUIPosition(dialogUI, npcTransform, uiPosition);
         }
     }
 

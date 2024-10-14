@@ -7,13 +7,10 @@ public class Player : MonoBehaviour
     private PlayerMoveController _moveController;
     private PlayerAttackController _attackController;
     
-    private void OnEnable()
-    {
-        GameManager.Instance.Player = this.gameObject;
-    }
-
     private void Awake()
     {
+        GameManager.Instance.Player = this.gameObject;
+        
         _healthComponent = gameObject.GetComponent<PlayerHealth>();
         _moveController = gameObject.GetComponent<PlayerMoveController>();
         _attackController = gameObject.GetComponent<PlayerAttackController>();

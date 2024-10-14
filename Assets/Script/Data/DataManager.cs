@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using UnityEngine.UIElements;
 
 public class DataManager
 {
@@ -61,7 +62,59 @@ public class DataManager
             case nameof(JsonName.Item):
                 ReadItemData(jsonData);
                 break;
+            case nameof(JsonName.Ability):
+                ReadAbilityData(jsonData);
+                break;
         }
+    }
+
+    private void ReadAbilityData(string jsonData)
+    {
+        try
+        {
+            JArray jsonArray = JArray.Parse(jsonData);
+
+            foreach(var item in jsonArray)
+            {
+                string id = item["ID"] != null ? item["ID"].ToString() : string.Empty;
+
+                string descriptionName = item["DescriptionName"] != null ? item["DescriptionName"].ToString() : string.Empty;
+
+                string replace = item["Description"] != null ? item["Description"].ToString() : string.Empty;
+
+                string description = replace.Replace("\\n", "\n");
+
+                string priceData = item["Price"] != null ? item["Price"].ToString() : string.Empty;
+
+                List<int> priceList = ParsePrice(priceData);
+
+                AbilityData data = new AbilityData(id, descriptionName, description, priceList);
+
+                _dataDictionary.Add(id, data);
+            }
+        }
+        catch (JsonException ex)
+        {
+            Debug.Log("<Ability>데이터를 변환하지 못했습니다.");
+        }
+    }
+
+    private List<int> ParsePrice(string priceData)
+    {
+        string trim = priceData.Trim('{', '}');
+
+        string[] splitPriceData = trim.Split('/');
+
+        List<int> priceList = new List<int>();
+
+        for (int i = 0; i < splitPriceData.Length; i++)
+        {
+            int price = ParseInt(splitPriceData[i]);
+
+            priceList.Add(price);
+        }
+
+        return priceList;
     }
 
     private void ReadItemData(string jsonData)

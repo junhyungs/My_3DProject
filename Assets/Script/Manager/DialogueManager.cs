@@ -115,16 +115,32 @@ public class DialogueManager : Singleton<DialogueManager>
         return dialogList;
     }
 
-    public void StartDialogue(NPC npc, DialogueOrder order, _NPC currentNPC = null)
+    #region Normal_NPC
+    public IEnumerator StartNormalNPC_Dialogue(NPC npc, DialogueOrder order)
     {
         string id = npc.ToString();
 
         OnActorName(id);
 
-        List<string> dialogList = GetList(id, order);
+        List<string> dialogueList = GetList(id, order);
 
-        StartCoroutine(ReadMessage(dialogList, currentNPC));
+        yield return StartCoroutine(ReadDialogue(dialogueList));
     }
+    #endregion
+
+    #region Banker
+    public IEnumerator StartBankerDialogue(NPC npc, DialogueOrder order)
+    {
+        string id = npc.ToString();
+
+        OnActorName(id);
+
+        List<string> dialogueList = GetList(id, order);
+
+        yield return StartCoroutine(ReadDialogue(dialogueList));
+    }
+
+    #endregion
 
     private void OnActorName(string id)
     {
@@ -133,7 +149,7 @@ public class DialogueManager : Singleton<DialogueManager>
         _dialogueName.text = GetName(id);
     }
 
-    private IEnumerator ReadMessage(List<string> messageList, _NPC currentNPC)
+    private IEnumerator ReadDialogue(List<string> dialogueList)
     {
         _dialogueUI.gameObject.SetActive(true);
 
@@ -141,7 +157,7 @@ public class DialogueManager : Singleton<DialogueManager>
 
         yield return _uiRect.DOScale(_maxScale, _durationTime).WaitForCompletion();
 
-        foreach(var message in messageList)
+        foreach(var message in dialogueList)
         {
             yield return StartCoroutine(Message(message));
 
@@ -153,17 +169,14 @@ public class DialogueManager : Singleton<DialogueManager>
 
         yield return _uiRect.DOScale(_minScale, _durationTime).WaitForCompletion();
 
-        currentNPC.ToggleNPC(false);
-
         _dialogueUI.gameObject.SetActive(false);
-
     }
 
     private IEnumerator Message(string message)
     {
         _dialogueText.text = string.Empty;
 
-        foreach(char charMessage in message)
+        foreach (char charMessage in message)
         {
             _dialogueText.text += charMessage;
 

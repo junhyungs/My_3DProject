@@ -8,11 +8,23 @@ public class RenderCamera : MonoBehaviour
     [Header("TrinketCamera")]
     [SerializeField] private GameObject[] _trinketCameraArray;
 
+    [Header("TrinketRenderObject")]
+    [SerializeField] private GameObject[] _trinketRenderObjectArray;
+
     [Header("WeaponCamera")]
     [SerializeField] private GameObject[] _weaponCameraArray;
 
+    [Header("WeaponRenderObject")]
+    [SerializeField] private GameObject[] _weaponRenderObjectArray;
+
     private Dictionary<TrinketItemType, GameObject> _trinketCameras;
     private Dictionary<PlayerWeapon,  GameObject> _weaponCameras;
+
+    private Dictionary<TrinketItemType, GameObject> _trinketDictionary;
+    private Dictionary<PlayerWeapon, GameObject> _weaponDictionary;
+
+    private GameObject _currentWeaponObject;
+    private GameObject _currentTrinketObject;
 
     private void Start()
     {
