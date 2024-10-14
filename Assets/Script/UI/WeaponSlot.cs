@@ -12,14 +12,14 @@ public class WeaponSlot : MonoBehaviour, IWeaponCameraEvent
     [Header("RenderTexture")]
     [SerializeField] private RenderTexture _renderTexture;
 
-    private Texture2D _texture2D;
-
     [Header("WeaponType")]
     [SerializeField] private PlayerWeapon _weaponType;
 
     private Action<PlayerWeapon, bool> _weaponAction;
 
     private bool _onSlot = false;
+
+    private Texture2D _texture2D;
 
     public ItemData Data { get; set; }
     public PlayerWeaponData WeaponData {get;set; }
@@ -39,6 +39,10 @@ public class WeaponSlot : MonoBehaviour, IWeaponCameraEvent
                 InventoryManager.Instance.RegisterWeaponEvent(this);
 
                 _rawImage.enabled = true;
+
+                CaptureImage();
+
+                InvokeEvent(false);
             }
 
             _onSlot = value;
@@ -67,8 +71,8 @@ public class WeaponSlot : MonoBehaviour, IWeaponCameraEvent
         if (_texture2D == null)
         {
             RenderTexture.active = _renderTexture;
-
-            _texture2D = new Texture2D(_renderTexture.width, _renderTexture.height, TextureFormat.RGB24, false);
+            
+            _texture2D = new Texture2D(_renderTexture.width, _renderTexture.height, TextureFormat.RGBA32, false);
 
             _texture2D.ReadPixels(new Rect(0, 0, _renderTexture.width, _renderTexture.height), 0, 0);
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryManager : Singleton<InventoryManager>
 {
@@ -16,6 +17,7 @@ public class InventoryManager : Singleton<InventoryManager>
     #region Event
     private Action<TrinketItemType, bool> _globalTrinketAction;
     private Action<PlayerWeapon, bool> _globalWeaponAction;
+
     private List<ITrinketCameraEvent> _trinketEventList = new List<ITrinketCameraEvent>();
     private List<IWeaponCameraEvent> _weaponEventList = new List<IWeaponCameraEvent>();
 
@@ -156,6 +158,17 @@ public class InventoryManager : Singleton<InventoryManager>
         }
     }
 
+    //Start 시점에서 등록을 보장함.
+    public void OnRenderWeaponObject(PlayerWeapon weapon, bool onEnable)
+    {
+        _globalWeaponAction?.Invoke(weapon, onEnable);
+    }
+
+    public void OnRenderTrinketObject(TrinketItemType trinketItemType, bool onEnable)
+    {
+        _globalTrinketAction?.Invoke(trinketItemType, onEnable);
+    }
+
     #endregion
 
     public void OnInventoryTabAction(bool onAction)
@@ -175,6 +188,7 @@ public class InventoryManager : Singleton<InventoryManager>
 
         _weaponPanel.SetWeaponType(weapon, data, weaponData);
     }
+
 
     //아이템 획득 시 호출
     public void SetItem(TrinketItemType item, ItemData data)

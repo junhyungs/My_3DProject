@@ -77,6 +77,13 @@ public class WeaponPanel : MonoBehaviour
     private void OnDisable()
     {
         PerformedAction(false);
+
+        if(_currentSlot != null)
+        {
+            _currentSlot.CaptureImage();
+
+            _currentSlot.InvokeEvent(false);
+        }
     }
 
     private void PerformedAction(bool onEnable)
@@ -128,6 +135,8 @@ public class WeaponPanel : MonoBehaviour
             return;
         }
 
+        slotComponent.LiveImage();
+
         var data = slotComponent.Data;
 
         _descriptionText.text = data.Description;
@@ -163,6 +172,8 @@ public class WeaponPanel : MonoBehaviour
     {
         if(_currentSlot != null)
         {
+            _currentSlot.CaptureImage();
+
             _currentSlot.InvokeEvent(false);
         }
 

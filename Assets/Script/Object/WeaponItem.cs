@@ -63,6 +63,8 @@ public class WeaponItem : MonoBehaviour, IInteractionItem
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             UIManager.Instance.ItemInteractionUI(transform, _uiPosition, ObjectName.GetUI);
+
+            InventoryManager.Instance.OnRenderWeaponObject(_itemID, true);
         }
     }
 
@@ -71,6 +73,8 @@ public class WeaponItem : MonoBehaviour, IInteractionItem
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             UIManager.Instance.HideItemInteractionUI(transform, ObjectName.GetUI);
+
+            InventoryManager.Instance.OnRenderWeaponObject(_itemID, false);
         }
     }
 }

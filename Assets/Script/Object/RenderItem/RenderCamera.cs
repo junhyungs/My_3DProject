@@ -5,26 +5,20 @@ using System;
 
 public class RenderCamera : MonoBehaviour
 {
-    [Header("TrinketCamera")]
-    [SerializeField] private GameObject[] _trinketCameraArray;
-
     [Header("TrinketRenderObject")]
     [SerializeField] private GameObject[] _trinketRenderObjectArray;
-
-    [Header("WeaponCamera")]
-    [SerializeField] private GameObject[] _weaponCameraArray;
 
     [Header("WeaponRenderObject")]
     [SerializeField] private GameObject[] _weaponRenderObjectArray;
 
-    private Dictionary<TrinketItemType, GameObject> _trinketCameras;
-    private Dictionary<PlayerWeapon,  GameObject> _weaponCameras;
+    [Header("TrinketCamera")]
+    [SerializeField] private Camera _trinketCamera;
+
+    [Header("WeaponCamera")]
+    [SerializeField] private Camera _weaponCamera;  
 
     private Dictionary<TrinketItemType, GameObject> _trinketDictionary;
     private Dictionary<PlayerWeapon, GameObject> _weaponDictionary;
-
-    private GameObject _currentWeaponObject;
-    private GameObject _currentTrinketObject;
 
     private void Start()
     {
@@ -34,59 +28,59 @@ public class RenderCamera : MonoBehaviour
     #region Initialize
     private void InitializeCamera()
     {
-        InitializeTrinketCamera();
+        InitializeTrinketObject();
 
-        InitializeWeaponCamera();
+        InitializeWeaponObject();
     }
 
-    private void InitializeTrinketCamera()
+    private void InitializeTrinketObject()
     {
         Array trinketEnum = Enum.GetValues(typeof(TrinketItemType));
 
-        if(trinketEnum.Length != _trinketCameraArray.Length)
+        if(trinketEnum.Length != _trinketRenderObjectArray.Length)
         {
             Debug.Log("Enum의 길이와 <_trinketCameraArray> 배열의 길이가 일치하지 않습니다.");
             return;
         }
 
-        _trinketCameras = new Dictionary<TrinketItemType, GameObject>();
+        _trinketDictionary = new Dictionary<TrinketItemType, GameObject>();
         
-        for(int i = 0; i < _trinketCameraArray.Length; i++)
+        for(int i = 0; i < _trinketRenderObjectArray.Length; i++)
         {
-            _trinketCameraArray[i].SetActive(false);
+            _trinketRenderObjectArray[i].SetActive(false);
 
-            _trinketCameras.Add((TrinketItemType)i, _trinketCameraArray[i]);
+            _trinketDictionary.Add((TrinketItemType)i, _trinketRenderObjectArray[i]);
         }
 
         InventoryManager.Instance.BindTrinketEvent(OnTrinketCamera);
     }
 
-    private void InitializeWeaponCamera()
+    private void InitializeWeaponObject()
     {
         Array weaponEnum = Enum.GetValues(typeof(PlayerWeapon));
 
-        if(weaponEnum.Length != _weaponCameraArray.Length)
+        if(weaponEnum.Length != _weaponRenderObjectArray.Length)
         {
             Debug.Log("Enum의 길이와 <_weaponCameraArray> 배열의 길이가 일치하지 않습니다.");
             return;
         }
 
-        _weaponCameras = new Dictionary<PlayerWeapon, GameObject>();
+        _weaponDictionary = new Dictionary<PlayerWeapon, GameObject>();
 
-        for(int i = 0; i < _weaponCameraArray.Length; i++)
+        for(int i = 0; i < _weaponRenderObjectArray.Length; i++)
         {
-            _weaponCameraArray[i].SetActive(false);
+            _weaponRenderObjectArray[i].SetActive(false);
 
-            _weaponCameras.Add((PlayerWeapon)i, _weaponCameraArray[i]);
+            _weaponDictionary.Add((PlayerWeapon)i, _weaponRenderObjectArray[i]);
         }
 
         InventoryManager.Instance.BindWeaponEvent(OnWeaponCamera);
     }
     #endregion
 
-    private GameObject GetTrinketCameraObject(TrinketItemType type)
+    private GameObject GetTrinketObject(TrinketItemType type)
     {
-        if(_trinketCameras.TryGetValue(type, out GameObject obj))
+        if(_trinketDictionary.TryGetValue(type, out GameObject obj))
         {
             return obj;
         }
@@ -95,9 +89,9 @@ public class RenderCamera : MonoBehaviour
         return null;
     }
 
-    private GameObject GetWeaponCameraObject(PlayerWeapon type)
+    private GameObject GetWeaponObject(PlayerWeapon type)
     {
-        if(_weaponCameras.TryGetValue(type, out GameObject obj))
+        if(_weaponDictionary.TryGetValue(type, out GameObject obj))
         {
             return obj;
         }
@@ -108,17 +102,17 @@ public class RenderCamera : MonoBehaviour
 
     private void ResetTrinketCamera()
     {
-        foreach(var camera in _trinketCameraArray)
+        foreach(var renderObject in _trinketRenderObjectArray)
         {
-            camera.SetActive(false);
+            renderObject.SetActive(false);
         }
     }
 
     private void ResetWeaponCamera()
     {
-        foreach(var camera in _weaponCameraArray)
+        foreach(var renderObject in _weaponRenderObjectArray)
         {
-            camera.SetActive(false);
+            renderObject.SetActive(false);
         }
     }
 
@@ -131,9 +125,9 @@ public class RenderCamera : MonoBehaviour
             return;
         }
 
-        GameObject camera = GetTrinketCameraObject(type);
+        GameObject currentRenderObject = GetTrinketObject(type);
 
-        camera.SetActive(true);
+        currentRenderObject.SetActive(true);
     }
 
     private void OnWeaponCamera(PlayerWeapon weapon, bool isActive)
@@ -145,8 +139,8 @@ public class RenderCamera : MonoBehaviour
             return;
         }
 
-        GameObject camera = GetWeaponCameraObject(weapon);
+        GameObject currentRenderObject = GetWeaponObject(weapon);
 
-        camera.SetActive(true);
+        currentRenderObject.SetActive(true);
     }
 }

@@ -64,6 +64,13 @@ public class TrinketPanel : MonoBehaviour
     private void OnDisable()
     {
         PerformedAction(false);
+
+        if(_currentSlot != null)
+        {
+            _currentSlot.CaptureImage();
+
+            _currentSlot.InvokeEvent(false);
+        }
     }
 
     private void PerformedAction(bool onEnable)
@@ -209,6 +216,8 @@ public class TrinketPanel : MonoBehaviour
     {
         if(_currentSlot != null)
         {
+            _currentSlot.CaptureImage();
+
             _currentSlot.InvokeEvent(false);
         }
 
@@ -238,6 +247,8 @@ public class TrinketPanel : MonoBehaviour
         {
             return;
         }
+
+        slotComponent.LiveImage();
 
         var data = slotComponent.Data;
 
