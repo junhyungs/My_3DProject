@@ -416,7 +416,6 @@ public class DataManager
 
                 PrefabPath pathData = new PrefabPath(id, path);
                 _pathDictionary.Add(id, pathData);  
-                Debug.Log(pathData.Path);
             }
         }
         catch (JsonException ex)

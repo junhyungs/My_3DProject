@@ -10,14 +10,14 @@ public class MapFactory
         _monoBehaviour = monoBehaviour;
     }
 
-    public void LoadMapPrefab(string prefabPath, System.Action<GameObject> returnCallBack)
+    public void LoadMapPrefab(string mapPath, System.Action<GameObject> returnCallBack)
     {
-        _monoBehaviour.StartCoroutine(LoadMap(prefabPath, returnCallBack));
+        _monoBehaviour.StartCoroutine(LoadMap(mapPath, returnCallBack));
     }
 
-    private IEnumerator LoadMap(string prefabPath, System.Action<GameObject> returnCallBack)
+    private IEnumerator LoadMap(string mapPath, System.Action<GameObject> returnCallBack)
     {
-        ResourceRequest request = Resources.LoadAsync<GameObject>(prefabPath);
+        ResourceRequest request = Resources.LoadAsync<GameObject>(mapPath);
 
         UIManager.Instance.OnLoadingUI(request);
 
@@ -26,8 +26,8 @@ public class MapFactory
             yield return null;
         }
 
-        GameObject mpaObject = request.asset as GameObject;
+        GameObject mapPrefab = request.asset as GameObject;
 
-        returnCallBack.Invoke(mpaObject);
+        returnCallBack.Invoke(mapPrefab);
     }
 }

@@ -18,7 +18,10 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        _playerInput = Player.GetComponent<PlayerInput>();
+        if(Player != null)
+        {
+            _playerInput = Player.GetComponent<PlayerInput>();
+        }
     }
 
     public void PlayerLock(bool isLock)

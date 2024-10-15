@@ -20,14 +20,23 @@ public class MouseObject : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         m_player = GameManager.Instance.Player;
-        m_playerTransform = m_player.transform;
 
+        if(m_player != null)
+        {
+            m_playerTransform = m_player.transform;
+        }
+        
         isOnEable = true;
     }
 
     
     void Update()
     {
+        if(m_player == null)
+        {
+            return;
+        }
+
         if (isOnEable)
         {
             MousePointObject();

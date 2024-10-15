@@ -39,8 +39,11 @@ public class EventManager
         }
 
         _hook = hookPositionEvent;
-        _hook.HookPositionEvent(true, attackController.OnHookCollied);
-        //m_GetHookPositionEvetn.Add(hookPositionEvent);    
+
+        if(attackController != null)
+        {
+            _hook.HookPositionEvent(true, attackController.OnHookCollied);
+        }
     }
 
     public void RegisterDisableGhoulArrow(IDisableArrow disableArrowEvent)

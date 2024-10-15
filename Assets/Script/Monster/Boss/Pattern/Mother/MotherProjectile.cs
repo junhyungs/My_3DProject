@@ -17,8 +17,12 @@ public class MotherProjectile : MonoBehaviour
     {
         _rigidBody = GetComponent<Rigidbody>();
         _meshRenderer = GetComponent<MeshRenderer>();
-        _playerTransform = GameManager.Instance.Player.transform;
         _data = BossManager.Instance.ProjectileData;
+
+        if(_playerTransform != null)
+        {
+            _playerTransform = GameManager.Instance.Player.transform;
+        }
     }
 
     private void OnEnable()

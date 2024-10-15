@@ -38,7 +38,6 @@ public class ObjectPool : Singleton<ObjectPool>
     {
         yield return new WaitWhile(() =>
         {
-            Debug.Log("아직 경로 데이터를 가져오지 못했습니다.");
             return DataManager.Instance.GetPath(ObjectName.Player.ToString()) == null;
         });
 
@@ -54,6 +53,8 @@ public class ObjectPool : Singleton<ObjectPool>
             
             _pathDataDictionary.Add(name, pathData);
         }
+
+        Debug.Log("경로 데이터 바인딩 완료");
 
         _poolDataReady = true;
         _poolDelayAction?.Invoke();
