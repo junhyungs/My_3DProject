@@ -4,8 +4,10 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private PlayerHealth _healthComponent;
-    private PlayerMoveController _moveController;
-    private PlayerAttackController _attackController;
+    private GameObject _shadowPlayer;
+
+    public PlayerMoveController _moveController { get; private set; }
+    public ShadowPlayer ShadowPlayer { get; set; }
     
     private void Awake()
     {
@@ -13,7 +15,14 @@ public class Player : MonoBehaviour
         
         _healthComponent = gameObject.GetComponent<PlayerHealth>();
         _moveController = gameObject.GetComponent<PlayerMoveController>();
-        _attackController = gameObject.GetComponent<PlayerAttackController>();
+    }
+
+    private void OnEnable()
+    {
+        if(_shadowPlayer == null)
+        {
+            CreateShadowPlayer();
+        }
     }
 
     private void Start()
@@ -52,6 +61,25 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void CreateShadowPlayer()
+    {
+        _shadowPlayer = new GameObject();
+
+        ShadowPlayer shadowPlayer = _shadowPlayer.AddComponent<ShadowPlayer>();
+
+        shadowPlayer.InitializeShadowPlayer(this);
+
+        ShadowPlayer = shadowPlayer;
+
+        _shadowPlayer.transform.position = new Vector3(transform.position.x,
+            transform.position.y + 1f, transform.position.z);
+    }
+
+    public void DestroyShadowPlayer()
+    {
+        Destroy(_shadowPlayer);
+    }
+
     private void OnInteractionDialogue()
     {
         Vector3 spherePosition = transform.position + new Vector3(0f, 0.5f, 0f);
@@ -88,20 +116,6 @@ public class Player : MonoBehaviour
                 interaction.InteractionItem();
             }
         }
-    }
-
-    public void DialogueLock(bool dialogueLock)
-    {
-        bool playerLock = dialogueLock ? false : true;
-
-        _moveController.IsAction = playerLock;
-        _attackController.IsAction = playerLock;
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position + new Vector3(0,0.5f,0), 0.5f);
     }
 
     private void OnTriggerEnter(Collider other)

@@ -8,6 +8,12 @@ public enum MonsterType
     Deku,
     Ghoul
 }
+public enum Map
+{
+    MainStage,
+    BossStage,
+    GimikStage
+}
 
 public enum JsonName
 {
@@ -20,15 +26,8 @@ public enum JsonName
     BossProjectile,
     Dialogue,
     Item,
-    Ability
-}
-
-public enum MapType
-{
-    Lobby,
-    Stage_1,
-    Stage_2,
-    Boss
+    Ability,
+    Map
 }
 
 public enum ObjectName
@@ -86,7 +85,14 @@ public enum NPC
     BusNPC,
     TelePhoneNPC,
     HallCrow_1,
-    Banker
+    HallCrow_2,
+    HallCrow_3,
+    HallCrow_4,
+    HallCorw_5,
+    Bager,
+    Security,
+    Banker,
+    Agatha
 }
 
 public enum PlayerWeapon
@@ -134,3 +140,4 @@ public enum TrinketItemType
     Trowel,
     Surveillance
 }
+

@@ -3,125 +3,152 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ElevatorMove
+{
+    Up,
+    Down
+}
+
 public class Elevator : MonoBehaviour
 {
+    [Header("UpKey")]
+    [SerializeField] private GameObject _upKey;
+
+    [Header("DownKey")]
+    [SerializeField] private GameObject _downKey;
+
     [Header("MoveSpeed")]
-    [SerializeField] private float _moveSpeed;
+    [SerializeField] private float _elevatorMoveSpeed;
 
-    [Header("Collider")]
-    [SerializeField] private BoxCollider _upCollider;
-    [SerializeField] private BoxCollider _downCollider;
-
-    private Vector3 _upDirection = Vector3.up;
-    private Vector3 _downDirection = Vector3.down;
+    private Vector3 _upDirection;
+    private Vector3 _downDirection;
     private Vector3 _startPosition;
 
-    private float _maxHeight = 0f;
-    private float _minHeight = -7.1f;
-    private float _currentHeight;
-
-    private bool _isUp;
+    private ElevatorMove _currentMove;
 
     private void Start()
+    {
+        InitializeUpKey();
+
+        InitializeDownKey();
+
+        InverseDirection();
+    }
+
+    private void InverseDirection()
     {
         _upDirection = transform.InverseTransformDirection(Vector3.up);
 
         _downDirection = transform.InverseTransformDirection(Vector3.down);
+
+        _startPosition = transform.position;
     }
-    private void Update()
+
+    private void InitializeUpKey()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if(_upKey == null)
         {
-            StartCoroutine(UpElevator());
+            return;
         }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-            StartCoroutine(DownElevator());
-        }
-        else if (Input.GetKeyDown(KeyCode.E))
-        {
-            StartCoroutine(CallElevator(true));
-        }
-        else if (Input.GetKeyDown(KeyCode.R))
-        {
-            StartCoroutine(CallElevator(false));
-        }
+
+        _upKey.AddComponent<UpElevatorKey>().InitializeUpKey(this);
+
+        SphereCollider triggerSphereCollider = _upKey.AddComponent<SphereCollider>();
+
+        triggerSphereCollider.radius = 0.2f;
+
+        triggerSphereCollider.isTrigger = true;
     }
-    public IEnumerator CallElevator(bool currentCall)
+
+    private void InitializeDownKey()
     {
-        if (currentCall)
+        if(_downKey == null)
         {
-            yield return StartCoroutine(UpElevator());
-
-            _upCollider.enabled = false;
-
-            _isUp = false;
+            return;
         }
-        else
+
+        _downKey.AddComponent<DownElevatorKey>().InitializeDownKey(this);
+
+        SphereCollider triggerSphereCollider = _downKey.AddComponent<SphereCollider>();
+
+        triggerSphereCollider.radius = 0.2f;
+
+        triggerSphereCollider.isTrigger = true;
+    }
+
+    public IEnumerator CallElevator(ElevatorMove moveDirection)
+    {
+        switch(moveDirection)
         {
-            yield return StartCoroutine(DownElevator());
-
-            _downCollider.enabled = false;
-
-            _isUp = true;
+            case ElevatorMove.Up:
+                yield return StartCoroutine(UpElevator());
+                _currentMove = ElevatorMove.Down;
+                break;
+            case ElevatorMove.Down:
+                yield return StartCoroutine(DownElevator());
+                _currentMove = ElevatorMove.Up;
+                break;
         }
     }
 
     public IEnumerator UpElevator()
     {
-        _upCollider.enabled = true;
+        Vector3 targetPosition = new Vector3(transform.position.x, _startPosition.y
+            + 7.1f, transform.position.z);
 
-        _downCollider.enabled = true;
-
-        _startPosition = transform.position;
-
-        _currentHeight = transform.position.y;
-
-        while(_currentHeight < _maxHeight)
+        if(transform.position.y >= targetPosition.y)
         {
-            Vector3 upElevator = _upDirection * _moveSpeed * Time.deltaTime;
+            yield break;
+        }
 
-            transform.Translate(upElevator);
+        while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+        {
+            Vector3 moveVector3 = _upDirection * _elevatorMoveSpeed * Time.deltaTime;
 
-            _currentHeight = transform.position.y - _startPosition.y;
+            transform.Translate(moveVector3);
 
             yield return null;
         }
 
-        _upCollider.enabled = false;
+        transform.position = targetPosition;
+
+
     }
-    
 
     public IEnumerator DownElevator()
     {
-        _upCollider.enabled = true;
+        Vector3 targetPosition = _startPosition;
 
-        _downCollider.enabled = true;
-
-        _startPosition = transform.position;
-
-        _currentHeight = 0f;
-
-        while (_currentHeight > _minHeight)
+        if(transform.position.y <= targetPosition.y)
         {
-            Vector3 upElevator = _downDirection * _moveSpeed * Time.deltaTime;
+            yield break;
+        }
 
-            transform.Translate(upElevator);
+        while(Vector3.Distance(transform.position, targetPosition) > 0.1f)
+        {
+            Vector3 moveVector3 = _downDirection * _elevatorMoveSpeed * Time.deltaTime;
 
-            _currentHeight = transform.position.y - _startPosition.y;
+            transform.Translate(moveVector3);
 
             yield return null;
         }
 
-        _downCollider.enabled = false;
+        transform.position = targetPosition;
     }
-
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-
+            switch (_currentMove)
+            {
+                case ElevatorMove.Up:
+                    StartCoroutine(UpElevator());
+                    break;
+                case ElevatorMove.Down:
+                    StartCoroutine(DownElevator());
+                    break;
+            }
         }
     }
 }

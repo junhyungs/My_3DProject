@@ -65,7 +65,59 @@ public class DataManager
             case nameof(JsonName.Ability):
                 ReadAbilityData(jsonData);
                 break;
+            case nameof(JsonName.Map):
+                ReadMapData(jsonData);
+                break;
         }
+    }
+
+    private void ReadMapData(string jsonData)
+    {
+        try
+        {
+            JArray jsonArray = JArray.Parse(jsonData);
+
+            foreach(var item in jsonArray)
+            {
+                string id = item["ID"] != null ? item["ID"].ToString() : string.Empty;
+
+                string replace = item["MapName"] != null ? item["MapName"].ToString() : string.Empty;
+
+                string mapName = replace.Replace("\\n", "\n");
+
+                string prefabPath = item["PrefabPath"] != null ? item["PrefabPath"].ToString() : string.Empty;
+
+                List<string> itemList = ParseStringList(item["ItemList"].ToString());
+
+                List<string> spawnMonsterList = ParseStringList(item["SpawnMonsterList"].ToString());
+
+                string skyBoxPath = item["SkyBoxPath"] != null ? item["SkyBoxPath"].ToString() : string.Empty;
+
+                MapData data = new MapData(id, mapName, prefabPath, itemList, spawnMonsterList, skyBoxPath);
+
+                _dataDictionary.Add(id, data);
+            }
+        }
+        catch(JsonException ex)
+        {
+            Debug.Log("<Map> 데이터를 변환하지 못했습니다.");
+        }
+    }
+
+    private List<string> ParseStringList(string jsonData)
+    {
+        string trim = jsonData.Trim('{','}');
+
+        string[] splitArray = trim.Split('/');
+
+        List<string> stringlist = new List<string>();
+
+        for(int i = 0; i < splitArray.Length; i++)
+        {
+            stringlist.Add(splitArray[i]);
+        }
+
+        return stringlist;
     }
 
     private void ReadAbilityData(string jsonData)

@@ -208,3 +208,23 @@ public class AbilityData : Data
         PriceList = priceList;
     }
 }
+
+public class MapData : Data
+{
+    public string ID { get; set; }
+    public string MapName { get; set; }
+    public string PrefabPath { get; set; }
+    public List<string> ItemList { get; set; }
+    public List<string> SpawnMonsterList { get; set; }
+    public string SkyBoxPath { get; set; }
+
+    public MapData(string iD, string mapName, string prefabPath, List<string> itemList, List<string> spawnMonsterList, string skyBoxPath)
+    {
+        ID = iD;
+        MapName = mapName;
+        PrefabPath = prefabPath;
+        ItemList = itemList;
+        SpawnMonsterList = spawnMonsterList;
+        SkyBoxPath = skyBoxPath;
+    }
+}

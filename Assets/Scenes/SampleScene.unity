@@ -5411,7 +5411,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71ca9a7ed8aba9944afcd8eb622d6e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _npcName: 4
+  _npcName: 10
   _uiPosition: {x: 2.5, y: 1.5, z: 0}
 --- !u!1 &1773291397
 GameObject:
@@ -16266,6 +16266,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 248039804235202028, guid: 796033fcdbe4ccb499f2eb49be9e4fa0, type: 3}
+      propertyPath: _saveJson
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6574483347064889870, guid: 796033fcdbe4ccb499f2eb49be9e4fa0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

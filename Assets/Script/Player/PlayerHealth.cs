@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour, IDamged
 {
-    private int m_playerHp;
+    private Player _player;
     private Animator m_hitAnimator;
+
+    private int m_playerHp;
 
     private void Awake()
     {
         m_hitAnimator = GetComponent<Animator>();
+    }
+
+    private void Start()
+    {
+        _player = GetComponent<Player>();   
     }
 
     public void SetHealthData(int hp)
@@ -49,5 +56,32 @@ public class PlayerHealth : MonoBehaviour, IDamged
         GameManager.Instance.IsGameOver = true;
 
         GameManager.Instance.GameOver();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Death"))
+        {
+            m_playerHp -= 1;
+
+            UIManager.Instance.RequestChangeHp(m_playerHp);
+
+            if (m_playerHp <= 0)
+            {
+                _player.DestroyShadowPlayer();
+
+                Die();
+
+                return;
+            }
+
+            gameObject.SetActive(false);
+
+            Transform respawn = _player.ShadowPlayer.transform;
+
+            transform.position = respawn.position;
+
+            gameObject.SetActive(true);
+        }
     }
 }

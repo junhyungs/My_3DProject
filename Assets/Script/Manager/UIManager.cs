@@ -5,6 +5,7 @@ using UnityEngine;
 public class UIManager : Singleton<UIManager>
 {
     public static event Action _onAbilityUI;
+    public static event Action<ResourceRequest> _loadingUI;
 
     private PlayerSkill m_currentSkill;
     private Action<PlayerSkill> SkillChangeCallBack;
@@ -22,6 +23,11 @@ public class UIManager : Singleton<UIManager>
     public void OnAbilityUI()
     {
         _onAbilityUI.Invoke();
+    }
+
+    public void OnLoadingUI(ResourceRequest request)
+    {
+        _loadingUI.Invoke(request);
     }
 
     #region Interaction
