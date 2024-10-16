@@ -72,23 +72,4 @@ public class Sword : Weapon
         }
     }
 
-    private void OnDrawGizmos()
-    {
-
-        Vector3 boxPosition = transform.position + transform.forward + Vector3.up * 0.6f;
-
-        Vector3 size = _weaponData.ChargeAttackRange;
-
-        Quaternion boxrotation = transform.rotation;
-
-        Matrix4x4 originalMatrix = Gizmos.matrix;
-
-        Gizmos.matrix = Matrix4x4.TRS(boxPosition, boxrotation, Vector3.one);
-
-        Gizmos.color = Color.red;
-
-        Gizmos.DrawWireCube(Vector3.zero, size);
-
-        Gizmos.matrix = originalMatrix;
-    }
 }

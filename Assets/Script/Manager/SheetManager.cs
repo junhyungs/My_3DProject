@@ -89,7 +89,6 @@ public class SheetManager : MonoBehaviour
 
         if(File.Exists(path))
         {
-            Debug.Log(" 이미 해당 파일이 존재합니다." + fileName);
             ReadData(fileName);
         }
         else

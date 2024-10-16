@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class MapManager : MonoBehaviour
+public class MapManager : Singleton<MapManager>
 {
     private Dictionary<string, MapData> _dataDictionary;
     private Dictionary<string, GameObject> _mapDictionary;
-    private HashSet<Map> _containsMap;
 
     private GameObject _currentMap;
 
     private void Awake()
     {
-        _containsMap = new HashSet<Map>();
-
         _mapDictionary = new Dictionary<string, GameObject>();
     }
 
@@ -42,14 +39,13 @@ public class MapManager : MonoBehaviour
 
             if(data == null)
             {
-                Debug.Log("현재 가져온 맵 데이터 중 null이 반환되었습니다.");
                 yield break;
             }
 
             _dataDictionary.Add(id, data);
         }
 
-        ChangeMap(Map.GimikStage);
+        ChangeMap(Map.MainStage);
     }
 
     private MapData GetMapData(string id)
@@ -59,7 +55,6 @@ public class MapManager : MonoBehaviour
             return data;
         }
 
-        Debug.Log("<MapManager> GetMapData가 실패했습니다.");
         return null;
     }
     
@@ -67,16 +62,7 @@ public class MapManager : MonoBehaviour
     {
         var data = GetMapData(mapName.ToString());
 
-        if (_containsMap.Contains(mapName))
-        {
-            LoadMap(data);
-
-            return;
-        }
-
         InitializeMap(data);
-
-        _containsMap.Add(mapName);
     }
 
     private void InitializeMap(MapData data)
@@ -104,40 +90,5 @@ public class MapManager : MonoBehaviour
         _currentMap = currentMap;
 
         _currentMap.SetActive(true);
-
-        Stage stage = _currentMap.GetComponent<Stage>();
-
-        if (stage != null)
-        {
-            stage.InitializeStage(data);
-
-            stage.StartStage();
-        }
-    }
-
-    private void LoadMap(MapData data)
-    {
-        UIManager.Instance.OnLoadingUI();
-
-        SaveCurrentMapData();
-
-        _currentMap.SetActive(false);
-
-        GameObject nextMap = GetMap(data.ID);
-
-        _currentMap = nextMap;
-
-        _currentMap.SetActive(true);
-    }
-
-    //이미 헤쉬셋으로 있는지 확인했기 때문에 바로 리턴.
-    private GameObject GetMap(string id)
-    {
-        return _mapDictionary[id];
-    }
-
-    private void SaveCurrentMapData()
-    {
-        //현재 맵 데이터 저장.
     }
 }

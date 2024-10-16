@@ -27,7 +27,6 @@ public class ObjectPool : Singleton<ObjectPool>
     private bool _poolDataReady = false;
 
     private event Action _poolDelayAction;
-    private event Action _dequeueDelayAction;
 
     private void Awake()
     {
@@ -147,6 +146,20 @@ public class ObjectPool : Singleton<ObjectPool>
 
         return item;
     }
+
+    public GameObject DequeueMonster(ObjectName name)
+    {
+        if(!_poolDataReady)
+        {
+            Debug.Log("데이터가 로드되지 않았습니다.<Pool>");
+            return null;
+        }
+
+        GameObject monster = _objectPool[name]._queue.Dequeue();
+
+        return monster;
+    }
+
 
     private GameObject CreateItem(ObjectName name)
     {

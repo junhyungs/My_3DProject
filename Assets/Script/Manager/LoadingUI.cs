@@ -62,9 +62,9 @@ public class LoadingUI : MonoBehaviour
             }
         }
 
-        yield return StartCoroutine(FadeImage(color, 1f, _duration));
+        //yield return StartCoroutine(FadeImage(color, 1f, _duration));
 
-        yield return StartCoroutine(FadeImage(color, 0f, _duration));
+        //yield return StartCoroutine(FadeImage(color, 0f, _duration));
 
         _childObject.SetActive(false);
     }

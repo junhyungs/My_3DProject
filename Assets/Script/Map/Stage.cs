@@ -14,7 +14,6 @@ public class Stage : MonoBehaviour
     private List<GameObject> _spawnMonsterList;
     private HashSet<PlayableDirector> _timeLineSet;
 
-    private NavMeshSurface _navMesh;
     private MapData _data;
 
     private void Awake()
@@ -22,8 +21,6 @@ public class Stage : MonoBehaviour
         _timeLineSet = new HashSet<PlayableDirector>();
 
         _spawnMonsterList = new List<GameObject>();
-
-        _navMesh = transform.GetComponentInChildren<NavMeshSurface>();  
     }
 
 
@@ -41,7 +38,12 @@ public class Stage : MonoBehaviour
     {
         _data = data;
 
-        foreach(var spawnMonster in _data.SpawnMonsterList)
+        CreateMonster(_data);
+    }
+
+    private void CreateMonster(MapData data)
+    {
+        foreach (var spawnMonster in data.SpawnMonsterList)
         {
             if (!string.IsNullOrWhiteSpace(spawnMonster))
             {
@@ -51,6 +53,7 @@ public class Stage : MonoBehaviour
             }
         }
     }
+
 
     public void StartStage()
     {
@@ -62,15 +65,17 @@ public class Stage : MonoBehaviour
 
     private IEnumerator SpawnMonster(Transform[] monsterTransforms)
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForEndOfFrame();
 
         for(int i = 0; i < monsterTransforms.Length; i++)
         {
             var spawnMonster = RandomMonster();
 
-            GameObject monster = ObjectPool.Instance.DequeueObject(spawnMonster);
+            GameObject monster = ObjectPool.Instance.DequeueMonster(spawnMonster);
 
             monster.transform.position = monsterTransforms[i].position;
+
+            monster.SetActive(true);
 
             _spawnMonsterList.Add(monster);
         }

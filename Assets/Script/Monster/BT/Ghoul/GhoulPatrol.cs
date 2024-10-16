@@ -72,24 +72,6 @@ public class GhoulPatrol : INode
 
                 _ghoul.StartCoroutine(PatrolCoolTime());
             }
-            //++_currentIndex;
-
-            //if(_currentIndex < _walkPositionList.Count)
-            //{
-            //    _animator.SetBool("TraceWalk", true);
-
-            //    _agent.SetDestination(_walkPositionList[_currentIndex]);
-            //}
-            //else
-            //{
-            //    _animator.SetBool("TraceWalk", false);
-
-            //    _agent.SetDestination(_ghoul.transform.position);
-
-            //    _currentIndex = 0;
-
-            //    return INode.State.Success;
-            //}
         }
 
         return INode.State.Running;

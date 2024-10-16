@@ -214,7 +214,7 @@ public class MapData : Data
     public string ID { get; set; }
     public string MapName { get; set; }
     public string PrefabPath { get; set; }
-    public List<string> ItemList { get; set; }
+    public List<string> ItemPath { get; set; }
     public List<string> SpawnMonsterList { get; set; }
     public string SkyBoxPath { get; set; }
 
@@ -223,7 +223,7 @@ public class MapData : Data
         ID = iD;
         MapName = mapName;
         PrefabPath = prefabPath;
-        ItemList = itemList;
+        ItemPath = itemList;
         SpawnMonsterList = spawnMonsterList;
         SkyBoxPath = skyBoxPath;
     }

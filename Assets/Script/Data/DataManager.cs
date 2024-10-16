@@ -79,21 +79,21 @@ public class DataManager
 
             foreach(var item in jsonArray)
             {
-                string id = item["ID"] != null ? item["ID"].ToString() : string.Empty;
+                string id = ParseString(item["ID"]);
 
-                string replace = item["MapName"] != null ? item["MapName"].ToString() : string.Empty;
+                string replace = ParseString(item["MapName"]);
 
                 string mapName = replace.Replace("\\n", "\n");
 
-                string prefabPath = item["PrefabPath"] != null ? item["PrefabPath"].ToString() : string.Empty;
+                string prefabPath = ParseString(item["PrefabPath"]);
 
-                List<string> itemList = ParseStringList(item["ItemList"].ToString());
+                List<string> itemPath = MapItemPath(item["ItemPath"]);
 
-                List<string> spawnMonsterList = ParseStringList(item["SpawnMonsterList"].ToString());
+                List<string> spawnMonsterList = MapMonsterList(item["SpawnMonsterList"]);
 
-                string skyBoxPath = item["SkyBoxPath"] != null ? item["SkyBoxPath"].ToString() : string.Empty;
+                string skyBoxPath = ParseString(item["SkyBoxPath"]);
 
-                MapData data = new MapData(id, mapName, prefabPath, itemList, spawnMonsterList, skyBoxPath);
+                MapData data = new MapData(id, mapName, prefabPath, itemPath, spawnMonsterList, skyBoxPath);
 
                 _dataDictionary.Add(id, data);
             }
@@ -104,21 +104,42 @@ public class DataManager
         }
     }
 
-    private List<string> ParseStringList(string jsonData)
+    private List<string> MapItemPath(JToken jtoken)
     {
-        string trim = jsonData.Trim('{','}');
+        string value = jtoken.ToString();
 
-        string[] splitArray = trim.Split('/');
+        value = value.Trim('{', '}');
+
+        string[] splitArray = value.Split(',');
+
+        List<string> stringList = new List<string>();
+
+        for(int i = 0; i < splitArray.Length; i++)
+        {
+            stringList.Add(splitArray[i]);
+        }
+
+        return stringList;
+    }
+
+    private List<string> MapMonsterList(JToken jtoken)
+    {
+        string value = jtoken.ToString();
+
+        value = value.Trim('{', '}');
+
+        string[] splitArray = value.Split('/');
 
         List<string> stringlist = new List<string>();
 
-        for(int i = 0; i < splitArray.Length; i++)
+        for (int i = 0; i < splitArray.Length; i++)
         {
             stringlist.Add(splitArray[i]);
         }
 
         return stringlist;
     }
+    
 
     private void ReadAbilityData(string jsonData)
     {
@@ -432,7 +453,6 @@ public class DataManager
         }
         else
         {
-            Debug.Log("딕셔너리에서 데이터를 가져오지 못했습니다.");
             return null;
         }
     }
@@ -445,7 +465,6 @@ public class DataManager
         }
         else
         {
-            Debug.Log("경로 데이터를 가져오지 못했습니다.");
             return null;
         }
     }
@@ -454,7 +473,6 @@ public class DataManager
     {
         if(json == null)
         {
-            Debug.Log("<ParseBool> 현재 null인 데이터가 있습니다.");
             return false;
         }
 
@@ -530,6 +548,13 @@ public class DataManager
         }
 
         return new Vector3(0f, 0f, 0f);
+    }
+
+    private string ParseString(JToken jtoken)
+    {
+        string value = jtoken != null ? jtoken.ToString() : string.Empty;
+
+        return value;
     }
 
     #region XML

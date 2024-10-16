@@ -75,6 +75,8 @@ public enum VineType
 
 public enum TimeLineType
 {//타임라인 이름 명확하게
+    Intro,
+    HallCrow,
     ForestMother,
 }
 
