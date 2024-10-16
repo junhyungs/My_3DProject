@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SlimeBehaviour : BehaviourMonster, IDamged
 {
@@ -40,6 +41,7 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
         StartCoroutine(LoadMonsterData("M102"));
         SetMaterial();
 
+        _monsterType = ObjectName.Slime;
         _node = SetBehaviourTree();
     }
 

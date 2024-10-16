@@ -25,7 +25,7 @@ public class UIManager : Singleton<UIManager>
         _onAbilityUI.Invoke();
     }
 
-    public void OnLoadingUI(ResourceRequest request)
+    public void OnLoadingUI(ResourceRequest request = null)
     {
         _loadingUI.Invoke(request);
     }

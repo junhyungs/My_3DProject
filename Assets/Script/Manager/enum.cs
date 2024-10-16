@@ -58,6 +58,11 @@ public enum ObjectName
     LadderUI,
     InteractionDialogueUI,
     InteractionDialogueBoxUI,
+    Ring,
+    RustyKey,
+    Teddy,
+    Trowel,
+    Surveillance,
 
     Null
 }

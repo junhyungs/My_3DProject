@@ -45,8 +45,11 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
         StartCoroutine(LoadMonsterData("M103"));
         SetMaterial();
 
+        _monsterType = ObjectName.Mage;
         _node = SetBehaviourTree();
     }
+
+    
 
     private void Update()
     {

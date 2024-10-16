@@ -41,8 +41,10 @@ public class DekuBehaviour : BehaviourMonster, IDamged
         StartCoroutine(LoadMonsterData("M105"));
         SetMaterial();
 
+        _monsterType = ObjectName.Deku;
         _node = SetBehaviourTree();
     }
+
 
     private void Update()
     {

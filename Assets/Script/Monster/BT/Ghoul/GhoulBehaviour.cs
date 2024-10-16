@@ -51,8 +51,11 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
         StartCoroutine(LoadMonsterData("M106"));
         SetMaterial();
 
+        _monsterType = ObjectName.Ghoul;
         _node = SetBehaviourTree();
     }
+
+    
 
     private void Update()
     {

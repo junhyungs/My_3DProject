@@ -20,6 +20,7 @@ public class BehaviourMonster : MonoBehaviour
     protected bool _isSpawn;
     protected bool _dataReady = false;
     protected Color _saveColor;
+    protected ObjectName _monsterType;
     private WaitForSeconds _intensityTime = new WaitForSeconds(0.1f);
     #endregion
 
@@ -30,6 +31,11 @@ public class BehaviourMonster : MonoBehaviour
     protected virtual void Start()
     {
         InitializeComponent();
+    }
+
+    public void OnDisableMonster()
+    {
+        ObjectPool.Instance.EnqueueObject(gameObject, _monsterType);
     }
 
     protected void InitializeComponent()
@@ -141,4 +147,6 @@ public class BehaviourMonster : MonoBehaviour
     {
         _isSpawn = isSpawn;
     }
+
+
 }

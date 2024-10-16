@@ -6,8 +6,8 @@ using System;
 public class MapManager : MonoBehaviour
 {
     private Dictionary<string, MapData> _dataDictionary;
+    private Dictionary<string, GameObject> _mapDictionary;
     private HashSet<Map> _containsMap;
-    private MapFactory _factory;
 
     private GameObject _currentMap;
 
@@ -15,7 +15,7 @@ public class MapManager : MonoBehaviour
     {
         _containsMap = new HashSet<Map>();
 
-        _factory = new MapFactory(this);
+        _mapDictionary = new Dictionary<string, GameObject>();
     }
 
     private void Start()
@@ -49,7 +49,7 @@ public class MapManager : MonoBehaviour
             _dataDictionary.Add(id, data);
         }
 
-        ChangeMap(Map.MainStage);
+        ChangeMap(Map.GimikStage);
     }
 
     private MapData GetMapData(string id)
@@ -81,36 +81,59 @@ public class MapManager : MonoBehaviour
 
     private void InitializeMap(MapData data)
     {
-        _factory.LoadMapPrefab(data.PrefabPath, InitializeMap);
+        StartCoroutine(LoadPrefab(data));
     }
 
-    private void InitializeMap(GameObject map)
+    private IEnumerator LoadPrefab(MapData data)
     {
-        _currentMap = Instantiate(map);
+        string path = data.PrefabPath;
+
+        ResourceRequest request = Resources.LoadAsync<GameObject>(path);
+
+        UIManager.Instance.OnLoadingUI(request);
+
+        while (!request.isDone)
+        {
+            yield return null;
+        }
+
+        GameObject currentMap = Instantiate(request.asset as GameObject);
+
+        _mapDictionary.Add(data.ID, currentMap);
+
+        _currentMap = currentMap;
 
         _currentMap.SetActive(true);
 
-        //나중에 스테이지 컴포넌트 가져와서 데이터로 초기화작업.
+        Stage stage = _currentMap.GetComponent<Stage>();
+
+        if (stage != null)
+        {
+            stage.InitializeStage(data);
+
+            stage.StartStage();
+        }
     }
 
     private void LoadMap(MapData data)
     {
-        _currentMap.SetActive(false);
+        UIManager.Instance.OnLoadingUI();
 
         SaveCurrentMapData();
 
-        Destroy(_currentMap);
+        _currentMap.SetActive(false);
 
-        _factory.LoadMapPrefab(data.PrefabPath, LoadMap);
-    }
+        GameObject nextMap = GetMap(data.ID);
 
-    private void LoadMap(GameObject map)
-    {
-        _currentMap = Instantiate(map);
+        _currentMap = nextMap;
 
         _currentMap.SetActive(true);
+    }
 
-        //이전 데이터를 가져와서 초기화
+    //이미 헤쉬셋으로 있는지 확인했기 때문에 바로 리턴.
+    private GameObject GetMap(string id)
+    {
+        return _mapDictionary[id];
     }
 
     private void SaveCurrentMapData()

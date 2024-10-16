@@ -22,7 +22,7 @@ public class ObjectPool : Singleton<ObjectPool>
 {
     private Dictionary<ObjectName, Pool> _objectPool = new Dictionary<ObjectName, Pool>();
     private Dictionary<ObjectName, GameObject> _objectDictionary = new Dictionary<ObjectName, GameObject>();
-    private Dictionary<ObjectName, PrefabPath> _pathDataDictionary = new Dictionary<ObjectName, PrefabPath>();
+    private Dictionary<ObjectName, PrefabPath> _pathDataDictionary = new Dictionary<ObjectName, PrefabPath>();    
 
     private bool _poolDataReady = false;
 
@@ -78,12 +78,11 @@ public class ObjectPool : Singleton<ObjectPool>
             pool.transform.SetParent(this.transform);
             pool.name = name.ToString() + "Pool";
             _objectPool.Add(name, new Pool(pool.transform));
+
+            var pathData = _pathDataDictionary[name];
+
+            CreatePrefab(pathData, count, name);
         }
-
-        var pathData = _pathDataDictionary[name];
-
-        CreatePrefab(pathData, count, name);
-
     }
 
     private void CreatePrefab(PrefabPath pathData, int count, ObjectName name)
@@ -106,18 +105,6 @@ public class ObjectPool : Singleton<ObjectPool>
         }
     }
     #endregion
-
-    private ObjectName ParseEnum(string id)
-    {
-        ObjectName result;
-
-        if (!Enum.TryParse(id, true, out result))
-        {
-            result = ObjectName.Null;
-        }
-
-        return result;
-    }
 
     public void EnqueueObject(GameObject prefab, ObjectName name)
     {
