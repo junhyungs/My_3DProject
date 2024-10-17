@@ -24,6 +24,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        DestroyShadowPlayer();
+    }
+
     private void Start()
     {
         StartCoroutine(LoadPlayerData("P101"));

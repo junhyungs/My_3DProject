@@ -29,6 +29,7 @@ public class Stage : MonoBehaviour
         _data = data;
     }
 
+    //SkyBoX 변경 메서드
     public virtual void ChangeSkyBox()
     {
         if(_skyBoxMaterial == null)

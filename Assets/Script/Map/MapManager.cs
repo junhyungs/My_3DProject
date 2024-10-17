@@ -106,8 +106,6 @@ public class MapManager : Singleton<MapManager>
 
             stageComponent.CreateMonsters();
 
-            stageComponent.ChangeSkyBox();
-
             stageComponent.StartPosition();
         }
     }
@@ -131,8 +129,7 @@ public class MapManager : Singleton<MapManager>
 
             if (_currentMap.TryGetComponent(out Stage stageComponent))
             {
-                stageComponent.ChangeSkyBox();
-
+                
                 stageComponent.SpawnItems();
 
                 stageComponent.CreateMonsters();

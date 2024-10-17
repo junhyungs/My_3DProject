@@ -8,9 +8,12 @@ using UnityEngine;
 public class WeaponManager : Singleton<WeaponManager>
 {
     private PlayerWeaponController _weaponController;
+    public PlayerWeapon CurrentWeapon { get; set; }
 
     public void ChangeWeapon(PlayerWeapon weapon)
     {
+        CurrentWeapon = weapon;
+
         _weaponController.SetWeapon(weapon);
     }
 

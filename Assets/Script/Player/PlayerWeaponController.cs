@@ -191,6 +191,8 @@ public class PlayerWeaponController : MonoBehaviour
                 break;
         }
 
+        WeaponManager.Instance.CurrentWeapon = newWeapon;
+
         ActiveIdleWeapon(true);
     }
 

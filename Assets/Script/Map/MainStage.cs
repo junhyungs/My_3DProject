@@ -21,11 +21,6 @@ public class MainStage : Stage
         base.CreateMonsters();
     }
 
-    public override void ChangeSkyBox()
-    {
-        base.ChangeSkyBox();
-    }
-
     public override void StartPosition()
     {
         base.StartPosition();
