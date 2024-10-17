@@ -1,38 +1,21 @@
 using System.Collections;
 using UnityEngine;
 
-public class TrinketItem : MonoBehaviour, IInteractionItem
+public class TrinketItem : Item, IInteractionItem
 {
     [Header("ItemID")]
     [SerializeField] private TrinketItemType _itemID;
-
-    [Header("UI_Position")]
-    [SerializeField] private Vector3 _uiPosition;
-
-    private ItemData _data;
 
     private void Start()
     {
         string id = _itemID.ToString();
 
-        StartCoroutine(LoadItemData(id));
-    }
-
-    private IEnumerator LoadItemData(string id)
-    {
-        yield return new WaitWhile(() =>
-        {
-            return DataManager.Instance.GetData(id) == null;
-        });
-
-        var data = DataManager.Instance.GetData(id) as ItemData;
-
-       _data = data;
+        StartCoroutine(LoadData(id));
     }
 
     public void InteractionItem()
     {
-        InventoryManager.Instance.SetItem(_itemID, _data);
+        InventoryManager.Instance.SetItem(_itemID, _itemType, _data);
 
         UIManager.Instance.HideItemInteractionUI(transform, ObjectName.GetUI);
 

@@ -13,26 +13,34 @@ public class PlayerWeaponEffectController : MonoBehaviour
     [Header("Transform")]
     [SerializeField] private Transform _effectTransform;
 
-    private Dictionary<PlayerWeapon, Color> _colorValueDictionary;
-    private Dictionary<PlayerWeapon, List<Vector3>> _rangeDictionary;
+    private Dictionary<PlayerWeapon, Color> _colorValueDictionary = new Dictionary<PlayerWeapon, Color>();
+    private Dictionary<PlayerWeapon, List<Vector3>> _rangeDictionary = new Dictionary<PlayerWeapon, List<Vector3>>();
 
     private GameObject _effectObject;
     private ParticleSystem _effectPaticleSystem;
-    private Material _effectMaterial;
+    public Material _effectMaterial;
+
+    private void Awake()
+    {
+        OnInitializeOnAwake();
+    }
 
     private void Start()
     {
-        InitializeEffect();
+        InitializeOnStart();
     }
 
-    private void InitializeEffect()
+    private void OnInitializeOnAwake()
     {
-        InitializeColorDictionary();
-
         InitializeMaterial();
 
-        InitializeEffectObject();
+        InitializeColorDictionary();
 
+        InitializeEffectObject();
+    }
+
+    private void InitializeOnStart()
+    {
         StartCoroutine(InitializeRangeDictionary());
     }
 
@@ -62,20 +70,15 @@ public class PlayerWeaponEffectController : MonoBehaviour
 
     private void InitializeColorDictionary()
     {
-        _colorValueDictionary = new Dictionary<PlayerWeapon, Color>
-        {
-            {PlayerWeapon.Sword, new Color(1f, 13f / 255f, 8f / 255f)},
-            {PlayerWeapon.Hammer, new Color(0f, 1f, 1f) },
-            {PlayerWeapon.Dagger, new Color(38f / 255f, 1f, 18f / 255f) },
-            {PlayerWeapon.GreatSword, new Color(1f, 0f, 228f / 255f) },
-            {PlayerWeapon.Umbrella, new Color(0f, 4f / 255f, 1f) }
-        };
+        _colorValueDictionary.Add(PlayerWeapon.Sword, new Color(1f, 13f / 255f, 8f / 255f));
+        _colorValueDictionary.Add(PlayerWeapon.Hammer, new Color(0f, 1f, 1f));
+        _colorValueDictionary.Add(PlayerWeapon.Dagger, new Color(38f / 255f, 1f, 18f / 255f));
+        _colorValueDictionary.Add(PlayerWeapon.GreatSword, new Color(1f, 0f, 228f / 255f));
+        _colorValueDictionary.Add(PlayerWeapon.Umbrella, new Color(0f, 4f / 255f, 1f));
     }
 
     private IEnumerator InitializeRangeDictionary()
     {
-        _rangeDictionary = new Dictionary<PlayerWeapon, List<Vector3>>();
-
         yield return new WaitWhile(() =>
         {
             return DataManager.Instance.GetData("W101") == null;

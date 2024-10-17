@@ -87,13 +87,16 @@ public class DataManager
 
                 string prefabPath = ParseString(item["PrefabPath"]);
 
-                List<string> itemPath = MapItemPath(item["ItemPath"]);
+                List<string> itemPath = MapItem(item["ItemPath"]);
 
                 List<string> spawnMonsterList = MapMonsterList(item["SpawnMonsterList"]);
 
                 string skyBoxPath = ParseString(item["SkyBoxPath"]);
 
-                MapData data = new MapData(id, mapName, prefabPath, itemPath, spawnMonsterList, skyBoxPath);
+                List<string> itemType = MapItem(item["ItemType"]);
+
+                MapData data = new MapData(id, mapName, prefabPath, itemPath,
+                    spawnMonsterList, skyBoxPath, itemType);
 
                 _dataDictionary.Add(id, data);
             }
@@ -104,7 +107,7 @@ public class DataManager
         }
     }
 
-    private List<string> MapItemPath(JToken jtoken)
+    private List<string> MapItem(JToken jtoken)
     {
         string value = jtoken.ToString();
 

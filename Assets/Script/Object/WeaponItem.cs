@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponItem : MonoBehaviour, IInteractionItem
+public class WeaponItem : Item, IInteractionItem
 {
     [Header("ItemID")]
     [SerializeField] private PlayerWeapon _itemID;
@@ -10,10 +10,6 @@ public class WeaponItem : MonoBehaviour, IInteractionItem
     [Header("DataID")]
     [SerializeField] private PlayerWeaponID _weaponID;
 
-    [Header("UI_Position")]
-    [SerializeField] private Vector3 _uiPosition;
-
-    private ItemData _data;
     private PlayerWeaponData _weaponData;
     
     void Start()
@@ -23,18 +19,6 @@ public class WeaponItem : MonoBehaviour, IInteractionItem
 
         StartCoroutine(LoadData(id));
         StartCoroutine(LoadWeaponData(weaponId));
-    }
-
-    private IEnumerator LoadData(string id)
-    {
-        yield return new WaitWhile(() =>
-        {
-            return DataManager.Instance.GetData(id) == null;
-        });
-
-        var data = DataManager.Instance.GetData(id) as ItemData;
-
-        _data = data;
     }
 
     private IEnumerator LoadWeaponData(string id)
@@ -51,7 +35,7 @@ public class WeaponItem : MonoBehaviour, IInteractionItem
 
     public void InteractionItem()
     {
-        InventoryManager.Instance.SetWeapon(_itemID, _data, _weaponData);
+        InventoryManager.Instance.SetWeapon(_itemID, _itemType, _data, _weaponData);
 
         UIManager.Instance.HideItemInteractionUI(transform, ObjectName.GetUI);
 

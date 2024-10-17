@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.Playables;
 
 
 public class DialogueManager : Singleton<DialogueManager>
@@ -138,6 +139,24 @@ public class DialogueManager : Singleton<DialogueManager>
         List<string> dialogueList = GetList(id, order);
 
         yield return StartCoroutine(ReadDialogue(dialogueList));
+    }
+
+    #endregion
+
+    #region TimeLine
+    public IEnumerator StartTimeLineDialogue(NPC npc, DialogueOrder order, PlayableDirector timeLine)
+    {
+        string id = npc.ToString();
+
+        OnActorName(id);
+
+        List<string> dialogueList = GetList(id, order);
+
+        timeLine.Pause();
+
+        yield return StartCoroutine(ReadDialogue(dialogueList));
+
+        timeLine.Resume();
     }
 
     #endregion

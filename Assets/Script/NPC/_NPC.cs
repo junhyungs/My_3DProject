@@ -21,8 +21,6 @@ public abstract class _NPC : MonoBehaviour
 
     public void ToggleNPC(bool toggle, GameObject npcCamera)
     {
-        CursorLock(toggle);
-
         GameManager.Instance.PlayerLock(toggle);
 
         if (npcCamera != null)
@@ -34,10 +32,5 @@ public abstract class _NPC : MonoBehaviour
         {
             UIManager.Instance.HideItemInteractionUI(transform, ObjectName.InteractionDialogueUI);
         }
-    }
-
-    private void CursorLock(bool toggle)
-    {
-        Cursor.lockState = toggle ? CursorLockMode.Locked : CursorLockMode.None;
     }
 }

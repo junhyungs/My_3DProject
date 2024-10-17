@@ -33,11 +33,11 @@ public class BehaviourMonster : MonoBehaviour
         InitializeComponent();
     }
 
-    public void OnDisableMonster()
+    public virtual void OnDisableMonster()
     {
         ObjectPool.Instance.EnqueueObject(gameObject, _monsterType);
     }
-
+    
     protected void InitializeComponent()
     {
         _agent = gameObject.GetComponent<NavMeshAgent>();

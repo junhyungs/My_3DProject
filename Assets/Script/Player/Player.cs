@@ -11,9 +11,8 @@ public class Player : MonoBehaviour
     
     private void Awake()
     {
-        GameManager.Instance.Player = this.gameObject;
-        
         _healthComponent = gameObject.GetComponent<PlayerHealth>();
+
         _moveController = gameObject.GetComponent<PlayerMoveController>();
     }
 

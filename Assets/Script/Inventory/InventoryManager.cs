@@ -29,8 +29,7 @@ public class InventoryManager : Singleton<InventoryManager>
     private Dictionary<PlayerWeapon, ItemData> _weaponDictionary;
     private Dictionary<TrinketItemType, ItemData> _trinketDictionary;
 
-    private HashSet<PlayerWeapon> _weaponSet;
-    private HashSet<TrinketItemType> _trinketItemSet;
+    private HashSet<ItemType> _itemTypeSet;
 
     private TrinketPanel _trinketPanel;
     private WeaponPanel _weaponPanel;
@@ -68,22 +67,15 @@ public class InventoryManager : Singleton<InventoryManager>
         get { return _baseDictionary; }
     }
 
-    public HashSet<PlayerWeapon> WeaponSet
+    public HashSet<ItemType> ItemSet
     {
-        get { return _weaponSet; }
-    }
-
-    public HashSet<TrinketItemType> TrinketSet
-    {
-        get { return _trinketItemSet; }
+        get { return _itemTypeSet; }
     }
     #endregion
 
     private void Awake()
     {
-        _weaponSet = new HashSet<PlayerWeapon>();
-        _trinketItemSet = new HashSet<TrinketItemType>();
-
+        _itemTypeSet = new HashSet<ItemType>();
         _trinketPanel = transform.GetComponentInChildren<TrinketPanel>(true);
         _weaponPanel = transform.GetComponentInChildren<WeaponPanel>(true);
         _inventoryUI = GetComponent<InventoryUI>();
@@ -177,28 +169,28 @@ public class InventoryManager : Singleton<InventoryManager>
     }
 
     //π´±‚ »πµÊ Ω√ »£√‚
-    public void SetWeapon(PlayerWeapon weapon, ItemData data, PlayerWeaponData weaponData)
+    public void SetWeapon(PlayerWeapon weapon, ItemType type, ItemData data, PlayerWeaponData weaponData)
     {
-        if(_weaponSet.Contains(weapon))
+        if(_itemTypeSet.Contains(type))
         {
             return;
         }
 
-        _weaponSet.Add(weapon);
+        _itemTypeSet.Add(type);
 
         _weaponPanel.SetWeaponType(weapon, data, weaponData);
     }
 
 
     //æ∆¿Ã≈€ »πµÊ Ω√ »£√‚
-    public void SetItem(TrinketItemType item, ItemData data)
+    public void SetItem(TrinketItemType item, ItemType type, ItemData data)
     {
-        if (_trinketItemSet.Contains(item))
+        if (_itemTypeSet.Contains(type))
         {
             return;
         }
 
-        _trinketItemSet.Add(item);
+        _itemTypeSet.Add(type);
 
         TrinketDictionary.Add(item, data);
 

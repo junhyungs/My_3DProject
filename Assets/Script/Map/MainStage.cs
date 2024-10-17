@@ -1,59 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Collections;
-using UnityEngine;
-using UnityEngine.Playables;
 
-public class MainStage : MonoBehaviour
+public class MainStage : Stage
 {
-    [Header("TrinketTransform")]
-    [SerializeField] private Transform[] _trinketTransforms;
-
-    private List<GameObject> _itemList;
-    private MapData _mainStageData;
-
     private void Start()
     {
         var startTimeLine = TimeLineManager.Instance.GetTimeLine(TimeLineType.Intro);
 
-        if(startTimeLine != null)
+        if (startTimeLine != null)
         {
             startTimeLine.Play();
         }
-        
-        StartCoroutine(LoadData("MainStage"));
     }
 
-    private IEnumerator LoadData(string id)
+    public override void SpawnItems()
     {
-        yield return new WaitWhile(() =>
-        {
-            return DataManager.Instance.GetData(id) == null;
-        });
-
-        var data = DataManager.Instance.GetData(id) as MapData;
-
-        _mainStageData = data;
-
-        CreateItem(_mainStageData);
+        base.SpawnItems();
     }
 
-    private void CreateItem(MapData data)
+    public override void CreateMonsters()
     {
-        _itemList = new List<GameObject>();
+        base.CreateMonsters();
+    }
 
-        for (int i = 0; i < data.ItemPath.Count; i++)
-        {
-            GameObject prefab = Resources.Load<GameObject>(data.ItemPath[i]);
+    public override void ChangeSkyBox()
+    {
+        base.ChangeSkyBox();
+    }
 
-            GameObject item = Instantiate(prefab);
-
-            if (_trinketTransforms[i] != null)
-            {
-                item.transform.position = _trinketTransforms[i].position;
-            }
-
-            _itemList.Add(item);
-        }
+    public override void StartPosition()
+    {
+        base.StartPosition();
     }
 }

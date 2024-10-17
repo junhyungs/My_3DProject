@@ -7,7 +7,6 @@ public class MapManager : Singleton<MapManager>
 {
     private Dictionary<string, MapData> _dataDictionary;
     private Dictionary<string, GameObject> _mapDictionary;
-
     private GameObject _currentMap;
 
     private void Awake()
@@ -58,9 +57,17 @@ public class MapManager : Singleton<MapManager>
         return null;
     }
     
+    //맵 변경 시 호출.
     public void ChangeMap(Map mapName)
     {
         var data = GetMapData(mapName.ToString());
+
+        if (_mapDictionary.ContainsKey(data.ID))
+        {
+            LoadMap(mapName);
+
+            return;
+        }
 
         InitializeMap(data);
     }
@@ -90,5 +97,53 @@ public class MapManager : Singleton<MapManager>
         _currentMap = currentMap;
 
         _currentMap.SetActive(true);
+
+        if(_currentMap.TryGetComponent(out Stage stageComponent))
+        {
+            stageComponent.SetMapData(data);
+
+            stageComponent.SpawnItems();
+
+            stageComponent.CreateMonsters();
+
+            stageComponent.ChangeSkyBox();
+
+            stageComponent.StartPosition();
+        }
     }
+
+    private void LoadMap(Map mapName)
+    {
+        UIManager.Instance.OnLoadingUI(null);   
+
+        if(_currentMap != null)
+        {
+            _currentMap.SetActive(false);
+        }
+
+        string mapDictionaryKey = mapName.ToString();
+
+        if (_mapDictionary.TryGetValue(mapDictionaryKey, out GameObject nextMap))
+        {
+            _currentMap = nextMap;
+
+            _currentMap.SetActive(true);
+
+            if (_currentMap.TryGetComponent(out Stage stageComponent))
+            {
+                stageComponent.ChangeSkyBox();
+
+                stageComponent.SpawnItems();
+
+                stageComponent.CreateMonsters();
+
+                stageComponent.StartPosition();
+            }
+            else
+                Debug.Log("Stage 컴포넌트가 없습니다.");
+        }
+        else
+            Debug.Log("맵이 딕셔너리에 없습니다.");
+    }
+   
 }

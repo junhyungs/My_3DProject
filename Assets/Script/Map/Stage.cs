@@ -2,48 +2,77 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Playables;
-using UnityEngine.AI;
-using Unity.AI.Navigation;
 
 public class Stage : MonoBehaviour
 {
-    [Header("MonsterTransforms")]
+    private enum SkyBox
+    {
+        Default,
+        Sky_Pano
+    }
+
+    [Header("SpawnTransform")]
     [SerializeField] private Transform[] _monsterTransforms;
+    [SerializeField] private Item[] _items;
 
-    private List<GameObject> _spawnMonsterList;
-    private HashSet<PlayableDirector> _timeLineSet;
+    [Header("StartPlayerPosition")]
+    [SerializeField] private Transform _startTransform;
 
-    private MapData _data;
+    protected List<BehaviourMonster> _spawnMonsters;
+    protected List<Material> _skyBoxList;
+    protected Material _skyBoxMaterial;
+    protected MapData _data;
+    protected Transform _saveTransform;
 
-    private void Awake()
-    {
-        _timeLineSet = new HashSet<PlayableDirector>();
-
-        _spawnMonsterList = new List<GameObject>();
-    }
-
-
-    private void OnDisable()
-    {
-        foreach(var spawnMonster in _spawnMonsterList)
-        {
-            spawnMonster.SetActive(false);
-        }
-
-        _spawnMonsterList.Clear();
-    }
-
-    public void InitializeStage(MapData data)
+    public virtual void SetMapData(MapData data)
     {
         _data = data;
-
-        CreateMonster(_data);
     }
 
-    private void CreateMonster(MapData data)
+    public virtual void ChangeSkyBox()
     {
-        foreach (var spawnMonster in data.SpawnMonsterList)
+        if(_skyBoxMaterial == null)
+        {
+            _skyBoxMaterial = Resources.Load<Material>(_data.SkyBoxPath);
+        }
+
+        RenderSettings.skybox = _skyBoxMaterial;
+    }
+
+    public virtual void OnDisableMap()
+    {
+        if(_spawnMonsters.Count <= 0)
+        {
+            return;
+        }
+
+        foreach(var monster in _spawnMonsters)
+        {
+            monster.OnDisableMonster();
+        }
+    }
+
+    public virtual void SpawnItems()
+    {
+        for(int i = 0; i < _items.Length; i++)
+        {
+            var itemType = _items[i]._itemType;
+
+            if(InventoryManager.Instance.ItemSet.Contains(itemType))
+            {
+                _items[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public virtual void CreateMonsters()
+    {
+        if(_monsterTransforms.Length <= 0)
+        {
+            return;
+        }
+
+        foreach(var spawnMonster in _data.SpawnMonsterList)
         {
             if (!string.IsNullOrWhiteSpace(spawnMonster))
             {
@@ -52,33 +81,45 @@ public class Stage : MonoBehaviour
                 ObjectPool.Instance.CreatePool(monsterType);
             }
         }
+
+        StartCoroutine(SpawnMonsters());
     }
 
-
-    public void StartStage()
-    {
-        if(_monsterTransforms != null)
-        {
-            StartCoroutine(SpawnMonster(_monsterTransforms));
-        }
-    }
-
-    private IEnumerator SpawnMonster(Transform[] monsterTransforms)
+    private IEnumerator SpawnMonsters()
     {
         yield return new WaitForEndOfFrame();
 
-        for(int i = 0; i < monsterTransforms.Length; i++)
+        for(int i = 0; i < _monsterTransforms.Length; i++)
         {
-            var spawnMonster = RandomMonster();
+            var monsterType = RandomMonster();
 
-            GameObject monster = ObjectPool.Instance.DequeueMonster(spawnMonster);
+            GameObject monster = ObjectPool.Instance.DequeueMonster(monsterType);
 
-            monster.transform.position = monsterTransforms[i].position;
+            monster.transform.position = _monsterTransforms[i].position;
 
             monster.SetActive(true);
 
-            _spawnMonsterList.Add(monster);
+            BehaviourMonster monsterComponent = monster.GetComponent<BehaviourMonster>();
+            
+            _spawnMonsters.Add(monsterComponent);
         }
+    }
+
+    public virtual void StartPosition()
+    {
+        GameObject player = GameManager.Instance.Player;
+
+        Vector3 playerPosition = _saveTransform == null ?
+            _startTransform.position : _saveTransform.position;
+
+        SetPlayerTransform(player, playerPosition, Quaternion.identity);
+    }
+
+    private void SetPlayerTransform(GameObject player, Vector3 position, Quaternion quaternion)
+    {
+        player.transform.position = position;
+
+        player.transform.rotation = quaternion;
     }
 
     private ObjectName RandomMonster()

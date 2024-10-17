@@ -355,7 +355,6 @@ public class PlayerAttackController : MonoBehaviour
 
     public void Hit()
     {
-        Debug.Log(chargeMax);
         m_weaponController.OnHit(chargeMax);
     }
 

@@ -308,7 +308,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.4355765, y: 0.24881175, z: -0.15676814, w: 0.8507583}
   m_LocalPosition: {x: 74.98534, y: 0, z: -0.15935993}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.0000001, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1368328904934044918}
@@ -326,9 +326,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cc00d08eff236848841c322a9f473d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemType: 9
+  _uiPosition: {x: 2, y: 1, z: 0}
   _itemID: 4
   _weaponID: 4
-  _uiPosition: {x: 2, y: 1, z: 0}
 --- !u!135 &75982813008976528
 SphereCollider:
   m_ObjectHideFlags: 0

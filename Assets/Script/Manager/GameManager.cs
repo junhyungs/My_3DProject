@@ -16,12 +16,35 @@ public class GameManager : Singleton<GameManager>
     public bool IsGameOver { get {  return isGameOver; } set { isGameOver = value; } }
     #endregion
 
+    #region CreatePlayer
+    private const string _playerPath = "Prefab/Player/player";
+    public bool IsCreate { get; set; }
+    #endregion
+
+    private void Awake()
+    {
+        CreatePlayer();
+    }
+
     private void Start()
     {
         if(Player != null)
         {
             _playerInput = Player.GetComponent<PlayerInput>();
         }
+    }
+
+    public void CreatePlayer()
+    {
+        GameObject player = Resources.Load<GameObject>(_playerPath);
+
+        player.SetActive(false);
+
+        Player = Instantiate(player);
+
+        _playerInput = Player.GetComponent<PlayerInput>();
+
+        IsCreate = true;
     }
 
     public void PlayerLock(bool isLock)

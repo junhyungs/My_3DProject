@@ -148,3 +148,17 @@ public enum TrinketItemType
     Surveillance
 }
 
+public enum ItemType
+{
+    Ring,
+    RustyKey,
+    Teddy,
+    Trowel,
+    Surveillance,
+    Sword,
+    Hammer,
+    Dagger,
+    GreatSword,
+    Umbrella
+}
+

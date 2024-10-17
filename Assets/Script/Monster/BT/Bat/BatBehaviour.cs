@@ -50,6 +50,11 @@ public class BatBehaviour : BehaviourMonster, IDamged
         }
     }
 
+    public override void OnDisableMonster()
+    {
+        base.OnDisableMonster();
+    }
+
     private void SetMaterial()
     {
         _copyMaterial = Instantiate(_originalMaterial);
