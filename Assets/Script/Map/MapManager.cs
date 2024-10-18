@@ -90,6 +90,11 @@ public class MapManager : Singleton<MapManager>
             yield return null;
         }
 
+        if(_currentMap !=null)
+        {
+            _currentMap.SetActive(false);
+        }
+
         GameObject currentMap = Instantiate(request.asset as GameObject);
 
         _mapDictionary.Add(data.ID, currentMap);
