@@ -53,12 +53,24 @@ public class SignalTrigger : MonoBehaviour
     {
         yield return StartCoroutine(DialogueManager.Instance.StartTimeLineDialogue(NPC.HallCrow_4, DialogueOrder.Story, timeLine));
 
+        ResetPlayer();
+    }
+
+    #endregion
+
+    private void ResetPlayer()
+    {
+        Transform dummyTransform = _dummyPlayer.gameObject.transform;
+
+        Transform playerTransform = GameManager.Instance.Player.transform;
+
+        playerTransform.position = dummyTransform.position;
+        playerTransform.rotation = dummyTransform.rotation;
+
         _dummyPlayer.gameObject.SetActive(false);
 
         OnActivePlayer();
     }
-
-    #endregion
 
     public void OnDeActivePlayer()
     {

@@ -68,6 +68,11 @@ public class PlayerMoveController : MonoBehaviour
         m_playerAnimator = GetComponent<Animator>();
     }
 
+    private void OnDisable()
+    {
+        m_playerInput = Vector2.zero;
+    }
+
     void Update()
     {
         if (!isLadder)
