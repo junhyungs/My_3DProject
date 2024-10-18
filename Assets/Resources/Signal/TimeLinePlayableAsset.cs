@@ -24,6 +24,8 @@ public class TimeLinePlayableAsset : PlayableBehaviour
 {
     public GameObject Player { get; set; }
 
+    
+
     public override void OnBehaviourPause(Playable playable, FrameData info)
     {
         Player.SetActive(true);

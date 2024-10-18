@@ -15,6 +15,7 @@ public class TimeLinePlayer : MonoBehaviour
 
     [Header("DummyWeapon")]
     [SerializeField] private GameObject[] _weapons;
+    private Animator _animator;
 
     private Dictionary<DummyPlayerWeapon, GameObject> _weaponDictionary = new Dictionary<DummyPlayerWeapon, GameObject>();
 
@@ -28,6 +29,10 @@ public class TimeLinePlayer : MonoBehaviour
 
     private void OnEnable()
     {
+        _animator = GetComponent<Animator>();
+
+        _animator.applyRootMotion = true;
+
         var currentWeapon = WeaponManager.Instance.CurrentWeapon;
 
         switch(currentWeapon)

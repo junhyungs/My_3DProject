@@ -6,6 +6,13 @@ using UnityEngine.Playables;
 
 public class SignalTrigger : MonoBehaviour
 {
+    private TimeLinePlayer _dummyPlayer;
+
+    private void Start()
+    {
+        _dummyPlayer = transform.GetComponentInChildren<TimeLinePlayer>(true);
+    }
+
     public void MainStage_Intro()
     {
         var timeLine = TimeLineManager.Instance.GetTimeLine(TimeLineType.Intro);
@@ -23,22 +30,32 @@ public class SignalTrigger : MonoBehaviour
 
     public void MainStage_HallCrow_2()
     {
+        var timeLine = TimeLineManager.Instance.GetTimeLine(TimeLineType.HallCrow);
 
+        StartCoroutine(DialogueManager.Instance.StartTimeLineDialogue(NPC.HallCrow_2, DialogueOrder.Story, timeLine));
     }
 
     public void MainStage_HallCrow_3()
     {
+        var timeLine = TimeLineManager.Instance.GetTimeLine(TimeLineType.HallCrow);
 
+        StartCoroutine(DialogueManager.Instance.StartTimeLineDialogue(NPC.HallCrow_3, DialogueOrder.Story, timeLine));  
     }
 
     public void MainStage_HallCrow_4()
     {
+        var timeLine = TimeLineManager.Instance.GetTimeLine(TimeLineType.HallCrow);
 
+        StartCoroutine(HallCrow_4(timeLine));
     }
 
-    public void MainStage_HallCrow_5()
+    private IEnumerator HallCrow_4(PlayableDirector timeLine)
     {
+        yield return StartCoroutine(DialogueManager.Instance.StartTimeLineDialogue(NPC.HallCrow_4, DialogueOrder.Story, timeLine));
 
+        _dummyPlayer.gameObject.SetActive(false);
+
+        OnActivePlayer();
     }
 
     #endregion
