@@ -3,46 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public enum GimikEnum
-{
-    OpenDoor = 1,
-    SpawnMonster = 2,
-    nextSceneDoor = 3,
-}
-
 public class GimikManager : Singleton<GimikManager>
 {
     private Dictionary<GimikEnum, Action<GameObject>> GimikEventDic = new Dictionary<GimikEnum, Action<GameObject>>();
     private HashSet<GameObject> SpawnGimikHashSet = new HashSet<GameObject>();
     private bool isSpawnGimik;
 
-    private void Start()
-    {
-        ObjectPool.Instance.CreatePool(ObjectName.Bat);
-        ObjectPool.Instance.CreatePool(ObjectName.Mage);
-        ObjectPool.Instance.CreatePool(ObjectName.Slime);
-        ObjectPool.Instance.CreatePool(ObjectName.Ghoul);
-    }
-
-
-    public Dictionary<GimikEnum, Action<GameObject>> Gimik
-    {
-        get { return GimikEventDic;}
-    }
-
-    public bool OnSpawnGimik
-    {
-        get { return isSpawnGimik; }
-    }
-
+    public Dictionary<GimikEnum, Action<GameObject>> Gimik => GimikEventDic;
+    public bool OnSpawnGimik => isSpawnGimik;
+    
     private void Awake()
     {
         GimikEventDic.Add(GimikEnum.OpenDoor, OpenDoor);
         GimikEventDic.Add(GimikEnum.SpawnMonster, SpawnEvent);
     }
 
-    //DoorEvent
+    #region MoveDoor
     private void OpenDoor(GameObject eventObject)
     {
         Vector3 movePos = Vector3.down * 5.0f;
@@ -71,8 +47,9 @@ public class GimikManager : Singleton<GimikManager>
 
         eventObject.transform.position = endPos;
     }
+    #endregion
 
-    //SpawnEvent
+    #region Monster Spawn
     private void SpawnEvent(GameObject spawnPositionObject)
     {
         int spawnCount = 1;
@@ -148,9 +125,5 @@ public class GimikManager : Singleton<GimikManager>
             }
         }
     }
-
-    //nextScene
-
-
-
+    #endregion
 }

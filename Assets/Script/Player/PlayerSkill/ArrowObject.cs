@@ -1,13 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ArrowObject : ProjectileObject
 {
     [Header("FireParticle")]
     [SerializeField] private GameObject m_fireParticleObject;
-
 
     private bool isBurning = false;
 
@@ -45,6 +41,7 @@ public class ArrowObject : ProjectileObject
             if(hit != null)
             {
                 hit.TakeDamage(m_atk);
+
                 ReturnArrow();
             }
         }
@@ -54,23 +51,27 @@ public class ArrowObject : ProjectileObject
             ReturnArrow();
         }
 
-        Stove isFire = other.gameObject.GetComponent<Stove>();
+        Stove stove = other.gameObject.GetComponent<Stove>();
 
-        if (isFire != null && isBurning == false)
+        if(stove == null)
         {
-            bool burning = isFire.IsBurning;
-            OnFireParticle(burning);
+            return;
         }
 
         if (isBurning)
         {
-            IBurningObject burning = other.gameObject.GetComponent<IBurningObject>();
-            
-            if(burning != null)
-            {
-                burning.OnBurning(true);
-            }
+            IBurningObject burningObject = stove.GetComponent<IBurningObject>();
 
+            if(burningObject != null)
+            {
+                burningObject.OnBurning(true);
+            }
+        }
+        else
+        {
+            bool burning = stove.IsBurning;
+
+            OnFireParticle(burning);
         }
     }
 

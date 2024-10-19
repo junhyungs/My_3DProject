@@ -20,9 +20,18 @@ public class CutSceneDoor : MonoBehaviour, IInteractionItem
     private BoxCollider _boxCollider;
     private GameObject _player;
 
+    private HashSet<string> _playerTrack;
+
     private void Awake()
     {
         _boxCollider = GetComponent<BoxCollider>();
+
+        _playerTrack = new HashSet<string>()
+        {
+            "PlayerMovement",
+            "PlayerWalkAnimation",
+            "PlayerObject"
+        };
     }
 
     private void Start()
@@ -32,45 +41,83 @@ public class CutSceneDoor : MonoBehaviour, IInteractionItem
 
     public void InteractionItem()
     {
-        _boxCollider.enabled = false;
+        OpenDoor();
+    }
 
-        UIManager.Instance.HideItemInteractionUI(transform, ObjectName.GetUI);
-
-        GameManager.Instance.PlayerLock(true);
+    private void OpenDoor()
+    {
+        PlayerLock(true);
 
         ResetPlayerTransform();
 
-        var timeLine = TimeLineManager.Instance.GetTimeLine(TimeLineType.Move);
+        ColliderControl(false);
 
-        var trak = timeLine.playableAsset.outputs;
+        UIManager.Instance.HideItemInteractionUI(transform, ObjectName.OpenUI);
 
-        foreach(var output in trak)
+        BindTimeLine(TimeLineType.Move);
+    }
+
+    public void CloseDoor()
+    {
+        _player = GameManager.Instance.Player;
+
+        ResetPlayerTransform();
+
+        BindTimeLine(TimeLineType.Out);
+    }
+
+    private void ResetPlayerTransform()
+    {
+        _player.transform.position = _movementTransform.position;
+
+        _player.transform.rotation = Quaternion.Euler(0f, _player.transform.rotation.y, 0f);
+    }
+
+    public void ChangeMap()
+    {
+        MapManager.Instance.ChangeMap(_changeMap);
+    }
+
+    private void PlayerLock(bool islock)
+    {
+        GameManager.Instance.PlayerLock(islock);
+    }
+
+    private void ColliderControl(bool enabled)
+    {
+        _boxCollider.enabled = enabled;
+    }
+
+    private PlayableDirector GetTimeLine(TimeLineType type)
+    {
+        var timeLine = TimeLineManager.Instance.GetTimeLine(type);
+
+        if (timeLine != null)
         {
-            if(output.streamName == "PlayerMovement" ||
-                output.streamName == "PlayerWalkAnimation" ||
-                output.streamName == "PlayerObject")
+            return timeLine;
+        }
+        else
+        {
+            Debug.Log("<CutSceneDoor> 타임라인을 가져오지 못했습니다.");
+            return null;
+        }
+    }
+
+    private void BindTimeLine(TimeLineType type)
+    {
+        var timeLine = GetTimeLine(type);
+
+        var track = timeLine.playableAsset.outputs;
+
+        foreach (var output in track)
+        {
+            if (_playerTrack.Contains(output.streamName))
             {
                 timeLine.SetGenericBinding(output.sourceObject, _player);
             }
         }
 
         timeLine.Play();
-    }
-
-    private void ResetPlayerTransform()
-    {
-        _player.transform.SetParent(transform);
-
-        _player.transform.localPosition = _movementTransform.localPosition;
-
-        _player.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
-
-        _player.transform.parent = null;
-    }
-
-    public void ChangeMap()
-    {
-        MapManager.Instance.ChangeMap(_changeMap);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -82,7 +129,7 @@ public class CutSceneDoor : MonoBehaviour, IInteractionItem
                 _player = other.gameObject;
             }
 
-            UIManager.Instance.ItemInteractionUI(transform, _uiPosition, ObjectName.GetUI);
+            UIManager.Instance.ItemInteractionUI(transform, _uiPosition, ObjectName.OpenUI);
         }
     }
 
@@ -90,7 +137,7 @@ public class CutSceneDoor : MonoBehaviour, IInteractionItem
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            UIManager.Instance.HideItemInteractionUI(transform, ObjectName.GetUI);
+            UIManager.Instance.HideItemInteractionUI(transform, ObjectName.OpenUI);
         }
     }
 }

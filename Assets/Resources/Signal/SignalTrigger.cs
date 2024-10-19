@@ -82,8 +82,8 @@ public class SignalTrigger : MonoBehaviour
         GameManager.Instance.Player.SetActive(true);
     }
 
-    private void PlayerLock(bool isLock)
+    public void ReleasePlayer()
     {
-        GameManager.Instance.PlayerLock(isLock);
+        GameManager.Instance.PlayerLock(false);
     }
 }

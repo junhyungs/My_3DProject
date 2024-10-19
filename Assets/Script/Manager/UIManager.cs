@@ -14,10 +14,11 @@ public class UIManager : Singleton<UIManager>
 
     private void Start()
     {
-        ObjectPool.Instance.CreatePool(ObjectName.UseUI);
-        ObjectPool.Instance.CreatePool(ObjectName.GetUI);
-        ObjectPool.Instance.CreatePool(ObjectName.LadderUI);
-        ObjectPool.Instance.CreatePool(ObjectName.InteractionDialogueUI);
+        ObjectPool.Instance.CreatePool(ObjectName.UseUI, 5);
+        ObjectPool.Instance.CreatePool(ObjectName.GetUI, 5);
+        ObjectPool.Instance.CreatePool(ObjectName.LadderUI, 5);
+        ObjectPool.Instance.CreatePool(ObjectName.OpenUI, 5);
+        ObjectPool.Instance.CreatePool(ObjectName.InteractionDialogueUI, 5);
     }
 
     public void OnAbilityUI()
@@ -51,6 +52,10 @@ public class UIManager : Singleton<UIManager>
                 case ObjectName.LadderUI:
                     GameObject ladderUI = ObjectPool.Instance.DequeueObject(ObjectName.LadderUI);
                     InteractionUIPosition(ladderUI, itemTransform, uiPosition);
+                    break;
+                case ObjectName.OpenUI:
+                    GameObject openUI = ObjectPool.Instance.DequeueObject(ObjectName.OpenUI);
+                    InteractionUIPosition (openUI, itemTransform, uiPosition);
                     break;
             }
         }

@@ -25,10 +25,14 @@ public class Stove : MonoBehaviour, IBurningObject
 
     public void OnBurning(bool isBurning)
     {
-        if(m_BigfireParticleObject != null && this.isBurning == false)
+        if(m_BigfireParticleObject != null ||
+            this.isBurning)
         {
-            m_BigfireParticleObject.SetActive(isBurning);
-            this.isBurning = isBurning;
+            return;
         }
+
+        m_BigfireParticleObject.SetActive(true);
+
+        this.isBurning = true;
     }
 }

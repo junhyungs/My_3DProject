@@ -63,6 +63,7 @@ public enum ObjectName
     Teddy,
     Trowel,
     Surveillance,
+    OpenUI,
 
     Null
 }
@@ -78,7 +79,15 @@ public enum TimeLineType
     Intro,
     HallCrow,
     Move,
-    ForestMother,
+    Out,
+    ForestMotherIntro,
+    ForestMotherDeath
+}
+public enum GimikEnum
+{
+    OpenDoor = 1,
+    SpawnMonster = 2,
+    nextSceneDoor = 3,
 }
 
 public enum DialogueOrder

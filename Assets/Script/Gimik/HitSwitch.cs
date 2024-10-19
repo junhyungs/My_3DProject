@@ -1,23 +1,15 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Playables;
 
 public class HitSwitch : MonoBehaviour
 {
+    public Action<HitSwitch> _swithAction;
+
     [Header("Key")]
     [SerializeField] private GimikEnum _key;
 
     [Header("GameObject")]
     [SerializeField] private GameObject EventObject;
-
-    [Header("TimeLine")]
-    [SerializeField] private PlayableDirector m_TimeLine;
-
-    private bool isHit;
-
-    public bool IsHit {  get { return isHit; } }
 
     public void SwitchEvent()
     {
@@ -27,17 +19,7 @@ public class HitSwitch : MonoBehaviour
         {
             gimikEvent.Invoke(EventObject);
 
-            PlayTimeLine();
-
-            isHit = true;
-        }
-    }
-
-    private void PlayTimeLine()
-    {
-        if(m_TimeLine != null)
-        {
-            m_TimeLine.Play();
+            _swithAction?.Invoke(this);
         }
     }
 }

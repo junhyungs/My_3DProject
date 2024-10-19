@@ -12,6 +12,16 @@ public class MainStage : Stage
         }
     }
 
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+    }
+
+    public override void SetMapData(MapData data)
+    {
+        base.SetMapData(data);
+    }
+
     public override void SpawnItems()
     {
         base.SpawnItems();

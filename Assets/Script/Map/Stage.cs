@@ -29,6 +29,13 @@ public class Stage : MonoBehaviour
         _data = data;
     }
 
+    protected virtual void OnDisable()
+    {
+        GameObject player = GameManager.Instance.Player;
+
+        _saveTransform = player.transform;
+    }
+
     //SkyBoX 변경 메서드
     public virtual void ChangeSkyBox()
     {
