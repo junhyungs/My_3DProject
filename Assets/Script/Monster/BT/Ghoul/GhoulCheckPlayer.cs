@@ -16,7 +16,7 @@ public class GhoulCheckPlayer : INode
         _ghoul = ghoul;
         _agent = _ghoul.GetComponent<NavMeshAgent>();
 
-        _radius = 10f;
+        _radius = 5f;
         _targetLayer = LayerMask.GetMask("Player");
     }
 
@@ -31,7 +31,7 @@ public class GhoulCheckPlayer : INode
 
         if(colliders.Length > 0)
         {
-            _agent.stoppingDistance = 8f;
+            _agent.stoppingDistance = 3f;
 
             _ghoul.PlayerObject = colliders[0].gameObject;
 

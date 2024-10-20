@@ -5,28 +5,34 @@ using UnityEngine.Playables;
 
 public class TimeLineManager : Singleton<TimeLineManager>
 {
-    [System.Serializable]
-    public class TimeLine
+    private Dictionary<TimeLineType, PlayableDirector> _timeLineReference;
+
+    private void Awake()
     {
-        [Header("TimeLineName")]
-        public TimeLineType _timeLineType;
-        [Header("TimeLine")]
-        public PlayableDirector _director;
+        _timeLineReference = new Dictionary<TimeLineType, PlayableDirector>();
     }
 
-    [Header("TimeLineList")]
-    [SerializeField] private List<TimeLine> _timeLines;
+    public void RegisterTimeLine(TimeLineType type, PlayableDirector director)
+    {
+        if(_timeLineReference.ContainsKey(type) || director == null)
+        {
+            return;
+        }
+
+        _timeLineReference.Add(type, director);
+    }
 
     public PlayableDirector GetTimeLine(TimeLineType type)
     {
-        foreach(var timeline in  _timeLines)
+        foreach(var timeLine in _timeLineReference)
         {
-            if(timeline._timeLineType == type && timeline._director != null)
+            if(timeLine.Key == type)
             {
-                return timeline._director;
+                return timeLine.Value;  
             }
         }
-        
-        return null;
+
+        Debug.Log("타임라인 참조 리턴에 실패했습니다.");
+        return null;    
     }
 }

@@ -23,6 +23,16 @@ public class ForestMother : MonoBehaviour, IDamged
         InitializeForestMother();
     }
 
+    private void OnEnable()
+    {
+        var materialValue = _copyMaterial.GetFloat("_Float");
+
+        if (materialValue <= 0f)
+        {
+            _copyMaterial.SetFloat("_Float", 0.5f);
+        }
+    }
+
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
@@ -79,9 +89,29 @@ public class ForestMother : MonoBehaviour, IDamged
     {
         this.gameObject.layer = LayerMask.NameToLayer("DeadMonster");
 
-        //PlayableDirector motherTimeLine = TimeLineManager.Instance.GetTimeLine(TimeLineType.ForestMother);
+        _animator.SetTrigger("Death");
 
-        //motherTimeLine.Play();
+        PlayableDirector motherTimeLine = TimeLineManager.Instance.GetTimeLine(TimeLineType.ForestMotherDeath);
+
+        motherTimeLine.Play();
+
+        StartCoroutine(FireShader(5f, 0.5f, -0.3f));
+    }
+
+    private IEnumerator FireShader(float maxTime, float startValue, float endValue)
+    {
+        float elapsedTime = 0f;
+
+        while(elapsedTime < maxTime)
+        {
+            elapsedTime += Time.deltaTime;
+
+            float colorValue = Mathf.Lerp(startValue, endValue, elapsedTime / maxTime);
+
+            _copyMaterial.SetFloat("_Float", colorValue);
+
+            yield return null;
+        }
 
         gameObject.SetActive(false);
     }

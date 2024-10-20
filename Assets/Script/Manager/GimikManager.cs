@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GimikManager : Singleton<GimikManager>
 {
@@ -15,7 +16,7 @@ public class GimikManager : Singleton<GimikManager>
     private void Awake()
     {
         GimikEventDic.Add(GimikEnum.OpenDoor, OpenDoor);
-        GimikEventDic.Add(GimikEnum.SpawnMonster, SpawnEvent);
+        
     }
 
     #region MoveDoor
@@ -50,64 +51,62 @@ public class GimikManager : Singleton<GimikManager>
     #endregion
 
     #region Monster Spawn
-    private void SpawnEvent(GameObject spawnPositionObject)
+
+    public void MonsterSpawnEvent(MapData data, GameObject spawnPositionObject)
     {
-        int spawnCount = 1;
+        Transform spawnTransform = spawnPositionObject.transform;
+
+        StartCoroutine(SpawnCoroutine(data, spawnTransform, data.EventCount));
+    }
+
+    private IEnumerator SpawnCoroutine(MapData data, Transform spawnTransform, int eventCount)
+    {
+        List<ObjectName> spawnList = ParseSpawnList(data.SpawnMonsterList);
+
+        for (int i = 0; i < eventCount; i++)
+        {
+            Spawn(data, spawnTransform, spawnList);
+
+            yield return new WaitWhile(() =>
+            {
+                return isSpawnGimik;
+            });
+        }
+    }
+
+    private void Spawn(MapData data, Transform spawnTransform, List<ObjectName> spawnList)
+    {
+        for(int i = 0; i < data.SpawnCount; i++)
+        {
+            int random = UnityEngine.Random.Range(0, spawnList.Count);
+            var spawnMonster = ObjectPool.Instance.DequeueMonster(spawnList[random]);
+
+            if (spawnList[random] is ObjectName.Slime)
+            {
+                float sizeRandom = UnityEngine.Random.Range(0.1f, 1.5f);
+                spawnMonster.transform.localScale = new Vector3(sizeRandom, sizeRandom, sizeRandom);
+            }
+
+            BehaviourMonster monsterComponent = spawnMonster.GetComponent<BehaviourMonster>();
+           
+
+            NavMeshAgent agent = spawnMonster.GetComponent<NavMeshAgent>();
+
+            if (!agent.enabled)
+            {
+                agent.enabled = true;
+            }
+
+            spawnMonster.transform.position = spawnTransform.position;
+            spawnMonster.transform.rotation = Quaternion.identity;
+
+            spawnMonster.SetActive(true);
+            RegisterMonster(spawnMonster);
+        }
 
         isSpawnGimik = true;
-
-        StartCoroutine(SpawnMonster(spawnPositionObject.transform, spawnCount));
     }
 
-    private IEnumerator SpawnMonster(Transform spawnPosition, int spawnCount)
-    {
-        for(int i = 0; i < spawnCount; i++)
-        {
-            yield return new WaitForSeconds(1.0f);
-
-            Spawn(spawnPosition);
-        }
-    }
-
-    private void Spawn(Transform SpawnTransform)
-    {
-        int randomMonster = UnityEngine.Random.Range(1, 5);
-
-        switch(randomMonster)
-        {
-            case 1:
-                GameObject bat = ObjectPool.Instance.DequeueObject(ObjectName.Bat);
-                BatBehaviour batComponent = bat.GetComponent<BatBehaviour>();
-                batComponent.IsSpawn(true);
-                RegisterMonster(bat);
-                bat.transform.position = SpawnTransform.position;
-                break;
-            case 2:
-                GameObject mage = ObjectPool.Instance.DequeueObject(ObjectName.Mage);
-                MageBehaviour mageComponent = mage.GetComponent<MageBehaviour>();
-                mageComponent.IsSpawn(true);
-                RegisterMonster(mage);
-                mage.transform.position = SpawnTransform.position;
-                break;
-            case 3:
-                GameObject ghoul = ObjectPool.Instance.DequeueObject(ObjectName.Ghoul);
-                GhoulBehaviour ghoulComponent = ghoul.GetComponent<GhoulBehaviour>();   
-                ghoulComponent.IsSpawn(true);
-                RegisterMonster(ghoul);
-                ghoul.transform.position = SpawnTransform.position;
-                break;
-            case 4:
-                GameObject slime = ObjectPool.Instance.DequeueObject(ObjectName.Slime);
-                float sizeRandom = UnityEngine.Random.Range(0.1f, 1.5f);
-                slime.transform.localScale = new Vector3(sizeRandom, sizeRandom, sizeRandom);
-                SlimeBehaviour slimeComponent = slime.GetComponent<SlimeBehaviour>();
-                slimeComponent.IsSpawn(true);
-                RegisterMonster(slime);
-                slime.transform.position = SpawnTransform.position;
-                break;
-        }
-    }
-    
     private void RegisterMonster(GameObject monster)
     {
         SpawnGimikHashSet.Add(monster);
@@ -119,11 +118,37 @@ public class GimikManager : Singleton<GimikManager>
         {
             SpawnGimikHashSet.Remove(monster);
 
-            if(SpawnGimikHashSet.Count == 0)
+            if (SpawnGimikHashSet.Count == 0)
             {
                 isSpawnGimik = false;
             }
         }
+    }
+
+    private List<ObjectName> ParseSpawnList(List<string> spawnList)
+    {
+        List<ObjectName> objectList = new List<ObjectName>();
+
+        foreach(var spawnMonster in  spawnList)
+        {
+            var parseEnum = ParseEnum(spawnMonster);
+
+            objectList.Add(parseEnum);
+        }
+
+        return objectList;
+    }
+
+    private ObjectName ParseEnum(string id)
+    {
+        ObjectName result;
+
+        if (!Enum.TryParse(id, true, out result))
+        {
+            result = ObjectName.Null;
+        }
+
+        return result;
     }
     #endregion
 }

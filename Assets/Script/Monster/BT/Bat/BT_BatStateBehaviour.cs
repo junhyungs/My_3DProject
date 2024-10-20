@@ -15,6 +15,8 @@ public class BatAttackStateBehaviour : StateMachineBehaviour
     private LayerMask _targetLayer;
     private float _stoppingDistance;
 
+    private bool _canAttack;
+
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if(batBehaviour == null)
@@ -56,6 +58,8 @@ public class BatAttackStateBehaviour : StateMachineBehaviour
     {
         animator.ResetTrigger("Attack");
 
+        _canAttack = true;
+
         _agent.SetDestination(batBehaviour.transform.position);
 
         _agent.stoppingDistance = _stoppingDistance;
@@ -65,21 +69,26 @@ public class BatAttackStateBehaviour : StateMachineBehaviour
 
     private void OverlapBox()
     {
-        Vector3 boxPosition = batBehaviour.transform.position +
-            batBehaviour.transform.TransformDirection(_transformDirection) + 
+        if (_canAttack)
+        {
+            Vector3 boxPosition = batBehaviour.transform.position +
+            batBehaviour.transform.TransformDirection(_transformDirection) +
             batBehaviour.transform.forward;
 
-        Collider[] colliders = Physics.OverlapBox(boxPosition, _boxSize/2,
-            batBehaviour.transform.rotation, _targetLayer);
+            Collider[] colliders = Physics.OverlapBox(boxPosition, _boxSize/2,
+                batBehaviour.transform.rotation, _targetLayer);
 
-        if(colliders.Length > 0 )
-        {
-            IDamged damaged = colliders[0].gameObject.GetComponent<IDamged>();
-
-            if( damaged != null )
+            if (colliders.Length > 0)
             {
-                damaged.TakeDamage(batBehaviour.Power);
+                IDamged damaged = colliders[0].gameObject.GetComponent<IDamged>();
+
+                if (damaged != null)
+                {
+                    damaged.TakeDamage(batBehaviour.Power);
+                }
             }
+
+            _canAttack = false;
         }
     }
 }

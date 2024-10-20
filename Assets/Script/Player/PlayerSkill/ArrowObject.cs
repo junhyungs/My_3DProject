@@ -48,6 +48,13 @@ public class ArrowObject : ProjectileObject
 
         if(other.gameObject.layer == LayerMask.NameToLayer("HitSwitch"))
         {
+            HitSwitch hitSwitch = other.gameObject.GetComponent<HitSwitch>();
+
+            if(hitSwitch != null)
+            {
+                hitSwitch.SwitchEvent();
+            }
+
             ReturnArrow();
         }
 

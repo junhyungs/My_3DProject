@@ -44,7 +44,7 @@ public class BossManager : Singleton<BossManager>
 
         _projectileData = data;
 
-        ObjectPool.Instance.CreatePool(ObjectName.MotherProjectile, 10);
+        ObjectPool.Instance.CreatePool(ObjectName.MotherProjectile, 20);
     }
 
     #region SendVine

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Stove : MonoBehaviour, IBurningObject
@@ -25,14 +23,14 @@ public class Stove : MonoBehaviour, IBurningObject
 
     public void OnBurning(bool isBurning)
     {
-        if(m_BigfireParticleObject != null ||
+        if(m_BigfireParticleObject == null ||
             this.isBurning)
         {
             return;
         }
 
-        m_BigfireParticleObject.SetActive(true);
+        m_BigfireParticleObject.SetActive(isBurning);
 
-        this.isBurning = true;
+        this.isBurning = isBurning;
     }
 }

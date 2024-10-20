@@ -12,7 +12,7 @@ public class MageCheckPlayer : INode
     {
         _mage = mageBehaviour;
 
-        _radius = 10f;
+        _radius = 7f;
         _targetLayer = LayerMask.GetMask("Player");
     }
 

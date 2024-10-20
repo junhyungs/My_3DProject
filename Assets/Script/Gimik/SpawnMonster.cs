@@ -1,152 +1,250 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Timeline;
-using UnityEngine.Playables;
+using UnityEngine.AI;
 
 public class SpawnMonster : MonoBehaviour
 {
-    [Header("Key")]
-    [SerializeField] private GimikEnum _key;
-
-    [Header("SecondKey")]
-    [SerializeField] private GimikEnum _secondKey;
-
     [Header("SpwanPosition")]
-    [SerializeField] private List<GameObject> SpawnPositionObjects;
+    [SerializeField] private GameObject[] _spawnPositionArray;
 
     [Header("DoorObject")]
-    [SerializeField] private GameObject[] DoorObject;
+    [SerializeField] private GameObject[] _doorObjectArray;
 
-    [Header("SecondGimikObject")]
-    [SerializeField] private GameObject SecondGimikObject;
+    public MapData Data { get; set; }
 
-    [Header("TimeLine")]
-    [SerializeField] private PlayableDirector m_TimeLine;
+    private SphereCollider _triggerCollider;
+    private Material[] _doorMaterialArray;
+    private HashSet<GameObject> _spawnMonsterSet;
 
-    private SphereCollider m_triggerCollider;
-    private Material[] m_doorMaterials;
+    private float _time;
+    private float _colorAmount;
+    private int _spawnCount;
+    private bool _isSpawn;
+
+    private void Awake()
+    {
+        _triggerCollider = GetComponent<SphereCollider>();  
+        
+        _spawnMonsterSet = new HashSet<GameObject>();
+    }
+
+    private void OnEnable()
+    {
+        _triggerCollider.enabled = true;
+
+        _isSpawn = false;
+    }
 
     private void Start()
     {
-        m_triggerCollider = GetComponent<SphereCollider>();
+        _doorMaterialArray = new Material[_doorObjectArray.Length];
 
-        m_doorMaterials = new Material[DoorObject.Length];
-
-        for(int i = 0; i < m_doorMaterials.Length; i++)
+        for(int i = 0; i < _doorMaterialArray.Length; i++)
         {
-            MeshRenderer renderer = DoorObject[i].GetComponent<MeshRenderer>();
+            MeshRenderer renderer = _doorObjectArray[i].GetComponent<MeshRenderer>();
 
             if(renderer != null)
             {
-                m_doorMaterials[i] = renderer.material;
+                _doorMaterialArray[i] = renderer.material;
             }
         }
     }
-
-
-    private IEnumerator StartGimik()
-    {
-        m_triggerCollider.enabled = false;
-
-        StartCoroutine(OpenDoor());
-
-        var gimik = GimikManager.Instance.Gimik;
-
-        if(gimik.TryGetValue(_key, out Action<GameObject> gimikEvent))
-        {
-            foreach (var obj in SpawnPositionObjects)
-            {
-                gimikEvent?.Invoke(obj);
-            }
-        }
-
-        yield return new WaitForSeconds(2.0f);
-
-        StartCoroutine(CloseDoor());
-
-        while (true)
-        {
-            if (!GimikManager.Instance.OnSpawnGimik)
-            {
-                PlayTimeLine();
-
-                if (SecondGimikObject == null)
-                    yield break;
-
-                if(gimik.TryGetValue(_secondKey, out Action<GameObject> secondGimikEvent))
-                {
-                    secondGimikEvent?.Invoke(SecondGimikObject);    
-                }
-                
-                yield break;
-            }
-
-            yield return null;
-        }
-    }
-
-    private void PlayTimeLine()
-    {
-        if(m_TimeLine != null)
-        {
-            m_TimeLine.Play();
-        }
-    }
-
-    private IEnumerator CloseDoor()
-    {
-        float timer = 2.5f;
-
-        float colorAmount = 0.006f;
-
-        float colorMaxValue = 0.5f;
-
-        while(timer > 0f)
-        {
-            colorMaxValue -= colorAmount;
-
-            for(int i = 0; i < m_doorMaterials.Length; i++)
-            {
-                m_doorMaterials[i].SetFloat("_Float", colorMaxValue);
-            }
-
-            yield return null;
-
-            timer -= Time.deltaTime;
-        }
-    }
-
-    private IEnumerator OpenDoor()
-    {
-        float timer = 2.5f;
-
-        float colorAmount = 0.006f;
-
-        float colorMaxValue = -0.3f;
-
-        while (timer > 0f)
-        {
-            colorMaxValue += colorAmount;
-
-            for (int i = 0; i < m_doorMaterials.Length; i++)
-            {
-                m_doorMaterials[i].SetFloat("_Float", colorMaxValue);
-            }
-
-            yield return null;
-
-            timer -= Time.deltaTime;
-        }
-    }
-
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            StartCoroutine(StartGimik());
+            StartSpawnEvent();
+        }
+    }
+
+    public void ResetSpawnGimik()
+    {
+        _spawnMonsterSet.Clear();
+    }
+
+    private void StartSpawnEvent()
+    {
+        _triggerCollider.enabled = false;
+
+        StartCoroutine(DoorCoroutine());
+    }
+
+    private IEnumerator DoorCoroutine()
+    {
+        yield return StartCoroutine(Open());
+
+        //foreach(var spawnPosition in _spawnPositionList)
+        //{
+        //    yield return StartCoroutine(MonsterSpawnEvent(Data, spawnPosition));
+        //}
+
+
+
+        for(int i = 0; i < Data.EventCount; i++)
+        {
+            if(i < 3)
+            {
+                
+            }
+        }
+    }
+
+    private IEnumerator MonsterSpawnEvent(MapData data, GameObject spawnPositionObject)
+    {
+        if(Data == null)
+        {
+            Debug.Log("맵 데이터가 null입니다.");
+            yield break;
+        }
+
+        Transform spawnTransform = spawnPositionObject.transform;
+
+        List<ObjectName> spawnList = ParseSpawnList(data.SpawnMonsterList);
+
+        for(int i = 0; i < data.EventCount; i++)
+        {
+            Spawn(data, spawnTransform, spawnList);
+
+            yield return new WaitWhile(() =>
+            {
+                return _isSpawn;
+            });
+        }
+
+        StartCoroutine(Close());
+    }
+
+    private void Spawn(MapData data, Transform spawnTransform, List<ObjectName> spawnList)
+    {
+        _spawnMonsterSet.Clear();
+
+        for(int i = 0; i < data.SpawnCount; i++)
+        {
+            int random = UnityEngine.Random.Range(0, spawnList.Count);
+            var spawnMonster = ObjectPool.Instance.DequeueMonster(spawnList[random]);
+
+            if (spawnList[random] is ObjectName.Slime)
+            {
+                float sizeRandom = UnityEngine.Random.Range(0.1f, 1.5f);
+                spawnMonster.transform.localScale = new Vector3(sizeRandom, sizeRandom, sizeRandom);
+            }
+
+            BehaviourMonster monsterComponent = spawnMonster.GetComponent<BehaviourMonster>();
+            monsterComponent.IsSpawn(true, this);
+
+            NavMeshAgent agent = spawnMonster.GetComponent<NavMeshAgent>();
+
+            if(agent != null)
+            {
+                if (!agent.enabled)
+                {
+                    agent.enabled = true;
+                }
+            }
+
+            spawnMonster.transform.position = spawnTransform.position;
+            spawnMonster.transform.rotation = Quaternion.identity;
+
+            RegisterMonster(spawnMonster);
+            spawnMonster.SetActive(true);
+        }
+
+        _isSpawn = true;
+    }
+
+    private void RegisterMonster(GameObject monsterObject)
+    {
+        _spawnMonsterSet.Add(monsterObject);
+    }
+
+    public void UnRegisterMonster(GameObject monsterObject)
+    {
+        if (!_spawnMonsterSet.Contains(monsterObject))
+        {
+            return;
+        }
+
+        _spawnMonsterSet.Remove(monsterObject);
+
+        if(_spawnMonsterSet.Count <= 0)
+        {
+            _isSpawn = false;
+        }
+    }
+
+    private List<ObjectName> ParseSpawnList(List<string> spawnList)
+    {
+        List<ObjectName> objectList = new List<ObjectName>();
+
+        foreach (var spawnMonster in spawnList)
+        {
+            var parseEnum = ParseEnum(spawnMonster);
+
+            objectList.Add(parseEnum);
+        }
+
+        return objectList;
+    }
+
+    private ObjectName ParseEnum(string id)
+    {
+        ObjectName result;
+
+        if (!Enum.TryParse(id, true, out result))
+        {
+            result = ObjectName.Null;
+        }
+
+        return result;
+    }
+
+    private IEnumerator Close()
+    {
+        _time = 2.5f;
+
+        _colorAmount = 0.006f;
+
+        float colorValue = 0.5f;
+
+        while(_time > 0f)
+        {
+            colorValue -= _colorAmount;
+
+            for(int i = 0; i < _doorMaterialArray.Length; i++)
+            {
+                _doorMaterialArray[i].SetFloat("_Float", colorValue);
+            }
+
+            yield return null;
+
+            _time -= Time.deltaTime;
+        }
+    }
+
+    private IEnumerator Open()
+    {
+        _time = 2.5f;
+
+        _colorAmount = 0.006f;
+
+        float colorValue = -0.3f;
+
+        while(_time > 0f)
+        {
+            colorValue += _colorAmount;
+
+            for(int i= 0; i < _doorMaterialArray.Length; i++)
+            {
+                _doorMaterialArray[i].SetFloat("_Float", colorValue);
+            }
+
+            yield return null;
+
+            _time -= Time.deltaTime;
         }
     }
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 public class MotherProjectile : MonoBehaviour
 {
     private Rigidbody _rigidBody;
-    private Transform _playerTransform;
     private ForestMotherProjectileData _data;
     private MeshRenderer _meshRenderer;
     private Material _material;
@@ -13,16 +12,15 @@ public class MotherProjectile : MonoBehaviour
 
     private bool _explosion;
 
+    public Transform PlayerTransform { get; set; }
+
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody>();
-        _meshRenderer = GetComponent<MeshRenderer>();
-        _data = BossManager.Instance.ProjectileData;
 
-        if(_playerTransform != null)
-        {
-            _playerTransform = GameManager.Instance.Player.transform;
-        }
+        _meshRenderer = GetComponent<MeshRenderer>();
+
+        _data = BossManager.Instance.ProjectileData;
     }
 
     private void OnEnable()
@@ -36,7 +34,7 @@ public class MotherProjectile : MonoBehaviour
 
     public void ProjectileMove()
     {
-        _targetDirection = (_playerTransform.position - transform.position).normalized;
+        _targetDirection = (PlayerTransform.position - transform.position).normalized;
 
         Vector3 moveTotarget = new Vector3(_targetDirection.x, _targetDirection.y + 3f,
             _targetDirection.z);

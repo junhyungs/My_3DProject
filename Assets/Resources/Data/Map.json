@@ -6,7 +6,9 @@
     "ItemPath": "{Prefab/Object/InteractionWeapon_Umbrella,Prefab/Object/InteractionWeapon_Hammer,Prefab/Object/TRINKET_Ring Variant,Prefab/Object/TRINKET_RustyKey Variant}",
     "SpawnMonsterList": "",
     "SkyBoxPath": "Prefab/Map/SkyBox/Sky_Pano",
-    "ItemType": "{Umbrella,Hammer,Ring,RustyKey}"
+    "ItemType": "{Umbrella,Hammer,Ring,RustyKey}",
+    "SpawnCount": 0,
+    "EventCount": 0
   },
   {
     "ID": "BossStage",
@@ -15,7 +17,9 @@
     "ItemPath": "{Prefab/Object/InteractionWeapon_Dagger,Prefab/Object/TRINKET_Teddy Variant}",
     "SpawnMonsterList": "{Bat/Slime/Ghoul}",
     "SkyBoxPath": "Prefab/Map/SkyBox/Sky_Anime",
-    "ItemType": "{Dagger,Teddy}"
+    "ItemType": "{Dagger,Teddy}",
+    "SpawnCount": 0,
+    "EventCount": 0
   },
   {
     "ID": "GimikStage",
@@ -24,6 +28,8 @@
     "ItemPath": "{Prefab/Object/InteractionWeapon_GreatSword,Prefab/Object/TRINKET_trowel Variant,Prefab/Object/TRINKET_Surveillance Variant}",
     "SpawnMonsterList": "{Bat/Slime/Mage/Ghoul}",
     "SkyBoxPath": "Prefab/Map/SkyBox/Sky_Pano",
-    "ItemType": "{GreatSword,Trowel,Surveillance}"
+    "ItemType": "{GreatSword,Trowel,Surveillance}",
+    "SpawnCount": 5,
+    "EventCount": 5
   }
 ]

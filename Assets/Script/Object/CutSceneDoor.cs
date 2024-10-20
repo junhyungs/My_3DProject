@@ -2,29 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
 public class CutSceneDoor : MonoBehaviour, IInteractionItem
 {
-    [Header("InternalDoor")]
-    [SerializeField] private GameObject _internalDoor;
+    private enum Door
+    {
+        Open, 
+        Close
+    }
+
+    [Header("PlayableAsset")]
+    [SerializeField] private PlayableAsset[] _asset;
 
     [Header("MoveMentTransform")]
     [SerializeField] private Transform _movementTransform;
 
-    [Header("UI_Position")]
-    [SerializeField] private Vector3 _uiPosition;
-
     [Header("ChangeMap")]
     [SerializeField] private Map _changeMap;
 
-    private BoxCollider _boxCollider;
-    private GameObject _player;
+    [Header("DifferentTimeLine")]
+    [SerializeField] private bool _isDifferentTimeline;
 
     private HashSet<string> _playerTrack;
+    private PlayableDirector _director;
+    private GameObject _player;
 
+    private Vector3 _uiPosition = new Vector3(1.8f, 2f, 0f);
+    
     private void Awake()
     {
-        _boxCollider = GetComponent<BoxCollider>();
+        _director = gameObject.GetComponent<PlayableDirector>();
 
         _playerTrack = new HashSet<string>()
         {
@@ -34,78 +42,65 @@ public class CutSceneDoor : MonoBehaviour, IInteractionItem
         };
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        _internalDoor.SetActive(false);
+        var closeAsset = _asset[(int)Door.Close] as TimelineAsset;
+
+        _director.playableAsset = closeAsset;
+
+        if (_isDifferentTimeline)
+        {
+            return;
+        }
+
+        _director.Play();
     }
 
     public void InteractionItem()
     {
+        var openAsset = _asset[(int)Door.Open] as TimelineAsset;
+
+        _director.playableAsset = openAsset;
+
         OpenDoor();
     }
 
     private void OpenDoor()
     {
-        PlayerLock(true);
-
-        ResetPlayerTransform();
-
-        ColliderControl(false);
+        GameManager.Instance.PlayerLock(true);
 
         UIManager.Instance.HideItemInteractionUI(transform, ObjectName.OpenUI);
 
-        BindTimeLine(TimeLineType.Move);
+        ResetPlayerTransform(true);
+
+        BindTimeLine();
     }
 
     public void CloseDoor()
     {
-        _player = GameManager.Instance.Player;
+        if(_player == null)
+        {
+            _player = GameManager.Instance.Player;
+        }
 
-        ResetPlayerTransform();
+        ResetPlayerTransform(false);
 
-        BindTimeLine(TimeLineType.Out);
+        BindTimeLine();
     }
 
-    private void ResetPlayerTransform()
+    private void ResetPlayerTransform(bool isOpen)
     {
         _player.transform.position = _movementTransform.position;
 
-        _player.transform.rotation = Quaternion.Euler(0f, _player.transform.rotation.y, 0f);
+        _player.transform.rotation = isOpen ? Quaternion.Euler(0f, _player.transform.rotation.y, 0f)
+            : Quaternion.Euler(0f, -180f, 0f);
     }
 
-    public void ChangeMap()
-    {
-        MapManager.Instance.ChangeMap(_changeMap);
-    }
 
-    private void PlayerLock(bool islock)
+    //런타임 중 플레이어 바인딩
+    private void BindTimeLine()
     {
-        GameManager.Instance.PlayerLock(islock);
-    }
-
-    private void ColliderControl(bool enabled)
-    {
-        _boxCollider.enabled = enabled;
-    }
-
-    private PlayableDirector GetTimeLine(TimeLineType type)
-    {
-        var timeLine = TimeLineManager.Instance.GetTimeLine(type);
-
-        if (timeLine != null)
-        {
-            return timeLine;
-        }
-        else
-        {
-            Debug.Log("<CutSceneDoor> 타임라인을 가져오지 못했습니다.");
-            return null;
-        }
-    }
-
-    private void BindTimeLine(TimeLineType type)
-    {
-        var timeLine = GetTimeLine(type);
+        var timeLine = _director;
 
         var track = timeLine.playableAsset.outputs;
 
@@ -120,6 +115,17 @@ public class CutSceneDoor : MonoBehaviour, IInteractionItem
         timeLine.Play();
     }
 
+    //문 이동 완료시 플레이어 해제
+    public void ReleasePlayer()
+    {
+        GameManager.Instance.PlayerLock(false);
+    }
+
+    //맵 변경
+    public void ChangeMap()
+    {
+        MapManager.Instance.ChangeMap(_changeMap);
+    }
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))

@@ -19,7 +19,6 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
      */
 
     private INode _node;
-    private bool _isDead;
     private Action _disableHandler;
 
     [Header("SoulPosition")]
@@ -44,6 +43,11 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
         EventManager.Instance.RegisterDisableGhoulArrow(this);
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+    }
+
     protected override void Start()
     {
         ObjectPool.Instance.CreatePool(ObjectName.GhoulArrow, 50);
@@ -54,8 +58,6 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
         _monsterType = ObjectName.Ghoul;
         _node = SetBehaviourTree();
     }
-
-    
 
     private void Update()
     {
@@ -90,6 +92,11 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
         return node;
     }
 
+    public override void IsSpawn(bool isSpawn, SpawnMonster reference)
+    {
+        base.IsSpawn(isSpawn, reference);
+    }
+
     private void SetMaterial()
     {
         _copyMaterial = Instantiate(_originalMaterial);
@@ -105,8 +112,6 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
 
         if(_currentHp <= 0)
         {
-            _isDead = true;
-
             Die(_soulTransform, _disableHandler);
         }
         else

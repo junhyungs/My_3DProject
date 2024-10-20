@@ -14,7 +14,7 @@ public class BatCanAttack : INode
         _bat = bat;
         _agent = _bat.GetComponent<NavMeshAgent>();
 
-        _stopTrackingDistance = 20f;
+        _stopTrackingDistance = 10f;
     }
 
     public INode.State Evaluate()

@@ -44,7 +44,7 @@ public class MapManager : Singleton<MapManager>
             _dataDictionary.Add(id, data);
         }
 
-        ChangeMap(Map.MainStage);
+        ChangeMap(Map.GimikStage);
     }
 
     private MapData GetMapData(string id)

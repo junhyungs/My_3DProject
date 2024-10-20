@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
 using UnityEngine;
-using UnityEngine.SearchService;
 
 public class FireBallObject : ProjectileObject
 {
@@ -45,6 +41,16 @@ public class FireBallObject : ProjectileObject
                 hit.TakeDamage(m_atk);
 
                 m_piercingPower--;
+            }
+        }
+
+        if(other.gameObject.layer == LayerMask.NameToLayer("HitSwitch"))
+        {
+            HitSwitch hitSwitch = other.gameObject.GetComponent<HitSwitch>();
+
+            if(hitSwitch != null)
+            {
+                hitSwitch.SwitchEvent();
             }
         }
 

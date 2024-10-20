@@ -22,7 +22,6 @@ public class BatBehaviour : BehaviourMonster, IDamged
     [SerializeField] private Transform _soulTransform;
 
     private INode _node;
-    private bool _isDead;
 
     #region Property
     public GameObject PlayerObject { get; set; }
@@ -31,6 +30,11 @@ public class BatBehaviour : BehaviourMonster, IDamged
     public bool IsAttack { get; set; } = false;
     public bool IsReturn { get; set; } = false;
     #endregion
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+    }
 
     protected override void Start()
     {
@@ -53,6 +57,11 @@ public class BatBehaviour : BehaviourMonster, IDamged
     public override void OnDisableMonster()
     {
         base.OnDisableMonster();
+    }
+
+    public override void IsSpawn(bool isSpawn, SpawnMonster reference)
+    {
+        base.IsSpawn(isSpawn, reference);
     }
 
     private void SetMaterial()
@@ -93,8 +102,6 @@ public class BatBehaviour : BehaviourMonster, IDamged
 
         if(_currentHp <= 0)
         {
-            _isDead = true;
-
             Die(_soulTransform);
         }
         else

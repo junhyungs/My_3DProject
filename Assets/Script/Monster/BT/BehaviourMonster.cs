@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,6 +10,7 @@ public class BehaviourMonster : MonoBehaviour
     protected Animator _animator;
     protected Rigidbody _rigidBody;
     protected Material _copyMaterial;
+    protected SpawnMonster _spawnComponent;
     #endregion
 
     #region Value
@@ -19,6 +19,7 @@ public class BehaviourMonster : MonoBehaviour
     protected float _currentSpeed;
     protected bool _isSpawn;
     protected bool _dataReady = false;
+    protected bool _isDead;
     protected Color _saveColor;
     protected ObjectName _monsterType;
     private WaitForSeconds _intensityTime = new WaitForSeconds(0.1f);
@@ -28,23 +29,42 @@ public class BehaviourMonster : MonoBehaviour
     protected BT_MonsterData _data;
     #endregion
 
+
+    protected virtual void OnEnable()
+    {
+        OnEnableMonster();
+    }
+
+    private void OnEnableMonster()
+    {
+        _isDead = false;
+
+        NavMeshAgentControl(_isDead);
+
+        if (_copyMaterial != null && _data != null)
+        {
+            _copyMaterial.SetFloat("_Float", 0.5f);
+
+            gameObject.layer = LayerMask.NameToLayer("Monster");
+
+            _currentHp = _data.Health;
+        }
+    }
+
     protected virtual void Start()
     {
-        InitializeComponent();
+        _agent = gameObject.GetComponent<NavMeshAgent>();
+
+        _animator = gameObject.GetComponent<Animator>();
+
+        _rigidBody = gameObject.GetComponent<Rigidbody>();
+
+        ObjectPool.Instance.CreatePool(ObjectName.Soul, 20);    
     }
 
     public virtual void OnDisableMonster()
     {
         ObjectPool.Instance.EnqueueObject(gameObject, _monsterType);
-    }
-    
-    protected void InitializeComponent()
-    {
-        _agent = gameObject.GetComponent<NavMeshAgent>();
-        _animator = gameObject.GetComponent<Animator>();
-        _rigidBody = gameObject.GetComponent<Rigidbody>();
-
-        ObjectPool.Instance.CreatePool(ObjectName.Soul, 20);
     }
 
     protected IEnumerator LoadMonsterData(string id)
@@ -67,23 +87,11 @@ public class BehaviourMonster : MonoBehaviour
         }
 
         _data = data;
+
         _dataReady = true;
     }
 
     public IEnumerator IntensityChange(float baseValue, float power)
-    {
-        Color currentColor = _copyMaterial.GetColor("_Color");
-
-        Color intensityUpColor = currentColor * Mathf.Pow(baseValue, power);
-
-        _copyMaterial.SetColor("_Color", intensityUpColor);
-
-        yield return _intensityTime;
-
-        _copyMaterial.SetColor("_Color", currentColor);
-    }
-
-    public IEnumerator Test(float baseValue, float power)
     {
         Color currentColor = _copyMaterial.GetColor("_Color");
 
@@ -105,6 +113,10 @@ public class BehaviourMonster : MonoBehaviour
             _isSpawn = false;
         }
 
+        _isDead = true;
+
+        NavMeshAgentControl(_isDead);
+
         MonsterSoul(soulTransform);
 
         this.gameObject.layer = LayerMask.NameToLayer("DeadMonster");
@@ -114,6 +126,23 @@ public class BehaviourMonster : MonoBehaviour
         _animator.SetTrigger("Die");
 
         StartCoroutine(FireShader(5f, 0.5f, -0.3f));
+    }
+
+    private void NavMeshAgentControl(bool isDead)
+    {
+        if(_agent == null)
+        {
+            return;
+        }
+
+        _agent.isStopped = isDead;
+
+        if (isDead)
+        {
+            _agent.velocity = Vector3.zero;
+
+            _agent.ResetPath();
+        }
     }
 
     public IEnumerator FireShader(float maxTime, float startValue, float endValue)
@@ -143,8 +172,10 @@ public class BehaviourMonster : MonoBehaviour
         component.StartCoroutine(component.Fly());
     }
 
-    public void IsSpawn(bool isSpawn)
+    public virtual void IsSpawn(bool isSpawn, SpawnMonster reference)
     {
+        _spawnComponent = reference;
+
         _isSpawn = isSpawn;
     }
 

@@ -79,6 +79,8 @@ public class ForestMotherAnimationEvent : MonoBehaviour
         fireParticle.Play();
 
         MotherProjectile projectileComponent = projectile.GetComponent<MotherProjectile>();
+        Transform player = GameManager.Instance.Player.transform;
+        projectileComponent.PlayerTransform = player;
         projectileComponent.ProjectileMove();
     }
     #endregion

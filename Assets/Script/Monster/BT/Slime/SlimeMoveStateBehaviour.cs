@@ -73,7 +73,7 @@ public class SlimeMoveStateBehaviour : StateMachineBehaviour
             _agent = _slime.GetComponent<NavMeshAgent>();
             _agentPath = new NavMeshPath();
 
-            _gridSize = 20;
+            _gridSize = 10;
             _minDistance = 5f;
             _maxSampleDistance = 0.1f;
             _targetLayer = LayerMask.GetMask("Player", "Default");
@@ -89,11 +89,15 @@ public class SlimeMoveStateBehaviour : StateMachineBehaviour
 
             _walkPositionList = new List<Vector3>(GetMovePositionList(_randomPositionList));
 
-            if(_walkPositionList.Count > 0)
+            if(_walkPositionList.Count > 1)
             {
                 _currentIndex++;
 
                 _movePosition = _walkPositionList[_currentIndex];
+            }
+            else
+            {
+                return;
             }
         }
 
@@ -176,7 +180,7 @@ public class SlimeMoveStateBehaviour : StateMachineBehaviour
     {
         List<Vector3> vector3list = new List<Vector3>();
 
-        int maxLoop = 10;
+        int maxLoop = 20;
         int currentLoop = 0;
 
         vector3list.Add(_slime.transform.position);

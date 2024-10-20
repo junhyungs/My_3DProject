@@ -24,8 +24,7 @@ public class DekuBehaviour : BehaviourMonster, IDamged
     [Header("FireTransform")]
     [SerializeField] private Transform _fireTransform;
 
-    private INode _node;
-    private bool _isDead;
+    private INode _node;    
 
     #region Property
     public GameObject PlayerObject { get; set; }
@@ -33,6 +32,11 @@ public class DekuBehaviour : BehaviourMonster, IDamged
     public bool IsAttack { get; set; } = false;
     public bool IsReturn { get; set; } = false;
     #endregion
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+    }
 
     protected override void Start()
     {
@@ -45,6 +49,10 @@ public class DekuBehaviour : BehaviourMonster, IDamged
         _node = SetBehaviourTree();
     }
 
+    public override void IsSpawn(bool isSpawn, SpawnMonster reference)
+    {
+        base.IsSpawn(isSpawn, reference);
+    }
 
     private void Update()
     {
@@ -90,8 +98,6 @@ public class DekuBehaviour : BehaviourMonster, IDamged
 
         if(_currentHp <= 0)
         {
-            _isDead = true;
-
             Die(_soulTransform);
         }
         else

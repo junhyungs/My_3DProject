@@ -25,8 +25,7 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     [SerializeField] private Material _originalMaterial;
 
     private INode _node;
-    private bool _isDead;
-
+    
     #region Property
     public GameObject PlayerObject { get; set; }
     public bool CheckPlayer { get; set; }
@@ -34,6 +33,11 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     public bool CanMove { get; set; } = true;
     public bool IsAttack { get; set; } = false;
     #endregion
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+    }
 
     protected override void Start()
     {
@@ -51,6 +55,11 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
         {
             _node.Evaluate();
         }
+    }
+
+    public override void IsSpawn(bool isSpawn, SpawnMonster reference)
+    {
+        base.IsSpawn(isSpawn, reference);
     }
 
     private void SetMaterial()
@@ -97,8 +106,6 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
 
         if(_currentHp <= 0)
         {
-            _isDead = true;
-
             Die(_soulPosition);
         }
         else

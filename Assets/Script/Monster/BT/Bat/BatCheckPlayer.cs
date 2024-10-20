@@ -16,7 +16,7 @@ public class BatCheckPlayer : INode
         _bat = bat;
         _agent = _bat.GetComponent<NavMeshAgent>();
 
-        _radius = 10f;
+        _radius = 5f;
         _targetLayer = LayerMask.GetMask("Player");
     }
 

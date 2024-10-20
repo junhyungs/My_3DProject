@@ -25,7 +25,7 @@ public class BatPatrol : INode
         _agent = _bat.GetComponent<NavMeshAgent>();
         _agentPath = new NavMeshPath();
 
-        _gridSize = 20;
+        _gridSize = 10;
         _minDistance = 5f;
         _targetLayer = LayerMask.GetMask("Player", "Default");
         _myBounds = _bat.transform.GetComponentInChildren<SkinnedMeshRenderer>().bounds;
@@ -46,11 +46,15 @@ public class BatPatrol : INode
 
             _walkPositionList = new List<Vector3>(GetMovePositionList(_randomPositionList));
 
-            if(_walkPositionList.Count > 0)
+            if(_walkPositionList.Count > 1)
             {
                 _currentIndex++;
 
                 _agent.SetDestination(_walkPositionList[_currentIndex]);
+            }
+            else
+            {
+                return INode.State.Running;
             }
         }
 

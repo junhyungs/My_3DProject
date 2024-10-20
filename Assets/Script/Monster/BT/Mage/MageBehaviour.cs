@@ -8,7 +8,6 @@ using UnityEngine.AI;
 public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
 {
     private INode _node;
-    private bool _isDead;
     private Action _disableHandler;
 
     #region Property
@@ -33,8 +32,9 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
     [Header("Material")]
     [SerializeField] private Material _originalMaterial;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         EventManager.Instance.RegisterDisableMageBullet(this);
     }
 
@@ -49,7 +49,11 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
         _node = SetBehaviourTree();
     }
 
-    
+    public override void IsSpawn(bool isSpawn, SpawnMonster reference)
+    {
+        base.IsSpawn(isSpawn, reference);
+    }
+
 
     private void Update()
     {
@@ -97,8 +101,6 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
 
         if(_currentHp <= 0)
         {
-            _isDead = true;
-
             if(TelePort != null)
             {
                 StopCoroutine(TelePort);

@@ -782,7 +782,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e921ef701d7588b4f9c2bb1f6558dd92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _patrolList: []
   _skinnedMeshRenderer: {fileID: 4078684643831646642}
   _originalMaterial: {fileID: 2100000, guid: f121f3282e7fcd548b9f0c63fff444a6, type: 2}
   _soulTransform: {fileID: 3925540126693056118}
@@ -815,7 +814,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5731103908492014147}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5

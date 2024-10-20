@@ -12,7 +12,7 @@ public class Ladder : MonoBehaviour, IInteractionItem
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             UIManager.Instance.ItemInteractionUI(transform, _uiPosition, ObjectName.LadderUI);
         }
@@ -20,7 +20,8 @@ public class Ladder : MonoBehaviour, IInteractionItem
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if(other.gameObject.layer == LayerMask.NameToLayer("Player")
+            || other.gameObject.layer == LayerMask.NameToLayer("LadderPlayer"))
         {
             UIManager.Instance.HideItemInteractionUI(transform, ObjectName.LadderUI);
         }

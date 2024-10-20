@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Stage : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class Stage : MonoBehaviour
     [Header("StartPlayerPosition")]
     [SerializeField] private Transform _startTransform;
 
-    protected List<BehaviourMonster> _spawnMonsters;
+    protected List<BehaviourMonster> _spawnMonsters = new List<BehaviourMonster>();
     protected List<Material> _skyBoxList;
     protected Material _skyBoxMaterial;
     protected MapData _data;
@@ -75,11 +76,6 @@ public class Stage : MonoBehaviour
 
     public virtual void CreateMonsters()
     {
-        if(_monsterTransforms.Length <= 0)
-        {
-            return;
-        }
-
         foreach(var spawnMonster in _data.SpawnMonsterList)
         {
             if (!string.IsNullOrWhiteSpace(spawnMonster))
@@ -88,6 +84,11 @@ public class Stage : MonoBehaviour
 
                 ObjectPool.Instance.CreatePool(monsterType);
             }
+        }
+
+        if (_monsterTransforms.Length <= 0)
+        {
+            return;
         }
 
         StartCoroutine(SpawnMonsters());
@@ -104,6 +105,13 @@ public class Stage : MonoBehaviour
             GameObject monster = ObjectPool.Instance.DequeueMonster(monsterType);
 
             monster.transform.position = _monsterTransforms[i].position;
+
+            NavMeshAgent agent = monster.GetComponent<NavMeshAgent>();
+
+            if (!agent.enabled)
+            {
+                agent.enabled = true;
+            }
 
             monster.SetActive(true);
 

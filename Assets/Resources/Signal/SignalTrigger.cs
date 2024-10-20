@@ -13,6 +13,7 @@ public class SignalTrigger : MonoBehaviour
         _dummyPlayer = transform.GetComponentInChildren<TimeLinePlayer>(true);
     }
 
+    #region MainStage
     public void MainStage_Intro()
     {
         var timeLine = TimeLineManager.Instance.GetTimeLine(TimeLineType.Intro);
@@ -56,8 +57,6 @@ public class SignalTrigger : MonoBehaviour
         ResetPlayer();
     }
 
-    #endregion
-
     private void ResetPlayer()
     {
         Transform dummyTransform = _dummyPlayer.gameObject.transform;
@@ -71,6 +70,17 @@ public class SignalTrigger : MonoBehaviour
 
         OnActivePlayer();
     }
+
+    #endregion
+    #endregion
+
+    #region BossStage
+    public void BossStageChangeMap_Gimik()
+    {
+        MapManager.Instance.ChangeMap(Map.GimikStage);
+    }
+
+    #endregion
 
     public void OnDeActivePlayer()
     {
@@ -86,4 +96,10 @@ public class SignalTrigger : MonoBehaviour
     {
         GameManager.Instance.PlayerLock(false);
     }
+
+    public void LockPlayer()
+    {
+        GameManager.Instance.PlayerLock(true);
+    }
+
 }

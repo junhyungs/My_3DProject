@@ -16,7 +16,7 @@ public class GhoulCanAttack : INode
         _animator = _ghoul.GetComponent<Animator>();
         _agent = _ghoul.GetComponent<NavMeshAgent>();
 
-        _stopTrackingDistance = 20f;
+        _stopTrackingDistance = 10f;
     }
 
     public INode.State Evaluate()

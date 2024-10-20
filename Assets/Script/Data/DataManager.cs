@@ -95,15 +95,19 @@ public class DataManager
 
                 List<string> itemType = MapItem(item["ItemType"]);
 
+                int spawnCount = ParseInt(item["SpawnCount"]);
+
+                int eventCount = ParseInt(item["EventCount"]);
+
                 MapData data = new MapData(id, mapName, prefabPath, itemPath,
-                    spawnMonsterList, skyBoxPath, itemType);
+                    spawnMonsterList, skyBoxPath, itemType, spawnCount, eventCount);
 
                 _dataDictionary.Add(id, data);
             }
         }
         catch(JsonException ex)
         {
-            Debug.Log("<Map> 데이터를 변환하지 못했습니다.");
+            Debug.Log($"<Map> 데이터를 변환하지 못했습니다. 오류 내역 : {ex.Message}");
         }
     }
 
@@ -171,7 +175,7 @@ public class DataManager
         }
         catch (JsonException ex)
         {
-            Debug.Log("<Ability>데이터를 변환하지 못했습니다.");
+            Debug.Log($"<Ability> 데이터를 변환하지 못했습니다. 오류 내역 : {ex.Message}");
         }
     }
 
@@ -218,7 +222,7 @@ public class DataManager
         }
         catch(JsonException ex)
         {
-            Debug.Log("<Item> 데이터를 변환하지 못했습니다.");
+            Debug.Log($"<Item> 데이터를 변환하지 못했습니다. 오류 내역 : {ex.Message}");
         }
     }
 
@@ -245,7 +249,7 @@ public class DataManager
         }
         catch(JsonException ex)
         {
-            Debug.Log("<Dialogue> 데이터를 변환하지 못했습니다.");
+            Debug.Log($"<Dialogue> 데이터를 변환하지 못했습니다. 오류 내역 : {ex.Message}");
         }
     }
 
@@ -274,7 +278,7 @@ public class DataManager
         }
         catch (JsonException ex)
         {
-            Debug.Log("<Monster> 데이터를 변환하지 못했습니다.");
+            Debug.Log($"<Monster> 데이터를 변환하지 못했습니다. 오류 내역 : {ex.Message}");
         }
     }
 
@@ -301,7 +305,7 @@ public class DataManager
         }
         catch(JsonException ex)
         {
-            Debug.Log("<Boss> 데이터를 변환하지 못했습니다.");
+            Debug.Log($"<Boss> 데이터를 변환하지 못했습니다. 오류 내역 : {ex.Message}");
         }
     }
 
@@ -338,7 +342,7 @@ public class DataManager
         }
         catch(JsonException ex)
         {
-            Debug.Log("<BossProjectile> 데이터를 변환하지 못했습니다.");
+            Debug.Log($"<BossProjectile> 데이터를 변환하지 못했습니다. 오류 내역 : {ex.Message}");
         }
     }
 
@@ -368,7 +372,7 @@ public class DataManager
         }
         catch (JsonException ex)
         {
-            Debug.Log("<Player> 데이터를 변환하지 못했습니다.");
+            Debug.Log($"<Player> 데이터를 변환하지 못했습니다. 오류 내역 : {ex.Message}");
         }
     }
 
@@ -393,7 +397,7 @@ public class DataManager
         }
         catch (JsonException ex)
         {
-            Debug.Log("<PlayerSkill> 스킬 데이터를 변환하지 못했습니다.");
+            Debug.Log($"<PlayerSkill> 스킬 데이터를 변환하지 못했습니다. 오류 내역 : {ex.Message}");
         }
     }
 
@@ -423,7 +427,7 @@ public class DataManager
         }
         catch(JsonException ex)
         {
-            Debug.Log("<PlayerWeapon> 무기 데이터를 변환하지 못했습니다.");
+            Debug.Log($"<PlayerWeapon> 무기 데이터를 변환하지 못했습니다. 오류 내역 : {ex.Message}");
         }
     }
 
@@ -444,7 +448,7 @@ public class DataManager
         }
         catch (JsonException ex)
         {
-            Debug.Log("<PrefabPath> 프리팹 경로 데이터를 가져오지 못했습니다.");
+            Debug.Log($"<PrefabPath> 프리팹 경로 데이터를 가져오지 못했습니다. 오류 내역 : {ex.Message}");
         }
     }
 
