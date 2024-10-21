@@ -4,54 +4,24 @@ using UnityEngine;
 
 public class Skip : MonoBehaviour
 {
-    //테스트를 위한 스크립트
-    [SerializeField] private Transform _warpTransform;
+    private Rigidbody _rigidbody;
 
-    [SerializeField] private GameObject[] _testObject;
-
-    private GameObject _player;
-
-    private void Start()
+    private void Awake()
     {
-        _player = GameManager.Instance.Player;
+        _rigidbody = gameObject.GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.F1))
+        if (Input.GetKey(KeyCode.Escape))
         {
-            _player.SetActive(true);
-        }
-        else if (Input.GetKeyDown(KeyCode.F2))
-        {
-            TelePortTransform();
-        }
-        else if (Input.GetKeyDown(KeyCode.F3))
-        {
-            AllSetActiveObject();
-        }
-    }
+            Vector3 moveDirection = Vector3.forward;
 
-    private void TelePortTransform()
-    {
-        if(_warpTransform == null)
-        {
-            return;
-        }
+            _rigidbody.position += moveDirection * 10f * Time.fixedDeltaTime;
 
-        _player.transform.position = _warpTransform.position;
-
-        _player.transform.rotation = Quaternion.identity;
-    }
-
-    private void AllSetActiveObject()
-    {
-        foreach (var testObject in _testObject)
-        {
-            if (testObject != null)
-            {
-                testObject.SetActive(true);
-            }
+            float roationAngle = 90f;
+            Quaternion rotation = Quaternion.Euler(0f,roationAngle,0f);
+            _rigidbody.rotation = Quaternion.Slerp(_rigidbody.rotation, rotation, Time.fixedDeltaTime * 10f);
         }
     }
 }

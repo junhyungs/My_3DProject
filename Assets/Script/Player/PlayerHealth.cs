@@ -53,8 +53,6 @@ public class PlayerHealth : MonoBehaviour, IDamged
     {
         m_hitAnimator.SetBool("Die", true);
 
-        GameManager.Instance.IsGameOver = true;
-
         GameManager.Instance.GameOver();
     }
 

@@ -8,7 +8,9 @@ public class MapManager : Singleton<MapManager>
     private Dictionary<string, MapData> _dataDictionary;
     private Dictionary<string, GameObject> _mapDictionary;
     private GameObject _currentMap;
-
+    private Map _currentMapName;
+    public Map CurrentMapName => _currentMapName;
+    
     private void Awake()
     {
         _mapDictionary = new Dictionary<string, GameObject>();
@@ -44,7 +46,7 @@ public class MapManager : Singleton<MapManager>
             _dataDictionary.Add(id, data);
         }
 
-        ChangeMap(Map.GimikStage);
+        ChangeMap(Map.MainStage);
     }
 
     private MapData GetMapData(string id)
@@ -61,6 +63,8 @@ public class MapManager : Singleton<MapManager>
     public void ChangeMap(Map mapName)
     {
         var data = GetMapData(mapName.ToString());
+
+        _currentMapName = mapName;
 
         if (_mapDictionary.ContainsKey(data.ID))
         {
@@ -110,8 +114,6 @@ public class MapManager : Singleton<MapManager>
             stageComponent.SpawnItems();
 
             stageComponent.CreateMonsters();
-
-            stageComponent.StartPosition();
         }
     }
 
@@ -134,18 +136,23 @@ public class MapManager : Singleton<MapManager>
 
             if (_currentMap.TryGetComponent(out Stage stageComponent))
             {
-                
                 stageComponent.SpawnItems();
 
                 stageComponent.CreateMonsters();
-
-                stageComponent.StartPosition();
             }
             else
                 Debug.Log("Stage ÄÄÆ÷³ÍÆ®°¡ ¾ø½À´Ï´Ù.");
         }
         else
             Debug.Log("¸ÊÀÌ µñ¼Å³Ê¸®¿¡ ¾ø½À´Ï´Ù.");
+    }
+
+    public void Respawn()
+    {
+        if(_currentMap != null )
+        {
+            ChangeMap(_currentMapName);
+        }
     }
    
 }

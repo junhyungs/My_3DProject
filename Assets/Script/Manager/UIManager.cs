@@ -6,6 +6,7 @@ public class UIManager : Singleton<UIManager>
 {
     public static event Action _onAbilityUI;
     public static event Action<ResourceRequest> _loadingUI;
+    public static event Action<bool> _deathUI;
 
     private PlayerSkill m_currentSkill;
     private Action<PlayerSkill> SkillChangeCallBack;
@@ -29,6 +30,11 @@ public class UIManager : Singleton<UIManager>
     public void OnLoadingUI(ResourceRequest request = null)
     {
         _loadingUI.Invoke(request);
+    }
+
+    public void OnDeathUI(bool isActive)
+    {
+        _deathUI.Invoke(isActive);
     }
 
     #region Interaction

@@ -1,9 +1,6 @@
 using Cinemachine;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Playables;
 
 public class CinemachineCamera : MonoBehaviour
 {
@@ -26,11 +23,27 @@ public class CinemachineCamera : MonoBehaviour
     private CinemachineVirtualCamera m_virtualCam;
 
     private float m_maxDistance = 15f;
+    private float _minView = 20f;
+    private float _zoomInSpeed = 0.5f;
+    private float _currentFieldOfView;
 
     public GameObject PlayerCam
     {
         get { return m_playerCam; }
         set { m_playerCam = value; }
+    }
+
+    private void Awake()
+    {
+        GameManager.Instance.RegisterDeathAction(DeathCameraZoom);
+    }
+
+    private void OnEnable()
+    {
+        if(m_virtualCam != null)
+        {
+            m_virtualCam.m_Lens.FieldOfView = _currentFieldOfView;
+        }
     }
 
     private void Start()
@@ -108,6 +121,8 @@ public class CinemachineCamera : MonoBehaviour
         m_virtualCam.Follow = transform;
         m_virtualCam.LookAt = transform;
 
+        _currentFieldOfView = m_virtualCam.m_Lens.FieldOfView;
+
         var doNothing = m_virtualCam.GetCinemachineComponent<CinemachineComposer>();
 
         if (doNothing != null)
@@ -124,6 +139,24 @@ public class CinemachineCamera : MonoBehaviour
             transPoser.m_XDamping = 2f;
             transPoser.m_YDamping = 2f;
             transPoser.m_ZDamping = 2f;
+        }
+    }
+
+   
+    private IEnumerator DeathCameraZoom()
+    {
+        float cameraFieldOfView = m_virtualCam.m_Lens.FieldOfView;
+
+        float time = 0f;
+
+        while (m_virtualCam.m_Lens.FieldOfView > _minView)
+        {
+            time += _zoomInSpeed * Time.deltaTime;
+
+            m_virtualCam.m_Lens.FieldOfView = Mathf.Lerp(cameraFieldOfView,
+                _minView, time * time);
+
+            yield return null;
         }
     }
 

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -15,14 +14,14 @@ public class CutSceneDoor : MonoBehaviour, IInteractionItem
     [Header("PlayableAsset")]
     [SerializeField] private PlayableAsset[] _asset;
 
-    [Header("MoveMentTransform")]
-    [SerializeField] private Transform _movementTransform;
+    [Header("InTransform")]
+    [SerializeField] private Transform _inTransform;
+
+    [Header("OutPosition")]
+    [SerializeField] private Transform _outTransform;
 
     [Header("ChangeMap")]
     [SerializeField] private Map _changeMap;
-
-    [Header("DifferentTimeLine")]
-    [SerializeField] private bool _isDifferentTimeline;
 
     private HashSet<string> _playerTrack;
     private PlayableDirector _director;
@@ -32,41 +31,23 @@ public class CutSceneDoor : MonoBehaviour, IInteractionItem
     
     private void Awake()
     {
-        _director = gameObject.GetComponent<PlayableDirector>();
-
-        _playerTrack = new HashSet<string>()
+        if(_director == null)
         {
-            "PlayerMovement",
-            "PlayerWalkAnimation",
-            "PlayerObject"
-        };
-    }
-
-    private void OnEnable()
-    {
-        var closeAsset = _asset[(int)Door.Close] as TimelineAsset;
-
-        _director.playableAsset = closeAsset;
-
-        if (_isDifferentTimeline)
-        {
-            return;
+            Initialize();
         }
-
-        _director.Play();
     }
 
     public void InteractionItem()
     {
-        var openAsset = _asset[(int)Door.Open] as TimelineAsset;
-
-        _director.playableAsset = openAsset;
-
         OpenDoor();
     }
 
     private void OpenDoor()
     {
+        var openAsset = _asset[(int)Door.Open] as TimelineAsset;
+
+        _director.playableAsset = openAsset;
+
         GameManager.Instance.PlayerLock(true);
 
         UIManager.Instance.HideItemInteractionUI(transform, ObjectName.OpenUI);
@@ -83,17 +64,42 @@ public class CutSceneDoor : MonoBehaviour, IInteractionItem
             _player = GameManager.Instance.Player;
         }
 
+        if(_director == null)
+        {
+            Initialize();
+        }
+
+        var closeAsset = _asset[(int)Door.Close] as TimelineAsset;
+
+        _director.playableAsset = closeAsset;
+
         ResetPlayerTransform(false);
 
         BindTimeLine();
     }
 
+    private void Initialize()
+    {
+        _director = gameObject.GetComponent<PlayableDirector>();
+
+        _playerTrack = new HashSet<string>()
+        {
+            "PlayerMovement",
+            "PlayerWalkAnimation",
+            "PlayerObject"
+        };
+    }
+
     private void ResetPlayerTransform(bool isOpen)
     {
-        _player.transform.position = _movementTransform.position;
+        _player.transform.position = isOpen ? _inTransform.position : _outTransform.position;
 
-        _player.transform.rotation = isOpen ? Quaternion.Euler(0f, _player.transform.rotation.y, 0f)
-            : Quaternion.Euler(0f, -180f, 0f);
+        Vector3 rotateDirection = transform.position - _player.transform.position;
+
+        Quaternion targetRotation = Quaternion.LookRotation(rotateDirection);
+
+        _player.transform.rotation = targetRotation;
+
     }
 
 
@@ -126,6 +132,7 @@ public class CutSceneDoor : MonoBehaviour, IInteractionItem
     {
         MapManager.Instance.ChangeMap(_changeMap);
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))

@@ -1,4 +1,3 @@
-using Cinemachine.Utility;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -21,7 +20,8 @@ public class PlayerAttackController : MonoBehaviour
 
     private Action<bool> m_hitEvent;
     public GameObject[] PositionObject => m_PositionObject;
-   
+
+    private LayerMask _mouseTargetLayer;
     private bool chargeMax;
     private bool chargeAttackDirection = true;
     private bool isAction = true;
@@ -63,6 +63,8 @@ public class PlayerAttackController : MonoBehaviour
         m_PositionObject[0] = m_arrowPositionObject;
         m_PositionObject[1] = m_firePositionObject;
         m_PositionObject[2] = m_bombPositionObject;
+
+        _mouseTargetLayer = LayerMask.GetMask("Ground");
     }
 
     private void OnUpdate()
@@ -304,7 +306,7 @@ public class PlayerAttackController : MonoBehaviour
     {
         Ray mouseRay = Camera.main.ScreenPointToRay( Input.mousePosition );
         
-        if(Physics.Raycast(mouseRay, out RaycastHit hit, 100))
+        if(Physics.Raycast(mouseRay, out RaycastHit hit, 100, _mouseTargetLayer))
         {
             Vector3 lookPosition = new Vector3(hit.point.x,transform.position.y, hit.point.z);
 

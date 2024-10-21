@@ -108,7 +108,7 @@ public class BehaviourMonster : MonoBehaviour
     {
         if (_isSpawn)
         {
-            GimikManager.Instance.UnRegisterMonster(this.gameObject);
+            _spawnComponent.UnRegisterMonster(gameObject);
 
             _isSpawn = false;
         }

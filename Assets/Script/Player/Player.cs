@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
 {
     private PlayerHealth _healthComponent;
     private GameObject _shadowPlayer;
-
+ 
     public PlayerMoveController _moveController { get; private set; }
     public ShadowPlayer ShadowPlayer { get; set; }
     
@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
 
         _moveController = gameObject.GetComponent<PlayerMoveController>();
     }
-
+    
     private void OnEnable()
     {
         if(_shadowPlayer == null)

@@ -16,9 +16,6 @@ public class Stage : MonoBehaviour
     [SerializeField] private Transform[] _monsterTransforms;
     [SerializeField] private Item[] _items;
 
-    [Header("StartPlayerPosition")]
-    [SerializeField] private Transform _startTransform;
-
     protected List<BehaviourMonster> _spawnMonsters = new List<BehaviourMonster>();
     protected List<Material> _skyBoxList;
     protected Material _skyBoxMaterial;
@@ -28,13 +25,6 @@ public class Stage : MonoBehaviour
     public virtual void SetMapData(MapData data)
     {
         _data = data;
-    }
-
-    protected virtual void OnDisable()
-    {
-        GameObject player = GameManager.Instance.Player;
-
-        _saveTransform = player.transform;
     }
 
     //SkyBoX 변경 메서드
@@ -48,7 +38,12 @@ public class Stage : MonoBehaviour
         RenderSettings.skybox = _skyBoxMaterial;
     }
 
-    public virtual void OnDisableMap()
+    protected virtual void OnDisable()
+    {
+        OnDisableMap();
+    }
+
+    public void OnDisableMap()
     {
         if(_spawnMonsters.Count <= 0)
         {
@@ -119,23 +114,6 @@ public class Stage : MonoBehaviour
             
             _spawnMonsters.Add(monsterComponent);
         }
-    }
-
-    public virtual void StartPosition()
-    {
-        GameObject player = GameManager.Instance.Player;
-
-        Vector3 playerPosition = _saveTransform == null ?
-            _startTransform.position : _saveTransform.position;
-
-        SetPlayerTransform(player, playerPosition, Quaternion.identity);
-    }
-
-    private void SetPlayerTransform(GameObject player, Vector3 position, Quaternion quaternion)
-    {
-        player.transform.position = position;
-
-        player.transform.rotation = quaternion;
     }
 
     private ObjectName RandomMonster()

@@ -7,7 +7,23 @@ public class BossStage : Stage
     [Header("BossDoor")]
     [SerializeField] private GameObject _bossDoor;
 
+    [Header("Door")]
+    [SerializeField] private CutSceneDoor _door;
+
     private HashSet<HitSwitch> _hitSwitchSet;
+
+    private void OnEnable()
+    {
+        if(_door != null)
+        {
+            _door.CloseDoor();
+        }
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+    }
 
     private void Start()
     {
@@ -61,10 +77,5 @@ public class BossStage : Stage
     public override void SpawnItems()
     {
         base.SpawnItems();
-    }
-
-    public override void StartPosition()
-    {
-        return;
     }
 }

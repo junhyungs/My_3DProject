@@ -2,20 +2,41 @@ using UnityEngine;
 
 public class MainStage : Stage
 {
-    private void Start()
-    {
-        var startTimeLine = TimeLineManager.Instance.GetTimeLine(TimeLineType.Intro);
+    [Header("Door")]
+    [SerializeField] private CutSceneDoor _door;
 
-        if (startTimeLine != null)
+    [Header("StartPosition")]
+    [SerializeField] private Transform _startTransform;
+    
+    private void OnEnable()
+    {
+        if(_door != null)
         {
-            startTimeLine.Play();
+            _door.CloseDoor();
         }
     }
 
-    protected override void OnDisable()
+    private void Start()
     {
-        base.OnDisable();
+        SetPlayer();
+
+        var timeLine = TimeLineManager.Instance.GetTimeLine(TimeLineType.Intro);
+
+        if(timeLine != null)
+        {
+            timeLine.Play();
+        }
     }
+
+    private void SetPlayer()
+    {
+        GameObject player = GameManager.Instance.Player;
+
+        player.transform.position = _startTransform.position;
+
+        player.transform.rotation = Quaternion.identity;
+    }
+
 
     public override void SetMapData(MapData data)
     {
@@ -27,13 +48,4 @@ public class MainStage : Stage
         base.SpawnItems();
     }
 
-    public override void CreateMonsters()
-    {
-        base.CreateMonsters();
-    }
-
-    public override void StartPosition()
-    {
-        base.StartPosition();
-    }
 }
