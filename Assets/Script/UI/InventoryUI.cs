@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,6 +22,13 @@ public class InventoryUI : MonoBehaviour
         _cancelAction.action.Enable();
 
         _cancelAction.action.performed += OnCancel;
+    }
+
+    private void OnDisable()
+    {
+        _cancelAction.action.performed -= OnCancel;
+
+        _cancelAction.action.Disable();
     }
 
     private void OnCancel(InputAction.CallbackContext context)

@@ -9,8 +9,8 @@ public class MotherProjectile : MonoBehaviour
     private Material _material;
 
     private Vector3 _targetDirection;
-
-    private bool _explosion;
+    private LayerMask _targetLayer;
+    private LayerMask _explosionLayer;
 
     public Transform PlayerTransform { get; set; }
 
@@ -20,13 +20,16 @@ public class MotherProjectile : MonoBehaviour
 
         _meshRenderer = GetComponent<MeshRenderer>();
 
+        _targetLayer = LayerMask.GetMask("Player");
+
+        _explosionLayer = LayerMask.GetMask("Ground", "Player", "Wall");
+
         _data = BossManager.Instance.ProjectileData;
+        
     }
 
     private void OnEnable()
     {
-        _explosion = true;
-
         _material = _meshRenderer.material;
 
         _material.SetFloat("_Float", 1f);
@@ -44,11 +47,10 @@ public class MotherProjectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (_explosion)
+        //비트 마스크 방식. 왼쪽으로 other.gameObject.layer만큼 이동.
+        if (((1 << collision.gameObject.layer) & _explosionLayer) != 0)
         {
             Explosion();
-
-            _explosion = false;
         }
     }
 
@@ -59,7 +61,7 @@ public class MotherProjectile : MonoBehaviour
         ParticleSystem explosion = transform.GetChild(0).GetComponent<ParticleSystem>();
         explosion.Play();
 
-        Collider[] colliders = Physics.OverlapSphere(transform.position, _data.SphereRadius);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, _data.SphereRadius, _targetLayer);
 
         foreach(var target in  colliders)
         {
@@ -81,7 +83,8 @@ public class MotherProjectile : MonoBehaviour
     {
         yield return new WaitForSeconds(2.0f);
 
-        _rigidBody.velocity = Vector3.zero; 
+        _rigidBody.velocity = Vector3.zero;
+
         ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.MotherProjectile);
     }
 }

@@ -99,8 +99,6 @@ public class BatBehaviour : BehaviourMonster, IDamged
     {
         _currentHp -= damage;
 
-        SkillManager.Instance.SkillCount++;
-
         if (_currentHp <= 0)
         {
             Die(_soulTransform);

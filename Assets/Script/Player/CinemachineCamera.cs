@@ -44,6 +44,19 @@ public class CinemachineCamera : MonoBehaviour
         {
             m_virtualCam.m_Lens.FieldOfView = _currentFieldOfView;
         }
+
+        if(m_playerCam != null)
+        {
+            m_playerCam.SetActive(true);
+        }
+    }
+
+    private void OnDisable()
+    {
+        if(m_playerCam != null)
+        {
+            m_playerCam.SetActive(false);
+        }
     }
 
     private void Start()

@@ -140,6 +140,10 @@ public class Elevator : MonoBehaviour
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
+            GameObject player = other.gameObject;
+
+            player.transform.SetParent(transform);
+
             switch (_currentMove)
             {
                 case ElevatorMove.Up:
@@ -149,6 +153,16 @@ public class Elevator : MonoBehaviour
                     StartCoroutine(DownElevator());
                     break;
             }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            GameObject player = other.gameObject;
+
+            player.transform.parent = null;
         }
     }
 }

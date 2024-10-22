@@ -97,8 +97,6 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
     {
         _currentHp -= (int)damage;
 
-        SkillManager.Instance.SkillCount++;
-
         if(_currentHp <= 0)
         {
             if(TelePort != null)

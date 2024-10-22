@@ -222,7 +222,7 @@ public class PlayerMoveController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Vector3 GizmoPosition = new Vector3(transform.position.x, transform.position.y + 0.4f, transform.position.z);
+        Vector3 GizmoPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         Gizmos.DrawWireSphere(GizmoPosition, 0.5f);
     }
 
@@ -243,7 +243,7 @@ public class PlayerMoveController : MonoBehaviour
 
     private void CheckGround()
     {
-        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y + 0.4f, transform.position.z);
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         isGround = Physics.CheckSphere(spherePosition, 0.5f, LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore);
 
         if (isGround)

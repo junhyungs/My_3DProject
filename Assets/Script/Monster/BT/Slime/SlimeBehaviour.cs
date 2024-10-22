@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+
 
 public class SlimeBehaviour : BehaviourMonster, IDamged
 {
@@ -101,8 +100,6 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     public void TakeDamage(float damage)
     {
         _currentHp -= damage;
-
-        SkillManager.Instance.SkillCount++;
 
         if(_currentHp <= 0)
         {

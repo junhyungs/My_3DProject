@@ -14,6 +14,8 @@ public class Bomb : Skill
         bombComponent.SetProjectileObjectData(_data.Power, _data.ProjectileSpeed, _data.SkillRange);
         bomb.transform.SetParent(spawnPositionObj.transform);
         bomb.transform.localPosition = Vector3.zero;
+
+        spawnPositionObj.transform.localRotation = Quaternion.identity;
         bomb.transform.localRotation = spawnPositionObj.transform.localRotation;
 
         bombParticle.SetActive(true);

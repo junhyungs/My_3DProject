@@ -43,6 +43,8 @@ public class Umbrella : Weapon
         {
             damged.TakeDamage(_currentPower);
 
+            SkillManager.Instance.SkillCount++;
+
             float effectCount = _weaponData.EffectCount;
 
             for (int i = 0; i < effectCount; i++)

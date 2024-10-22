@@ -106,8 +106,6 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
     {
         _currentHp -= damage;
 
-        SkillManager.Instance.SkillCount++;
-
         if(_currentHp <= 0)
         {
             Die(_soulTransform, _disableHandler);

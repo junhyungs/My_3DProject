@@ -5,16 +5,11 @@ public class BombObject : ProjectileObject
 {
     private MeshRenderer m_bombMeshRenderer;
     private Material m_bombMaterial;
-    private int m_maxBounce = 2;
-    private int m_currentBounce;
-    private float m_forceTime;
-    private float m_forcePowerTime;
-    private float m_maxPower = 30.0f;
-    private bool isFlying;
 
     protected override void Awake()
     {
         base.Awake();
+
         m_projectileRigidbody.useGravity = false;
     }
 
@@ -25,10 +20,6 @@ public class BombObject : ProjectileObject
         m_bombMaterial = m_bombMeshRenderer.material;
 
         m_bombMaterial.SetFloat("_Float", 1.0f);
-
-        m_currentBounce = 0;
-
-        m_forceTime = 0.3f;
     }
 
     public override void IsFire(bool fire)
@@ -38,54 +29,24 @@ public class BombObject : ProjectileObject
         if(isFire)
         {
             Invoke(nameof(ReturnBomb), 4f);
-            isFlying = true;
+
+            m_projectileRigidbody.useGravity = true;
         }
-    }
-
-    private void BombUp(float forcePowerTime)
-    {
-        float forcePower = m_speed * forcePowerTime;
-
-        if(forcePower > m_maxPower)
-        {
-            forcePower = 30.0f;
-        }
-
-        Vector3 moveDirection = transform.TransformDirection(new Vector3(0, 2, 1).normalized);
-
-        m_projectileRigidbody.useGravity = true;
-
-        m_projectileRigidbody.AddForce(moveDirection * forcePower, ForceMode.Force);
     }
 
     private void FixedUpdate()
     {
-        if(!isFlying)
-            m_forcePowerTime += Time.fixedDeltaTime;
-
-        if (isFlying && m_forceTime > 0f)
+        if (isFire)
         {
-            BombUp(m_forcePowerTime);
+            Vector3 moveDirection = transform.forward * m_speed;
 
-            m_forceTime -= Time.fixedDeltaTime;
+            m_projectileRigidbody.AddForce(moveDirection);
         }
-
     }
 
-    
-
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        m_currentBounce++;
-
-        if(m_currentBounce < m_maxBounce)
-        {
-            if(collision.gameObject.layer == LayerMask.NameToLayer("Monster"))
-            {
-                Explosion();
-            }
-        }
-        else
+        if (other.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
             Explosion();
         }
@@ -94,6 +55,8 @@ public class BombObject : ProjectileObject
     private void Explosion()
     {
         m_bombMaterial.SetFloat("_Float", 0);
+
+        isFire = false;
 
         m_projectileRigidbody.velocity = Vector3.zero;
 
@@ -114,7 +77,6 @@ public class BombObject : ProjectileObject
         }
 
         StartCoroutine(ReturnPool());
-
     }
 
     private IEnumerator ReturnPool()

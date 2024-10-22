@@ -7,21 +7,14 @@ public class GameManager : Singleton<GameManager>
 {
     #region Player
     private PlayerInput _playerInput;
-    private Animator _animator;
     private PlayerHealth _health;
-    private PlayerMoveController _moveController;
+    private Animator _animator;
     private Func<IEnumerator> _deathCameraZoom;
     public GameObject Player { get; set; }
     #endregion
 
-    #region GameOver
-    private bool isGameOver = false;
-    public bool IsGameOver { get {  return isGameOver; } set { isGameOver = value; } }
-    #endregion
-
     #region CreatePlayer
     private const string _playerPath = "Prefab/Player/player";
-    public bool IsCreate { get; set; }
     #endregion
 
     private void Awake()
@@ -31,29 +24,28 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        if(Player != null)
-        {
-            _playerInput = Player.GetComponent<PlayerInput>();
-        }
+        GetPlayerComponent();
     }
 
-    public void CreatePlayer()
+    private void CreatePlayer()
     {
         GameObject player = Resources.Load<GameObject>(_playerPath);
 
-        player.SetActive(false);
-
         Player = Instantiate(player);
+    }
 
-        _playerInput = Player.GetComponent<PlayerInput>();
+    private void GetPlayerComponent()
+    {
+        if(Player != null)
+        {
+            _playerInput = Player.GetComponent<PlayerInput>();
 
-        _health = Player.GetComponent<PlayerHealth>();
+            _health = Player.GetComponent<PlayerHealth>();
 
-        _animator = Player.GetComponent<Animator>();
+            _animator = Player.GetComponent<Animator>();
 
-        _moveController = Player.GetComponent<PlayerMoveController>();
-
-        IsCreate = true;
+            Player.SetActive(false);
+        }
     }
 
     public void PlayerLock(bool isLock)
@@ -98,8 +90,6 @@ public class GameManager : Singleton<GameManager>
         _health.PlayerHP = 4;
 
         _animator.SetBool("Die", false);
-
-        _moveController.IsAction = true;
     }
 
 }
