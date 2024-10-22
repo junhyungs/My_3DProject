@@ -16,7 +16,9 @@ public class BatCheckPlayer : INode
         _bat = bat;
         _agent = _bat.GetComponent<NavMeshAgent>();
 
-        _radius = 5f;
+        _radius = _bat.Spawn ? _bat.Data.SpawnTrackingDistance
+            : _bat.Data.TrackingDistance;
+
         _targetLayer = LayerMask.GetMask("Player");
     }
 
@@ -31,7 +33,7 @@ public class BatCheckPlayer : INode
 
         if(colliders.Length > 0)
         {
-            _agent.stoppingDistance = 2.5f;
+            _agent.stoppingDistance = _bat.Data.AgentStoppingDistance;
 
             _bat.PlayerObject = colliders[0].gameObject;
 

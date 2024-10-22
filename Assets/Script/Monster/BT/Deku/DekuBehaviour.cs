@@ -24,10 +24,10 @@ public class DekuBehaviour : BehaviourMonster, IDamged
     [Header("FireTransform")]
     [SerializeField] private Transform _fireTransform;
 
-    private INode _node;    
-
     #region Property
     public GameObject PlayerObject { get; set; }
+    public BT_MonsterData Data => _data;
+    public bool Spawn => _isSpawn;
     public bool CheckPlayer { get; set; }
     public bool IsAttack { get; set; } = false;
     public bool IsReturn { get; set; } = false;
@@ -46,7 +46,6 @@ public class DekuBehaviour : BehaviourMonster, IDamged
         SetMaterial();
 
         _monsterType = ObjectName.Deku;
-        _node = SetBehaviourTree();
     }
 
     public override void IsSpawn(bool isSpawn, SpawnMonster reference)
@@ -58,7 +57,7 @@ public class DekuBehaviour : BehaviourMonster, IDamged
     {
         if (!_isDead && _dataReady)
         {
-            _node.Evaluate();
+            _behaviourNode.Evaluate();
         }
     }
 
@@ -67,8 +66,8 @@ public class DekuBehaviour : BehaviourMonster, IDamged
         _copyMaterial = Instantiate(_originalMaterial);
         _skinnedMeshRenderer.material = _copyMaterial;
     }
-    
-    private INode SetBehaviourTree()
+
+    protected override INode SetBehaviourTree()
     {
         INode newNode = new SelectorNode(new List<INode>
         {

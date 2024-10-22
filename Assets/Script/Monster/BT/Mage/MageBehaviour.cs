@@ -7,7 +7,6 @@ using UnityEngine.AI;
 
 public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
 {
-    private INode _node;
     private Action _disableHandler;
 
     #region Property
@@ -15,6 +14,8 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
     public NavMeshAgent Agent { get { return _agent; } }
     public Animator Animator { get { return _animator; } }
     public GameObject PlayerObject {  get; set; }
+    public BT_MonsterData Data => _data;
+    public bool Spawn => _isSpawn;
     public bool CheckPlayer { get; set; }
     public bool IsAttack {  get; set; }
     public bool IsTeleporting { get; set; } = true;
@@ -46,7 +47,6 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
         SetMaterial();
 
         _monsterType = ObjectName.Mage;
-        _node = SetBehaviourTree();
     }
 
     public override void IsSpawn(bool isSpawn, SpawnMonster reference)
@@ -59,11 +59,11 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
     {
         if (!_isDead && _dataReady)
         {
-            _node.Evaluate();
+            _behaviourNode.Evaluate();
         }
     }
 
-    private INode SetBehaviourTree()
+    protected override INode SetBehaviourTree()
     {
         INode node = new SelectorNode(new List<INode>
         {

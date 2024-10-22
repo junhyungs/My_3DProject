@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,7 +16,7 @@ public class DekuCheckPlayer : INode
         _animator = _deku.GetComponent<Animator>();
         _agent = _deku.GetComponent<NavMeshAgent>();
 
-        _radius = 10f;
+        _radius = _deku.Spawn ? _deku.Data.SpawnTrackingDistance : _deku.Data.TrackingDistance;
         _targetLayer = LayerMask.GetMask("Player");
     }
 
@@ -33,7 +31,7 @@ public class DekuCheckPlayer : INode
 
         if(colliders.Length > 0 )
         {
-            _agent.stoppingDistance = 5f;
+            _agent.stoppingDistance = _deku.Data.AgentStoppingDistance;
 
             _animator.SetBool("Hide", false);
 

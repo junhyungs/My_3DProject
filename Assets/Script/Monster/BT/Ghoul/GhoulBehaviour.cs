@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
 {
@@ -18,7 +16,6 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
 
      */
 
-    private INode _node;
     private Action _disableHandler;
 
     [Header("SoulPosition")]
@@ -33,6 +30,8 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
     [SerializeField] private MeshRenderer _meshRenderer;
 
     public GameObject PlayerObject { get; set; }
+    public BT_MonsterData Data => _data;
+    public bool Spawn => _isSpawn;
     public bool CheckPlayer { get; set; }
     public bool IsAttack { get; set; } = false;
     public bool IsReturn { get; set; }
@@ -56,18 +55,17 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
         SetMaterial();
 
         _monsterType = ObjectName.Ghoul;
-        _node = SetBehaviourTree();
     }
 
     private void Update()
     {
         if (!_isDead && _dataReady)
         {
-            _node.Evaluate();
+            _behaviourNode.Evaluate();
         }
     }
 
-    private INode SetBehaviourTree()
+    protected override INode SetBehaviourTree()
     {
         INode node = new SelectorNode(new List<INode>
         {

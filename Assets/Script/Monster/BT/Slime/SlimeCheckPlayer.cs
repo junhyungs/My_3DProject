@@ -12,7 +12,9 @@ public class SlimeCheckPlayer : INode
     {
         _slime = slime;
 
-        _radius = 5f;
+        _radius = _slime.Spawn ? _slime.Data.SpawnTrackingDistance
+            : _slime.Data.TrackingDistance;
+
         _targetLayer = LayerMask.GetMask("Player");
     }
 

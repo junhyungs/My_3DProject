@@ -24,10 +24,11 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     [Header("Material")]
     [SerializeField] private Material _originalMaterial;
 
-    private INode _node;
     
     #region Property
     public GameObject PlayerObject { get; set; }
+    public BT_MonsterData Data => _data;
+    public bool Spawn => _isSpawn;
     public bool CheckPlayer { get; set; }
     public bool CanRotation { get; set; } = true;
     public bool CanMove { get; set; } = true;
@@ -46,14 +47,13 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
         SetMaterial();
 
         _monsterType = ObjectName.Slime;
-        _node = SetBehaviourTree();
     }
 
     private void Update()
     {
         if (!_isDead && _dataReady)
         {
-            _node.Evaluate();
+            _behaviourNode.Evaluate();
         }
     }
 
@@ -72,7 +72,7 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
         }
     }
 
-    private INode SetBehaviourTree()
+    protected override INode SetBehaviourTree()
     {
         INode node = new SelectorNode(new List<INode>
         {
@@ -97,7 +97,7 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
         });
         return node;
     }
-
+    
     public void TakeDamage(float damage)
     {
         _currentHp -= damage;

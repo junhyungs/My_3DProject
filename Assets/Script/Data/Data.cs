@@ -13,9 +13,13 @@ public class BT_MonsterData : Data
     public float Speed { get; set; }
     public float TrackingDistance { get; set; }
     public float StopTrackingDistance { get; set; }
+    public float AgentStoppingDistance { get; set; }
+    public float SpawnTrackingDistance { get; set; }
+    public float SpawnStopTrackingDistance { get; set; }
 
-
-    public BT_MonsterData(string id, string name, int health, float power, float speed, float trackingDistance, float stopTrackingDistance)
+    public BT_MonsterData(string id, string name, int health, float power, float speed, 
+        float trackingDistance, float stopTrackingDistance, float agentStoppingDistance,
+        float spawnTrackingDistance, float spawnStopTrackingDistance)
     {
         ID = id;
         Name = name;
@@ -24,6 +28,9 @@ public class BT_MonsterData : Data
         Speed = speed;
         TrackingDistance = trackingDistance;
         StopTrackingDistance = stopTrackingDistance;
+        AgentStoppingDistance = agentStoppingDistance;
+        SpawnTrackingDistance = spawnTrackingDistance;
+        SpawnStopTrackingDistance = spawnStopTrackingDistance;
     }
 }
 

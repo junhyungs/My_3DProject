@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,7 +14,8 @@ public class GhoulCheckPlayer : INode
         _ghoul = ghoul;
         _agent = _ghoul.GetComponent<NavMeshAgent>();
 
-        _radius = 5f;
+        _radius = _ghoul.Spawn ? _ghoul.Data.SpawnTrackingDistance : _ghoul.Data.TrackingDistance;
+
         _targetLayer = LayerMask.GetMask("Player");
     }
 
@@ -31,7 +30,7 @@ public class GhoulCheckPlayer : INode
 
         if(colliders.Length > 0)
         {
-            _agent.stoppingDistance = 3f;
+            _agent.stoppingDistance = _ghoul.Data.AgentStoppingDistance;
 
             _ghoul.PlayerObject = colliders[0].gameObject;
 

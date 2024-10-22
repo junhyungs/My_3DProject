@@ -11,6 +11,8 @@ public class BehaviourMonster : MonoBehaviour
     protected Rigidbody _rigidBody;
     protected Material _copyMaterial;
     protected SpawnMonster _spawnComponent;
+
+    protected INode _behaviourNode;
     #endregion
 
     #region Value
@@ -88,7 +90,16 @@ public class BehaviourMonster : MonoBehaviour
 
         _data = data;
 
+        _behaviourNode = SetBehaviourTree();
+
         _dataReady = true;
+    }
+
+    protected virtual INode SetBehaviourTree()
+    {
+        INode node = null;
+
+        return node;
     }
 
     public IEnumerator IntensityChange(float baseValue, float power)

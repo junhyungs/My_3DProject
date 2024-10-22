@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,6 +14,7 @@ public class SlimeMoveStateBehaviour : StateMachineBehaviour
     private int _currentIndex = 0;
     private float _minDistance;
     private float _maxSampleDistance;
+    private float _agentStoppingDistance;
 
     private Vector3 _movePosition;
     private LayerMask _targetLayer;
@@ -30,7 +29,7 @@ public class SlimeMoveStateBehaviour : StateMachineBehaviour
 
         if (_slime.CheckPlayer)
         {
-            _agent.stoppingDistance = 3f;
+            _agent.stoppingDistance = _agentStoppingDistance;
 
             _movePosition = _slime.PlayerObject.transform.position;
         }
@@ -76,6 +75,7 @@ public class SlimeMoveStateBehaviour : StateMachineBehaviour
             _gridSize = 10;
             _minDistance = 5f;
             _maxSampleDistance = 0.1f;
+            _agentStoppingDistance = _slime.Data.AgentStoppingDistance;
             _targetLayer = LayerMask.GetMask("Player", "Default");
             _myBounds = _slime.transform.GetComponentInChildren<SkinnedMeshRenderer>().bounds;
         }

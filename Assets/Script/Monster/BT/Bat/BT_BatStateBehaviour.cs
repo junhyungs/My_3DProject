@@ -29,6 +29,7 @@ public class BatAttackStateBehaviour : StateMachineBehaviour
             _targetLayer = LayerMask.GetMask("Player");
         }
 
+    
         _stoppingDistance = _agent.stoppingDistance;
 
         _currentPlayerPosition = batBehaviour.PlayerObject.transform.position;

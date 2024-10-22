@@ -12,7 +12,9 @@ public class MageCheckPlayer : INode
     {
         _mage = mageBehaviour;
 
-        _radius = 7f;
+        _radius = _mage.Spawn ? _mage.Data.SpawnTrackingDistance
+            : _mage.Data.TrackingDistance;
+
         _targetLayer = LayerMask.GetMask("Player");
     }
 

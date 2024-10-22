@@ -80,7 +80,7 @@ public class PlayerMoveController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(IsAction);
+        
         if (!isLadder)
         {
             CheckGround();

@@ -24,10 +24,10 @@ public class BossManager : Singleton<BossManager>
     {
         yield return new WaitWhile(() =>
         {
-            Debug.Log("ForestMother 데이터를 가져오지 못했습니다.");
             return DataManager.Instance.GetData(id) == null;
         });
 
+        Debug.Log("ForestMother 데이터를 가져왔습니다.");
         var data = DataManager.Instance.GetData(id) as ForestMotherData;
         _data = data;
     }
@@ -36,10 +36,9 @@ public class BossManager : Singleton<BossManager>
     {
         yield return new WaitWhile(() =>
         {
-            Debug.Log("ForestMotherProjectile 데이터를 가져오지 못했습니다.");
             return DataManager.Instance.GetData(id) == null;
         });
-
+        Debug.Log("ForestMotherProjectile 데이터를 가져왔습니다.");
         var data = DataManager.Instance.GetData(id) as ForestMotherProjectileData;
 
         _projectileData = data;

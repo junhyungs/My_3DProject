@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class MageMoveToPlayer : INode
 {
@@ -9,6 +8,10 @@ public class MageMoveToPlayer : INode
     public MageMoveToPlayer(MageBehaviour mageBehaviour)
     {
         _mage = mageBehaviour;
+
+        NavMeshAgent agent = _mage.GetComponent<NavMeshAgent>();
+
+        agent.stoppingDistance = _mage.Data.AgentStoppingDistance;
     }
 
     public INode.State Evaluate()

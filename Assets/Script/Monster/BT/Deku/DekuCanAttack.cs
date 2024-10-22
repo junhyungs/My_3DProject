@@ -17,7 +17,8 @@ public class DekuCanAttack : INode
         _agent = _deku.GetComponent<NavMeshAgent>();    
         _animator = _deku.GetComponent<Animator>();
 
-        _stopTrackingDistance = 20f;
+        _stopTrackingDistance = _deku.Spawn ? _deku.Data.SpawnStopTrackingDistance
+            : _deku.Data.StopTrackingDistance;
     }
 
     public INode.State Evaluate()

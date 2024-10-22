@@ -52,7 +52,10 @@ public class Stage : MonoBehaviour
 
         foreach(var monster in _spawnMonsters)
         {
-            monster.OnDisableMonster();
+            if (monster.gameObject.activeSelf)
+            {
+                monster.OnDisableMonster();
+            }
         }
     }
 

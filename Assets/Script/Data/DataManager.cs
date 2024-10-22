@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using UnityEngine.UIElements;
 
 public class DataManager
 {
@@ -16,6 +15,7 @@ public class DataManager
 
     private Dictionary<string, Data> _dataDictionary = new Dictionary<string, Data>(); 
     private Dictionary<string, PathData> _pathDictionary = new Dictionary<string, PathData>();
+    private HashSet<string> _jsonDataSet = new HashSet<string>();
 
     public static DataManager Instance
     {
@@ -32,6 +32,11 @@ public class DataManager
 
     public void SetData(string fileName, string jsonData)
     {
+
+        if (_jsonDataSet.Contains(jsonData))
+        {
+            return;
+        }
 
         switch (fileName)
         {
@@ -104,6 +109,8 @@ public class DataManager
 
                 _dataDictionary.Add(id, data);
             }
+
+            _jsonDataSet.Add(jsonData);
         }
         catch(JsonException ex)
         {
@@ -172,6 +179,8 @@ public class DataManager
 
                 _dataDictionary.Add(id, data);
             }
+
+            _jsonDataSet.Add(jsonData);
         }
         catch (JsonException ex)
         {
@@ -219,6 +228,8 @@ public class DataManager
 
                 _dataDictionary.Add(id, data);
             }
+
+            _jsonDataSet.Add(jsonData);
         }
         catch(JsonException ex)
         {
@@ -248,6 +259,8 @@ public class DataManager
 
                 _dataDictionary.Add(id, data);
             }
+
+            _jsonDataSet.Add(jsonData);
         }
         catch(JsonException ex)
         {
@@ -272,11 +285,16 @@ public class DataManager
                 float speed = ParseFloat(item["Speed"]);
                 float trackingDistance = ParseFloat(item["TrackingDistance"]);
                 float stopTrackingDistance = ParseFloat(item["StopTrackingDistance"]);
+                float agentStoppingDistance = ParseFloat(item["AgentStoppingDistance"]);
+                float spawnTrackingDistance = ParseFloat(item["SpawnTrackingDistance"]);
+                float spawnStopTrackingDistance = ParseFloat(item["SpawnStopTrackingDistance"]);
 
                 BT_MonsterData monsterData = new BT_MonsterData(id, name, hp, power, speed, 
-                    trackingDistance, stopTrackingDistance);
+                    trackingDistance, stopTrackingDistance, agentStoppingDistance, spawnTrackingDistance, spawnStopTrackingDistance);
                 _dataDictionary.Add(id, monsterData);
             }
+
+            _jsonDataSet.Add(jsonData);
         }
         catch (JsonException ex)
         {
@@ -304,6 +322,8 @@ public class DataManager
 
                 _dataDictionary.Add(id, data);
             }
+
+            _jsonDataSet.Add(jsonData);
         }
         catch(JsonException ex)
         {
@@ -341,6 +361,8 @@ public class DataManager
 
                 _dataDictionary.Add(id, data);
             }
+
+            _jsonDataSet.Add(jsonData);
         }
         catch(JsonException ex)
         {
@@ -371,6 +393,8 @@ public class DataManager
                     , gravity, health);
                 _dataDictionary.Add(id, playerData);
             }
+
+            _jsonDataSet.Add(jsonData);
         }
         catch (JsonException ex)
         {
@@ -396,6 +420,8 @@ public class DataManager
                 PlayerSkillData skillData = new PlayerSkillData(id,name, power, projectileSpeed, skillRange, cost); 
                 _dataDictionary.Add(id, skillData); 
             }
+
+            _jsonDataSet.Add(jsonData);
         }
         catch (JsonException ex)
         {
@@ -426,6 +452,8 @@ public class DataManager
 
                 _dataDictionary.Add(id, weaponData);
             }
+
+            _jsonDataSet.Add(jsonData);
         }
         catch(JsonException ex)
         {
@@ -447,6 +475,8 @@ public class DataManager
                 PrefabPath pathData = new PrefabPath(id, path);
                 _pathDictionary.Add(id, pathData);  
             }
+
+            _jsonDataSet.Add(jsonData);
         }
         catch (JsonException ex)
         {

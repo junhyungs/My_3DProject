@@ -21,10 +21,10 @@ public class BatBehaviour : BehaviourMonster, IDamged
     [Header("SoulPosition")]
     [SerializeField] private Transform _soulTransform;
 
-    private INode _node;
-
     #region Property
     public GameObject PlayerObject { get; set; }
+    public BT_MonsterData Data => _data;
+    public bool Spawn => _isSpawn;
     public float Power => _currentPower;
     public bool CheckPlayer { get; set; }
     public bool IsAttack { get; set; } = false;
@@ -42,15 +42,14 @@ public class BatBehaviour : BehaviourMonster, IDamged
         StartCoroutine(LoadMonsterData("M101"));
         SetMaterial();
 
-        _monsterType = ObjectName.Bat;
-        _node = SetBehaviourTree();
+        _monsterType = ObjectName.Bat;        
     }
 
     private void Update()
     {
         if (!_isDead && _dataReady)
         {
-            _node.Evaluate();
+            _behaviourNode.Evaluate();
         }
     }
 
@@ -70,7 +69,7 @@ public class BatBehaviour : BehaviourMonster, IDamged
         _skinnedMeshRenderer.material = _copyMaterial;
     }
 
-    private INode SetBehaviourTree()
+    protected override INode SetBehaviourTree()
     {
         INode node = new SelectorNode(new List<INode>
         {
@@ -100,7 +99,9 @@ public class BatBehaviour : BehaviourMonster, IDamged
     {
         _currentHp -= damage;
 
-        if(_currentHp <= 0)
+        SkillManager.Instance.SkillCount++;
+
+        if (_currentHp <= 0)
         {
             Die(_soulTransform);
         }
