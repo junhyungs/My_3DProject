@@ -12,6 +12,9 @@ public class SpawnMonster : MonoBehaviour
     [Header("SelectDoor")]
     [SerializeField] private int _doorCount;
 
+    [Header("EndingDoor")]
+    [SerializeField] private GameObject _endingDoor;
+
     public MapData Data { get; set; }
 
     private SphereCollider _triggerCollider;
@@ -109,7 +112,7 @@ public class SpawnMonster : MonoBehaviour
 
         GameObject[] selectDoor = new GameObject[_doorCount];
 
-        for (int i = 0; i < Data.EventCount; i++)
+        for (int i = 0; i < 1; i++)
         {
             _spawnMonsterSet.Clear();
 
@@ -132,6 +135,8 @@ public class SpawnMonster : MonoBehaviour
                 return _isSpawn;
             });
         }
+
+        _endingDoor.SetActive(true);
     }
 
     private IEnumerator Open(GameObject doorObject, MapData data)

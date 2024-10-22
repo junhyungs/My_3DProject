@@ -18,6 +18,8 @@ public class MapManager : Singleton<MapManager>
 
     private void Start()
     {
+       UIManager.Instance.OnInitializeImage(true);
+
        StartCoroutine(InitializeMapData());
     }
 
@@ -45,6 +47,8 @@ public class MapManager : Singleton<MapManager>
 
             _dataDictionary.Add(id, data);
         }
+
+        UIManager.Instance.OnInitializeImage(false);
 
         ChangeMap(Map.MainStage);
     }

@@ -47,6 +47,14 @@ public class PlayerWeaponController : MonoBehaviour
         InitializeWeaponController();
     }
 
+    private void OnEnable()
+    {
+        if(_currentWeapon != null)
+        {
+            ResetWeapon();
+        }
+    }
+
     private void Start()
     {
         SetWeapon(PlayerWeapon.Sword);
@@ -124,6 +132,14 @@ public class PlayerWeaponController : MonoBehaviour
     private void ActiveIdleWeapon(bool active)
     {
         _idleObject[(int)_currentWeaponType].SetActive(active);
+    }
+
+    private void ResetWeapon()
+    {
+        RightObject[(int)_currentWeaponType].SetActive(false);
+        LeftObject[(int)_currentWeaponType].SetActive(false);
+
+        ActiveIdleWeapon(true);
     }
 
     private void OnDisableWeaponObject()

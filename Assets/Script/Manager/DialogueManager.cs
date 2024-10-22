@@ -77,7 +77,8 @@ public class DialogueManager : Singleton<DialogueManager>
             Dictionary<DialogueOrder, List<string>> orderDictionary = new Dictionary<DialogueOrder, List<string>>
             {
                 {DialogueOrder.Story, data.StoryMessage },
-                {DialogueOrder.Loop, data.LoopMessage }
+                {DialogueOrder.Loop, data.LoopMessage },
+                {DialogueOrder.End, data.EndMessage },
             };
 
             _dialogueDictionary.Add(data.ID, orderDictionary);

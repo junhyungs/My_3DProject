@@ -8,7 +8,7 @@ public class CutSceneDoor : MonoBehaviour, IInteractionItem
     private enum Door
     {
         Open, 
-        Close
+        Close,
     }
 
     [Header("PlayableAsset")]
@@ -132,6 +132,8 @@ public class CutSceneDoor : MonoBehaviour, IInteractionItem
     {
         MapManager.Instance.ChangeMap(_changeMap);
     }
+
+    
 
     private void OnTriggerEnter(Collider other)
     {

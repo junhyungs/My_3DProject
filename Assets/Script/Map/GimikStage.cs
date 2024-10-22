@@ -8,12 +8,20 @@ public class GimikStage : Stage
     [Header("Door")]
     [SerializeField] private CutSceneDoor _door;
 
+    [Header("EndingDoor")]
+    [SerializeField] private GameObject _endingDoor;
+
     private void OnEnable()
     {
         if(_door != null)
         {
             _door.CloseDoor();
         }
+    }
+
+    private new void OnDisable()
+    {
+        _endingDoor.SetActive(false);
     }
 
     public override void SetMapData(MapData data)

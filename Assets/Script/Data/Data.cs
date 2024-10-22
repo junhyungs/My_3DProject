@@ -183,13 +183,16 @@ public class DialogueData : Data
     public string Name { get; set; }
     public List<string> StoryMessage { get; set; }
     public List<string> LoopMessage { get; set; }
+    public List<string> EndMessage { get;set; }
 
-    public DialogueData(string iD, string name, List<string> storyMessage, List<string> loopMessage)
+    public DialogueData(string iD, string name, List<string> storyMessage, List<string> loopMessage
+        , List<string> endMessage)
     {
         ID = iD;
         Name = name;
         StoryMessage = storyMessage;
         LoopMessage = loopMessage;
+        EndMessage = endMessage;
     }
 }
 

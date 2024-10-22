@@ -242,7 +242,9 @@ public class DataManager
 
                 List<string> loopList = ParseDialogue(item["LoopMessage"]);
 
-                DialogueData data = new DialogueData(id, name, stroyList, loopList);
+                List<string> endMessage = ParseDialogue(item["EndMessage"]);
+
+                DialogueData data = new DialogueData(id, name, stroyList, loopList, endMessage);
 
                 _dataDictionary.Add(id, data);
             }

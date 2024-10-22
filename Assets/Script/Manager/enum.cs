@@ -12,7 +12,8 @@ public enum Map
 {
     MainStage,
     BossStage,
-    GimikStage
+    GimikStage,
+    EndingStage
 }
 
 public enum JsonName
@@ -64,6 +65,7 @@ public enum ObjectName
     Trowel,
     Surveillance,
     OpenUI,
+    ThankYouUI,
 
     Null
 }
@@ -94,6 +96,7 @@ public enum DialogueOrder
 {
     Story,
     Loop,
+    End
 }
 
 public enum NPC

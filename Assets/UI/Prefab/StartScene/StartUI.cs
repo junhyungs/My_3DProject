@@ -1,11 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
-
-
-
+using UnityEngine.SceneManagement;
 
 public class StartUI : MonoBehaviour
 {
@@ -93,14 +90,6 @@ public class StartUI : MonoBehaviour
             selectedIndex = 0;
         }
 
-        //Mathf.Clamp(value, min, max) value 값을 min, max로 제한하는 함수
-        //selectedIndex = Mathf.Clamp(selectedIndex + direction, 0, buttons.Count -1);
-
-        //if (selectedIndex == saveIndex)
-        //    return;
-
-        //saveIndex = selectedIndex;
-
         if (previousIndex != selectedIndex)
         {
             AnimateImages(buttons[previousIndex], false);
@@ -170,7 +159,7 @@ public class StartUI : MonoBehaviour
     {
         DOTween.KillAll();
 
-        LoadingScene.LoadScene("R_Boss");
+        SceneManager.LoadScene("MainScene");
     }
 
     public void OnOptionPanel()

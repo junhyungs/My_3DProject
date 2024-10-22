@@ -7,6 +7,7 @@ public class UIManager : Singleton<UIManager>
     public static event Action _onAbilityUI;
     public static event Action<ResourceRequest> _loadingUI;
     public static event Action<bool> _deathUI;
+    public static event Action<bool> _initializeUI;
 
     private PlayerSkill m_currentSkill;
     private Action<PlayerSkill> SkillChangeCallBack;
@@ -15,11 +16,12 @@ public class UIManager : Singleton<UIManager>
 
     private void Start()
     {
-        ObjectPool.Instance.CreatePool(ObjectName.UseUI, 5);
-        ObjectPool.Instance.CreatePool(ObjectName.GetUI, 5);
-        ObjectPool.Instance.CreatePool(ObjectName.LadderUI, 5);
-        ObjectPool.Instance.CreatePool(ObjectName.OpenUI, 5);
-        ObjectPool.Instance.CreatePool(ObjectName.InteractionDialogueUI, 5);
+        ObjectPool.Instance.CreatePool(ObjectName.UseUI, 3);
+        ObjectPool.Instance.CreatePool(ObjectName.GetUI, 3);
+        ObjectPool.Instance.CreatePool(ObjectName.LadderUI, 3);
+        ObjectPool.Instance.CreatePool(ObjectName.OpenUI, 3);
+        ObjectPool.Instance.CreatePool(ObjectName.ThankYouUI, 3);
+        ObjectPool.Instance.CreatePool(ObjectName.InteractionDialogueUI, 3);
     }
 
     public void OnAbilityUI()
@@ -35,6 +37,11 @@ public class UIManager : Singleton<UIManager>
     public void OnDeathUI(bool isActive)
     {
         _deathUI.Invoke(isActive);
+    }
+
+    public void OnInitializeImage(bool isActive)
+    {
+        _initializeUI.Invoke(isActive);
     }
 
     #region Interaction
@@ -62,6 +69,10 @@ public class UIManager : Singleton<UIManager>
                 case ObjectName.OpenUI:
                     GameObject openUI = ObjectPool.Instance.DequeueObject(ObjectName.OpenUI);
                     InteractionUIPosition (openUI, itemTransform, uiPosition);
+                    break;
+                case ObjectName.ThankYouUI:
+                    GameObject thankyouUI = ObjectPool.Instance.DequeueObject(ObjectName.ThankYouUI);
+                    InteractionUIPosition(thankyouUI, itemTransform, uiPosition);
                     break;
             }
         }

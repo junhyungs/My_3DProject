@@ -68,6 +68,11 @@ public class PlayerMoveController : MonoBehaviour
         m_playerAnimator = GetComponent<Animator>();
     }
 
+    private void OnEnable()
+    {
+        IsAction = true;
+    }
+
     private void OnDisable()
     {
         m_playerInput = Vector2.zero;
@@ -75,6 +80,7 @@ public class PlayerMoveController : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(IsAction);
         if (!isLadder)
         {
             CheckGround();
@@ -103,7 +109,7 @@ public class PlayerMoveController : MonoBehaviour
     
     //Roll----------------------------------------------------------------------------------------------------------------
     private void OnRoll(InputValue input)
-    {
+    {       
         if (!isAction)
             return; 
 
