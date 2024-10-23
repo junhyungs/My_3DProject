@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class PlayerAttackReset : StateMachineBehaviour//부착된 애니메이션 State에서만 활성화.

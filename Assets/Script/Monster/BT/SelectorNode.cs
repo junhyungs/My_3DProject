@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class SelectorNode : INode
 {
@@ -36,7 +34,5 @@ public class SelectorNode : INode
         }
 
         return INode.State.Fail;
-    }
-
-    
+    }    
 }

@@ -23056,7 +23056,8 @@ MonoBehaviour:
         Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"GhoulConditional_CheckPlayer","NodeData":{"Offset":"(-138.77121,189.154526)"},"ID":18,"Name":"Ghoul
         Conditional   Check Player","Instant":true},{"Type":"GhoulAction_Patrol","NodeData":{"Offset":"(100.170708,187.027008)"},"ID":19,"Name":"Ghoul
         Action   Patrol","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(170,170)"},"ID":20,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"GhoulAction_Ready","NodeData":{"Offset":"(4.64835167,198.240967)"},"ID":21,"Name":"Ghoul
-        Action   Ready","Instant":true}]}]}]}]}]}}'
+        Action   Ready","Instant":true}]}]}]}]}]},"DetachedTasks":[{"Type":"BehaviorDesigner.Runtime.Tasks.UntilFailure","NodeData":{"Offset":"(726.34314,368.2061)"},"ID":22,"Name":"Until
+        Failure","Instant":true}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 

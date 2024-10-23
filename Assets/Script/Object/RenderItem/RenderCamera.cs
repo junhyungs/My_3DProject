@@ -13,9 +13,11 @@ public class RenderCamera : MonoBehaviour
 
     [Header("TrinketCamera")]
     [SerializeField] private Camera _trinketCamera;
+    [SerializeField] private Light _trinketLight;
 
     [Header("WeaponCamera")]
-    [SerializeField] private Camera _weaponCamera;  
+    [SerializeField] private Camera _weaponCamera;
+    [SerializeField] private Light _weaponLight;
 
     private Dictionary<TrinketItemType, GameObject> _trinketDictionary;
     private Dictionary<PlayerWeapon, GameObject> _weaponDictionary;

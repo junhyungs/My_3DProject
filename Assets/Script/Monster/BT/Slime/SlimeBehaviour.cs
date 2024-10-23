@@ -7,7 +7,7 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     /*
                                              [Selector]
 
-                   [Selector]                                        [Selector]
+                   [Selector]                                         [Selector]
       
        [Sequence]             [Sequence]                      [CheckPlayer] [Partrol] 
      
