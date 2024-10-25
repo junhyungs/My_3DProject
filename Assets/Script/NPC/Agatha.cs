@@ -16,7 +16,7 @@ public class Agatha : _NPC, IInteractionDialogue
         {
             return;
         }
-
+        
         GameManager.Instance.PlayerLock(true);
 
         _onTrigger = true;

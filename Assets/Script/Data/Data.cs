@@ -53,7 +53,8 @@ public class PlayerData : Data
     public float Gravity { get; set; }
     public int Health { get; set; }
 
-    public PlayerData(string iD, string name, float power, float speed, float rollSpeed, float ladderSpeed, float speedChangeValue, float speedOffSet, float gravity, int health)
+    public PlayerData(string iD, string name, float power, float speed, float rollSpeed, 
+        float ladderSpeed, float speedChangeValue, float speedOffSet, float gravity, int health)
     {
         ID = iD;
         Name = name;

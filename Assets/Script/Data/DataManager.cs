@@ -88,7 +88,7 @@ public class DataManager
 
                 string replace = ParseString(item["MapName"]);
 
-                string mapName = replace.Replace("\\n",     "\n");
+                string mapName = replace.Replace("\\n", "\n");
 
                 string prefabPath = ParseString(item["PrefabPath"]);
 
