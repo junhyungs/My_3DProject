@@ -9,6 +9,8 @@ public class MotherVine
     public VineType _vineType;
     [Header("VineCollider")]
     public GameObject[] _colliderArray;
+    [Header("Index")]
+    public int _index;
 
     [HideInInspector]
     public SphereCollider[] _sphereColliders;
@@ -101,7 +103,7 @@ public class ForestMotherAnimationEvent : MonoBehaviour
                 if(colliderObject != null)
                 {
                     AddComponents(motherVine._sphereColliders,
-                        colliderObject, i, motherVine);
+                        colliderObject, i, motherVine._index, motherVine);
                 }
             }
 
@@ -127,7 +129,8 @@ public class ForestMotherAnimationEvent : MonoBehaviour
         _vineColliderDictionary[vineType].Add(motherVine);
     }
 
-    private void AddComponents(SphereCollider[] sphereColliders ,GameObject colliderObject, int index, MotherVine motherVine)
+    private void AddComponents(SphereCollider[] sphereColliders ,GameObject colliderObject, 
+        int colliderindex, int vineNumber ,MotherVine motherVine)
     {
         colliderObject.AddComponent<SphereCollider>();
 
@@ -136,8 +139,8 @@ public class ForestMotherAnimationEvent : MonoBehaviour
         collider.radius = 0.5f;
         collider.enabled = false;
 
-        colliderObject.AddComponent<Mother_VineHandler>().Initialize(motherVine, index, _data.Power);
-        sphereColliders[index] = collider;
+        colliderObject.AddComponent<Mother_VineHandler>().Initialize(motherVine, vineNumber, _data.Power);
+        sphereColliders[colliderindex] = collider;
     }
 
     private List<MotherVine> GetMotherVineList(VineType key)

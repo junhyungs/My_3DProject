@@ -21,7 +21,6 @@ public class SpawnMonster : MonoBehaviour
     private HashSet<GameObject> _spawnMonsterSet;
     private Dictionary<GameObject, Material> _doorMaterialDictionary;
 
-    private float _time;
     private float _colorAmount;
     private int _spawnFailCount;
     private bool _isSpawn;

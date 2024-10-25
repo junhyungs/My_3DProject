@@ -12,6 +12,7 @@ public class LoadingUI : MonoBehaviour
 
     private float _duration = 0.3f;
     private float _requestNullDuration = 2.0f;
+    private float _exitDuration = 2.0f;
 
     private void Awake()
     {
@@ -21,11 +22,13 @@ public class LoadingUI : MonoBehaviour
     private void OnEnable()
     {
         UIManager._loadingUI += StartLoadingUI;
+        UIManager.Instance.AddExitEvent(ExitImageBlink, true);
     }
 
     private void OnDisable()
     {
         UIManager._loadingUI -= StartLoadingUI;
+        UIManager.Instance.AddExitEvent(ExitImageBlink, false);
     }
 
     public void StartLoadingUI(ResourceRequest request = null)
@@ -33,6 +36,24 @@ public class LoadingUI : MonoBehaviour
         _childObject.SetActive(true);
 
         StartCoroutine(ImageBlink(request));
+    }
+
+    private IEnumerator ExitImageBlink()
+    {
+        _childObject.SetActive(true);
+
+        Color color = _loadIcon.color;
+
+        float durationTime = 0f;
+
+        while (durationTime < _exitDuration)
+        {
+            yield return StartCoroutine(FadeImage(color, 1f, _duration));
+
+            yield return StartCoroutine(FadeImage(color, 0f, _duration));
+
+            durationTime += 2 * _duration;
+        }
     }
 
     public IEnumerator ImageBlink(ResourceRequest request = null)

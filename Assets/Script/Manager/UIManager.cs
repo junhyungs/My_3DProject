@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ public class UIManager : Singleton<UIManager>
     private Action<PlayerSkill> SkillChangeCallBack;
     private Action<int> PlayerSkillCountCallBack;
     private Action<int> PlayerHpIconChangeCallBack;
+    private Func<IEnumerator> _globalExitDoorFunc;
+    private IExitDoor _exitEvent;
 
     private void Start()
     {
@@ -42,6 +45,26 @@ public class UIManager : Singleton<UIManager>
     public void OnInitializeImage(bool isActive)
     {
         _initializeUI.Invoke(isActive);
+    }
+
+    public void RegisterExitEvent(IExitDoor exitDoor)
+    {
+        _exitEvent = exitDoor;
+
+        if(_globalExitDoorFunc != null)
+        {
+            exitDoor.ExitUIEvent(_globalExitDoorFunc, true);
+        }
+    }
+
+    public void AddExitEvent(Func<IEnumerator> coroutineCallBack, bool register)
+    {
+        _globalExitDoorFunc = coroutineCallBack;
+
+        if(_exitEvent != null)
+        {
+            _exitEvent.ExitUIEvent(coroutineCallBack, register);
+        }
     }
 
     #region Interaction

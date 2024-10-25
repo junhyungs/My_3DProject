@@ -21,6 +21,8 @@ public class CinemachineCamera : MonoBehaviour
 
     private GameObject m_playerCam;
     private CinemachineVirtualCamera m_virtualCam;
+    private Vector3 _onDisablePosition;
+
 
     private float m_maxDistance = 15f;
     private float _minView = 20f;
@@ -47,12 +49,18 @@ public class CinemachineCamera : MonoBehaviour
 
         if(m_playerCam != null)
         {
+            Vector3 movePosition = transform.position - _onDisablePosition;
+
+            m_playerCam.transform.position += movePosition;
+
             m_playerCam.SetActive(true);
         }
     }
 
     private void OnDisable()
     {
+        _onDisablePosition = transform.position;
+
         if(m_playerCam != null)
         {
             m_playerCam.SetActive(false);

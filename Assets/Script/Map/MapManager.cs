@@ -109,8 +109,6 @@ public class MapManager : Singleton<MapManager>
 
         _currentMap = currentMap;
 
-        _currentMap.SetActive(true);
-
         if(_currentMap.TryGetComponent(out Stage stageComponent))
         {
             stageComponent.SetMapData(data);

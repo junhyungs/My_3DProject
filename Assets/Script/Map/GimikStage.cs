@@ -7,6 +7,7 @@ public class GimikStage : Stage
 
     [Header("Door")]
     [SerializeField] private CutSceneDoor _door;
+    [SerializeField] private Transform _outTransform;
 
     [Header("EndingDoor")]
     [SerializeField] private GameObject _endingDoor;
@@ -15,6 +16,10 @@ public class GimikStage : Stage
     {
         if(_door != null)
         {
+            GameObject player = GameManager.Instance.Player;
+
+            player.transform.position = _outTransform.position;
+
             _door.CloseDoor();
         }
     }

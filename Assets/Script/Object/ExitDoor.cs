@@ -1,9 +1,16 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 
-public class ExitDoor : MonoBehaviour, IInteractionItem
+public interface IExitDoor
+{
+    public void ExitUIEvent(Func<IEnumerator> coroutineCallBack, bool register);
+}
+
+public class ExitDoor : MonoBehaviour, IInteractionItem, IExitDoor
 {
     [Header("ExitUI")]
     [SerializeField] private GameObject _exitUI;
@@ -14,6 +21,7 @@ public class ExitDoor : MonoBehaviour, IInteractionItem
     private PlayableDirector _director;
     private GameObject _player;
     private HashSet<string> _track;
+    private Func<IEnumerator> _uiEvent;
 
     private void Awake()
     {
@@ -25,6 +33,11 @@ public class ExitDoor : MonoBehaviour, IInteractionItem
             "PlayerWalkAnimation",
             "PlayerObject"
         };
+    }
+
+    private void OnEnable()
+    {
+        UIManager.Instance.RegisterExitEvent(this);
     }
 
     private void Start()
@@ -55,12 +68,9 @@ public class ExitDoor : MonoBehaviour, IInteractionItem
 
     public void InteractionItem()
     {
-        if (_exitUI.activeSelf)
-        {
-            _exitUI.SetActive(false);
-        }
+        _exitUI.SetActive(false);
 
-        if(_player == null)
+        if (_player == null)
         {
             _player = GameManager.Instance.Player;
         }
@@ -83,6 +93,13 @@ public class ExitDoor : MonoBehaviour, IInteractionItem
     //¾À º¯°æ
     public void StartScene()
     {
+        StartCoroutine(Exit());
+    }
+
+    private IEnumerator Exit()
+    {
+        yield return StartCoroutine(_uiEvent.Invoke());
+
         SceneManager.LoadScene("StartScene");
     }
 
@@ -96,5 +113,17 @@ public class ExitDoor : MonoBehaviour, IInteractionItem
 
         player.transform.rotation = targetRotation;
 
+    }
+
+    public void ExitUIEvent(Func<IEnumerator> coroutineCallBack, bool register)
+    {
+        if (register)
+        {
+            _uiEvent += coroutineCallBack;
+        }
+        else
+        {
+            _uiEvent -= coroutineCallBack;
+        }
     }
 }
