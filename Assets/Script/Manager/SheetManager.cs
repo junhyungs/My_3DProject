@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using System.IO;
 using Newtonsoft.Json;
 using System;
+using static System.Net.WebRequestMethods;
 
 
 public class SheetManager : MonoBehaviour
@@ -28,7 +29,7 @@ public class SheetManager : MonoBehaviour
     #endregion
 
     #region Ability
-    const string _abilityPath = "https://script.google.com/macros/s/AKfycbwNnQuNy1jfiNOpvZjGQDS7zFpY3aEzKhxghg02c_5VcumV0bREp7Q7r0S8HH9R0WIJ/exec";
+    const string _abilityPath = "https://script.google.com/macros/s/AKfycbyZZJj41jfvj4ppsnwzTau66q2HS6rqTUYHbby65_IUdWa7S0MJcFmQJX3Igp_sxxj5/exec";
     #endregion
 
     #region Map
@@ -39,8 +40,18 @@ public class SheetManager : MonoBehaviour
     [Header("SaveJson")]
     [SerializeField] private bool _saveJson;
 
+    [Header("EditJson")]
+    [SerializeField] private bool _editJson;
+
     private void Awake()
     {
+        if (_editJson)
+        {
+            Debug.Log("데이터를 수정중입니다. 게임 데이터를 읽어오지 않습니다.");
+            StartCoroutine(EditJson(new string[] { "a", "bc", "def" }, new string[] { "he", "ad", "Er" }, new string[] { }, _abilityPath));
+            return;
+        }
+
         if (_saveJson)
         {
             SaveJson();
@@ -48,7 +59,7 @@ public class SheetManager : MonoBehaviour
             return;
         }
 
-        LoadJson();
+        //LoadJson();
     }
 
     private void SaveJson()
@@ -66,51 +77,51 @@ public class SheetManager : MonoBehaviour
         StartCoroutine(SaveJsonData(JsonName.Map, _mapDataPath));
     }
 
-    private void LoadJson()
-    {
-        StartCoroutine(LoadJsonData(JsonName.Monster, _monsterDataPath));
-        StartCoroutine(LoadJsonData(JsonName.Player, _playerDataPath));
-        StartCoroutine(LoadJsonData(JsonName.Boss, _bossDataPath));
-        StartCoroutine(LoadJsonData(JsonName.PlayerWeapon, _playerWeaponPath));
-        StartCoroutine(LoadJsonData(JsonName.PlayerSkill, _playerSkillPath));
-        StartCoroutine(LoadJsonData(JsonName.PrefabPath, _PrefabPath));
-        StartCoroutine(LoadJsonData(JsonName.BossProjectile, _bossProjectilePath));
-        StartCoroutine(LoadJsonData(JsonName.Dialogue, _dialoguePath));
-        StartCoroutine(LoadJsonData(JsonName.Item, _itemDataPath));
-        StartCoroutine(LoadJsonData(JsonName.Ability, _abilityPath));
-        StartCoroutine(LoadJsonData(JsonName.Map, _mapDataPath));
-    }
+    //private void LoadJson()
+    //{
+    //    StartCoroutine(LoadJsonData(JsonName.Monster, _monsterDataPath));
+    //    StartCoroutine(LoadJsonData(JsonName.Player, _playerDataPath));
+    //    StartCoroutine(LoadJsonData(JsonName.Boss, _bossDataPath));
+    //    StartCoroutine(LoadJsonData(JsonName.PlayerWeapon, _playerWeaponPath));
+    //    StartCoroutine(LoadJsonData(JsonName.PlayerSkill, _playerSkillPath));
+    //    StartCoroutine(LoadJsonData(JsonName.PrefabPath, _PrefabPath));
+    //    StartCoroutine(LoadJsonData(JsonName.BossProjectile, _bossProjectilePath));
+    //    StartCoroutine(LoadJsonData(JsonName.Dialogue, _dialoguePath));
+    //    StartCoroutine(LoadJsonData(JsonName.Item, _itemDataPath));
+    //    StartCoroutine(LoadJsonData(JsonName.Ability, _abilityPath));
+    //    StartCoroutine(LoadJsonData(JsonName.Map, _mapDataPath));
+    //}
 
-    public IEnumerator LoadJsonData(JsonName name, string url)
-    {
-        string fileName = name.ToString();
+    //public IEnumerator LoadJsonData(JsonName name, string url)
+    //{
+    //    string fileName = name.ToString();
 
-        var path = Path.Combine(Application.dataPath, $"Resources/Data/{fileName}.json");
+    //    var path = Path.Combine(Application.dataPath, $"Resources/Data/{fileName}.json");
 
-        if(File.Exists(path))
-        {
-            ReadData(fileName);
-        }
-        else
-        {
-            UnityWebRequest unityWebRequest = UnityWebRequest.Get(url);
+    //    if(File.Exists(path))
+    //    {
+    //        ReadData(fileName);
+    //    }
+    //    else
+    //    {
+    //        UnityWebRequest unityWebRequest = UnityWebRequest.Get(url);
 
-            yield return unityWebRequest.SendWebRequest();
+    //        yield return unityWebRequest.SendWebRequest();
 
-            if (unityWebRequest.result != UnityWebRequest.Result.Success)
-            {
-                Debug.Log("데이터를 가져오지 못했습니다");
-            }
-            else
-            {
-                string data = unityWebRequest.downloadHandler.text;
+    //        if (unityWebRequest.result != UnityWebRequest.Result.Success)
+    //        {
+    //            Debug.Log("데이터를 가져오지 못했습니다");
+    //        }
+    //        else
+    //        {
+    //            string data = unityWebRequest.downloadHandler.text;
 
-                File.WriteAllText(path, data);
+    //            File.WriteAllText(path, data);
 
-                ReadData(fileName);
-            }
-        }
-    }
+    //            ReadData(fileName);
+    //        }
+    //    }
+    //}
     
     public IEnumerator SaveJsonData(JsonName name, string url)
     {
@@ -139,7 +150,7 @@ public class SheetManager : MonoBehaviour
 
                 var path = Path.Combine(Application.dataPath, $"Resources/Data/{fileName}.json");
 
-                File.WriteAllText(path, data);
+                //File.WriteAllText(path, data);
 
                 ReadData(fileName);
             }
@@ -155,6 +166,26 @@ public class SheetManager : MonoBehaviour
         var jsonData = Resources.Load<TextAsset>($"Data/{fileName}");
 
         DataManager.Instance.SetData(fileName, jsonData.text);
+    }
+
+    private IEnumerator EditJson(string[] id, string[] headerName, string[] value, string url)
+    {
+        WWWForm form = new WWWForm();
+
+        for(int i = 0; i < id.Length; i++)
+        {
+            form.AddField("ID[]", id[i]);
+
+            form.AddField("HeaderName[]", headerName[i]);
+
+            form.AddField("value[]", value[i]);
+        }
+
+        using(UnityWebRequest request = UnityWebRequest.Post(url, form))
+        {
+            yield return request.SendWebRequest();
+        }
+        
     }
 
     //function doGet(e)
@@ -212,6 +243,49 @@ public class SheetManager : MonoBehaviour
     //    var jsonOut = JSON.stringify(jsonData, null, 2);
 
     //    return ContentService.createTextOutput(jsonOut).setMimeType(ContentService.MimeType.JSON);
+    //}
+
+    //function doPost(e)
+    //{
+    //    // 요청 본문에서 폼 데이터 가져오기
+    //    var idsToUpdate = e.parameters.ID; // 배열로 가져오기
+    //    var newDescriptionNames = e.parameters.DescriptionName; // 배열로 가져오기
+
+    //    // 시트1을 가져옴
+    //    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("시트1");
+
+    //    // 시트의 데이터 가져오기
+    //    var data = sheet.getDataRange().getValues();
+
+    //    // 데이터에서 헤더를 찾기
+    //    var headers = data[0];
+
+    //    // ID와 DescriptionName의 인덱스를 찾기
+    //    var idIndex = headers.indexOf("ID");
+    //    var descriptionNameIndex = headers.indexOf("DescriptionName");
+
+    //    // ID가 맞는 항목을 찾아서 DescriptionName 수정
+    //    for (var i = 0; i < idsToUpdate.length; i++)
+    //    {
+    //        var idToUpdate = idsToUpdate[i];
+    //        var newDescriptionName = newDescriptionNames[i];
+
+    //        for (var j = 1; j < data.length; j++)
+    //        { // 데이터는 1번째 인덱스부터 시작
+    //            if (data[j][idIndex] === idToUpdate)
+    //            {
+    //                data[j][descriptionNameIndex] = newDescriptionName; // DescriptionName 수정
+    //                break; // 수정 후 반복문 종료
+    //            }
+    //        }
+    //    }
+
+    //    // 수정된 데이터를 다시 시트에 기록
+    //    sheet.getRange(1, 1, data.length, headers.length).setValues(data);
+
+    //    // 응답을 생성 (상태 메시지 반환)
+    //    return ContentService.createTextOutput(JSON.stringify({ status: "success", message: "Data updated successfully."}))
+    //                     .setMimeType(ContentService.MimeType.JSON);
     //}
 
 }
