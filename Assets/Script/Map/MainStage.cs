@@ -7,10 +7,12 @@ public class MainStage : Stage
 
     [Header("StartPosition")]
     [SerializeField] private Transform _startTransform;
-    
+
+    private bool _isFirst = true;
+
     private void OnEnable()
     {
-        if(_door != null)
+        if (!_isFirst)
         {
             _door.CloseDoor();
         }
@@ -24,6 +26,8 @@ public class MainStage : Stage
 
         if(timeLine != null)
         {
+            _isFirst = false;
+
             timeLine.Play();
         }
     }
@@ -47,5 +51,4 @@ public class MainStage : Stage
     {
         base.SpawnItems();
     }
-
 }

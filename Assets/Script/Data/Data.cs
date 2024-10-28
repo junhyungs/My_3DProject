@@ -223,7 +223,7 @@ public class AbilityData : Data
 public class MapData : Data
 {
     public string ID { get; set; }
-    public string MapName { get; set; }
+    public List<string> MapName { get; set; }
     public string PrefabPath { get; set; }
     public List<string> ItemPath { get; set; }
     public List<string> SpawnMonsterList { get; set; }
@@ -232,7 +232,7 @@ public class MapData : Data
     public int SpawnCount { get; set; }
     public int EventCount { get; set; }
 
-    public MapData(string iD, string mapName, string prefabPath, List<string> itemList,
+    public MapData(string iD, List<string> mapName, string prefabPath, List<string> itemList,
         List<string> spawnMonsterList, string skyBoxPath, List<string> itemType, int spawnCount, int eventCount)
     {
         ID = iD;

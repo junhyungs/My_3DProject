@@ -9,6 +9,8 @@ public class UIManager : Singleton<UIManager>
     public static event Action<ResourceRequest> _loadingUI;
     public static event Action<bool> _deathUI;
     public static event Action<bool> _initializeUI;
+    public static event Action _onMapNameUI;
+
 
     private PlayerSkill m_currentSkill;
     private Action<PlayerSkill> SkillChangeCallBack;
@@ -27,6 +29,7 @@ public class UIManager : Singleton<UIManager>
         ObjectPool.Instance.CreatePool(ObjectName.InteractionDialogueUI, 3);
     }
 
+    #region Event
     public void OnAbilityUI()
     {
         _onAbilityUI.Invoke();
@@ -45,6 +48,11 @@ public class UIManager : Singleton<UIManager>
     public void OnInitializeImage(bool isActive)
     {
         _initializeUI.Invoke(isActive);
+    }
+
+    public void OnMapNameUI()
+    {
+        _onMapNameUI.Invoke();
     }
 
     public void RegisterExitEvent(IExitDoor exitDoor)
@@ -66,6 +74,7 @@ public class UIManager : Singleton<UIManager>
             _exitEvent.ExitUIEvent(coroutineCallBack, register);
         }
     }
+    #endregion
 
     #region Interaction
     //Interaction UI Dic

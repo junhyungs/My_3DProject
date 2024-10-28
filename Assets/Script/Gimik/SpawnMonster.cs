@@ -111,7 +111,7 @@ public class SpawnMonster : MonoBehaviour
 
         GameObject[] selectDoor = new GameObject[_doorCount];
 
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < Data.EventCount; i++)
         {
             _spawnMonsterSet.Clear();
 

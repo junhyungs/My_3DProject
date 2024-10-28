@@ -53,7 +53,7 @@ public class MapManager : Singleton<MapManager>
         ChangeMap(Map.MainStage);
     }
 
-    private MapData GetMapData(string id)
+    public MapData GetMapData(string id)
     {
         if(_dataDictionary.TryGetValue(id, out MapData data))
         {

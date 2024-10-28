@@ -69,12 +69,12 @@ public class PlayerUI : MonoBehaviour
 
     private void ImageAlpaControl(bool alpaControl)
     {
-        Action alpaAction = alpaControl ? IncreaseAlpa : DecreaseAlpa;  
+        Action alpaAction = alpaControl ? IncreaseAlpha : DecreaseAlpha;  
 
         alpaAction.Invoke();
     }
 
-    private void IncreaseAlpa()
+    private void IncreaseAlpha()
     {
         foreach(var imageAlpa in _childImageList)
         {
@@ -82,7 +82,7 @@ public class PlayerUI : MonoBehaviour
         }
     }
 
-    private void DecreaseAlpa()
+    private void DecreaseAlpha()
     {
         foreach (var imageAlpa in _childImageList)
         {

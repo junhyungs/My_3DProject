@@ -86,19 +86,17 @@ public class DataManager
             {
                 string id = ParseString(item["ID"]);
 
-                string replace = ParseString(item["MapName"]);
-
-                string mapName = replace.Replace("\\n", "\n");
+                List<string> mapName = MapList(item["MapName"]);
 
                 string prefabPath = ParseString(item["PrefabPath"]);
 
-                List<string> itemPath = MapItem(item["ItemPath"]);
+                List<string> itemPath = MapItemList(item["ItemPath"]);
 
-                List<string> spawnMonsterList = MapMonsterList(item["SpawnMonsterList"]);
+                List<string> spawnMonsterList = MapList(item["SpawnMonsterList"]);
 
                 string skyBoxPath = ParseString(item["SkyBoxPath"]);
 
-                List<string> itemType = MapItem(item["ItemType"]);
+                List<string> itemType = MapItemList(item["ItemType"]);
 
                 int spawnCount = ParseInt(item["SpawnCount"]);
 
@@ -118,7 +116,7 @@ public class DataManager
         }
     }
 
-    private List<string> MapItem(JToken jtoken)
+    private List<string> MapItemList(JToken jtoken)
     {
         string value = jtoken.ToString();
 
@@ -136,7 +134,7 @@ public class DataManager
         return stringList;
     }
 
-    private List<string> MapMonsterList(JToken jtoken)
+    private List<string> MapList(JToken jtoken)
     {
         string value = jtoken.ToString();
 

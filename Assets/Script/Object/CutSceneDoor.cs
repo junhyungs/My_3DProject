@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -26,6 +27,7 @@ public class CutSceneDoor : MonoBehaviour, IInteractionItem
     private HashSet<string> _playerTrack;
     private PlayableDirector _director;
     private GameObject _player;
+    private WaitForSeconds _nameWait = new WaitForSeconds(1f);
 
     private Vector3 _uiPosition = new Vector3(1.8f, 2f, 0f);
     
@@ -37,9 +39,31 @@ public class CutSceneDoor : MonoBehaviour, IInteractionItem
         }
     }
 
+    private void OnEnable()
+    {
+        _director.stopped += DirectorStoppped;
+    }
+
+    private void OnDisable()
+    {
+        _director.stopped -= DirectorStoppped;
+    }
+
     public void InteractionItem()
     {
         OpenDoor();
+    }
+
+    private void DirectorStoppped(PlayableDirector director)
+    {
+        StartCoroutine(OnMapName());
+    }
+
+    private IEnumerator OnMapName()
+    {
+        yield return _nameWait;
+
+        UIManager.Instance.OnMapNameUI();
     }
 
     private void OpenDoor()
