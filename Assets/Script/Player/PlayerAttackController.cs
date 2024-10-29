@@ -327,23 +327,30 @@ public class PlayerAttackController : MonoBehaviour
         switch (m_skillController.SkillType)
         {
             case PlayerSkill.Bow:
-                SkillManager.Instance.Cost(PlayerSkill.Bow);
-                m_skillController.UseSkill(m_arrowPositionObject);
+                IsSkill(PlayerSkill.Bow, m_arrowPositionObject);
                 break;
             case PlayerSkill.FireBall:
-                SkillManager.Instance.Cost(PlayerSkill.FireBall);
-                m_skillController.UseSkill(m_firePositionObject);
+                IsSkill(PlayerSkill.FireBall, m_firePositionObject);
                 break;
             case PlayerSkill.Hook:
-                m_skillController.UseSkill(m_hookPositionObject);
+                IsSkill(PlayerSkill.Hook, m_hookPositionObject);
                 OnSkill(PlayerSkill.Hook);
                 break;
             case PlayerSkill.Bomb:
-                SkillManager.Instance.Cost(PlayerSkill.Bomb);
-                m_skillController.UseSkill(m_bombPositionObject);
+                IsSkill(PlayerSkill.Bomb, m_bombPositionObject);
                 break;
         }
 
+    }
+
+    private void IsSkill(PlayerSkill skillType, GameObject positionObject)
+    {
+        bool isSkillUsable = SkillManager.Instance.Cost(skillType);
+
+        if(isSkillUsable)
+        {
+            m_skillController.UseSkill(positionObject);
+        }
     }
 
     //AnimationEvent

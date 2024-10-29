@@ -64,8 +64,6 @@ public class ForestMother : MonoBehaviour, IDamged
     {
         Property.CurrentHP -= damage;
 
-        SkillManager.Instance.SkillCount++;
-
         if (Property.CurrentHP > 0)
         {
             StartCoroutine(IntensityChange(2f, 3f));

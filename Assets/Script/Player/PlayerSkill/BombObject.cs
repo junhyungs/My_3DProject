@@ -58,8 +58,10 @@ public class BombObject : ProjectileObject
 
         m_projectileRigidbody.velocity = Vector3.zero;
 
-        GameObject explosionParticle = gameObject.transform.GetChild(1).gameObject;
+        GameObject bombParticle = gameObject.transform.GetChild(0).gameObject;
+        bombParticle.SetActive(false);
 
+        GameObject explosionParticle = gameObject.transform.GetChild(1).gameObject;
         explosionParticle.SetActive(true);
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, m_range, LayerMask.GetMask("Monster"));

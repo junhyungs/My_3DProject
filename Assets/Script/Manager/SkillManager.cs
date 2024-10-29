@@ -28,7 +28,7 @@ public class SkillManager : Singleton<SkillManager>
         get { return m_skillCount; }
         set
         {
-            if (m_skillCount >= 4)
+            if (value > 4)
             {
                 return;
             }
@@ -38,22 +38,6 @@ public class SkillManager : Singleton<SkillManager>
             UIManager.Instance.RequestChangeSkillCount(m_skillCount);
         }
     }
-
-    //public void Cost(PlayerSkill skill)
-    //{
-    //    if(m_skillCount <= 0)
-    //    {
-    //        return;
-    //    }
-
-    //    Skill currentSkill = _skillDictionary[skill];
-
-    //    int cost = currentSkill.GetSkillData().Cost;
-
-    //    m_skillCount -= cost;
-
-    //    UIManager.Instance.RequestChangeSkillCount(m_skillCount);
-    //}
 
     public bool Cost(PlayerSkill skillName)
     {
@@ -72,7 +56,7 @@ public class SkillManager : Singleton<SkillManager>
 
             if(calculate >= 0)
             {
-                m_skillCount = calculate;
+                m_skillCount -= cost;
 
                 UIManager.Instance.RequestChangeSkillCount(m_skillCount);
 

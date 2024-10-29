@@ -19,8 +19,6 @@ public class Bomb : Skill
         bomb.transform.localRotation = spawnPositionObj.transform.localRotation;
 
         bombParticle.SetActive(true);
-        ParticleSystem bombParticleSystem = bombParticle.GetComponent<ParticleSystem>();
-        bombParticleSystem.Play();
     }
 
     public override void Fire(GameObject spawnPositionObj, bool isFire)
