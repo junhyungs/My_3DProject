@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public class Sword : Weapon
@@ -71,6 +72,16 @@ public class Sword : Weapon
         if(hitSwitch != null)
         {
             hitSwitch.SwitchEvent();
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        if(_boxPosition != Vector3.zero)
+        {
+            Gizmos.DrawWireCube(_boxPosition, _weaponData.NormalAttackRange);
         }
     }
 

@@ -7,53 +7,81 @@ public class PlayerSkillController : MonoBehaviour
     [Header("SkillObject")]
     [SerializeField] private GameObject[] SkillObject;
 
+    private Animator m_skillAnimation;
+
     private ISkill m_currentSkill;
     private PlayerSkill _currentSkillType;
-    private Animator m_skillAnimation;
 
     public PlayerSkill SkillType => _currentSkillType;
 
     private void Awake()
     {
-        OnDisableSkillObject();
+        m_skillAnimation = gameObject.GetComponent<Animator>();
+
+        OnAwakeSkillObject();
+    }
+
+    private void OnAwakeSkillObject()
+    {
+        foreach (var skillObject in SkillObject)
+        {
+            if (skillObject != null)
+            {
+                skillObject.SetActive(false);
+            }
+        }
     }
 
     private void Start()
     {
-        InitializeSkillController();
+        Initialize();
     }
 
-    private void InitializeSkillController()
+    private void Initialize()
     {
-        m_skillAnimation = gameObject.GetComponent<Animator>();
+        SetSkill(PlayerSkill.Bow);
 
-        SkillManager.Instance.AddSkill(PlayerSkill.Bow);
-        SkillManager.Instance.AddSkill(PlayerSkill.FireBall);
-        SkillManager.Instance.AddSkill(PlayerSkill.Bomb);
-        SkillManager.Instance.AddSkill(PlayerSkill.Hook);
-
-        SetSkill(_currentSkillType);
+        ObjectPool.Instance.CreatePool(ObjectName.PlayerHook, 1);
+        ObjectPool.Instance.CreatePool(ObjectName.PlayerSegment);
+        ObjectPool.Instance.CreatePool(ObjectName.PlayerArrow);
+        ObjectPool.Instance.CreatePool(ObjectName.PlayerBomb);
+        ObjectPool.Instance.CreatePool(ObjectName.PlayerFireBall);
+        ObjectPool.Instance.CreatePool(ObjectName.HitEffect);
     }
 
     public void SetSkill(PlayerSkill skillType)
     {
-        if(SkillManager.Instance.HasSkill(skillType))
-        {
-            Debug.Log("스킬이 없음. 변경불가");
-            return;
-        }
-
         _currentSkillType = skillType;
 
-        m_currentSkill = null;
+        if(m_currentSkill != null)
+        {
+            m_currentSkill = null;
+        }
 
         Skill newSkill = SkillManager.Instance.GetSkill(skillType);
 
-        m_currentSkill = newSkill;
+        if(newSkill == null)
+        {
+            StartCoroutine(GetSkill(skillType));
+        }
+        else
+        {
+            m_currentSkill = newSkill;
+        }
 
         UIManager.Instance.RequestChangeSkill(_currentSkillType);
+    }
 
-        SkillManager.Instance.SetCurretSkill(skillType);
+    private IEnumerator GetSkill(PlayerSkill skillType)
+    {
+        yield return new WaitUntil(() =>
+        {
+            return SkillManager.Instance.GetSkill(skillType) != null;
+        });
+
+        var skill = SkillManager.Instance.GetSkill(skillType);
+
+        m_currentSkill = skill;
     }
 
     public void CurrentSkillAnimation(bool isPressed)
@@ -90,11 +118,5 @@ public class PlayerSkillController : MonoBehaviour
         m_currentSkill.UseSkill(FirePosition);
     }
 
-    private void OnDisableSkillObject()
-    {
-        foreach(var skillObj in SkillObject)
-        {
-            skillObj.SetActive(false);
-        }
-    }
+    
 }

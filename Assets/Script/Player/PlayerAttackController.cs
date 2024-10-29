@@ -324,9 +324,6 @@ public class PlayerAttackController : MonoBehaviour
     //AnimationEvent
     public void UseSkillAttack()
     {
-        if (SkillManager.Instance.SkillCount <= 0 && m_skillController.SkillType != PlayerSkill.Hook)
-            return;
-
         switch (m_skillController.SkillType)
         {
             case PlayerSkill.Bow:

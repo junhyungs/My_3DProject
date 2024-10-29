@@ -26,10 +26,10 @@ public class WeaponManager : Singleton<WeaponManager>
     {
         yield return new WaitWhile(() =>
         {
-            Debug.Log("무기 데이터를 가져오지 못했습니다");
             return DataManager.Instance.GetData(Id) == null;
         });
 
+        Debug.Log("무기 데이터를 가져왔습니다.");
         var weaponData = DataManager.Instance.GetData(Id) as PlayerWeaponData;
 
         weaponComponent.SetWeaponData(weaponData);

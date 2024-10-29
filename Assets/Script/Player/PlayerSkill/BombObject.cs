@@ -29,8 +29,6 @@ public class BombObject : ProjectileObject
         if(isFire)
         {
             Invoke(nameof(ReturnBomb), 4f);
-
-            m_projectileRigidbody.useGravity = true;
         }
     }
 
