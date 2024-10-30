@@ -25,11 +25,6 @@ public class Ghoul_BT : BehaviourMonster, IDamged, IDisableArrow
     public bool IsReturn { get; set; }
     public bool IsDead { get; set; }
 
-    private void Awake()
-    {
-        EventManager.Instance.RegisterDisableGhoulArrow(this);
-    }
-
     protected override void Start()
     {
         ObjectPool.Instance.CreatePool(ObjectName.GhoulArrow, 50);

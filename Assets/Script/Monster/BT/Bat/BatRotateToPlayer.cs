@@ -22,6 +22,11 @@ public class BatRotateToPlayer : INode
 
         Vector3 rotateDirection = (playerTransform.position - _bat.transform.position).normalized;
 
+        if(rotateDirection == Vector3.zero)
+        {
+            return INode.State.Success;
+        }
+
         rotateDirection.y = 0f;
 
         _angle = Vector3.Angle(_bat.transform.forward, rotateDirection);

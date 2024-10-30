@@ -41,7 +41,7 @@ public class BatBehaviour : BehaviourMonster, IDamged
         base.Start();
         StartCoroutine(LoadMonsterData("M101"));
         SetMaterial();
-
+        
         _monsterType = ObjectName.Bat;        
     }
 

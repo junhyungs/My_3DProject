@@ -22,39 +22,42 @@ public class GhoulMoveToPlayer : INode
 
     public INode.State Evaluate()
     {
-        if(!_ghoul.CheckPlayer)
-        {
-            return INode.State.Fail;
-        }
-
-        _animator.SetBool("TraceWalk", true);
-
-        if (_ghoul.IsReturn)
-        {
-            _agent.stoppingDistance = 0f;
-
-            _agent.SetDestination(_startPosition);
-
-            if(_agent.remainingDistance <= _agent.stoppingDistance)
-            {
-                _agent.SetDestination(_ghoul.transform.position);
-
-                _ghoul.CheckPlayer = false;
-
-                _animator.SetBool("TraceWalk", false);
-
-                _ghoul.IsReturn = false;
-
-                return INode.State.Success;
-            }
-
-            return INode.State.Running;
-        }
-
-        Transform playerTransform = _ghoul.PlayerObject.transform;
-
-        _agent.SetDestination(playerTransform.position);
+        _agent.SetDestination(_ghoul.Destination);
 
         return INode.State.Running;
+        //if(!_ghoul.CheckPlayer)
+        //{
+        //    return INode.State.Fail;
+        //}
+
+        //_animator.SetBool("TraceWalk", true);
+
+        //if (_ghoul.IsReturn)
+        //{
+        //    _agent.stoppingDistance = 0f;
+
+        //    _agent.SetDestination(_startPosition);
+
+        //    if(_agent.remainingDistance <= _agent.stoppingDistance)
+        //    {
+        //        _agent.SetDestination(_ghoul.transform.position);
+
+        //        _ghoul.CheckPlayer = false;
+
+        //        _animator.SetBool("TraceWalk", false);
+
+        //        _ghoul.IsReturn = false;
+
+        //        return INode.State.Success;
+        //    }
+
+        //    return INode.State.Running;
+        //}
+
+        //Transform playerTransform = _ghoul.PlayerObject.transform;
+
+        //_agent.SetDestination(playerTransform.position);
+
+        //return INode.State.Running;
     }
 }

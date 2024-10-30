@@ -10,11 +10,6 @@ public class GhoulArrow : MonoBehaviour
     private bool isFire;
     private SphereCollider m_collider;
 
-    private void Awake()
-    {
-        EventManager.Instance.AddEvent_DisableGhoulArrowEvent(ReturnArrow);
-    }
-
     private void OnEnable()
     {
         m_collider = GetComponent<SphereCollider>();
@@ -61,7 +56,7 @@ public class GhoulArrow : MonoBehaviour
         }
     }
 
-    private void ReturnArrow()
+    public void ReturnArrow()
     {
         ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.GhoulArrow);
     }

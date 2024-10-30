@@ -23,8 +23,10 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     [Header("Material")]
     [SerializeField] private Material _originalMaterial;
 
-    
+    private float _slimeObjectDistance = 3f;
+
     #region Property
+    public bool Last { get; set; }
     public GameObject PlayerObject { get; set; }
     public BT_MonsterData Data => _data;
     public bool Spawn => _isSpawn;
@@ -37,6 +39,16 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     protected override void OnEnable()
     {
         base.OnEnable();
+
+        Last = false;
+    }
+
+    private void OnDisable()
+    {
+        if (Last)
+        {
+            Destroy(gameObject);
+        }
     }
 
     protected override void Start()
@@ -103,7 +115,30 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
 
         if(_currentHp <= 0)
         {
-            Die(_soulPosition);
+            if (Last)
+            {
+                Die(_soulPosition);
+
+                return;
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                GameObject slime = Instantiate(gameObject);
+
+                slime.transform.localScale = new Vector3(transform.localScale.x / 2,
+                    transform.localScale.y /2, transform.localScale.z / 2);
+
+                slime.transform.position = transform.position;
+
+                SlimeBehaviour slimeBehaviour = slime.GetComponent<SlimeBehaviour>();
+
+                slimeBehaviour.Last = true;
+
+                slimeBehaviour._currentHp /= 2f;
+            }
+
+            this.gameObject.SetActive(false);
         }
         else
         {
@@ -114,6 +149,7 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     public void OnUpdateAttackObject()
     {
         float rotation = 0f;
+        float objectDistance = Last ? _slimeObjectDistance / 2 : _slimeObjectDistance;
 
         for (int i = 0; i < _objectArray.Length; i++)
         {
@@ -123,7 +159,8 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
 
             if(objectComponent != null)
             {
-                objectComponent.SetRotationValue(rotation);
+
+                objectComponent.SetRotationValue(rotation, objectDistance);
 
                 objectComponent.SetDamage(_currentPower);
             }

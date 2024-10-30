@@ -18,10 +18,6 @@ public class Ghoul : Monster, IDisableArrow
     [Header("SoulPosition")]
     [SerializeField] private GameObject m_DropSoulPosition;
 
-    private void OnEnable()
-    {
-        EventManager.Instance.RegisterDisableGhoulArrow(this);
-    }
 
     protected override void Start()
     {

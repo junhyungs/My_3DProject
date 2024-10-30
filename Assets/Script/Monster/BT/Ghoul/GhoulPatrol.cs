@@ -128,6 +128,7 @@ public class GhoulPatrol : INode
             return false;
         }
     }
+
     private bool AgentPath(Vector3 hitPosition)
     {
         _agent.CalculatePath(hitPosition, _agentPath);
@@ -156,6 +157,7 @@ public class GhoulPatrol : INode
             }
         }
 
+        _ghoul.SetList(randomPositionList);
         return randomPositionList;
     }
 

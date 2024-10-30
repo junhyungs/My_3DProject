@@ -4,17 +4,7 @@ using UnityEngine;
 
 public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
 {
-    /*
-                                      [Selector] 
-
-                    
-                       [Selector]                   [Selector]
-
-        [Sequence]               move        checkplayer,  patrol
-
- canAttack, rotation, attack
-
-     */
+  
 
     private Action _disableHandler;
 
@@ -31,16 +21,11 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
 
     public GameObject PlayerObject { get; set; }
     public BT_MonsterData Data => _data;
+    public Vector3 Destination { get; set; }
     public bool Spawn => _isSpawn;
     public bool CheckPlayer { get; set; }
     public bool IsAttack { get; set; } = false;
     public bool IsReturn { get; set; }
-
-
-    private void Awake()
-    {
-        EventManager.Instance.RegisterDisableGhoulArrow(this);
-    }
 
     protected override void OnEnable()
     {
@@ -67,16 +52,19 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
 
     protected override INode SetBehaviourTree()
     {
+        
         INode node = new SelectorNode(new List<INode>
         {
-            new SelectorNode(new List<INode>()
+            new SequenceNode(new List<INode>()
             {
-                new SequenceNode(new List<INode>
-                {
-                    new GhoulCanAttack(this),
-                    new GhoulRotateToPlayer(this),
-                    new GhoulAttack(this)
-                }),
+                new GhoulCanAttack(this),
+                new GhoulRotateToPlayer(this),
+                new GhoulAttack(this)
+            }),
+
+            new SequenceNode(new List<INode>()
+            {
+                new GhoulIsMove(this),
                 new GhoulMoveToPlayer(this),
             }),
 
@@ -124,8 +112,9 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
     public void Arrow()
     {
         GameObject arrow = ObjectPool.Instance.DequeueObject(ObjectName.GhoulArrow);
-
         GhoulArrow arrowComponent = arrow.GetComponent<GhoulArrow>();
+
+        _disableHandler = arrowComponent.ReturnArrow;
         arrowComponent.IsFire(false);
         arrowComponent.SetAttackPower(_currentPower);
         arrow.transform.SetParent(_fireTransform);
@@ -149,6 +138,9 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
     private Vector3 _girdCenter;
     private float _gridSize;
 
+    private List<Vector3> testList;
+    private Bounds _myBounds;
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
@@ -164,6 +156,16 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
 
             Gizmos.DrawWireCube(_girdCenter, gridSize);
         }
+
+        if(testList != null)
+        {
+            foreach(var position in testList)
+            {
+                Gizmos.color = Color.blue;
+
+                Gizmos.DrawWireSphere(position, 0.5f);
+            }
+        }
     }
 
     public void SetBounds(Bounds bounds)
@@ -176,5 +178,15 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
     {
         _girdCenter = center;
         _gridSize = size;
+    }
+
+    public void SetList(List<Vector3> list)
+    {
+        testList = list;
+    }
+
+    public void SetMyBounds(Bounds bounds)
+    {
+        _myBounds = bounds;
     }
 }
