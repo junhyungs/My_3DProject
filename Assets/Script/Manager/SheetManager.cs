@@ -90,8 +90,8 @@ public class SheetManager : MonoBehaviour
     {
         string fileName = name.ToString();
 
-        var path = Path.Combine(Application.dataPath, $"Resources/Data/{fileName}.json");
-
+        //var path = Path.Combine(Application.dataPath, $"Resources/Data/{fileName}.json");
+        var path = Path.Combine(Application.persistentDataPath, $"{fileName}.json");
         if (File.Exists(path))
         {
             ReadData(fileName);
