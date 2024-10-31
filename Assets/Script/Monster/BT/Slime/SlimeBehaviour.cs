@@ -23,8 +23,6 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     [Header("Material")]
     [SerializeField] private Material _originalMaterial;
 
-    private float _slimeObjectDistance = 3f;
-
     #region Property
     public bool Last { get; set; }
     public GameObject PlayerObject { get; set; }
@@ -115,30 +113,7 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
 
         if(_currentHp <= 0)
         {
-            if (Last)
-            {
-                Die(_soulPosition);
-
-                return;
-            }
-
-            for (int i = 0; i < 2; i++)
-            {
-                GameObject slime = Instantiate(gameObject);
-
-                slime.transform.localScale = new Vector3(transform.localScale.x / 2,
-                    transform.localScale.y /2, transform.localScale.z / 2);
-
-                slime.transform.position = transform.position;
-
-                SlimeBehaviour slimeBehaviour = slime.GetComponent<SlimeBehaviour>();
-
-                slimeBehaviour.Last = true;
-
-                slimeBehaviour._currentHp /= 2f;
-            }
-
-            this.gameObject.SetActive(false);
+            Die(_soulPosition);
         }
         else
         {
@@ -149,7 +124,6 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     public void OnUpdateAttackObject()
     {
         float rotation = 0f;
-        float objectDistance = Last ? _slimeObjectDistance / 2 : _slimeObjectDistance;
 
         for (int i = 0; i < _objectArray.Length; i++)
         {
@@ -160,7 +134,7 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
             if(objectComponent != null)
             {
 
-                objectComponent.SetRotationValue(rotation, objectDistance);
+                objectComponent.SetRotationValue(rotation);
 
                 objectComponent.SetDamage(_currentPower);
             }

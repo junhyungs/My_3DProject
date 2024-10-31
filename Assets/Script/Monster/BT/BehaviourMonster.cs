@@ -150,10 +150,9 @@ public class BehaviourMonster : MonoBehaviour
 
         if (isDead)
         {
-            _agent.enabled = false;
-            //_agent.velocity = Vector3.zero;
+            _agent.velocity = Vector3.zero;
 
-            //_agent.ResetPath();
+            _agent.ResetPath();
         }
     }
 

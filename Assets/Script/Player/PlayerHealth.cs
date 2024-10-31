@@ -17,12 +17,6 @@ public class PlayerHealth : MonoBehaviour, IDamged
         _player = GetComponent<Player>();   
     }
 
-    public void SetHealthData(int hp)
-    {
-        m_playerHp = hp;
-        UIManager.Instance.TriggerEvent(MVVM.Health_Event, m_playerHp);
-    }
-
     public int PlayerHP
     {
         get { return m_playerHp; }

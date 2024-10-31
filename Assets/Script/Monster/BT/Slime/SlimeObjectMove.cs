@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SlimeObjectMove : MonoBehaviour
 {
-    private float _maxDistance;
+    private float _maxDistance = 3f;
     [Header("Speed")]
     [SerializeField] private float _moveSpeed = 10f;
     private float _currentDistance;
@@ -24,10 +24,8 @@ public class SlimeObjectMove : MonoBehaviour
         ObjectMove();
     }
 
-    public void SetRotationValue(float y, float maxDistance)
+    public void SetRotationValue(float y)
     {
-        _maxDistance = maxDistance;
-
         _y = y;
 
         Quaternion rotation = Quaternion.Euler(90f, _y, 0f);

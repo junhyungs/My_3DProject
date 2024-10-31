@@ -46,7 +46,7 @@ public class Player : MonoBehaviour
 
         var data = DataManager.Instance.GetData(id) as PlayerData;
 
-        _healthComponent.SetHealthData(data.Health);
+        _healthComponent.PlayerHP = data.Health;
         _moveController.SetMoveData(data.Speed, data.RollSpeed, data.LadderSpeed,
             data.SpeedChangeValue, data.SpeedOffSet, data.Gravity);
 
