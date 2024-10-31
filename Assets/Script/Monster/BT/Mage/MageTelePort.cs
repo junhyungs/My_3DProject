@@ -89,7 +89,7 @@ public class MageTelePort : INode
 
         _mage.Animator.SetBool("TelePort_In", true);
 
-        float elapsedTime = 0f;
+        float elapsedTime = 0f; //경과시간
 
         while (elapsedTime < _maxTime)
         {

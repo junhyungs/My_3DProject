@@ -200,13 +200,13 @@ public class InventoryManager : Singleton<InventoryManager>
     public void SetSoulCount(int soulCount)
     {
         m_soulCount += soulCount;
-        RequestChangeSoulValue(m_soulCount);
+        UIManager.Instance.TriggerEvent(MVVM.Soul_Event, m_soulCount);
     }
 
     public void SetHealthCount(int healthCount)
     {
         m_HealthCount += healthCount;
-        RequestChangeHealthValue(m_HealthCount);
+        UIManager.Instance.TriggerEvent(MVVM.HealthItem_Event, m_HealthCount);
     }
 
     public bool UseHealthItem()
@@ -214,8 +214,8 @@ public class InventoryManager : Singleton<InventoryManager>
         if (m_HealthCount != 0)
         {
             m_HealthCount--;
-            
-            RequestChangeHealthValue(m_HealthCount);
+
+            UIManager.Instance.TriggerEvent(MVVM.HealthItem_Event, m_HealthCount);
 
             return true;
         }

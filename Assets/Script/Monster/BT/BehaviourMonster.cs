@@ -139,7 +139,7 @@ public class BehaviourMonster : MonoBehaviour
         StartCoroutine(FireShader(5f, 0.5f, -0.3f));
     }
 
-    private void NavMeshAgentControl(bool isDead)
+    public void NavMeshAgentControl(bool isDead)
     {
         if(_agent == null)
         {
@@ -150,9 +150,10 @@ public class BehaviourMonster : MonoBehaviour
 
         if (isDead)
         {
-            _agent.velocity = Vector3.zero;
+            _agent.enabled = false;
+            //_agent.velocity = Vector3.zero;
 
-            _agent.ResetPath();
+            //_agent.ResetPath();
         }
     }
 

@@ -8,6 +8,15 @@ public enum MonsterType
     Deku,
     Ghoul
 }
+public enum MVVM
+{
+    Health_Event,
+    Soul_Event,
+    HealthItem_Event,
+    CurrentSkill_Event,
+    SkillCount_Event
+}
+
 public enum Map
 {
     MainStage,

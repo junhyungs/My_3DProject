@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +7,10 @@ public class PlayerHpIcon : MonoBehaviour
 {
     [Header("PlayerHPIcon")]
     [SerializeField] private List<Image> HpIconList = new List<Image>();
+
+    [Header("Key")]
+    [SerializeField] private MVVM _keyName;
+    
 
     PlayerHpViewModel m_hpView;
 
@@ -22,7 +24,7 @@ public class PlayerHpIcon : MonoBehaviour
 
             m_hpView.PropertyChanged += PlayerHpIconChanged;
 
-            m_hpView.RegisterChangeHpEventOnEnable();
+            m_hpView.RegisterChangeHpEventOnEnable(_keyName);
         }
     }
 

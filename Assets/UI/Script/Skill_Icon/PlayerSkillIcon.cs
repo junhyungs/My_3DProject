@@ -1,7 +1,5 @@
-
 using System.Collections.Generic;
 using System.ComponentModel;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,13 +20,13 @@ public class PlayerSkillIcon : MonoBehaviour
     [Header("SkillCountIcon")]
     [SerializeField] private List<GameObject> EnableSkillCount_IconList = new List<GameObject>();
 
+    [Header("CurrentSkill")]
+    [SerializeField] private MVVM _currentSkill;
+    [Header("SkillCount")]
+    [SerializeField] private MVVM _skillCount;
+
     PlayerSkillViewModel m_SkillView;
-
-    private PlayerSkill m_currentSkill;
-    private int m_currentSkillCount;
-
     private Dictionary<PlayerSkill, Image> Skill_IconDic = new Dictionary<PlayerSkill, Image>();
-    
 
     private void OnEnable()
     {
@@ -40,7 +38,7 @@ public class PlayerSkillIcon : MonoBehaviour
 
             m_SkillView.PropertyChanged += OnSkill_IconColorChanged;
 
-            m_SkillView.RegisterChangeSkillEventOnEnable();
+            m_SkillView.RegisterChangeSkillIcon_EventOnEnable(_currentSkill, _skillCount);
 
             initIconDic();
         }
@@ -60,12 +58,10 @@ public class PlayerSkillIcon : MonoBehaviour
         switch(arg.PropertyName)
         {
             case nameof(m_SkillView.CurrentSkill):
-                m_currentSkill = m_SkillView.CurrentSkill;
-                IconColorChanged(m_currentSkill);
+                IconColorChanged(m_SkillView.CurrentSkill);
                 break;
             case nameof(m_SkillView.CurrentSkillCount):
-                m_currentSkillCount = m_SkillView.CurrentSkillCount;
-                ChangeSkillCountIcon(m_currentSkillCount);
+                ChangeSkillCountIcon(m_SkillView.CurrentSkillCount);
                 break;
         }
     }

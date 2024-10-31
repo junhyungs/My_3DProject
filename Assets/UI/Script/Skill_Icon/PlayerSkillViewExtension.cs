@@ -1,29 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public static class PlayerSkillViewExtension
 {
-
-    public static void RegisterChangeSkillEventOnEnable(this PlayerSkillViewModel skillvm)
+    public static void RegisterChangeSkillIcon_EventOnEnable(this PlayerSkillViewModel viewModel,
+        MVVM skillKeyName, MVVM skillCountKeyName)
     {
-        UIManager.Instance.RegisterChangeSkillCallBack(skillvm.OnResponseChangeSkill);
-        UIManager.Instance.RegisterChangeSkillCountCallBack(skillvm.OnResponseChangeSkillCount);
+        UIManager.Instance.RegisterUIManager<PlayerSkill>(skillKeyName, viewModel.OnResponseChangeSkill);
+        UIManager.Instance.RegisterUIManager<int>(skillCountKeyName, viewModel.OnResponseChangeSkillCount);
     }
 
-    public static void UnRegisterChangeSkillEventOnDisable(this PlayerSkillViewModel skillvm)
+    public static void UnRegisterChangeSkillIcon_EventOnDisable(this PlayerSkillViewModel viewModel,
+         MVVM skillKeyName, MVVM skillCountKeyName)
     {
-        UIManager.Instance.UnRegisterChangeSkillCallBack(skillvm.OnResponseChangeSkill);
-        UIManager.Instance.UnRegisterChangeSkillCountCallBack(skillvm.OnResponseChangeSkillCount);
+        UIManager.Instance.UnRegisterUIManager<PlayerSkill>(skillKeyName, viewModel.OnResponseChangeSkill);
+        UIManager.Instance.UnRegisterUIManager<int>(skillCountKeyName, viewModel.OnResponseChangeSkillCount);
     }
 
-    public static void OnResponseChangeSkill(this PlayerSkillViewModel skillvm, PlayerSkill skill)
+    public static void OnResponseChangeSkill(this PlayerSkillViewModel viewModel, PlayerSkill currentSkill)
     {
-        skillvm.CurrentSkill = skill;
+        viewModel.CurrentSkill = currentSkill;
     }
 
-    public static void OnResponseChangeSkillCount(this  PlayerSkillViewModel skillvm, int skillCount)
+    public static void OnResponseChangeSkillCount(this PlayerSkillViewModel viewModel, int skillCount)
     {
-        skillvm.CurrentSkillCount = skillCount;
+        viewModel.CurrentSkillCount = skillCount;
     }
 }

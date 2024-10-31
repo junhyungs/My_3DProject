@@ -1,17 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public static class PlayerHpViewExtension
 {
-    public static void RegisterChangeHpEventOnEnable(this PlayerHpViewModel hpvm)
+    public static void RegisterChangeHpEventOnEnable(this PlayerHpViewModel hpvm, MVVM keyName)
     {
-        UIManager.Instance.RegisterChangeHpCallBack(hpvm.OnResponseChangeHp);
+        UIManager.Instance.RegisterUIManager<int>(keyName, hpvm.OnResponseChangeHp);
     }
     
-    public static void UnRegisterChangeHpEventOnDisable(this PlayerHpViewModel hpvm)
+    public static void UnRegisterChangeHpEventOnDisable(this PlayerHpViewModel hpvm, MVVM keyName)
     {
-        UIManager.Instance.UnRegisterChangeHpCallBack(hpvm.OnResponseChangeHp);
+        UIManager.Instance.UnRegisterUIManager<int>(keyName, hpvm.OnResponseChangeHp);
     }
 
     public static void OnResponseChangeHp(this PlayerHpViewModel hpvm, int Hp)

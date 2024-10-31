@@ -1,7 +1,4 @@
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations.Rigging;
@@ -155,7 +152,7 @@ public class Mother_Hyper : Mother, IMotherPattern
 
         Vector3 rayPosition = _mother.transform.position + new Vector3(0f, 0.5f, 0f);
 
-        RaycastHit[] hits = Physics.RaycastAll(rayPosition, rayDirection, 50f, LayerMask.GetMask("Wall"));
+        RaycastHit[] hits = Physics.RaycastAll(rayPosition, rayDirection, 80f, LayerMask.GetMask("Wall"));
 
         if(hits.Length > 0)
         {

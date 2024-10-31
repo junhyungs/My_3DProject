@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +10,11 @@ public class Item_Icon : MonoBehaviour
     [Header("HealthText")]
     [SerializeField] private Text HealthValueText;
 
+    [Header("SoulKey")]
+    [SerializeField] private MVVM _soulKey;
+    [Header("HealthItemKey")]
+    [SerializeField] private MVVM _healthItemKey;
+
     ItemViewModel m_ItemView;
 
     private void OnEnable()
@@ -22,7 +25,7 @@ public class Item_Icon : MonoBehaviour
 
             m_ItemView.PropertyChanged += OnItem_TextValueChange;
 
-            m_ItemView.RegisterChangeValueEventOnEnable();
+            m_ItemView.RegisterChangeItem_EventOnEnable(_soulKey, _healthItemKey);
         }
     }
 

@@ -69,7 +69,7 @@ public class PlayerSkillController : MonoBehaviour
             m_currentSkill = newSkill;
         }
 
-        UIManager.Instance.RequestChangeSkill(_currentSkillType);
+        UIManager.Instance.TriggerEvent(MVVM.CurrentSkill_Event, _currentSkillType);
     }
 
     private IEnumerator GetSkill(PlayerSkill skillType)

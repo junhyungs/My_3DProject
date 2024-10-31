@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour, IDamged
@@ -22,7 +20,7 @@ public class PlayerHealth : MonoBehaviour, IDamged
     public void SetHealthData(int hp)
     {
         m_playerHp = hp;
-        UIManager.Instance.RequestChangeHp(m_playerHp);
+        UIManager.Instance.TriggerEvent(MVVM.Health_Event, m_playerHp);
     }
 
     public int PlayerHP
@@ -31,7 +29,7 @@ public class PlayerHealth : MonoBehaviour, IDamged
         set
         {
             m_playerHp = value;
-            UIManager.Instance.RequestChangeHp(m_playerHp);
+            UIManager.Instance.TriggerEvent(MVVM.Health_Event, m_playerHp);
         }
     }
 
@@ -39,7 +37,7 @@ public class PlayerHealth : MonoBehaviour, IDamged
     {
         m_playerHp -= (int)damage;
 
-        UIManager.Instance.RequestChangeHp(m_playerHp);
+        UIManager.Instance.TriggerEvent(MVVM.Health_Event, m_playerHp);
 
         m_hitAnimator.SetTrigger("Hit");
         
@@ -62,7 +60,7 @@ public class PlayerHealth : MonoBehaviour, IDamged
         {
             m_playerHp -= 1;
 
-            UIManager.Instance.RequestChangeHp(m_playerHp);
+            UIManager.Instance.TriggerEvent(MVVM.Health_Event, m_playerHp);
 
             if (m_playerHp <= 0)
             {

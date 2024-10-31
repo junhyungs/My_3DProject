@@ -1,29 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public static class ItemViewModelExtension
 {
-    public static void RegisterChangeValueEventOnEnable(this ItemViewModel itemVm)
+    public static void RegisterChangeItem_EventOnEnable(this ItemViewModel viewModel,
+       MVVM soulKeyName, MVVM healthKeyName)
     {
-        InventoryManager.Instance.RegisterChangeSoulValueCallBack(itemVm.OnResponseChangeSoul);
-        InventoryManager.Instance.RegisterChangeHealthValueCallBack(itemVm.OnResponeseChangeHealth);
+        UIManager.Instance.RegisterUIManager<int>(soulKeyName, viewModel.OnResponseChangeSoul);
+        UIManager.Instance.RegisterUIManager<int>(healthKeyName, viewModel.OnResponseChangeHealthItem);
     }
 
-    public static void UnRegisterChangeValueEventOnDisable(this ItemViewModel itemVm)
+    public static void UnRegisterChangeItem_EventOnDisable(this ItemViewModel viewModel,
+        MVVM soulKeyName, MVVM healthKeyName)
     {
-        InventoryManager.Instance.UnRegisterChangeSoulValueCallBack(itemVm.OnResponseChangeSoul);
-        InventoryManager.Instance.UnRegisterChangeHealthValueCallBack(itemVm.OnResponeseChangeHealth);
+        UIManager.Instance.UnRegisterUIManager<int>(soulKeyName, viewModel.OnResponseChangeSoul);
+        UIManager.Instance.UnRegisterUIManager<int>(healthKeyName, viewModel.OnResponseChangeHealthItem);
     }
 
-    public static void OnResponseChangeSoul(this ItemViewModel itemVm, int value)
+    public static void OnResponseChangeSoul(this ItemViewModel viewModel, int value)
     {
-        itemVm.SoulCount = value;
+        viewModel.SoulCount = value;
     }
 
-    public static void OnResponeseChangeHealth(this ItemViewModel itemVm, int value)
+    public static void OnResponseChangeHealthItem(this ItemViewModel viewModel, int value)
     {
-        itemVm.HealthCount = value;
+        viewModel.HealthCount = value;
     }
 
 }

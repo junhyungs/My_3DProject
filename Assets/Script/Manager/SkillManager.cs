@@ -35,13 +35,13 @@ public class SkillManager : Singleton<SkillManager>
 
             m_skillCount = value;
 
-            UIManager.Instance.RequestChangeSkillCount(m_skillCount);
+            UIManager.Instance.TriggerEvent(MVVM.SkillCount_Event, m_skillCount);
         }
     }
 
     public bool Cost(PlayerSkill skillName)
     {
-        if(m_skillCount <= 0)
+        if(m_skillCount <= 0 && !(skillName is PlayerSkill.Hook))
         {
             return false;
         }
@@ -58,7 +58,7 @@ public class SkillManager : Singleton<SkillManager>
             {
                 m_skillCount -= cost;
 
-                UIManager.Instance.RequestChangeSkillCount(m_skillCount);
+                UIManager.Instance.TriggerEvent(MVVM.SkillCount_Event, m_skillCount);
 
                 return true;
             }

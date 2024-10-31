@@ -82,7 +82,7 @@ public class HookObject : ProjectileObject, IHookPosition
             ReturnHook();
         }
 
-        if(other.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        if(other.gameObject.layer == LayerMask.NameToLayer("Monster") && isFire)
         {
             IDamged hit = other.gameObject.GetComponent<IDamged>();
 
@@ -99,6 +99,7 @@ public class HookObject : ProjectileObject, IHookPosition
         
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
+
             if (!isFire)
             {
                 _hookEventHandler.Invoke(transform.position, false);
@@ -109,7 +110,7 @@ public class HookObject : ProjectileObject, IHookPosition
             {
                 ReturnHook();
             }
-            
+
         }
     }
 

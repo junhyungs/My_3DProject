@@ -11,11 +11,7 @@ public class UIManager : Singleton<UIManager>
     public static event Action<bool> _initializeUI;
     public static event Action _onMapNameUI;
 
-
-    private PlayerSkill m_currentSkill;
-    private Action<PlayerSkill> SkillChangeCallBack;
-    private Action<int> PlayerSkillCountCallBack;
-    private Action<int> PlayerHpIconChangeCallBack;
+    private Dictionary<MVVM, Delegate> _playerUIEvent = new Dictionary<MVVM, Delegate>();
     private Func<IEnumerator> _globalExitDoorFunc;
     private IExitDoor _exitEvent;
 
@@ -137,54 +133,29 @@ public class UIManager : Singleton<UIManager>
     }
     #endregion
 
-    #region MVVM_HP
-    public void RequestChangeHp(int hp)
+    #region MVVM
+    public void RegisterUIManager<T>(MVVM key, Action<T> callBack)
     {
-        PlayerHpIconChangeCallBack?.Invoke(hp);
+        if (!_playerUIEvent.ContainsKey(key))
+        {
+            _playerUIEvent.Add(key, callBack);
+        }
     }
 
-    public void RegisterChangeHpCallBack(Action<int> hpCallBack)
+    public void UnRegisterUIManager<T>(MVVM key, Action<T> callBack)
     {
-        PlayerHpIconChangeCallBack += hpCallBack;
+        if (_playerUIEvent.ContainsKey(key))
+        {
+            _playerUIEvent[key] = Delegate.Remove(_playerUIEvent[key], callBack);
+        }
     }
 
-    public void UnRegisterChangeHpCallBack(Action<int> hpCallBack)
+    public void TriggerEvent<T>(MVVM key, T value)
     {
-        PlayerHpIconChangeCallBack -= hpCallBack;
-    }
-    #endregion
-
-    #region MVVM_Skill
-    public void RequestChangeSkill(PlayerSkill changeSkill)
-    {
-        m_currentSkill = changeSkill;
-
-        SkillChangeCallBack?.Invoke(m_currentSkill);
-    }
-
-    public void RequestChangeSkillCount(int skillCount)
-    {
-        PlayerSkillCountCallBack?.Invoke(skillCount);
-    }
-
-    public void RegisterChangeSkillCountCallBack(Action<int> skillCountCallBack)
-    {
-        PlayerSkillCountCallBack += skillCountCallBack;
-    }
-
-    public void UnRegisterChangeSkillCountCallBack(Action<int> skillCountCallBack)
-    {
-        PlayerSkillCountCallBack -= skillCountCallBack;
-    }
-
-    public void RegisterChangeSkillCallBack(Action<PlayerSkill> skillChangeCallBack)
-    {
-        SkillChangeCallBack += skillChangeCallBack;
-    }
-
-    public void UnRegisterChangeSkillCallBack(Action<PlayerSkill> skillChangeCallBack)
-    {
-        SkillChangeCallBack -= skillChangeCallBack;
+        if(_playerUIEvent.TryGetValue(key, out Delegate callBack))
+        {
+            (callBack as Action<T>)?.Invoke(value);
+        }
     }
     #endregion
 }
