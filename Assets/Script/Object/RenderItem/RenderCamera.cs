@@ -22,7 +22,7 @@ public class RenderCamera : MonoBehaviour
     private Dictionary<TrinketItemType, GameObject> _trinketDictionary;
     private Dictionary<PlayerWeapon, GameObject> _weaponDictionary;
 
-    private void Start()
+    private void Awake()
     {
         InitializeCamera();
     }

@@ -584,12 +584,6 @@ MonoBehaviour:
   - {fileID: 3771085493428566431}
   - {fileID: 2090505917750454870}
   - {fileID: 8380227711525042051}
-  _slotArray:
-  - {fileID: 6799747502609669100}
-  - {fileID: 1275712120364516981}
-  - {fileID: 95258013337108977}
-  - {fileID: 5706015612539870252}
-  - {fileID: 6224149648683578452}
   _descriptionText: {fileID: 2901138096885691825}
   _descriptionName: {fileID: 5247231351173033472}
   _abilitieText:
@@ -5142,7 +5136,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &1255865438301329590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16146,7 +16140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _triggerAction: {fileID: 5015789032983892840, guid: 4d75fe2eab914a44bb008548bc585fe3, type: 3}
-  _buttonComponent:
+  _buttonComponents:
   - {fileID: 2474232273842722773}
   - {fileID: 903649346167644646}
   - {fileID: 2805627122285538297}

@@ -20,7 +20,6 @@ public class MouseDelta : MonoBehaviour
 
     private void OnEnable()
     {
-        CurserState(false);
         ChangeBottomText(true);
 
         _backAction.action.Enable();
@@ -32,7 +31,6 @@ public class MouseDelta : MonoBehaviour
 
     private void OnDisable()
     {
-        CurserState(true);
         ChangeBottomText(false);
 
         _backAction.action.performed -= BackAction; 
@@ -50,11 +48,6 @@ public class MouseDelta : MonoBehaviour
 
             _controlPanel.SetActive(true);  
         }
-    }
-
-    private void CurserState(bool isLock)
-    {
-        Cursor.lockState = isLock ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
     private void ChangeBottomText(bool chage)

@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,39 +14,41 @@ public class WeaponSlot : MonoBehaviour, IWeaponCameraEvent
     [SerializeField] private PlayerWeapon _weaponType;
 
     private Action<PlayerWeapon, bool> _weaponAction;
-
-    private bool _onSlot = false;
-
     private Texture2D _texture2D;
 
     public ItemData Data { get; set; }
     public PlayerWeaponData WeaponData {get;set; }
+    public bool OnSlot { get; set; }
+    public PlayerWeapon Type => _weaponType;
 
-    public PlayerWeapon Type
+    private void Awake()
     {
-        get { return _weaponType; }
+        Button button = gameObject.GetComponent<Button>();
+
+        button.onClick.AddListener(OnClickChangedWeapon);
     }
 
-    public bool OnSlot
+    public void OnClickChangedWeapon()
     {
-        get { return _onSlot; }
-        set
+        if(Data == null)
         {
-            if (!_rawImage.enabled)
-            {
-                InventoryManager.Instance.RegisterWeaponEvent(this);
-
-                _rawImage.enabled = true;
-
-                CaptureImage();
-
-                InvokeEvent(false);
-            }
-
-            _onSlot = value;
+            return;
         }
+
+        WeaponManager.Instance.ChangeWeapon(_weaponType);
     }
 
+    public void InitializeWeaponSlot()
+    {
+        InventoryManager.Instance.RegisterWeaponEvent(this);
+
+        _rawImage.enabled = true;
+
+        CaptureImage();
+
+        InvokeEvent(false);
+    }
+    
     public void WeaponCameraEvent(Action<PlayerWeapon, bool> callBack, bool isAdd)
     {
         if (isAdd)

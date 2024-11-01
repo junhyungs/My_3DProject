@@ -130,20 +130,6 @@ public class DialogueManager : Singleton<DialogueManager>
     }
     #endregion
 
-    #region Banker
-    public IEnumerator StartBankerDialogue(NPC npc, DialogueOrder order)
-    {
-        string id = npc.ToString();
-
-        OnActorName(id);
-
-        List<string> dialogueList = GetList(id, order);
-
-        yield return StartCoroutine(ReadDialogue(dialogueList));
-    }
-
-    #endregion
-
     #region TimeLine
     public IEnumerator StartTimeLineDialogue(NPC npc, DialogueOrder order, PlayableDirector timeLine)
     {

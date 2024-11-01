@@ -26,11 +26,11 @@ public class Banker : _NPC, IInteractionDialogue
 
     protected override IEnumerator StartDialogue(DialogueOrder order)
     {
-        yield return StartCoroutine(DialogueManager.Instance.StartBankerDialogue(_npcName, order));
+        UIManager.Instance.HideItemInteractionUI(transform, ObjectName.InteractionDialogueUI);
+
+        yield return StartCoroutine(DialogueManager.Instance.StartNormalNPC_Dialogue(_npcName, order));
 
         UIManager.Instance.OnAbilityUI();
-
-        UIManager.Instance.HideItemInteractionUI(transform, ObjectName.InteractionDialogueUI);
     }
 
     private void OnTriggerEnter(Collider other)

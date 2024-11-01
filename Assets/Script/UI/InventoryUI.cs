@@ -21,53 +21,46 @@ public class InventoryUI : MonoBehaviour
     {
         _cancelAction.action.Enable();
 
-        _cancelAction.action.performed += OnCancel;
+        _cancelAction.action.performed += OnCancelInventoryUI;
     }
 
     private void OnDisable()
     {
-        _cancelAction.action.performed -= OnCancel;
+        _cancelAction.action.performed -= OnCancelInventoryUI;
 
         _cancelAction.action.Disable();
     }
 
-    private void OnCancel(InputAction.CallbackContext context)
+    private void OnCancelInventoryUI(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (_inventoryPanel.activeSelf)
         {
-            Action enableAction = _inventoryPanel.activeSelf ? OnDisableInventoryUI : OnEnableInventoryUI;
-
-            enableAction.Invoke();
+            InventroyUI(false);
+        }
+        else
+        {
+            InventroyUI(true);
         }
     }
 
-    private void OnEnableInventoryUI()
+    private void InventroyUI(bool active)
     {
-        GameManager.Instance.PlayerLock(true);
+        GameManager.Instance.PlayerLock(active);
 
-        _inventoryPanel.SetActive(true);
+        _inventoryPanel.SetActive(active);
 
-        _playerUI.MovePlayerUI(true);
-    }
-
-    private void OnDisableInventoryUI()
-    {
-        GameManager.Instance.PlayerLock(false);
-
-        _inventoryPanel.SetActive(false);
-
-        _playerUI.MovePlayerUI(false);
+        _playerUI.MovePlayerUI(active);
     }
 
     public void ActionControl(bool control)
     {
         if (control)
         {
-            _cancelAction.action.performed -= OnCancel;
+            _cancelAction.action.performed -= OnCancelInventoryUI;
 
             return;
         }
 
-        _cancelAction.action.performed += OnCancel; 
+        _cancelAction.action.performed += OnCancelInventoryUI; 
     }
 }

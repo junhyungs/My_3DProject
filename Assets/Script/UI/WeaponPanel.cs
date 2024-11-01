@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -25,9 +23,6 @@ public class WeaponPanel : MonoBehaviour
     [Header("ButtonObject")]
     [SerializeField] private GameObject[] _buttonObject;
 
-    [Header("Slot")]
-    [SerializeField] private WeaponSlot[] _slotArray;
-
     [Header("Description")]
     [SerializeField] private TextMeshProUGUI _descriptionText;
 
@@ -38,16 +33,15 @@ public class WeaponPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] _abilitieText;
 
     private Dictionary<GameObject, WeaponSlot> _slotDictionary;
-
     private WeaponSlot _currentSlot;
 
-    private void Awake()
+    private void OnInitializeWeaponPanel()
     {
-        OnAwakeWeaponPanel();
-    }
+        if(_slotDictionary != null)
+        {
+            return;
+        }
 
-    private void OnAwakeWeaponPanel()
-    {
         _slotDictionary = new Dictionary<GameObject, WeaponSlot>();
 
         for(int i = 0; i < _buttonObject.Length; i++)
@@ -67,6 +61,8 @@ public class WeaponPanel : MonoBehaviour
 
     private void OnEnableWeaponPanel()
     {
+        OnInitializeWeaponPanel();
+
         PerformedAction(true);
 
         EventSystem.current.SetSelectedGameObject(_buttonObject[0]);
@@ -109,17 +105,17 @@ public class WeaponPanel : MonoBehaviour
     //인벤토리 매니저에서 비활성화 상태일 때 호출.
     public void SetWeaponType(PlayerWeapon weapon, ItemData data, PlayerWeaponData weaponData)
     {
-        for(int i = 0; i < _slotArray.Length; i++)
+        OnInitializeWeaponPanel();
+
+        foreach (var slot in _slotDictionary.Values)
         {
-            if (_slotArray[i].Type == weapon && !_slotArray[i].OnSlot)
+            if(slot.Type == weapon)
             {
-                _slotArray[i].OnSlot = true;
+                slot.InitializeWeaponSlot();
 
-                _slotArray[i].Data = data;
+                slot.Data = data;
 
-                _slotArray[i].WeaponData = weaponData;  
-
-                return;
+                slot.WeaponData = weaponData;
             }
         }
     }
@@ -130,20 +126,34 @@ public class WeaponPanel : MonoBehaviour
         
         var slotComponent = GetWeaponSlot(selectObject);
 
-        if (!slotComponent.OnSlot)
+        if (slotComponent.Data == null)
         {
             return;
         }
 
+        OnDescription(slotComponent);
+
+        OnAbilityDescription(slotComponent);
+
         slotComponent.LiveImage();
 
-        var data = slotComponent.Data;
+        slotComponent.InvokeEvent(true);
+
+        _currentSlot = slotComponent;
+    }
+
+    private void OnDescription(WeaponSlot slot)
+    {
+        var data = slot.Data;
 
         _descriptionText.text = data.Description;
 
         _descriptionName.text = data.ItemName;
+    }
 
-        var weaponData = slotComponent.WeaponData;
+    private void OnAbilityDescription(WeaponSlot slot)
+    {
+        var weaponData = slot.WeaponData;
 
         _abilitieText[(int)AbilitieType.Damage].text = weaponData.Power.ToString() + "X";
 
@@ -151,11 +161,7 @@ public class WeaponPanel : MonoBehaviour
 
         _abilitieText[(int)AbilitieType.Critical].text = weaponData.ChargePower.ToString() + "X";
 
-        _abilitieText[(int)AbilitieType.Speed].text = 1f.ToString() + "X";    
-
-        _currentSlot = slotComponent;
-
-        slotComponent.InvokeEvent(true);
+        _abilitieText[(int)AbilitieType.Speed].text = 1f.ToString() + "X";
     }
 
     private WeaponSlot GetWeaponSlot(GameObject selectObject)
@@ -190,16 +196,6 @@ public class WeaponPanel : MonoBehaviour
     private void SetActiveChildImage(InputAction.CallbackContext context)
     {
         var selectObject = EventSystem.current.currentSelectedGameObject;
-
-        if (Keyboard.current.enterKey.wasPressedThisFrame)
-        {
-            var slot = GetWeaponSlot(selectObject);
-
-            if (slot.OnSlot)
-            {
-                WeaponManager.Instance.ChangeWeapon(slot.Type);
-            }
-        }
 
         RefreshDescription(selectObject);
     }

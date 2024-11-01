@@ -2,14 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class InventoryManager : Singleton<InventoryManager>
 {
     #region MVVM
-    private Action<int> PlayerSoulItemCallBack;
-    private Action<int> PlayerHealthItemCallBack;
-
     private int m_soulCount;
     private int m_HealthCount;
     #endregion
@@ -17,63 +13,29 @@ public class InventoryManager : Singleton<InventoryManager>
     #region Event
     private Action<TrinketItemType, bool> _globalTrinketAction;
     private Action<PlayerWeapon, bool> _globalWeaponAction;
-
     private List<ITrinketCameraEvent> _trinketEventList = new List<ITrinketCameraEvent>();
     private List<IWeaponCameraEvent> _weaponEventList = new List<IWeaponCameraEvent>();
-
     private InventoryUI _inventoryUI;
     #endregion
 
     #region Data
     private Dictionary<string, ItemData> _baseDictionary;
-    private Dictionary<PlayerWeapon, ItemData> _weaponDictionary;
-    private Dictionary<TrinketItemType, ItemData> _trinketDictionary;
-
     private HashSet<ItemType> _itemTypeSet;
-
     private TrinketPanel _trinketPanel;
     private WeaponPanel _weaponPanel;
     #endregion
 
     #region Property
-    public Dictionary<PlayerWeapon, ItemData> WeaponDictionary
-    {
-        get
-        {
-            if(_weaponDictionary == null)
-            {
-                _weaponDictionary = new Dictionary<PlayerWeapon, ItemData>();
-            }
-
-            return _weaponDictionary;
-        }
-    }
-
-    public Dictionary<TrinketItemType, ItemData> TrinketDictionary
-    {
-        get
-        {
-            if(_trinketDictionary == null)
-            {
-                _trinketDictionary = new Dictionary<TrinketItemType, ItemData>();
-            }
-
-            return _trinketDictionary;  
-        }
-    }
-
-    public Dictionary<string, ItemData> DataDictionary
-    {
-        get { return _baseDictionary; }
-    }
-
-    public HashSet<ItemType> ItemSet
-    {
-        get { return _itemTypeSet; }
-    }
+    public Dictionary<string, ItemData> DataDictionary => _baseDictionary;
+    public HashSet<ItemType> ItemSet => _itemTypeSet;
     #endregion
 
     private void Awake()
+    {
+        OnAwakeInventroyManager();
+    }
+
+    private void OnAwakeInventroyManager()
     {
         _itemTypeSet = new HashSet<ItemType>();
         _trinketPanel = transform.GetComponentInChildren<TrinketPanel>(true);
@@ -83,10 +45,10 @@ public class InventoryManager : Singleton<InventoryManager>
 
     private void Start()
     {
-        StartCoroutine(LoadItemData());
+        StartCoroutine(LoadBaseData());
     }
 
-    private IEnumerator LoadItemData()
+    private IEnumerator LoadBaseData()
     {
         _baseDictionary = new Dictionary<string, ItemData>();
 
@@ -106,6 +68,19 @@ public class InventoryManager : Singleton<InventoryManager>
             var data = DataManager.Instance.GetData(id) as ItemData;
 
             _baseDictionary.Add(id, data);
+        }
+
+        var swordData = DataManager.Instance.GetData("W101") as PlayerWeaponData;
+
+        if(swordData != null)
+        {
+            var itemData = _baseDictionary["Sword"];
+
+            _globalWeaponAction.Invoke(PlayerWeapon.Sword, true);
+
+            yield return new WaitForEndOfFrame();
+
+            SetWeapon(PlayerWeapon.Sword, ItemType.Sword, itemData, swordData);
         }
     }
 
@@ -192,8 +167,6 @@ public class InventoryManager : Singleton<InventoryManager>
 
         _itemTypeSet.Add(type);
 
-        TrinketDictionary.Add(item, data);
-
         _trinketPanel.SetTrinketType(item, data);
     }
 
@@ -224,57 +197,4 @@ public class InventoryManager : Singleton<InventoryManager>
             return false;
         }
     }
-
-    public bool UseSoul(int value)
-    {
-        if (m_soulCount == 0)
-            return false;
-
-        int currentSoul = m_soulCount;
-
-        int afterUseSoul = currentSoul - value;
-
-        if (afterUseSoul >= 0)
-        {
-            m_soulCount = afterUseSoul;
-
-            return true;
-        }
-        else
-            return false;
-    }
-
-    #region MVVM
-    //Soul
-    public void RequestChangeSoulValue(int value)
-    {
-        PlayerSoulItemCallBack?.Invoke(value);
-    }
-
-    public void RegisterChangeSoulValueCallBack(Action<int> valueCallBack)
-    {
-        PlayerSoulItemCallBack += valueCallBack;
-    }
-
-    public void UnRegisterChangeSoulValueCallBack(Action<int> valueCallBack)
-    {
-        PlayerSoulItemCallBack -= valueCallBack;
-    }
-
-    //Health
-    public void RequestChangeHealthValue(int value)
-    {
-        PlayerHealthItemCallBack?.Invoke(value);
-    }
-
-    public void RegisterChangeHealthValueCallBack(Action<int> valueCallBack)
-    {
-        PlayerHealthItemCallBack += valueCallBack;
-    }
-
-    public void UnRegisterChangeHealthValueCallBack(Action<int> valueCallBack)
-    {
-        PlayerHealthItemCallBack -= valueCallBack;
-    }
-    #endregion
 }

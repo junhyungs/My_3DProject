@@ -26,6 +26,8 @@ public class PhoneBooth : _NPC, IInteractionDialogue
 
     protected override IEnumerator StartDialogue(DialogueOrder order)
     {
+        UIManager.Instance.HideItemInteractionUI(transform, ObjectName.InteractionDialogueUI);
+
         yield return StartCoroutine(DialogueManager.Instance.StartNormalNPC_Dialogue(_npcName, order));
 
         GameManager.Instance.PlayerLock(false);

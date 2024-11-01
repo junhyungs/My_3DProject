@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,10 +7,10 @@ public class InventoryPanel : MonoBehaviour
     [SerializeField] private InputActionReference _triggerAction;
 
     [Header("TriggerButtonComponent")]
-    [SerializeField] private List<TriggerButton> _buttonComponent;
+    [SerializeField] private TriggerButton[] _buttonComponents;
 
     [Header("Panels")]
-    [SerializeField] private List<GameObject> _panels;
+    [SerializeField] private GameObject[] _panels;
 
     private int _buttonIndex = 0;
 
@@ -21,18 +20,32 @@ public class InventoryPanel : MonoBehaviour
 
         _buttonIndex = 0;
 
-        _buttonComponent[_buttonIndex].OnEnableUI();
-        
-        _triggerAction.action.Enable();
+        _buttonComponents[_buttonIndex].OnEnableUI();
 
-        _triggerAction.action.performed += SelectOnButton;
-
-        Time.timeScale = 0;
+        PerformedAction(true);
     }
 
     private void OnDisable()
     {
-        Time.timeScale = 1;
+        PerformedAction(false);
+    }
+
+    private void PerformedAction(bool onEnable)
+    {
+        if (onEnable)
+        {
+            _triggerAction.action.Enable();
+
+            _triggerAction.action.performed += SelectOnButton;
+
+            Time.timeScale = 0f;
+
+            return;
+        }
+
+        _triggerAction.action.performed -= SelectOnButton;
+
+        Time.timeScale = 1f;
     }
 
     private void DisableUI()
@@ -47,7 +60,7 @@ public class InventoryPanel : MonoBehaviour
 
     private void TriggerButtonDisableUI()
     {
-        foreach(var buttonComponent in  _buttonComponent)
+        foreach(var buttonComponent in _buttonComponents)
         {
             buttonComponent.OnDisableUI();
         }
@@ -65,10 +78,10 @@ public class InventoryPanel : MonoBehaviour
 
                 if(_buttonIndex < 0)
                 {
-                    _buttonIndex = _buttonComponent.Count - 1;
+                    _buttonIndex = _buttonComponents.Length - 1;
                 }
 
-                _buttonComponent[_buttonIndex].OnEnableUI();
+                _buttonComponents[_buttonIndex].OnEnableUI();
             }
             else if (Keyboard.current.xKey.wasPressedThisFrame)
             {
@@ -76,12 +89,12 @@ public class InventoryPanel : MonoBehaviour
 
                 _buttonIndex++;
 
-                if (_buttonIndex >= _buttonComponent.Count)
+                if (_buttonIndex >= _buttonComponents.Length)
                 {
                     _buttonIndex = 0;
                 }
 
-                _buttonComponent[_buttonIndex].OnEnableUI();
+                _buttonComponents[_buttonIndex].OnEnableUI();
             }
         }
     }
