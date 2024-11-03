@@ -1,3 +1,4 @@
+using System.Data;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -17,18 +18,17 @@ public class MotherAim : MonoBehaviour
 
         if (player != null)
         {
-            _multiAimConstraintData = _multiAimConstraint.data;
+            var data = _multiAimConstraint.data;
 
-            WeightedTransform weightedTransform = new WeightedTransform();
-            weightedTransform.transform = player.transform;
-            weightedTransform.weight = 1f;
+            var sources = data.sourceObjects;
 
-            var sources = _multiAimConstraintData.sourceObjects;
-            sources.Add(weightedTransform);
+            sources.Clear();
 
-            _multiAimConstraintData.sourceObjects = sources;
+            sources.Add(new WeightedTransform(player.transform, 1f));
 
-            _multiAimConstraint.data = _multiAimConstraintData;
+            data.sourceObjects = sources;
+
+            _multiAimConstraint.data = data;
         }
     }
 }

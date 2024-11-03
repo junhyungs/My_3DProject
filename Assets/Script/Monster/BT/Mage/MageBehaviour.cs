@@ -87,6 +87,21 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
         return node;
     }
 
+    private void OnDrawGizmos()
+    {
+        if(_teleportPosition != Vector3.zero)
+        {
+            Gizmos.color = Color.yellow;
+
+            Gizmos.DrawWireSphere(_teleportPosition, 0.5f);
+        }
+    }
+    private Vector3 _teleportPosition;
+    public void SetTeleportPosition(Vector3 position)
+    {
+        _teleportPosition = position;
+    }
+
     private void SetMaterial()
     {
         _copyMaterial = Instantiate(_originalMaterial);

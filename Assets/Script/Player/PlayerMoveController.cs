@@ -80,19 +80,12 @@ public class PlayerMoveController : MonoBehaviour
 
     void Update()
     {
-        
         if (!isLadder)
         {
             CheckGround();
             Gravity();
             PlayerMove();
         }
-
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            OnLadder();
-        }
-
     }
 
     public void SetMoveData(float walkSpeed, float rollSpeed, float ladderSpeed, float speedChangeValue,
@@ -290,7 +283,7 @@ public class PlayerMoveController : MonoBehaviour
     }
 
 
-    private void OnLadder()
+    public void OnLadder()
     {
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y + 0.4f, transform.position.z);
 
@@ -300,6 +293,13 @@ public class PlayerMoveController : MonoBehaviour
         {
             if (checkcoll.gameObject.layer == LayerMask.NameToLayer("Ladder"))
             {
+                IInteractionItem interactionItem = checkcoll.gameObject.GetComponent<IInteractionItem>();
+
+                if (interactionItem != null)
+                {
+                    interactionItem.InteractionItem();
+                }
+
                 transform.SetParent(checkcoll.gameObject.transform);
                 transform.localPosition = Vector3.zero;
                 transform.rotation = checkcoll.transform.rotation;

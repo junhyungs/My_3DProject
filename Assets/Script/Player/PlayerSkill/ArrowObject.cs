@@ -46,21 +46,9 @@ public class ArrowObject : ProjectileObject
             }
         }
 
-        if(other.gameObject.layer == LayerMask.NameToLayer("HitSwitch"))
-        {
-            HitSwitch hitSwitch = other.gameObject.GetComponent<HitSwitch>();
-
-            if(hitSwitch != null)
-            {
-                hitSwitch.SwitchEvent();
-            }
-
-            ReturnArrow();
-        }
-
         Stove stove = other.gameObject.GetComponent<Stove>();
 
-        if(stove == null)
+        if (stove == null)
         {
             return;
         }
@@ -69,7 +57,7 @@ public class ArrowObject : ProjectileObject
         {
             IBurningObject burningObject = stove.GetComponent<IBurningObject>();
 
-            if(burningObject != null)
+            if (burningObject != null)
             {
                 burningObject.OnBurning(true);
             }
@@ -79,6 +67,16 @@ public class ArrowObject : ProjectileObject
             bool burning = stove.IsBurning;
 
             OnFireParticle(burning);
+        }
+
+        if (other.gameObject.layer == LayerMask.NameToLayer("HitSwitch"))
+        {
+            HitSwitch hitSwitch = other.gameObject.GetComponent<HitSwitch>();
+
+            if(hitSwitch != null)
+            {
+                hitSwitch.SwitchEvent();
+            }
         }
     }
 

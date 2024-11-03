@@ -63,6 +63,10 @@ public class Player : MonoBehaviour
         {
             OnInteractionDialogue();
         }
+        else if (Input.GetKeyDown(KeyCode.F))
+        {
+            _moveController.OnLadder();
+        }
     }
 
     private void CreateShadowPlayer()

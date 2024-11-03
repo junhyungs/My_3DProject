@@ -74,7 +74,7 @@ public class MageTelePort : INode
         if(NavMesh.SamplePosition(teleportPosition, out hit, _teleportDistance, NavMesh.AllAreas))
         {
             _mage.Agent.Warp(hit.position);
-
+            _mage.SetTeleportPosition(hit.position);
             Vector3 rotateDirection = (playerTransform.position - _mage.transform.position).normalized;
 
             rotateDirection.y = 0f;
