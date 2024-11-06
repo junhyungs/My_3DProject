@@ -34,7 +34,7 @@ public class PlayerMoveController : MonoBehaviour
     //Roll
     private bool isRoll = false;
     //RollSpeed
-    private float m_rollSpeed;
+    public float m_rollSpeed { get; set; }
     //Ladder
     private bool isLadder;
     private float m_radderSpeed;
@@ -108,34 +108,9 @@ public class PlayerMoveController : MonoBehaviour
 
         bool isPressed = input.isPressed;
 
-        if (isPressed && !isRoll)
+        if (isPressed)
         {
             m_playerAnimator.SetBool("isRoll", true);
-        }
-    }
-
-    public void StartRoll()
-    {
-        isAction = false;
-        StartCoroutine(Roll());
-    }
-
-    public void StopRoll()
-    {
-        isRoll = false;
-        isAction = true;
-    }
-
-    private IEnumerator Roll()
-    {
-        m_playerAnimator.SetBool("isRoll", false);
-        isRoll = true;
-        
-        while (isRoll)
-        {
-            Vector3 rollPos = (transform.forward).normalized * m_rollSpeed * Time.deltaTime;
-            m_playerController.Move(rollPos);
-            yield return null;
         }
     }
     //EndRoll---------------------------------------------------------------------------------------------------------------
