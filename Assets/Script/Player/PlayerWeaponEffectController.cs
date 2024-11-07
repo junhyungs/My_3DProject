@@ -22,7 +22,7 @@ public class PlayerWeaponEffectController : MonoBehaviour
 
     private void Awake()
     {
-        OnInitializeOnAwake();
+        InitializeOnAwake();
     }
 
     private void Start()
@@ -30,7 +30,7 @@ public class PlayerWeaponEffectController : MonoBehaviour
         InitializeOnStart();
     }
 
-    private void OnInitializeOnAwake()
+    private void InitializeOnAwake()
     {
         InitializeMaterial();
 
@@ -118,7 +118,7 @@ public class PlayerWeaponEffectController : MonoBehaviour
         {
             List<Vector3> rangeList = _rangeDictionary[currentWeapon];
 
-            Vector3 range = isCharge ? rangeList[(int)Range.Charge] : rangeList[(int)Range.Charge];
+            Vector3 range = isCharge ? rangeList[(int)Range.Charge] : rangeList[(int)Range.Normal];
 
             return range;
         }

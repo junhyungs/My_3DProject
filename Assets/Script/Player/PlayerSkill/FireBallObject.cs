@@ -10,6 +10,11 @@ public class FireBallObject : ProjectileObject
         base.Awake();
     }
 
+    private void OnEnable()
+    {
+        m_piercingPower = 5;
+    }
+
     public override void IsFire(bool fire)
     {
         isFire = fire;
@@ -32,40 +37,56 @@ public class FireBallObject : ProjectileObject
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Monster"))
+        Piercing(other);
+        HitMonster(other);
+        HitSwitch(other);
+        HitBurningObject(other);
+    }
+
+    private void Piercing(Collider other)
+    {
+        if(m_piercingPower <= 0 || other.gameObject.layer == LayerMask.NameToLayer("Wall"))
+        {
+            ReturnFireBall();
+        }
+    }
+
+    private void HitMonster(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
             IDamged hit = other.gameObject.GetComponent<IDamged>();
 
-            if(hit != null)
+            if (hit != null)
             {
                 hit.TakeDamage(m_atk);
 
                 m_piercingPower--;
             }
         }
+    }
 
-        if(other.gameObject.layer == LayerMask.NameToLayer("HitSwitch"))
+    private void HitSwitch(Collider other)
+    {
+        IHitSwitch hitSwitch = other.gameObject.GetComponent<IHitSwitch>();
+
+        if (hitSwitch != null)
         {
-            HitSwitch hitSwitch = other.gameObject.GetComponent<HitSwitch>();
+            hitSwitch.OnHitSwitch();
+        }
+    }
 
-            if(hitSwitch != null)
+    private void HitBurningObject(Collider other)
+    {
+        if(other.gameObject.layer == LayerMask.NameToLayer("BurningObject"))
+        {
+            IBurningObject burningObject = other.gameObject.GetComponent<IBurningObject>();
+
+            if(burningObject != null)
             {
-                hitSwitch.SwitchEvent();
+                burningObject.OnBurning();
             }
         }
-
-        IBurningObject burning = other.gameObject.GetComponent<IBurningObject>();
-
-        if(burning != null)
-        {
-            burning.OnBurning(isBurning);
-        }
-
-        if(m_piercingPower <= 0 || other.gameObject.layer == LayerMask.NameToLayer("Wall"))
-        {
-            ReturnFireBall();
-        }
-
     }
 
     private void ReturnFireBall()

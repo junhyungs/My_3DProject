@@ -69,11 +69,11 @@ public class Umbrella : Weapon
             }
         }
 
-        HitSwitch hitSwitch = other.gameObject.GetComponent<HitSwitch>();
+        IHitSwitch hitSwitch = other.gameObject.GetComponent<IHitSwitch>();
 
         if (hitSwitch != null)
         {
-            hitSwitch.SwitchEvent();
+            hitSwitch.OnHitSwitch();
         }
     }
 }

@@ -50,7 +50,7 @@ public class MapManager : Singleton<MapManager>
 
         UIManager.Instance.OnInitializeImage(false);
 
-        ChangeMap(Map.BossStage);
+        ChangeMap(Map.MainStage);
     }
 
     public MapData GetMapData(string id)

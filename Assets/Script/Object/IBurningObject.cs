@@ -4,5 +4,6 @@ using UnityEngine;
 
 public interface IBurningObject
 {
-    public void OnBurning(bool isBurning);
+    public void OnBurning();
+    public bool IsBurning();
 }

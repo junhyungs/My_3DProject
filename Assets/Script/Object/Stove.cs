@@ -2,35 +2,41 @@ using UnityEngine;
 
 public class Stove : MonoBehaviour, IBurningObject
 {
-    [Header("FireParticle")]
-    [SerializeField] private GameObject m_BigfireParticleObject;
+    [Header("BurningParticle")]
+    [SerializeField] private ParticleSystem _burningParticle;
 
     [Header("OnFire")]
-    [SerializeField] private bool isBurning;
-
-    public bool IsBurning
-    {
-        get { return isBurning; }
-    }
+    [SerializeField] private bool _isBurning;
 
     private void Start()
     {
-        if (isBurning)
+        if (_isBurning)
         {
-            m_BigfireParticleObject.SetActive(true);
+            OnParticleSystem();
         }
     }
 
-    public void OnBurning(bool isBurning)
+    public void OnBurning()
     {
-        if(m_BigfireParticleObject == null ||
-            this.isBurning)
+        if(_isBurning)
         {
             return;
         }
 
-        m_BigfireParticleObject.SetActive(isBurning);
+        _isBurning = true;
 
-        this.isBurning = isBurning;
+        OnParticleSystem();
+    }
+
+    public bool IsBurning()
+    {
+        return _isBurning;
+    }
+
+    private void OnParticleSystem()
+    {
+        _burningParticle.gameObject.SetActive(true);
+
+        _burningParticle.Play();
     }
 }

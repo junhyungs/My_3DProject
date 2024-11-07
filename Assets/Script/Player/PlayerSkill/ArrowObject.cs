@@ -34,59 +34,63 @@ public class ArrowObject : ProjectileObject
 
     private void OnTriggerEnter(Collider other)
     {
+        HitMonster(other);
+        HitSwitch(other);
+        HitBurningObject(other);
+    }
+
+    private void HitMonster(Collider other)
+    {
         if(other.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
-            IDamged hit = other.gameObject.GetComponent<IDamged>();
+            IDamged damaged = other.gameObject.GetComponent<IDamged>();
 
-            if(hit != null)
+            if(damaged != null)
             {
-                hit.TakeDamage(m_atk);
+                damaged.TakeDamage(m_atk);
 
                 ReturnArrow();
             }
         }
+    }
 
-        Stove stove = other.gameObject.GetComponent<Stove>();
+    private void HitSwitch(Collider other)
+    {
+        IHitSwitch hitSwitch = other.gameObject.GetComponent<IHitSwitch>();
 
-        if (stove == null)
+        if(hitSwitch != null)
         {
-            return;
+            hitSwitch.OnHitSwitch();
         }
+    }
 
-        if (isBurning)
+    private void HitBurningObject(Collider other)
+    {
+        if(other.gameObject.layer == LayerMask.NameToLayer("BurningObject"))
         {
-            IBurningObject burningObject = stove.GetComponent<IBurningObject>();
+            IBurningObject burningObject = other.gameObject.GetComponent<IBurningObject>();
 
-            if (burningObject != null)
+            if (isBurning)
             {
-                burningObject.OnBurning(true);
+                burningObject.OnBurning();
             }
-        }
-        else
-        {
-            bool burning = stove.IsBurning;
-
-            OnFireParticle(burning);
-        }
-
-        if (other.gameObject.layer == LayerMask.NameToLayer("HitSwitch"))
-        {
-            HitSwitch hitSwitch = other.gameObject.GetComponent<HitSwitch>();
-
-            if(hitSwitch != null)
+            else
             {
-                hitSwitch.SwitchEvent();
+                bool setBurning = burningObject.IsBurning();
+
+                if (setBurning)
+                {
+                    OnParticleSystem();
+                }
             }
         }
     }
 
-    private void OnFireParticle(bool buring)
+    private void OnParticleSystem()
     {
-        if (buring)
-        {
-            m_fireParticleObject.SetActive(true);
-            this.isBurning = buring;
-        }
+        m_fireParticleObject.SetActive(true);
+
+        isBurning = true;
     }
 
     private void ReturnArrow()

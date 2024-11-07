@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class HitSwitch : MonoBehaviour
+public class HitSwitch : MonoBehaviour, IHitSwitch
 {
     [Header("GameObject")]
     [SerializeField] private GameObject EventObject;
@@ -10,8 +10,13 @@ public class HitSwitch : MonoBehaviour
     public Action<HitSwitch> _swithAction;
     private float _moveTime = 4f;
 
-    public void SwitchEvent()
+    public void OnHitSwitch()
     {
+        if(EventObject == null)
+        {
+            return;
+        }
+
         OpenDoor(EventObject);
 
         _swithAction?.Invoke(this);

@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 8173159738575586280}
   - component: {fileID: 7274412524160722396}
   - component: {fileID: 4662204898641455226}
-  m_Layer: 16
+  m_Layer: 26
   m_Name: Point light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 0.6
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7274412524160722396
 MonoBehaviour:
@@ -131,8 +131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b14369c3e844b45a93f9ee13272ad6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BigfireParticleObject: {fileID: 8605319048728903232}
-  isBurning: 0
+  _burningParticle: {fileID: 311764828643657418}
+  _isBurning: 0
 --- !u!114 &4662204898641455226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,7 +145,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8423cb11d0ed8384eab9bb31b2121e24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _key: 1
   EventObject: {fileID: 0}
 --- !u!1 &1383568392454320110
 GameObject:
