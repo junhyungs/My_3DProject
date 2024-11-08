@@ -169,7 +169,7 @@ public class StartUI : MonoBehaviour
 
     public void OnExit()
     {
-        Debug.Log("Exit");
+        Application.Quit();
     }
 
 }

@@ -15,18 +15,14 @@ public class PlayerAttackController : MonoBehaviour
     private GameObject[] m_PositionObject;
     private PlayerWeaponController m_weaponController;
     private PlayerSkillController m_skillController;
-    private CharacterController m_playerController;
     private Animator m_attackAnimation;
 
-    private Action<bool> m_hitEvent;
     public GameObject[] PositionObject => m_PositionObject;
 
     private LayerMask _mouseTargetLayer;
     private bool chargeMax;
     private bool chargeAttackDirection = true;
     private bool isAction = true;
-    private bool _isFly;
-    private bool _iscollide = false;
 
     public bool IsAction
     {
@@ -51,11 +47,8 @@ public class PlayerAttackController : MonoBehaviour
 
     private void Init()
     {
-        EventManager.Instance.SetAttackContorller(this);
-
         m_weaponController = GetComponent<PlayerWeaponController>();   
         m_skillController = GetComponent<PlayerSkillController>();  
-        m_playerController = GetComponent<CharacterController>();
         m_attackAnimation = GetComponent<Animator>();
 
         m_PositionObject = new GameObject[3];
@@ -136,83 +129,6 @@ public class PlayerAttackController : MonoBehaviour
             }
         }
         
-    }
-
-    // HookMove
-    public void OnHookCollied(Vector3 targetPos, bool isAnchor)
-    {
-        
-        if (isAnchor)
-        {
-            m_attackAnimation.SetTrigger("HookStart");
-            m_attackAnimation.SetBool("HookEnd", true);
-            gameObject.layer = LayerMask.NameToLayer("fly");
-            StartCoroutine(Hook(targetPos));
-        }
-        else
-            m_attackAnimation.SetTrigger("HookFail");
-    }
-
-    private IEnumerator Hook(Vector3 targetPosition)
-    {
-        float hookSpeed = 15f;
-        float maxDistance = 10f;
-        float currentDistance = 0f;
-
-        Vector3 hookDirection = (targetPosition - transform.position).normalized;
-
-        LayerMask targetLayer = LayerMask.GetMask("HookObject", "Monster");
-
-        hookDirection.y = 0f;
-
-        _iscollide = false;
-
-        while (true)
-        {
-            _iscollide = Physics.CheckSphere(transform.position, 1f, targetLayer);
-
-            if (_iscollide && _isFly)
-            {
-                m_attackAnimation.SetBool("HookEnd", false);
-                gameObject.layer = LayerMask.NameToLayer("Player");
-
-                Collider[] removeChain = Physics.OverlapSphere(transform.position, 1f, LayerMask.GetMask("Hook"));
-
-                if(removeChain.Length > 0)
-                {
-                    foreach (var chain in removeChain)
-                    {
-                        ObjectPool.Instance.EnqueueObject(chain.gameObject, ObjectName.PlayerSegment);
-                    }
-                }
-
-                _isFly = false;
-                break;
-            }
-            else
-            {
-                _isFly = true;
-
-                float distance = hookSpeed * Time.deltaTime;
-
-                currentDistance += distance;
-
-                if(currentDistance >= maxDistance)
-                {
-                    m_attackAnimation.SetBool("HookEnd", false);
-                    gameObject.layer = LayerMask.NameToLayer("Player");
-
-                    _isFly = false;
-                    break;
-                }
-
-                Vector3 moveVector = hookDirection * hookSpeed * Time.deltaTime;
-
-                m_playerController.Move(moveVector);
-
-                yield return null;
-            }
-        }
     }
 
     private void OnChargeAttack(InputValue input)

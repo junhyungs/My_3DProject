@@ -8,7 +8,6 @@ public class BehaviourMonster : MonoBehaviour
     #region Component
     protected NavMeshAgent _agent;
     protected Animator _animator;
-    protected Rigidbody _rigidBody;
     protected Material _copyMaterial;
     protected SpawnMonster _spawnComponent;
 
@@ -58,8 +57,6 @@ public class BehaviourMonster : MonoBehaviour
         _agent = gameObject.GetComponent<NavMeshAgent>();
 
         _animator = gameObject.GetComponent<Animator>();
-
-        _rigidBody = gameObject.GetComponent<Rigidbody>();
 
         ObjectPool.Instance.CreatePool(ObjectName.Soul, 20);    
     }

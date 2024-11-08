@@ -57,6 +57,4 @@ public class ClimbStateBehaviour : StateMachineBehaviour
     {
         return stateInfo.shortNameHash == m_Climbing_off_ladder_top;
     }
-
-    
 }

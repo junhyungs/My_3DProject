@@ -151,7 +151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7144a141196503f4c9b0d669b7c69b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxDistance: 3.5
   _moveSpeed: 10
 --- !u!1 &154532186769091628
 GameObject:
@@ -291,7 +290,6 @@ GameObject:
   - component: {fileID: 7537537532033309751}
   - component: {fileID: 5186515902344592594}
   - component: {fileID: 6934945476220796094}
-  - component: {fileID: 8655375548035612302}
   - component: {fileID: 7309394270460398848}
   m_Layer: 6
   m_Name: BT_Slime
@@ -389,33 +387,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!54 &8655375548035612302
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 459349174352375473}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
 --- !u!136 &7309394270460398848
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -431,7 +402,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -590,7 +561,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7144a141196503f4c9b0d669b7c69b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxDistance: 3.5
   _moveSpeed: 10
 --- !u!1 &1086063769740460296
 GameObject:
@@ -1591,7 +1561,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7144a141196503f4c9b0d669b7c69b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxDistance: 3.5
   _moveSpeed: 10
 --- !u!1 &3218860450022939690
 GameObject:
@@ -2109,7 +2078,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7144a141196503f4c9b0d669b7c69b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxDistance: 3.5
   _moveSpeed: 10
 --- !u!1 &5145164922144147639
 GameObject:
@@ -2302,7 +2270,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7144a141196503f4c9b0d669b7c69b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxDistance: 3.5
   _moveSpeed: 10
 --- !u!1 &5392431259153753868
 GameObject:
@@ -2424,7 +2391,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7144a141196503f4c9b0d669b7c69b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxDistance: 3.5
   _moveSpeed: 10
 --- !u!1 &5590962316006590842
 GameObject:
@@ -3021,7 +2987,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7144a141196503f4c9b0d669b7c69b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxDistance: 3.5
   _moveSpeed: 10
 --- !u!1 &7427381387764720123
 GameObject:
@@ -3213,7 +3178,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7144a141196503f4c9b0d669b7c69b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxDistance: 3.5
   _moveSpeed: 10
 --- !u!1 &7717648911683207486
 GameObject:

@@ -5,7 +5,7 @@ using UnityEngine;
 public class EventManager
 {
     private static EventManager instance;
-    private PlayerAttackController attackController;
+    private PlayerMoveController moveController;
     private List<IDisableMagicBullet> m_OnDisableMageBullet = new List<IDisableMagicBullet>();
 
     private IHookPosition _hook;
@@ -23,9 +23,9 @@ public class EventManager
         }
     }
 
-    public void SetAttackContorller(PlayerAttackController controller)
+    public void SetMoveController(PlayerMoveController moveController)
     {
-        attackController = controller;
+        this.moveController = moveController;
     }
 
     //RegisterEvent-----------------------------------------------------------------------------------
@@ -38,9 +38,9 @@ public class EventManager
 
         _hook = hookPositionEvent;
 
-        if(attackController != null)
+        if(moveController != null)
         {
-            _hook.HookPositionEvent(true, attackController.OnHookCollied);
+            _hook.HookPositionEvent(true, moveController.OnHookCollied);
         }
     }
 

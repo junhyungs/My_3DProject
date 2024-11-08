@@ -31,8 +31,6 @@ public class PlayerMoveController : MonoBehaviour
     private float m_rotationVelocity;
     //PlayerMoveControll
     private bool isAction = true;
-    //Roll
-    private bool isRoll = false;
     //RollSpeed
     public float m_rollSpeed { get; set; }
     //Ladder
@@ -41,6 +39,10 @@ public class PlayerMoveController : MonoBehaviour
     private bool isLadderDirection = true;
     private Vector3 m_currentPositionY;
     private Vector3 m_previousPositionY;
+    //Hook
+    private float _hookSpeed = 15f;
+    private bool _isCollider;
+    private bool _isFly;
 
     public bool IsAction
     {
@@ -64,6 +66,8 @@ public class PlayerMoveController : MonoBehaviour
 
     private void Awake()
     {
+        EventManager.Instance.SetMoveController(this);
+
         m_playerController = GetComponent<CharacterController>();
         m_playerAnimator = GetComponent<Animator>();
     }
@@ -307,5 +311,86 @@ public class PlayerMoveController : MonoBehaviour
     }
 
     //EndClimb-----------------------------------------------------------------------------------------------------------------
+
+    //Hook Move
+    public void OnHookCollied(Vector3 targetPosition, bool isAnchor)
+    {
+        if (isAnchor)
+        {
+            m_playerAnimator.SetTrigger("HookStart");
+            m_playerAnimator.SetBool("HookEnd", true);
+            gameObject.layer = LayerMask.NameToLayer("fly");
+            StartCoroutine(Hook(targetPosition));
+        }
+        else
+        {
+            m_playerAnimator.SetTrigger("HookFail");
+        }
+    }
+
+
+    private IEnumerator Hook(Vector3 targetPosition)
+    {
+        float maxDistance = 10f;
+        float currentDistance = 0f;
+
+        Vector3 hookDirection = (targetPosition - transform.position).normalized;
+
+        LayerMask targetLayer = LayerMask.GetMask("HookObject", "Monster");
+
+        hookDirection.y = 0f;
+
+        _isCollider = false;
+
+        while (true)
+        {
+            _isCollider = Physics.CheckSphere(transform.position, 1f, targetLayer);
+
+            if(_isCollider && _isFly)
+            {
+                m_playerAnimator.SetBool("HookEnd", false);
+                gameObject.layer = LayerMask.NameToLayer("Player");
+
+                Collider[] removeChain = Physics.OverlapSphere(transform.position, 10f, LayerMask.GetMask("Hook"));
+
+                if(removeChain.Length > 0)
+                {
+                    foreach(var chain in removeChain)
+                    {
+                        ObjectPool.Instance.EnqueueObject(chain.gameObject, ObjectName.PlayerSegment);
+                    }
+                }
+
+                _isFly = false;
+                break;
+            }
+            else
+            {
+                _isFly = true;
+
+                float distance = _hookSpeed * Time.deltaTime;
+
+                currentDistance += distance;
+
+                if(currentDistance >= maxDistance)
+                {
+                    m_playerAnimator.SetBool("HookEnd", false);
+                    gameObject.layer = LayerMask.NameToLayer("Player");
+
+                    _isFly = false;
+                    break;
+                }
+
+                Vector3 moveVector = hookDirection * _hookSpeed * Time.deltaTime;
+
+                m_playerController.Move(moveVector);
+
+                yield return null;
+            }
+        }
+        
+    }
+
+    //End Hook Move
 
 }

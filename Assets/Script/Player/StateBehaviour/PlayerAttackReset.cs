@@ -38,7 +38,7 @@ public class PlayerAttackReset : StateMachineBehaviour//부착된 애니메이션 State�
     //애니메이션의 루트모션이 진행되는 동안 매 프레임마다 호출. 애니메이션의 활성화 여부와 관계가 없기 때문에 
     //애니메이션의 루트 모션이 진행되는 중이라면 매 프레임마다 계속 호출된다.
     public override void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) { }
-    
+
     //애니매이션이 활성화 되었을 때만 매 프레임마다 호출. 애니메이션이 비활성화 되면 호출되지않음.
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -106,7 +106,7 @@ public class PlayerAttackReset : StateMachineBehaviour//부착된 애니메이션 State�
         var actionDic = m_objectController.ActiveWeaponDic;
 
         if (actionDic.TryGetValue(stateInfo.shortNameHash, out Action<bool> action))
-        {           
+        {
             action(m_attackController.IsChargeMax);
         }
     }
