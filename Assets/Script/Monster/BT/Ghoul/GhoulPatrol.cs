@@ -12,6 +12,7 @@ public class GhoulPatrol : INode
 
     private List<Vector3> _walkPositionList;
     private List<Vector3> _randomPositionList;
+    private List<Vector3> _removeList;
 
     private int _gridSize;
     private int _currentIndex = 0;
@@ -35,6 +36,7 @@ public class GhoulPatrol : INode
         _isCoolTime = false;
         _targetLayer = LayerMask.GetMask("Default");
         _myBounds = _ghoul.transform.GetComponentInChildren<SkinnedMeshRenderer>().bounds;
+        _removeList = new List<Vector3>();
     }
 
     public INode.State Evaluate()
@@ -139,25 +141,24 @@ public class GhoulPatrol : INode
 
     private List<Vector3> GetMovePositionList(List<Vector3> randomPositionList)
     {
-        List<Vector3> removeList = new List<Vector3>();
-
         foreach (var randomPosition in randomPositionList)
         {
             if (!CanAgentMove(randomPosition))
             {
-                removeList.Add(randomPosition);
+                _removeList.Add(randomPosition);
             }
         }
 
-        if (removeList.Count > 0)
+        if (_removeList.Count > 0)
         {
-            foreach (var removePosition in removeList)
+            foreach (var removePosition in _removeList)
             {
                 randomPositionList.Remove(removePosition);
             }
         }
 
         _ghoul.SetList(randomPositionList);
+        _removeList.Clear();
         return randomPositionList;
     }
 

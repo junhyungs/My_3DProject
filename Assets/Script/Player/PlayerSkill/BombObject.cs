@@ -1,11 +1,11 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class BombObject : ProjectileObject
-{
+{    
     private MeshRenderer m_bombMeshRenderer;
     private Material m_bombMaterial;
-
     protected override void Awake()
     {
         base.Awake();

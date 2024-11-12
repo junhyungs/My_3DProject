@@ -25,7 +25,6 @@ public class PlayerAttackReset : StateMachineBehaviour//부착된 애니메이션 State�
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        GetComponent(animator);
         ChargeMax(stateInfo, false);
         animator.ResetTrigger(m_triggerName);
         animator.ResetTrigger(m_ChargeL);
@@ -42,8 +41,7 @@ public class PlayerAttackReset : StateMachineBehaviour//부착된 애니메이션 State�
     //애니매이션이 활성화 되었을 때만 매 프레임마다 호출. 애니메이션이 비활성화 되면 호출되지않음.
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        GetComponent(animator);
-
+        
         bool isChargeTrue = stateInfo.shortNameHash == m_Charge_slash_L
             || stateInfo.shortNameHash == m_Charge_slash_R;
 
