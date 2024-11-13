@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using DG.Tweening;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 public class OptionPanel : MonoBehaviour
 {
@@ -18,8 +19,8 @@ public class OptionPanel : MonoBehaviour
     [Header("MoveDuration")]
     [SerializeField] private float _moveDuration;
 
-    private List<Tweener> _leftTweeners;
-    private List<Tweener> _rightTweeners;
+    private List<Tweener> _leftTweeners = new List<Tweener>();
+    private List<Tweener> _rightTweeners = new List<Tweener>();
 
     private int _currentIndex;
 
@@ -125,13 +126,26 @@ public class OptionPanel : MonoBehaviour
 
     private void CreateTweeners()
     {
-        if (_leftTweeners != null && _rightTweeners != null)
+        if(_leftTweeners.Count > 0)
         {
-            return;
+            foreach(var tweeners in _leftTweeners)
+            {
+                tweeners.Kill();
+            }
+
+            _leftTweeners.Clear();
         }
 
-        _leftTweeners = new List<Tweener>();
-        _rightTweeners = new List<Tweener>();
+        if(_rightTweeners.Count > 0)
+        {
+            foreach(var tweeners in _rightTweeners)
+            {
+                tweeners.Kill();
+            }
+
+            _rightTweeners.Clear();
+        }
+        
 
         foreach (var controlButton in _buttons)
         {
