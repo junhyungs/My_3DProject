@@ -34,12 +34,6 @@ public class ControlPanel : MonoBehaviour
     [Header("NavigateAction")]
     [SerializeField] private InputActionReference _navigateAction;
 
-    [Header("MoveDistance")]
-    [SerializeField] private float _moveDistance;
-
-    [Header("MoveDuration")]
-    [SerializeField] private float _moveDuration;
-
     [Header("ButtonList")]
     [SerializeField] private List<PanelButtons> _buttons;
 
@@ -49,10 +43,15 @@ public class ControlPanel : MonoBehaviour
     [Header("KeyboardOption")]
     [SerializeField] private GameObject _keyboardOption;
 
+    [Header("ScreenOption")]
+    [SerializeField] private GameObject _screenOption;
+
     private List<Tweener> _leftTweeners;
     private List<Tweener> _rightTweeners;
 
     private int _currentIndex;
+    private float _moveDistance = 60f;
+    private float _moveDuration = 0.5f;
 
     private void OnEnable()
     {
@@ -191,6 +190,15 @@ public class ControlPanel : MonoBehaviour
     public void OnKeyboardOption()
     {
         _keyboardOption.SetActive(true);
+
+        gameObject.SetActive(false);
+    }
+
+    public void OnScreenOption()
+    {
+        return;
+
+        _screenOption.SetActive(true);
 
         gameObject.SetActive(false);
     }
