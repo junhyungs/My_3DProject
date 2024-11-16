@@ -96,6 +96,13 @@ public class CombineMesh : MonoBehaviour
 
         foreach(var meshFilter in meshFilterList)
         {
+
+            if(meshFilter == null || meshFilter.sharedMesh == null)
+            {
+                Debug.Log("meshFilter가 Null 또는 sharedMesh가 Null입니다.");
+                continue;
+            }
+
             combineInstanceList.Add(new CombineInstance
             {
                 mesh = meshFilter.sharedMesh,
@@ -116,13 +123,39 @@ public class CombineMesh : MonoBehaviour
 
         var newMesh = new Mesh();
         newMesh.indexFormat = totalVertexCount > 65535 ? IndexFormat.UInt32 : IndexFormat.UInt16;
-        newMesh.CombineMeshes(combineInstanceList.ToArray(), true, true);
 
+        try
+        {
+            newMesh.CombineMeshes(combineInstanceList.ToArray(), true, true);
+        }
+        catch(System.Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
+
+        SaveMesh(newMesh, $"{_name}_CombineMesh");
+        
         var newMeshFilter = childObject.AddComponent<MeshFilter>();
         newMeshFilter.sharedMesh = newMesh;
 
         var newMeshRenderer = childObject.AddComponent<MeshRenderer>();
         newMeshRenderer.sharedMaterial = material;
+    }
+
+    private void SaveMesh(Mesh mesh, string meshName)
+    {
+#if UNITY_EDITOR //에디터에서만 처리할 수 있도록.
+        string path = $"Assets/Combine/{meshName}.asset";
+
+        path = AssetDatabase.GenerateUniqueAssetPath(path);
+
+        AssetDatabase.CreateAsset(mesh, path);
+
+        AssetDatabase.SaveAssets();
+
+        Debug.Log("에셋이 저장되었습니다.");
+
+    #endif
     }
 
     public void ResetCombine()
