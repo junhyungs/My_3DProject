@@ -27,15 +27,7 @@ public class CombineMesh : MonoBehaviour
 
         var meshFilterList = GetMeshFilterList();
 
-        var material = GetMaterial(meshFilterList);
-
-        if(material == null)
-        {
-            Debug.Log("다른 머트리얼이 발견되어 중단합니다.");
-            return;
-        }
-
-        CreateObject(meshFilterList, material);
+        CreateMeshObject(meshFilterList);
 
         if (_isDestroy)
         {
@@ -55,7 +47,46 @@ public class CombineMesh : MonoBehaviour
         return meshFilterList;
     }
 
-    private void CreateObject(List<MeshFilter> meshFilterList, Material material)
+    private void CreateMeshObject(List<MeshFilter> meshFilters)
+    {
+        var meshDictionary = new Dictionary<Material, List<MeshFilter>>();
+
+        foreach(var meshFilter in meshFilters)
+        {
+            if (meshFilter.TryGetComponent(out MeshRenderer meshRenderer))
+            {
+                var material = meshRenderer.sharedMaterial;
+
+                if (!meshDictionary.ContainsKey(material))
+                {
+                    meshDictionary[material] = new List<MeshFilter>();
+                }
+
+                meshDictionary[material].Add(meshFilter);
+            }
+            else
+                continue;
+        }
+
+        var combineParentObject = new GameObject(_name);
+
+        if (_isStatic)
+        {
+            combineParentObject.isStatic = true;
+        }
+
+        foreach(var keyValuePair in meshDictionary)
+        {
+            var material = keyValuePair.Key;
+
+            var meshFilterList = keyValuePair.Value;
+
+            CreateObject(meshFilterList, material, combineParentObject);
+        }
+
+    }
+
+    private void CreateObject(List<MeshFilter> meshFilterList, Material material, GameObject parentObject)
     {
         List<CombineInstance> combineInstanceList = new List<CombineInstance>();
 
@@ -72,45 +103,24 @@ public class CombineMesh : MonoBehaviour
             totalVertexCount += meshFilter.sharedMesh.vertexCount;
         }
 
-        var combineObject = new GameObject(_name);
+        var childObject = new GameObject(material.name);
+
+        childObject.transform.SetParent(parentObject.transform, false);
 
         if (_isStatic)
         {
-            combineObject.isStatic = true;  
+            childObject.isStatic = true;
         }
 
         var newMesh = new Mesh();
         newMesh.indexFormat = totalVertexCount > 65535 ? IndexFormat.UInt32 : IndexFormat.UInt16;
         newMesh.CombineMeshes(combineInstanceList.ToArray(), true, true);
 
-        var newMeshFilter = combineObject.AddComponent<MeshFilter>();
+        var newMeshFilter = childObject.AddComponent<MeshFilter>();
         newMeshFilter.sharedMesh = newMesh;
 
-        var newMeshRenderer = combineObject.AddComponent<MeshRenderer>();
+        var newMeshRenderer = childObject.AddComponent<MeshRenderer>();
         newMeshRenderer.sharedMaterial = material;
-    }
-
-    private Material GetMaterial(List<MeshFilter> meshFilterList)
-    {
-        Material material = null;
-
-        foreach(var meshFilter in meshFilterList)
-        {
-            if(meshFilter.TryGetComponent(out MeshRenderer meshRenderer))
-            {
-                if(material == null)
-                {
-                    material = meshRenderer.sharedMaterial;
-                }
-                else if(material != meshRenderer.sharedMaterial)
-                {
-                    Debug.Log("다른 머트리얼이 발견되었습니다.");
-                    return null;
-                }
-            }
-        }
-
-        return material;    
     }
 
     public void ResetCombine()
