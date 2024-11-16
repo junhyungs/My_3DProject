@@ -8,13 +8,21 @@ public class CombineMeshEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
+        DrawDefaultInspector(); //기본 인스펙터 Draw
+
+        EditorGUILayout.BeginHorizontal(); //수평 레이아웃 시작
 
         _combineMesh = (CombineMesh)target;
 
-        if (GUILayout.Button("Button"))
+        if (GUILayout.Button("ComBine"))
         {
-            Debug.Log("버튼 눌림");
+            _combineMesh.MeshCombine();
         }
+        else if (GUILayout.Button("Clear"))
+        {
+            _combineMesh.ResetCombine();
+        }
+
+        EditorGUILayout.EndHorizontal();
     }
 }

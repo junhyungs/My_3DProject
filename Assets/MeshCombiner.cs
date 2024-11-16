@@ -3,8 +3,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class MeshCombiner : MonoBehaviour
-{
+public class MeshCombiner : MonoBehaviour //병합할 메쉬에 대한 정보를 복사하고 이 정보를 바탕으로 새로운 메쉬를 생성함. 
+{                                         //병합할 메쉬(objectsToMerge List)로 추가했던 메쉬들은 새로운 메쉬 생성후에 비활성화하거나 삭제하는 코드.
     public List<GameObject> objectsToMerge = new List<GameObject>(); // 병합할 오브젝트 리스트
     public bool addMeshCollider = false; // 병합된 메쉬에 메쉬 콜라이더를 추가할지 결정하는 변수
     public bool deactivateObjectsAfterMerge = true; // 병합 후 병합된 오브젝트들을 비활성화할지 결정하는 변수
@@ -101,7 +101,7 @@ public class MeshCombiner : MonoBehaviour
         }
     }
 
-    // MeshFilter 리스트에서 Material을 기준으로 메쉬를 그룹화하는 메서드
+    // MeshFilter 리스트에서 Material을 기준으로 메쉬를 그룹화하는 메서드/ 새로운 메쉬생성X 공통된 정보를 묶음.
     private Dictionary<Material, List<CombineInstance>> CreateMaterialMeshMap(List<MeshFilter> meshFilters)
     {
         var materialMeshMap = new Dictionary<Material, List<CombineInstance>>();
@@ -112,25 +112,25 @@ public class MeshCombiner : MonoBehaviour
             if (meshRenderer == null || meshFilter.sharedMesh == null)
                 continue;
 
-            var sharedMaterials = meshRenderer.sharedMaterials;
-            for (int subMeshIndex = 0; subMeshIndex < meshFilter.sharedMesh.subMeshCount; subMeshIndex++)
+            var sharedMaterials = meshRenderer.sharedMaterials; //현재 이 메쉬에 적용되어 있는 모든 머트리얼을 가져옴
+            for (int subMeshIndex = 0; subMeshIndex < meshFilter.sharedMesh.subMeshCount; subMeshIndex++) //머트리얼의 개수 만큼 반복
             {
-                if (subMeshIndex >= sharedMaterials.Length)
+                if (subMeshIndex >= sharedMaterials.Length) //머트리얼의 정보가 없다면 건너뜀
                     continue;
 
-                var material = sharedMaterials[subMeshIndex];
+                var material = sharedMaterials[subMeshIndex]; //현재 머트리얼을 가져옴(인덱스가 0이라면 사용중인 모든 머트리얼 중 첫 번째 머트리얼)
                 if (material == null)
                     continue;
 
-                if (!materialMeshMap.ContainsKey(material))
+                if (!materialMeshMap.ContainsKey(material)) //현재 딕셔너리에 이 머트리얼에 대한 key가 없다면 List 생성
                 {
                     materialMeshMap[material] = new List<CombineInstance>();
                 }
 
-                materialMeshMap[material].Add(new CombineInstance
+                materialMeshMap[material].Add(new CombineInstance //리스트안에 병합할 메쉬의 정보를 담아줌
                 {
-                    mesh = GetSubMesh(meshFilter.sharedMesh, subMeshIndex),
-                    transform = meshFilter.transform.localToWorldMatrix
+                    mesh = GetSubMesh(meshFilter.sharedMesh, subMeshIndex), //sharedMesh는 원본데이터임. 원본데이터는 모든 오브젝트가 공유함으로 수정하지 않는것이 좋음. 따라서 지금 이 코드는 원본 데이터를 수정하지 않고 현재 작업해야하는 메쉬의 정보를 복사하는거임.
+                    transform = meshFilter.transform.localToWorldMatrix //현재 메쉬의 위치, 회전, 크기 정보
                 });
             }
         }
@@ -141,9 +141,9 @@ public class MeshCombiner : MonoBehaviour
     // 서브 메쉬를 추출하는 메서드
     private Mesh GetSubMesh(Mesh mesh, int index)
     {
-        var subMesh = new Mesh
+        var subMesh = new Mesh //새로운 메쉬를 생성하여 현재 메쉬에 대한 정보를 복사한다.
         {
-            vertices = mesh.vertices,
+            vertices = mesh.vertices, 
             normals = mesh.normals,
             tangents = mesh.tangents,
             uv = mesh.uv,
@@ -152,8 +152,8 @@ public class MeshCombiner : MonoBehaviour
             uv4 = mesh.uv4,
             colors = mesh.colors
         };
-        subMesh.SetTriangles(mesh.GetTriangles(index), 0);
-        return subMesh;
+        subMesh.SetTriangles(mesh.GetTriangles(index), 0); //새로 생성한 메쉬에 현재 메쉬의 삼각형 정보를 복사하여 넣는다. 
+        return subMesh; //mesh.GetTriangles(index)는 현재 메쉬의 삼각형 정보. 따라서 현재 메쉬의 삼각형(폴리곤)정보를 복사하여 새로운 메쉬에게 할당해주는 부분.
     }
 
     // 병합된 오브젝트를 생성하고 설정하는 메서드
@@ -172,10 +172,10 @@ public class MeshCombiner : MonoBehaviour
             var combinedMesh = new Mesh();
 
             // 버텍스 개수에 따라 인덱스 포맷 설정
-            int totalVertexCount = combineInstances.Sum(c => c.mesh.vertexCount);
-            combinedMesh.indexFormat = totalVertexCount > 65535 ? IndexFormat.UInt32 : IndexFormat.UInt16;
+            int totalVertexCount = combineInstances.Sum(c => c.mesh.vertexCount); //모든 버텍스 개수를 합산한 값을 반환.
+            combinedMesh.indexFormat = totalVertexCount > 65535 ? IndexFormat.UInt32 : IndexFormat.UInt16; //1개의 서브 메쉬는 최대 65535개의 정점을 지원한다. 이 정점 수를 초과했다면 포멧을 UInt32로 변경하여 초과되더라도 처리할 수 있게함.
 
-            combinedMesh.CombineMeshes(combineInstances.ToArray(), true, true);
+            combinedMesh.CombineMeshes(combineInstances.ToArray(), true, true); //병합하는 부분. 아까 복사할 정보를 담았던 리스트를 배열화, 2번째 매개변수는 모든 서브메쉬를 병합할지 여부. 3번째 매개변수는 변환행렬 정보를 포함하여 병합할건지, 아니면 변환 행렬을 무시하고 로컬 좌표로 병합할지. 
 
             var child = new GameObject(material.name);
             child.transform.SetParent(combinedObject.transform, false);
