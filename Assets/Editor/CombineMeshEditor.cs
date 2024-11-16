@@ -10,7 +10,7 @@ public class CombineMeshEditor : Editor
     {
         DrawDefaultInspector(); //기본 인스펙터 Draw
 
-        EditorGUILayout.BeginHorizontal(); //수평 레이아웃 시작
+        //EditorGUILayout.BeginHorizontal(); //수평 레이아웃 시작
 
         _combineMesh = (CombineMesh)target;
 
@@ -18,11 +18,7 @@ public class CombineMeshEditor : Editor
         {
             _combineMesh.MeshCombine();
         }
-        else if (GUILayout.Button("Clear"))
-        {
-            _combineMesh.ResetCombine();
-        }
-
-        EditorGUILayout.EndHorizontal();
+       
+        //EditorGUILayout.EndHorizontal();
     }
 }

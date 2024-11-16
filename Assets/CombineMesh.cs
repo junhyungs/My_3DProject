@@ -33,6 +33,8 @@ public class CombineMesh : MonoBehaviour
         {
             DestroyObject(_combineObjectArray);
         }
+
+        ResetCombine();
     }
 
     private List<MeshFilter> GetMeshFilterList()
@@ -133,7 +135,10 @@ public class CombineMesh : MonoBehaviour
     {//에디터 모드에서는 Destroy가 아니라 DestroyImmediate로 삭제해야함. 이 경우에 Undo 기능이 없어서 되돌리기를 못함(control + Z) 그래서 Undo.DestroyObjectImmediate를 사용.
         for (int i = 0; i < combineObjects.Length; i++)
         {
-            Undo.DestroyObjectImmediate(combineObjects[i]);
+            if (combineObjects[i] != null)
+            {
+                Undo.DestroyObjectImmediate(combineObjects[i]);
+            }
         }
     }
 }
