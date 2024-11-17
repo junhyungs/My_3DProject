@@ -12,6 +12,9 @@ public class CombineMesh : MonoBehaviour
     [Header("CombineObjectName")]
     [SerializeField] private string _name;
 
+    [Header("SavePath")]
+    [SerializeField] private string _savePath;
+
     [Header("MakeStatic")]
     [SerializeField] private bool _isStatic;
     [Header("DestroyObject")]
@@ -114,7 +117,7 @@ public class CombineMesh : MonoBehaviour
 
         var childObject = new GameObject(material.name);
 
-        childObject.transform.SetParent(parentObject.transform, false);
+        childObject.transform.SetParent(parentObject.transform, true);
 
         if (_isStatic)
         {
@@ -145,7 +148,7 @@ public class CombineMesh : MonoBehaviour
     private void SaveMesh(Mesh mesh, string meshName)
     {
 #if UNITY_EDITOR //에디터에서만 처리할 수 있도록.
-        string path = $"Assets/Combine/{meshName}.asset";
+        string path = $"{_savePath}"+ $"{meshName}.asset";
 
         path = AssetDatabase.GenerateUniqueAssetPath(path);
 
