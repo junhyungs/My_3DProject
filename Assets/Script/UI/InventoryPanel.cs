@@ -1,26 +1,54 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+
+[System.Serializable]
+public class MenuUI
+{
+    [Header("TriggerButton")]
+    public GameObject _triggerButton;
+
+    [Header("BindPanel")]
+    public GameObject _panelUI;
+
+    public Image ButtonImage { get; set; }
+}
 
 public class InventoryPanel : MonoBehaviour
 {
     [Header("TriggerAction")]
     [SerializeField] private InputActionReference _triggerAction;
 
-    [Header("TriggerButtonComponent")]
-    [SerializeField] private TriggerButton[] _buttonComponents;
+    [Header("MenuUI")]
+    [SerializeField] private List<MenuUI> _menus;
 
-    [Header("Panels")]
-    [SerializeField] private GameObject[] _panels;
+    private ResetInventoryUI _resetPanels;
 
     private int _buttonIndex = 0;
 
+    private void Awake()
+    {
+        foreach(var menu in _menus)
+        {
+            var imageComponent = menu._triggerButton.GetComponent<Image>();
+
+            if (imageComponent != null)
+            {
+                menu.ButtonImage = imageComponent;
+            }
+        }
+
+        _resetPanels = GetComponent<ResetInventoryUI>();
+    }
+
     private void OnEnable()
     {
-        DisableUI();
-
+        OnDisableUI();
+       
         _buttonIndex = 0;
 
-        _buttonComponents[_buttonIndex].OnEnableUI();
+        OnEnableUI(_buttonIndex);
 
         PerformedAction(true);
     }
@@ -48,22 +76,37 @@ public class InventoryPanel : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    private void DisableUI()
+    private void OnEnableUI(int index)
     {
-        foreach(var panel in _panels)
-        {
-            panel.gameObject.SetActive(false);
-        }
+        _menus[index]._panelUI.SetActive(true);
 
-        TriggerButtonDisableUI();
+        SetAlpha(1f, _menus[index].ButtonImage);
     }
 
-    private void TriggerButtonDisableUI()
+    private void OnDisableUI()
     {
-        foreach(var buttonComponent in _buttonComponents)
+        _resetPanels.DisablePanelUI();
+
+        DisablePanelUI();
+    }
+
+    private void DisablePanelUI()
+    {
+        foreach(var menu in _menus)
         {
-            buttonComponent.OnDisableUI();
+            menu._panelUI.SetActive(false);
+
+            SetAlpha(0.1f, menu.ButtonImage);
         }
+    }
+
+    private void SetAlpha(float alpha, Image currentImage)
+    {
+        var currentColor = currentImage.color;
+
+        currentColor.a = alpha;
+
+        currentImage.color = currentColor;
     }
 
     private void SelectOnButton(InputAction.CallbackContext context)
@@ -72,29 +115,29 @@ public class InventoryPanel : MonoBehaviour
         {
             if (Keyboard.current.zKey.wasPressedThisFrame)
             {
-                TriggerButtonDisableUI();
+                DisablePanelUI();
 
                 _buttonIndex--;
 
                 if(_buttonIndex < 0)
                 {
-                    _buttonIndex = _buttonComponents.Length - 1;
+                    _buttonIndex = _menus.Count - 1;
                 }
 
-                _buttonComponents[_buttonIndex].OnEnableUI();
+                OnEnableUI(_buttonIndex);
             }
             else if (Keyboard.current.xKey.wasPressedThisFrame)
             {
-                TriggerButtonDisableUI();
-
+                DisablePanelUI();
+               
                 _buttonIndex++;
 
-                if (_buttonIndex >= _buttonComponents.Length)
+                if (_buttonIndex >= _menus.Count)
                 {
                     _buttonIndex = 0;
                 }
 
-                _buttonComponents[_buttonIndex].OnEnableUI();
+                OnEnableUI(_buttonIndex);
             }
         }
     }
