@@ -16,19 +16,20 @@ public class FireBallObject : ProjectileObject
 
     public override void IsFire(bool fire)
     {
-        isFire = fire;
-
-        if(isFire == true)
-        {
-            Invoke(nameof(ReturnFireBall), 5.0f);
-        }
+        InvokeReturnMethod(fire, nameof(ReturnFireBall));
+    }
+    public override void SetProjectileObjectData(float atk, float speed, float range)
+    {
+        _projectileAtk = atk;
+        _projectileSpeed = speed;
+        _range = range;
     }
 
     private void FixedUpdate()
     {
-        if (isFire)
+        if (_isFire)
         {
-            Vector3 moveForce = transform.forward * m_speed;
+            Vector3 moveForce = transform.forward * _projectileSpeed;
 
             m_projectileRigidbody.AddForce(moveForce);
         }
@@ -36,18 +37,16 @@ public class FireBallObject : ProjectileObject
 
     private void OnTriggerEnter(Collider other)
     {
-        Piercing(other);
+        if (m_piercingPower <= 0 || other.gameObject.layer == LayerMask.NameToLayer("Wall"))
+        {
+            ReturnFireBall();
+
+            return;
+        }
+
         HitMonster(other);
         HitSwitch(other);
         HitBurningObject(other);
-    }
-
-    private void Piercing(Collider other)
-    {
-        if(m_piercingPower <= 0 || other.gameObject.layer == LayerMask.NameToLayer("Wall"))
-        {
-            ReturnFireBall();
-        }
     }
 
     private void HitMonster(Collider other)
@@ -58,7 +57,7 @@ public class FireBallObject : ProjectileObject
 
             if (hit != null)
             {
-                hit.TakeDamage(m_atk);
+                hit.TakeDamage(_projectileAtk);
 
                 m_piercingPower--;
             }
@@ -90,8 +89,8 @@ public class FireBallObject : ProjectileObject
 
     private void ReturnFireBall()
     {
+        m_projectileRigidbody.velocity = Vector3.zero;
+
         ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.PlayerFireBall);
     }
-
-    
 }

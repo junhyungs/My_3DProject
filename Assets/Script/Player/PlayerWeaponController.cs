@@ -3,12 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ActiveType
-{
-    Right,
-    Left
-}
-
 public class PlayerWeaponController : MonoBehaviour
 {
     [Header("IdleWeapon")]
@@ -29,6 +23,8 @@ public class PlayerWeaponController : MonoBehaviour
     private PlayerWeapon _currentWeaponType;
 
     public Dictionary<int, Action<bool>> ActiveWeaponDic => Animation_ActionDic;
+
+    private PlayerData _data;
     private PlayerWeaponEffectController _effectController;
 
     #region Animation.StringToHash
@@ -57,7 +53,7 @@ public class PlayerWeaponController : MonoBehaviour
 
     private void Start()
     {
-        SetWeapon(PlayerWeapon.Sword);
+        StartCoroutine(GetPlayerData());
     }
 
     private void InitializeWeaponController()
@@ -76,6 +72,17 @@ public class PlayerWeaponController : MonoBehaviour
         Animation_ActionDic.Add(m_Slash_Light_Last, ActiveRightWeapon);
         Animation_ActionDic.Add(m_Charge_slash_L, ActiveChargeLeftWeapon);
         Animation_ActionDic.Add(m_Charge_slash_R, ActiveChargeRightWeapon);
+    }
+
+    private IEnumerator GetPlayerData()
+    {
+        yield return new WaitWhile(() => { return DataManager.Instance.GetData("P101") == null; });
+
+        var data = DataManager.Instance.GetData("P101") as PlayerData;
+
+        _data = data;
+
+        SetWeapon(PlayerWeapon.Sword);
     }
    
     public void ActiveLeftWeapon(bool isCharge)
@@ -177,33 +184,28 @@ public class PlayerWeaponController : MonoBehaviour
         {
             case PlayerWeapon.Sword:
                 _currentWeapon = gameObject.AddComponent<Sword>();
-                Sword swordComponent = _currentWeapon as Sword;
                 _effectController.ChageColor(PlayerWeapon.Sword);
-                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W101", swordComponent));
+                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W101", _currentWeapon, _data));
                 break;
             case PlayerWeapon.Hammer:
                 _currentWeapon = gameObject.AddComponent<Hammer>();
-                Hammer hammerComponent = _currentWeapon as Hammer;
                 _effectController.ChageColor(PlayerWeapon.Hammer);
-                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W102", hammerComponent));
+                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W102", _currentWeapon, _data));
                 break;
             case PlayerWeapon.Dagger:
                 _currentWeapon = gameObject.AddComponent<Dagger>();
-                Dagger daggerComponent = _currentWeapon as Dagger;
                 _effectController.ChageColor(PlayerWeapon.Dagger);
-                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W103", daggerComponent));
+                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W103", _currentWeapon, _data));
                 break;
             case PlayerWeapon.GreatSword:
                 _currentWeapon = gameObject.AddComponent<GreatSword>();
-                GreatSword greatSwordComponent = _currentWeapon as GreatSword;
                 _effectController.ChageColor(PlayerWeapon.GreatSword);
-                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W104", greatSwordComponent));
+                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W104", _currentWeapon, _data));
                 break;
             case PlayerWeapon.Umbrella:
                 _currentWeapon = gameObject.AddComponent<Umbrella>();
-                Umbrella umbrellaComponent = _currentWeapon as Umbrella;
                 _effectController.ChageColor(PlayerWeapon.Umbrella);
-                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W105", umbrellaComponent));
+                StartCoroutine(WeaponManager.Instance.LoadWeaponData("W105", _currentWeapon, _data));
                 break;
         }
 

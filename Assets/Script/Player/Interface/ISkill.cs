@@ -10,3 +10,4 @@ public interface ISkill
     public void Fire(GameObject spawnPositionObj, bool isFire);
 }
 
+

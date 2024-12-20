@@ -386,12 +386,12 @@ public class DataManager
                 float speedOffset = ParseFloat(item["SpeedOffSet"]);
                 float gravity = ParseFloat(item["Gravity"]);
                 int health = ParseInt(item["Health"]);
-
+                
                 PlayerData playerData = new PlayerData(id, name, power, speed, rollSpeed, ladderSpeed, speedChangeValue, speedOffset
                     , gravity, health);
                 _dataDictionary.Add(id, playerData);
             }
-
+            
             _jsonDataSet.Add(jsonData);
         }
         catch (JsonException ex)

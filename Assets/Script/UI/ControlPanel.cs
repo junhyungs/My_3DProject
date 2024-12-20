@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using DG.Tweening;
 using UnityEngine.EventSystems;
 
 [System.Serializable]
@@ -46,16 +44,10 @@ public class ControlPanel : MonoBehaviour
     [Header("ScreenOption")]
     [SerializeField] private GameObject _screenOption;
 
-    private List<Tweener> _leftTweeners;
-    private List<Tweener> _rightTweeners;
-
     private int _currentIndex;
-    private float _moveDistance = 60f;
-    private float _moveDuration = 0.5f;
 
     private void OnEnable()
     {
-        CreateTweeners();
 
         ResetControlPanelButton();
 
@@ -98,11 +90,6 @@ public class ControlPanel : MonoBehaviour
         buttons._rightImageObject.SetActive(isActive);
 
         buttons._leftImageObject.SetActive(isActive);
-
-        if (isActive)
-        {
-            AnimationImage(buttons);
-        }
     }
 
     private void SetNextButton(InputAction.CallbackContext context)
@@ -142,44 +129,7 @@ public class ControlPanel : MonoBehaviour
         }
     }
 
-    private void AnimationImage(PanelButtons button)
-    {
-        int index = _buttons.IndexOf(button);
-
-        button._leftRectTransform.position = button._initLeftPosition;
-
-        button._rightRectTransform.position = button._initRightPosition;
-        
-        _leftTweeners[index].Play();
-
-        _rightTweeners[index].Play();
-    }
-
-    private void CreateTweeners()
-    {
-        if(_leftTweeners != null && _rightTweeners != null)
-        {
-            return;
-        }
-
-        _leftTweeners = new List<Tweener>();
-        _rightTweeners = new List<Tweener>();
-
-        foreach(var controlButton in _buttons)
-        {
-            controlButton._initLeftPosition = controlButton._leftRectTransform.position;
-            controlButton._initRightPosition = controlButton._rightRectTransform.position;
-
-            float targetX_left = controlButton._leftRectTransform.position.x - _moveDistance;
-            float targetX_right = controlButton._rightRectTransform.position.x + _moveDistance;
-
-            _leftTweeners.Add(controlButton._leftRectTransform.DOMoveX(targetX_left, _moveDuration)
-                .SetLoops(-1, LoopType.Yoyo).SetUpdate(true));
-            _rightTweeners.Add(controlButton._rightRectTransform.DOMoveX(targetX_right, _moveDuration)
-                .SetLoops(-1, LoopType.Yoyo).SetUpdate(true));
-        }
-    }
-
+   
     public void OnMouseDelta()
     {
         _mouseDelta.SetActive(true);

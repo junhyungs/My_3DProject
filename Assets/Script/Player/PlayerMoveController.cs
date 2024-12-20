@@ -120,25 +120,27 @@ public class PlayerMoveController : MonoBehaviour
     //EndRoll---------------------------------------------------------------------------------------------------------------
 
     //playerAttackMove------------------------------------------------------------------------------------------------------
-    public void AnimationStateMove(bool isChargeMax)
-    {
-        StartCoroutine(AnimationMovement(isChargeMax));
-    }
+    //public void AnimationStateMove(bool isChargeMax)
+    //{
+    //    StartCoroutine(AnimationMovement(isChargeMax));
+    //}
 
-    private IEnumerator AnimationMovement(bool isChargeMax)
-    {
-        float startTime = Time.time;
+    //private IEnumerator AnimationMovement(bool isChargeMax)
+    //{
+    //    float startTime = Time.time;
 
-        float moveSpeed = isChargeMax ? 10.0f : 3.0f;
-
-        Vector3 direction = transform.forward;
-
-        while(Time.time < startTime + 0.2f)
-        {
-            m_playerController.Move(direction * moveSpeed * Time.deltaTime);
-            yield return null;
-        }
-    }
+    //    float moveSpeed = isChargeMax ? 10.0f : 3.0f;
+    //    float test = 0f;
+    //    Vector3 direction = transform.forward;
+        
+    //    while(Time.time < startTime + 0.2f)
+    //    {
+    //        m_playerController.Move(direction * moveSpeed * Time.deltaTime);
+    //        test += 1.0f;
+    //        yield return null;
+    //    }
+    //    Debug.Log(test);
+    //}
     //EndAttackMove-----------------------------------------------------------------------------------------------------------
 
     //Movemet-----------------------------------------------------------------------------------------------------------------
@@ -202,14 +204,16 @@ public class PlayerMoveController : MonoBehaviour
     {
         if (isGround)
         {
-            if (m_verticalVelocity < 0)
-            {
-                m_verticalVelocity = -2f;
-            }
+            //if (m_verticalVelocity < 0)
+            //{
+            //    m_verticalVelocity = -2f;
+            //}
+            m_verticalVelocity = 0f;
         }
         else
         {
             m_verticalVelocity += m_gravity * Time.deltaTime;
+            m_verticalVelocity = Mathf.Max(m_verticalVelocity, -10f);
         }
     }
 

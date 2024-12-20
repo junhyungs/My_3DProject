@@ -15,11 +15,12 @@ public enum PlayerSkill
 
 public class SkillManager : Singleton<SkillManager>
 {
-    private Dictionary<PlayerSkill, Skill> _skillDictionary = new Dictionary<PlayerSkill, Skill>();
+    private Dictionary<PlayerSkill, ISkill> _skillDictionary = new Dictionary<PlayerSkill, ISkill>();
     private int m_skillCount;
 
     private void Start()
     {
+        CreateSkillProjectile();
         StartCoroutine(CreateSkill());
     }
 
@@ -46,7 +47,7 @@ public class SkillManager : Singleton<SkillManager>
             return false;
         }
 
-        Skill skillComponent = _skillDictionary[skillName];
+        ISkill skillComponent = _skillDictionary[skillName];
 
         if(skillComponent != null)
         {
@@ -67,15 +68,30 @@ public class SkillManager : Singleton<SkillManager>
         return false;
     }
 
+    private void CreateSkillProjectile()
+    {
+        var projectileValue = new (ObjectName, int)[]
+        {
+            (ObjectName.PlayerHook, 1),
+            (ObjectName.PlayerSegment, 20),
+            (ObjectName.PlayerArrow, 5),
+            (ObjectName.PlayerBomb, 3),
+            (ObjectName.PlayerFireBall, 5),
+            (ObjectName.HitEffect, 5)
+        };
+
+        foreach(var(projectileType, count) in projectileValue)
+        {
+            ObjectPool.Instance.CreatePool(projectileType, count);
+        }
+    }
+
     private IEnumerator CreateSkill()
     {
-     
         yield return new WaitWhile(() =>
         {
             return DataManager.Instance.GetData("Bow") == null;
         });
-
-        Debug.Log("스킬 데이터를 가져왔습니다.");
 
         Array enumArray = Enum.GetValues(typeof(PlayerSkill));
 
@@ -85,33 +101,33 @@ public class SkillManager : Singleton<SkillManager>
 
             var data = DataManager.Instance.GetData(id) as PlayerSkillData;
 
-            switch ((PlayerSkill)enumArray.GetValue(i))
+            ISkill skill = null;
+
+            var enumValue = (PlayerSkill)enumArray.GetValue(i);
+
+            switch (enumValue)
             {
                 case PlayerSkill.Bow:
-                    Bow bow = new Bow();
-                    bow.SetSkillData(data);
-                    _skillDictionary.Add(PlayerSkill.Bow, bow);
+                    skill = new Bow();
                     break;
                 case PlayerSkill.FireBall:
-                    FireBall fireBall = new FireBall();
-                    fireBall.SetSkillData(data);
-                    _skillDictionary.Add(PlayerSkill.FireBall, fireBall);
+                    skill = new FireBall();
                     break;
                 case PlayerSkill.Bomb:
-                    Bomb bomb = new Bomb();
-                    bomb.SetSkillData(data);
-                    _skillDictionary.Add(PlayerSkill.Bomb, bomb);
+                    skill = new Bomb();
                     break;
                 case PlayerSkill.Hook:
-                    Hook hook = new Hook();
-                    hook.SetSkillData(data);
-                    _skillDictionary.Add(PlayerSkill.Hook, hook);
+                    skill = new Hook();
                     break;
             }
+
+            skill.SetSkillData(data);
+
+            _skillDictionary.Add(enumValue, skill);
         }
     }
  
-    public Skill GetSkill(PlayerSkill skill)
+    public ISkill GetSkill(PlayerSkill skill)
     {
         if (_skillDictionary.ContainsKey(skill))
         {

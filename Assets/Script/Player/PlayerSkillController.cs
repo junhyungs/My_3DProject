@@ -34,19 +34,7 @@ public class PlayerSkillController : MonoBehaviour
 
     private void Start()
     {
-        Initialize();
-    }
-
-    private void Initialize()
-    {
         SetSkill(PlayerSkill.Bow);
-
-        ObjectPool.Instance.CreatePool(ObjectName.PlayerHook, 1);
-        ObjectPool.Instance.CreatePool(ObjectName.PlayerSegment);
-        ObjectPool.Instance.CreatePool(ObjectName.PlayerArrow);
-        ObjectPool.Instance.CreatePool(ObjectName.PlayerBomb);
-        ObjectPool.Instance.CreatePool(ObjectName.PlayerFireBall);
-        ObjectPool.Instance.CreatePool(ObjectName.HitEffect);
     }
 
     public void SetSkill(PlayerSkill skillType)
@@ -58,7 +46,7 @@ public class PlayerSkillController : MonoBehaviour
             m_currentSkill = null;
         }
 
-        Skill newSkill = SkillManager.Instance.GetSkill(skillType);
+        var newSkill = SkillManager.Instance.GetSkill(skillType);
 
         if(newSkill == null)
         {

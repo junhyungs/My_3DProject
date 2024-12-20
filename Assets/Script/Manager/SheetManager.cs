@@ -35,6 +35,8 @@ public class SheetManager : MonoBehaviour
     const string _mapDataPath = "https://script.google.com/macros/s/AKfycbzCRou8ldvpGxo2SxWF03p_2onC-QSrOeHptV983lEdz_74R85IUmDAr5q-23YJcgft/exec";
     #endregion
 
+    const string _testPost = "https://script.google.com/macros/s/AKfycbwY8fVsfmZXyi3dZqyuyQT8TtNj30hk2xGh7HZTcGgDtyhHGwchcGHpTF6lszbXDg7W/exec";
+
     [Header("SaveJson")]
     [SerializeField] private bool _saveJson;
 
@@ -99,7 +101,7 @@ public class SheetManager : MonoBehaviour
         else
         {
             UnityWebRequest unityWebRequest = UnityWebRequest.Get(url);
-
+            
             yield return unityWebRequest.SendWebRequest();
 
             if (unityWebRequest.result != UnityWebRequest.Result.Success)
@@ -162,6 +164,40 @@ public class SheetManager : MonoBehaviour
         DataManager.Instance.SetData(fileName, jsonData.text);
     }
 
+    private void Start()
+    {
+        var playerData = DataManager.Instance.GetData("P101") as PlayerData;
+
+        if(playerData != null)
+        {
+            Debug.Log(playerData.SpeedOffSet);
+            StartCoroutine(TestPost(playerData));
+            Debug.Log("요청시작");
+        }
+    }
+
+    public IEnumerator TestPost(PlayerData data)
+    {
+        string jsonData = JsonConvert.SerializeObject(data);
+        Debug.Log(jsonData);
+        WWWForm form = new WWWForm();
+
+        form.AddField("json", jsonData);
+
+        UnityWebRequest request = UnityWebRequest.Post(_testPost, form);
+
+        yield return request.SendWebRequest();
+
+        if(request.result == UnityWebRequest.Result.Success)
+        {
+            Debug.Log("성공!");
+        }
+        else
+        {
+            Debug.Log("실패!");
+        }
+    }
+
     //function doGet(e)
     //{
     //    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("시트1"); //현재 활성화 되어있는 시트를 가져옴.
@@ -219,47 +255,63 @@ public class SheetManager : MonoBehaviour
     //    return ContentService.createTextOutput(jsonOut).setMimeType(ContentService.MimeType.JSON);
     //}
 
-    //function doPost(e)
-    //{
-    //    // 요청 본문에서 폼 데이터 가져오기
-    //    var idsToUpdate = e.parameters.ID; // 배열로 가져오기
-    //    var newDescriptionNames = e.parameters.DescriptionName; // 배열로 가져오기
 
-    //    // 시트1을 가져옴
-    //    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("시트1");
+  //  function doPost(e)
+  //  {
+  //      var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("시트1"); //현재 활성화 된 시트
 
-    //    // 시트의 데이터 가져오기
-    //    var data = sheet.getDataRange().getValues();
+  //      var jsonString = e.parameter.json; //form을 만들 때 지정한 필드 이름
 
-    //    // 데이터에서 헤더를 찾기
-    //    var headers = data[0];
+  //      var data = JSON.parse(jsonString); //제이슨으로 변환
 
-    //    // ID와 DescriptionName의 인덱스를 찾기
-    //    var idIndex = headers.indexOf("ID");
-    //    var descriptionNameIndex = headers.indexOf("DescriptionName");
+  //      var headers = Object.keys(data); //데이터의 필드 이름을 가져옴. ex) data.ID 이면 ID를 가져옴.
 
-    //    // ID가 맞는 항목을 찾아서 DescriptionName 수정
-    //    for (var i = 0; i < idsToUpdate.length; i++)
-    //    {
-    //        var idToUpdate = idsToUpdate[i];
-    //        var newDescriptionName = newDescriptionNames[i];
+  //      // 첫 번째 행에 헤더가 없다면 헤더 추가
+  //      if (sheet.getLastRow() == 0)
+  //      {
+  //          sheet.appendRow(headers);
+  //      }
 
-    //        for (var j = 1; j < data.length; j++)
-    //        { // 데이터는 1번째 인덱스부터 시작
-    //            if (data[j][idIndex] === idToUpdate)
-    //            {
-    //                data[j][descriptionNameIndex] = newDescriptionName; // DescriptionName 수정
-    //                break; // 수정 후 반복문 종료
-    //            }
-    //        }
-    //    }
+  //      var rowData = []; //데이터를 보관할 배열 선언
 
-    //    // 수정된 데이터를 다시 시트에 기록
-    //    sheet.getRange(1, 1, data.length, headers.length).setValues(data);
+  //      //헤더 배열을 순회하며 각 헤더 값을 키값으로 data 배열에서 해당하는 데이터를 rowData 배열에 넣는다.
+  //      for (var i = 0; i < headers.length; i++)
+  //      {
+  //          var header = headers[i];
 
-    //    // 응답을 생성 (상태 메시지 반환)
-    //    return ContentService.createTextOutput(JSON.stringify({ status: "success", message: "Data updated successfully."}))
-    //                     .setMimeType(ContentService.MimeType.JSON);
-    //}
+  //          rowData.push(data[header]);
+  //      }
+
+  //      var lastRow = sheet.getLastRow(); //현재 시트의 마지막 행을 가져옴
+
+  //      if (lastRow > 1)
+  //      { //행이 있다면
+
+  //          var currentData = sheet.getDataRange().getValues(); //시트의 모든 데이터를 가져옴.
+  //          var currentHeaders = currentData[0]; //헤더는 항상 첫 번째 행
+
+  //          for (var i = 1; i < currentData.length; i++)
+  //          { //첫 번째 행을 제외하고 순회하며 데이터를 덮어씌움
+
+  //              for (var j = 0; j < currentHeaders.length; j++)
+  //              {
+  //                  currentData[i][j] = rowData[j];
+  //              }
+
+  //          }
+  //          //덮어씌운 데이터를 시트에 반영.
+  //          sheet.getRange(2, 1, currentData.length - 1, currentData[0].length).setValues(currentData.slice(1));//getRange(시작 행, 시작 열, 데이터를 반영할 행의 개수, 데이터의 열 수).setValues(currentData.slice(1)) -> currentData 배열의 첫 번째 요소(헤더)를 제외한 나머지 데이터를 잘라낸다. (즉 헤더만 잘라내고 데이터가 기록된 행만 처리하겠다.)
+  //      }
+  //      else
+  //      {
+  //          // 데이터 행을 추가
+  //          sheet.appendRow(rowData); //appendRow 매번 새로운 행을 생성한다.
+  //      }
+
+  //      return ContentService.createTextOutput(
+  //        JSON.stringify({ success: true})
+  //).setMimeType(ContentService.MimeType.JSON);
+
+  //  }
 
 }

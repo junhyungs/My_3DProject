@@ -1,13 +1,39 @@
 using UnityEngine;
 
-public class Ladder : MonoBehaviour, IInteractionItem
+public class Ladder : MonoBehaviour, IInteractionItem, IInteractionLadder
 {
     [Header("UI_Position")]
     [SerializeField] private Vector3 _uiPosition;
 
+    private float _lowestPointY;
+    private float _highestPointY;
+
+    private void Start()
+    {
+        var boxCollider = GetComponent<BoxCollider>();
+        var boxCenter = boxCollider.center;
+
+
+        var lowestPointY = boxCenter.y - (boxCollider.size.y / 2f);
+        var highestPointY = boxCenter.y + (boxCollider.size.y / 2f);
+        
+        var worldLowestPointY = transform.TransformPoint(new Vector3(0f, lowestPointY, 0f));
+        var worldHighestPointY = transform.TransformPoint(new Vector3(0f, highestPointY, 0f));
+
+        _lowestPointY = worldLowestPointY.y;
+        _highestPointY = worldHighestPointY.y;
+    }
+
     public void InteractionItem()
     {
         UIManager.Instance.HideItemInteractionUI(transform, ObjectName.LadderUI);
+    }
+
+    public void InteractionLadder(NewPlayer player)
+    {
+        player.transform.SetParent(transform);
+        player.transform.localPosition = Vector3.zero;
+        player.transform.rotation = transform.rotation;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -25,5 +51,12 @@ public class Ladder : MonoBehaviour, IInteractionItem
         {
             UIManager.Instance.HideItemInteractionUI(transform, ObjectName.LadderUI);
         }
+    }
+
+    public (float, float) LadderLength()
+    {
+        var ladder = (_lowestPointY,  _highestPointY);
+
+        return ladder;
     }
 }

@@ -4,17 +4,16 @@ using System;
 public class HookObject : ProjectileObject, IHookPosition
 {
     private Action<Vector3, bool> _hookEventHandler;
-    
-    private GameObject m_player;
     private Vector3 m_movePos;
+
+    public Vector3 StartPosition { get; set; }
     private float m_maxDistance = 10.0f;
     private bool isAnchor;
 
     private void OnEnable()
     {
         EventManager.Instance.RegisterHookPositionEvent(this);
-
-        m_player = GameManager.Instance.Player;
+    
         transform.gameObject.layer = LayerMask.NameToLayer("Default");
         isAnchor = false;
     }
@@ -24,12 +23,20 @@ public class HookObject : ProjectileObject, IHookPosition
         _hookEventHandler = null;
     }
 
+
     public override void IsFire(bool fire)
     {
-        isFire = fire;
+        _isFire = fire;
     }
 
-    void FixedUpdate()
+    public override void SetProjectileObjectData(float atk, float speed, float range)
+    {
+        _projectileAtk = atk;
+        _projectileSpeed = speed;
+        _range = range;
+    }
+
+    private void Update()
     {
         if (isAnchor)
         {
@@ -38,23 +45,22 @@ public class HookObject : ProjectileObject, IHookPosition
 
         FireDistance();
 
-        if (isFire)
+        if (_isFire)
         {
-            m_movePos = transform.forward * (m_speed + 10) * Time.fixedDeltaTime;
+            m_movePos = transform.forward * (_projectileSpeed + 10) * Time.deltaTime;
             transform.position += m_movePos;
         }
         else
         {
-            m_movePos = -transform.forward * (m_speed + 10) * Time.fixedDeltaTime;
+            m_movePos = -transform.forward * (_projectileSpeed + 10) * Time.deltaTime;
             transform.position += m_movePos;
         }
-
     }
 
     private void FireDistance()
     {
 
-        float currentDistance = Vector3.Distance(transform.position, m_player.transform.position);
+        float currentDistance = Vector3.Distance(transform.position, StartPosition);
 
         if (currentDistance >= m_maxDistance && !isAnchor)
         {
@@ -66,7 +72,7 @@ public class HookObject : ProjectileObject, IHookPosition
                 ObjectPool.Instance.EnqueueObject(chain, ObjectName.PlayerSegment);
             }
 
-            isFire = false;
+            _isFire = false;
             transform.gameObject.layer = LayerMask.NameToLayer("Player");
         } 
         
@@ -82,13 +88,13 @@ public class HookObject : ProjectileObject, IHookPosition
             ReturnHook();
         }
 
-        if(other.gameObject.layer == LayerMask.NameToLayer("Monster") && isFire)
+        if(other.gameObject.layer == LayerMask.NameToLayer("Monster") && _isFire)
         {
             IDamged hit = other.gameObject.GetComponent<IDamged>();
 
             if (hit != null)
             {
-                hit.TakeDamage(m_atk);
+                hit.TakeDamage(_projectileAtk);
             }
 
             _hookEventHandler?.Invoke(transform.position, true);
@@ -96,11 +102,11 @@ public class HookObject : ProjectileObject, IHookPosition
             isAnchor = true;
             ReturnHook();
         }
-        
-        if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
+
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
 
-            if (!isFire)
+            if (!_isFire)
             {
                 _hookEventHandler.Invoke(transform.position, false);
 

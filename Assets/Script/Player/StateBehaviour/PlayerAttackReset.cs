@@ -58,7 +58,7 @@ public class PlayerAttackReset : StateMachineBehaviour//ºÎÂøµÈ ¾Ö´Ï¸ÞÀÌ¼Ç State¿
     {
         GetComponent(animator);
         ChargeMax(stateInfo, true);
-        AnimationStateMove(stateInfo, m_attackController.IsChargeMax);
+        //AnimationStateMove(stateInfo, m_attackController.IsChargeMax);
         ActiveObject(stateInfo);
     }
 
@@ -87,17 +87,17 @@ public class PlayerAttackReset : StateMachineBehaviour//ºÎÂøµÈ ¾Ö´Ï¸ÞÀÌ¼Ç State¿
         }
     }
 
-    private void AnimationStateMove(AnimatorStateInfo stateInfo, bool isChargeMax)
-    {
-        bool animationStateMove = stateInfo.shortNameHash == m_Slash_Light_L
-           || stateInfo.shortNameHash == m_Slash_Light_R
-           || stateInfo.shortNameHash == m_Slash_Light_Last;
+    //private void AnimationStateMove(AnimatorStateInfo stateInfo, bool isChargeMax)
+    //{
+    //    bool animationStateMove = stateInfo.shortNameHash == m_Slash_Light_L
+    //       || stateInfo.shortNameHash == m_Slash_Light_R
+    //       || stateInfo.shortNameHash == m_Slash_Light_Last;
 
-        if (animationStateMove)
-        {
-            m_moveController.AnimationStateMove(isChargeMax);
-        }
-    }
+    //    if (animationStateMove)
+    //    {
+    //        m_moveController.AnimationStateMove(isChargeMax);
+    //    }
+    //}
 
     private void ActiveObject(AnimatorStateInfo stateInfo)
     {

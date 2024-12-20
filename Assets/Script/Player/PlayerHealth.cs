@@ -58,7 +58,6 @@ public class PlayerHealth : MonoBehaviour, IDamged
 
             if (m_playerHp <= 0)
             {
-                _player.DestroyShadowPlayer();
 
                 Die();
 

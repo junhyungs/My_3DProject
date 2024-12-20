@@ -1,11 +1,13 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public interface IInteractionItem
 {
     public void InteractionItem();
+}
+
+public interface IInteractionLadder
+{
+    public void InteractionLadder(NewPlayer player);
+    public (float,float) LadderLength();
 }
 
 public interface ITrinketCameraEvent

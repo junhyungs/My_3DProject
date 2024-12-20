@@ -22,7 +22,7 @@ public class WeaponManager : Singleton<WeaponManager>
         _weaponController = weaponController;
     }
 
-    public IEnumerator LoadWeaponData(string Id, Weapon weaponComponent)
+    public IEnumerator LoadWeaponData(string Id, IWeapon weaponComponent, PlayerData data)
     {
         yield return new WaitWhile(() =>
         {
@@ -32,6 +32,6 @@ public class WeaponManager : Singleton<WeaponManager>
         Debug.Log("무기 데이터를 가져왔습니다.");
         var weaponData = DataManager.Instance.GetData(Id) as PlayerWeaponData;
 
-        weaponComponent.SetWeaponData(weaponData);
+        weaponComponent.SetWeaponData(weaponData, data);
     }
 }

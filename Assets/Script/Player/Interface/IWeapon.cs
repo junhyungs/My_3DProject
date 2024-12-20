@@ -4,7 +4,6 @@ using UnityEngine;
 
 public interface IWeapon
 {
-    public void SetWeaponData(PlayerWeaponData weaponData);
+    public void SetWeaponData(PlayerWeaponData weaponData, PlayerData playerData);
     public void UseWeapon(bool isCharge);
-
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,11 +5,10 @@ public class BombObject : ProjectileObject
 {    
     private MeshRenderer m_bombMeshRenderer;
     private Material m_bombMaterial;
+
     protected override void Awake()
     {
         base.Awake();
-
-        m_projectileRigidbody.useGravity = false;
     }
 
     private void OnEnable()
@@ -24,19 +22,21 @@ public class BombObject : ProjectileObject
 
     public override void IsFire(bool fire)
     {
-        isFire = fire;
+        InvokeReturnMethod(fire, nameof(ReturnBomb));
+    }
 
-        if(isFire)
-        {
-            Invoke(nameof(ReturnBomb), 4f);
-        }
+    public override void SetProjectileObjectData(float atk, float speed, float range)
+    {
+        _projectileAtk = atk;
+        _projectileSpeed = speed;
+        _range = range;
     }
 
     private void FixedUpdate()
     {
-        if (isFire)
+        if (_isFire)
         {
-            Vector3 moveDirection = transform.forward * m_speed;
+            Vector3 moveDirection = transform.forward * _projectileSpeed;
 
             m_projectileRigidbody.AddForce(moveDirection);
         }
@@ -54,7 +54,7 @@ public class BombObject : ProjectileObject
     {
         m_bombMaterial.SetFloat("_Float", 0);
 
-        isFire = false;
+        _isFire = false;
 
         m_projectileRigidbody.velocity = Vector3.zero;
 
@@ -64,7 +64,7 @@ public class BombObject : ProjectileObject
         GameObject explosionParticle = gameObject.transform.GetChild(1).gameObject;
         explosionParticle.SetActive(true);
 
-        Collider[] colliders = Physics.OverlapSphere(transform.position, m_range, LayerMask.GetMask("Monster"));
+        Collider[] colliders = Physics.OverlapSphere(transform.position, _range, LayerMask.GetMask("Monster"));
 
         for(int i = 0; i < colliders.Length; i++)
         {
@@ -72,7 +72,7 @@ public class BombObject : ProjectileObject
 
             if (hit != null)
             {
-                hit.TakeDamage(m_atk);
+                hit.TakeDamage(_projectileAtk);
             }
         }
 

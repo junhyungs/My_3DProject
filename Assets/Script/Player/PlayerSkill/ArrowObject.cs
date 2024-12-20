@@ -14,19 +14,21 @@ public class ArrowObject : ProjectileObject
 
     public override void IsFire(bool fire)
     {
-        isFire = fire;
+        InvokeReturnMethod(fire, nameof(ReturnArrow));
+    }
 
-        if(isFire == true)
-        {
-            Invoke(nameof(ReturnArrow), 5.0f);
-        }
+    public override void SetProjectileObjectData(float atk, float speed, float range)
+    {
+        _projectileAtk = atk;
+        _projectileSpeed = speed;
+        _range = range;
     }
 
     private void FixedUpdate()
     {
-        if (isFire)
+        if (_isFire)
         {
-            Vector3 moveForce = transform.forward * m_speed;
+            Vector3 moveForce = transform.forward * _projectileSpeed;
 
             m_projectileRigidbody.AddForce(moveForce);
         }
@@ -47,7 +49,7 @@ public class ArrowObject : ProjectileObject
 
             if(damaged != null)
             {
-                damaged.TakeDamage(m_atk);
+                damaged.TakeDamage(_projectileAtk);
 
                 ReturnArrow();
             }
@@ -99,5 +101,4 @@ public class ArrowObject : ProjectileObject
 
         ObjectPool.Instance.EnqueueObject(this.gameObject, ObjectName.PlayerArrow);
     }
-
 }

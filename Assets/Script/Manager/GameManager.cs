@@ -76,6 +76,10 @@ public class GameManager : Singleton<GameManager>
 
         yield return new WaitForSeconds(1f);
 
+        var playerComponent = Player.GetComponent<Player>();
+
+        Destroy(playerComponent.ShadowPlayer.gameObject);
+
         Player.SetActive(false);
 
         MapManager.Instance.Respawn();

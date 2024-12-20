@@ -1,13 +1,16 @@
 
-public enum MonsterType
+public enum State
 {
-    Bat = 1,
-    Slime,
-    Mage,
-    Pot,
-    Deku,
-    Ghoul
+    Idle,
+    Move,
+    Ladder,
+    Skill,
+    Attack,
+    Roll,
+    Hit,
+    Falling
 }
+
 public enum MVVM
 {
     Health_Event,

@@ -24,11 +24,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnDisable()
-    {
-        DestroyShadowPlayer();
-    }
-
     private void Start()
     {
         StartCoroutine(LoadPlayerData("P101"));
@@ -67,6 +62,14 @@ public class Player : MonoBehaviour
         {
             _moveController.OnLadder();
         }
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Time.timeScale = 0f;
+        }
+        else if (Input.GetKeyDown(KeyCode.P))
+        {
+            Time.timeScale = 1f;
+        }
     }
 
     private void CreateShadowPlayer()
@@ -81,11 +84,6 @@ public class Player : MonoBehaviour
 
         _shadowPlayer.transform.position = new Vector3(transform.position.x,
             transform.position.y + 1f, transform.position.z);
-    }
-
-    public void DestroyShadowPlayer()
-    {
-        Destroy(_shadowPlayer);
     }
 
     private void OnInteractionDialogue()

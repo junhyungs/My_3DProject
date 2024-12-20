@@ -1,30 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class ProjectileObject : MonoBehaviour
+public abstract class ProjectileObject : MonoBehaviour
 {
     protected Rigidbody m_projectileRigidbody;
-    protected bool isFire;
-    protected float m_atk;
-    protected float m_speed;
-    protected float m_range;
-    protected float m_disableTime;
+
+    protected bool _isFire;
+
+    protected float _projectileAtk;
+    protected float _projectileSpeed;
+    protected float _range;
+    protected float _disableTime;
+    private float _returnTime = 5f;
 
     protected virtual void Awake()
     {
         m_projectileRigidbody = GetComponent<Rigidbody>();
     }
 
-    public virtual void IsFire(bool fire)
-    {
-        isFire = fire;
-    }
+    public abstract void IsFire(bool fire);
+    public abstract void SetProjectileObjectData(float atk, float speed, float range);
 
-    public void SetProjectileObjectData(float atk, float speed, float range)
+    protected void InvokeReturnMethod(bool fire, string methodName)
     {
-        m_atk = atk;
-        m_speed = speed;
-        m_range = range;
+        _isFire = fire;
+
+        if (_isFire)
+        {
+            Invoke(methodName, _returnTime);
+        }
     }
 }
