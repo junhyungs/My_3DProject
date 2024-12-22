@@ -3,6 +3,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+
 
 public class WeaponPanel : MonoBehaviour
 {
@@ -63,7 +65,7 @@ public class WeaponPanel : MonoBehaviour
     {
         OnInitializeWeaponPanel();
 
-        PerformedAction(true);
+        OnEnableInputAction();
 
         EventSystem.current.SetSelectedGameObject(_buttonObject[0]);
 
@@ -72,7 +74,7 @@ public class WeaponPanel : MonoBehaviour
 
     private void OnDisable()
     {
-        PerformedAction(false);
+        OnDisableInputAction();
 
         if(_currentSlot != null)
         {
@@ -82,23 +84,18 @@ public class WeaponPanel : MonoBehaviour
         }
     }
 
-    private void PerformedAction(bool onEnable)
+    private void OnEnableInputAction()
     {
-        if (onEnable)
-        {
-            _navigateAction.action.Enable();
+        _navigateAction.action.Enable();
+        _subMitAction.action.Enable();
 
-            _subMitAction.action.Enable();
+        _subMitAction.action.performed += SetActiveChildImage;
+        _navigateAction.action.performed += SetActiveChildImage;
+    }
 
-            _subMitAction.action.performed += SetActiveChildImage;
-
-            _navigateAction.action.performed += SetActiveChildImage;
-
-            return;
-        }
-
+    private void OnDisableInputAction()
+    {
         _subMitAction.action.performed -= SetActiveChildImage;
-
         _navigateAction.action.performed -= SetActiveChildImage;
     }
 

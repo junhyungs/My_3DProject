@@ -148,7 +148,7 @@ public class CombineMesh : MonoBehaviour
     private void SaveMesh(Mesh mesh, string meshName)
     {
 #if UNITY_EDITOR //에디터에서만 처리할 수 있도록.
-        string path = $"{_savePath}"+ $"{meshName}.asset";
+        string path = $"{_savePath}/{meshName}.asset";
 
         path = AssetDatabase.GenerateUniqueAssetPath(path);
 

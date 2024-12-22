@@ -94,6 +94,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "TriggerButtonX",
+                    "type": "Button",
+                    "id": "05079b8f-daf1-44f4-8e3c-98dfe53ed853",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "TriggerButtonZ",
+                    "type": "Button",
+                    "id": "19cf857c-6a2e-46f5-9a14-e0fa2a861a2f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -459,6 +477,28 @@
                     "action": "UpDownNavigate",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "8e28f009-8be1-4de1-933e-6ebfb15a2a2e",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TriggerButtonX",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5d66c0a9-bdd9-472b-bff2-921d34e30afe",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TriggerButtonZ",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

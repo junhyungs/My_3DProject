@@ -17,8 +17,11 @@ public class MenuUI
 
 public class InventoryPanel : MonoBehaviour
 {
-    [Header("TriggerAction")]
-    [SerializeField] private InputActionReference _triggerAction;
+    [Header("TriggerButtonActionX")]
+    [SerializeField] private InputActionReference _triggerButtonX;
+
+    [Header("TriggerButtonActionZ")]
+    [SerializeField] private InputActionReference _triggerButtonZ;
 
     [Header("MenuUI")]
     [SerializeField] private List<MenuUI> _menus;
@@ -45,59 +48,71 @@ public class InventoryPanel : MonoBehaviour
     private void OnEnable()
     {
         OnDisableUI();
-       
-        _buttonIndex = 0;
 
         OnEnableUI(_buttonIndex);
 
-        PerformedAction(true);
+        OnEnableInputAction();
+
+        SetTimeScale(true);
     }
 
     private void OnDisable()
     {
-        PerformedAction(false);
+        OnDisableInputAction();
+
+        SetTimeScale(false);
     }
 
-    private void PerformedAction(bool onEnable)
+    private void OnEnableInputAction()
     {
-        if (onEnable)
-        {
-            _triggerAction.action.Enable();
+        _triggerButtonX.action.Enable();
+        _triggerButtonZ.action.Enable();
 
-            _triggerAction.action.performed += SelectOnButton;
+        _triggerButtonX.action.performed += SelectMenuUI_X;
+        _triggerButtonZ.action.performed += SelectMenuUI_Z;        
+    }
 
-            Time.timeScale = 0f;
+    private void OnDisableInputAction()
+    {
+        _triggerButtonX.action.performed -= SelectMenuUI_X;
+        _triggerButtonZ.action.performed -= SelectMenuUI_Z;
 
-            return;
-        }
+        _triggerButtonX.action.Disable();
+        _triggerButtonZ.action.Disable();
+    }
 
-        _triggerAction.action.performed -= SelectOnButton;
-
-        Time.timeScale = 1f;
+    private void SetTimeScale(bool onEnable)
+    {
+        Time.timeScale = onEnable ? 0f : 1f;
     }
 
     private void OnEnableUI(int index)
     {
-        _menus[index]._panelUI.SetActive(true);
-
-        SetAlpha(1f, _menus[index].ButtonImage);
+        SetUIState(index, true, 1f);
     }
 
     private void OnDisableUI()
     {
+        _buttonIndex = 0;
+
         _resetPanels.DisablePanelUI();
 
-        DisablePanelUI();
+        DisableMenuUI();
     }
 
-    private void DisablePanelUI()
+    private void DisableMenuUI()
     {
-        foreach(var menu in _menus)
+        for(int i = 0; i < _menus.Count; i++)
         {
-            menu._panelUI.SetActive(false);
-
-            SetAlpha(0.1f, menu.ButtonImage);
+            SetUIState(i, false, 0.1f);
         }
+    }
+
+    private void SetUIState(int index, bool isActive, float alpha)
+    {
+        _menus[index]._panelUI.SetActive(isActive);
+
+        SetAlpha(alpha, _menus[index].ButtonImage);
     }
 
     private void SetAlpha(float alpha, Image currentImage)
@@ -109,48 +124,40 @@ public class InventoryPanel : MonoBehaviour
         currentImage.color = currentColor;
     }
 
-    private void SelectOnButton(InputAction.CallbackContext context)
+    private void SelectMenuUI_X(InputAction.CallbackContext context)
     {
-        if (context.performed)
-        {
-            if (Keyboard.current.zKey.wasPressedThisFrame)
-            {
-                DisablePanelUI();
+        MenuDirection(1);
+    }
 
-                _buttonIndex--;
+    private void SelectMenuUI_Z(InputAction.CallbackContext context)
+    {
+        MenuDirection(-1);
+    }
 
-                if(_buttonIndex < 0)
-                {
-                    _buttonIndex = _menus.Count - 1;
-                }
+    private void MenuDirection(int index)
+    {
+        DisableMenuUI();
 
-                OnEnableUI(_buttonIndex);
-            }
-            else if (Keyboard.current.xKey.wasPressedThisFrame)
-            {
-                DisablePanelUI();
-               
-                _buttonIndex++;
+        _buttonIndex += index;
 
-                if (_buttonIndex >= _menus.Count)
-                {
-                    _buttonIndex = 0;
-                }
+        if (_buttonIndex < 0)
+            _buttonIndex = _menus.Count - 1;
 
-                OnEnableUI(_buttonIndex);
-            }
-        }
+        if (_buttonIndex >= _menus.Count)
+            _buttonIndex = 0;
+
+        OnEnableUI(_buttonIndex);
     }
 
     public void DisableTriggerAction(bool disable)
     {
         if (disable)
         {
-            _triggerAction.action.performed -= SelectOnButton;
+            OnDisableInputAction();
         }
         else
         {
-            _triggerAction.action.performed += SelectOnButton;
+            OnEnableInputAction();
         }
     }
 }

@@ -164,22 +164,20 @@ public class SheetManager : MonoBehaviour
         DataManager.Instance.SetData(fileName, jsonData.text);
     }
 
-    private void Start()
+    private void Post()
     {
         var playerData = DataManager.Instance.GetData("P101") as PlayerData;
 
-        if(playerData != null)
+        if (playerData != null)
         {
-            Debug.Log(playerData.SpeedOffSet);
-            StartCoroutine(TestPost(playerData));
-            Debug.Log("요청시작");
+            StartCoroutine(PostMessage(playerData));
         }
     }
 
-    public IEnumerator TestPost(PlayerData data)
+    public IEnumerator PostMessage(PlayerData data)
     {
         string jsonData = JsonConvert.SerializeObject(data);
-        Debug.Log(jsonData);
+
         WWWForm form = new WWWForm();
 
         form.AddField("json", jsonData);

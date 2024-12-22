@@ -7,6 +7,9 @@ public class Banker : _NPC, IInteractionDialogue
     [Header("NPC_Name")]
     [SerializeField] private NPC _npcName;
 
+    [Header("DialogueOrder")]
+    [SerializeField] private DialogueOrder _order;
+
     [Header("UI_Position")]
     [SerializeField] private Vector3 _uiPosition;
 
@@ -21,7 +24,7 @@ public class Banker : _NPC, IInteractionDialogue
 
         _onTrigger = true;
 
-        StartCoroutine(StartDialogue(DialogueOrder.Loop));
+        StartCoroutine(StartDialogue(_order));
     }
 
     protected override IEnumerator StartDialogue(DialogueOrder order)
