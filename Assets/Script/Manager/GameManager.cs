@@ -82,18 +82,22 @@ public class GameManager : Singleton<GameManager>
 
         Player.SetActive(false);
 
-        MapManager.Instance.Respawn();
+        yield return StartCoroutine(MapManager.Instance.Respawn(playerComponent));
 
         Respawn();
     }
 
-    private void Respawn()
+    public void Respawn()
     {
+        Player.SetActive(true);
+
         Player.gameObject.layer = LayerMask.NameToLayer("Player");
 
         _health.PlayerHP = 4;
 
         _animator.SetBool("Die", false);
+
+        PlayerLock(false);
     }
 
 }

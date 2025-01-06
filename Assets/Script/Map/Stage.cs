@@ -16,6 +16,8 @@ public class Stage : MonoBehaviour
     [SerializeField] private Transform[] _monsterTransforms;
     [SerializeField] private Item[] _items;
 
+    public Transform RespawnPoint { get; set; }
+
     protected List<BehaviourMonster> _spawnMonsters = new List<BehaviourMonster>();
     protected List<Material> _skyBoxList;
     protected Material _skyBoxMaterial;
@@ -59,6 +61,8 @@ public class Stage : MonoBehaviour
         }
     }
 
+    public virtual void OnEnableGimikObject() { }
+    
     public virtual void SpawnItems()
     {
         for(int i = 0; i < _items.Length; i++)

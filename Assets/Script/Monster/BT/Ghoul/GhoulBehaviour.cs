@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
@@ -30,6 +31,11 @@ public class GhoulBehaviour : BehaviourMonster, IDamged, IDisableArrow
     protected override void OnEnable()
     {
         base.OnEnable();
+    }
+
+    public override void OnDisableMonster()
+    {
+        base.OnDisableMonster();
     }
 
     protected override void Start()

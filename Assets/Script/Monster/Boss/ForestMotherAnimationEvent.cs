@@ -29,11 +29,14 @@ public class ForestMotherAnimationEvent : MonoBehaviour
     private ForestMotherData _data;
     private Dictionary<VineType, List<MotherVine>> _vineColliderDictionary;
     private List<MotherVine> _onList = new List<MotherVine>();  
-
-    private readonly int _slam = Animator.StringToHash("Slam");
-    private readonly int _slamRotation = Animator.StringToHash("SlamRotation");
+    
     private readonly int _spinIdle = Animator.StringToHash("SpinIdle");
     private readonly int _hyper = Animator.StringToHash("Hyper");
+
+    #region Trigger
+    private readonly int _slamRotation = Animator.StringToHash("SlamRotation");
+    private readonly int _slam = Animator.StringToHash("Slam");
+    #endregion
 
     private void Start()
     {
@@ -42,6 +45,12 @@ public class ForestMotherAnimationEvent : MonoBehaviour
         _data = BossManager.Instance.MotherData;
 
         InitializeCollider();
+    }
+
+    private void OnDisable()
+    {
+        _animator.Rebind();
+        _animator.Update(0f);
     }
 
     #region SpinIdle

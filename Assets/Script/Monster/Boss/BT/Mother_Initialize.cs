@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using BehaviorDesigner.Runtime.Tasks;
 
 [TaskCategory("Boss/Mother/Initialize")]
@@ -23,7 +24,12 @@ public class Mother_Initialize : Action
 
     private void InitializeMother(ForestMother mother)
     {
-        _property = new ForestMotherProperty();
+        if(_property == null)
+        {
+            _property = new ForestMotherProperty();
+
+            mother.Property = _property;
+        }
 
         var data = BossManager.Instance.MotherData;
 
@@ -32,8 +38,6 @@ public class Mother_Initialize : Action
         _property.CurrentSpeed = data.Speed;
         _property.DownHealth = data.DownHealth;
         _property.PlayerObject = GameManager.Instance.Player;
-
-        mother.Property = _property;
 
         InitializePattern(mother, mother.Property);
     }

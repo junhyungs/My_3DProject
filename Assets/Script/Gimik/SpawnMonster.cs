@@ -34,21 +34,12 @@ public class SpawnMonster : MonoBehaviour
 
     private void OnEnable()
     {
-        _triggerCollider.enabled = true;
-
-        _spawnFailCount = 0;
-
-        _isSpawn = false;
+        OnEnableTriggerCollider();
     }
 
     private void OnDisable()
     {
-        foreach(var monster in _spawnMonsterSet)
-        {
-            BehaviourMonster monsterComponent = monster.GetComponent<BehaviourMonster>();
-
-            monsterComponent.OnDisableMonster();
-        }
+        OnDisableSpawnMonsters();
     }
 
     private void Start()
@@ -75,6 +66,45 @@ public class SpawnMonster : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             StartSpawnEvent();
+        }
+    }
+
+    public void OnEnableTriggerCollider()
+    {
+        _triggerCollider.enabled = true;
+
+        _spawnFailCount = 0;
+
+        _isSpawn = false;
+    }
+
+    public void OnDisableSpawnMonsters()
+    {
+        StopAllCoroutines();
+
+        if(_spawnMonsterSet.Count <= 0)
+        {
+            return;
+        }
+
+        foreach (var monster in _spawnMonsterSet)
+        {
+            BehaviourMonster monsterComponent = monster.GetComponent<BehaviourMonster>();
+
+            monsterComponent.OnDisableMonster();
+        }
+
+        ResetDoorMaterial();
+        ResetSpawnGimik();
+    }
+
+    private void ResetDoorMaterial()
+    {
+        foreach(var keyValuePair in _doorMaterialDictionary)
+        {
+            var material = keyValuePair.Value;
+
+            material.SetFloat("_Float", -0.3f);
         }
     }
 

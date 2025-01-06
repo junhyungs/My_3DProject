@@ -39,6 +39,11 @@ public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
         EventManager.Instance.RegisterDisableMageBullet(this);
     }
 
+    public override void OnDisableMonster()
+    {
+        base.OnDisableMonster();
+    }
+
     protected override void Start()
     {
         ObjectPool.Instance.CreatePool(ObjectName.MageBullet);

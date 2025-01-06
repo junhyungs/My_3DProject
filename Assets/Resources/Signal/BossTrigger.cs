@@ -4,6 +4,21 @@ using UnityEngine;
 
 public class BossTrigger : MonoBehaviour
 {
+    private BoxCollider _boxCollider;
+
+    private void Awake()
+    {
+        _boxCollider = GetComponent<BoxCollider>();
+    }
+
+    public void OnEnableBossTrigger()
+    {
+        if (!_boxCollider.enabled)
+        {
+            _boxCollider.enabled = true;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))

@@ -18875,6 +18875,7 @@ GameObject:
   - component: {fileID: 2459884434919694026}
   - component: {fileID: 2914887392335619046}
   - component: {fileID: 353649206952965261}
+  - component: {fileID: 6399122178635039947}
   m_Layer: 0
   m_Name: BossDoor
   m_TagString: Untagged
@@ -18948,6 +18949,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6399122178635039947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2301219798383171189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3492b933591f3db419818c6d2fe615dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2315577159235246231
 GameObject:
   m_ObjectHideFlags: 0
@@ -43384,6 +43397,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5488825052858547230}
   - {fileID: 903082053128160285}
   - {fileID: 5481074599155996384}
   - {fileID: 836302144721064150}
@@ -43425,8 +43439,13 @@ MonoBehaviour:
   _items:
   - {fileID: 7338940182067999953}
   - {fileID: 4697299845386508759}
-  _bossDoor: {fileID: 2301219798383171189}
+  _bossDoor: {fileID: 6399122178635039947}
+  _bossTrigger: {fileID: 6744449332286003400}
   _door: {fileID: 2551717814775175160}
+  _respawnPoint: {fileID: 5488825052858547230}
+  _respawnDisableObjects:
+  - {fileID: 8628605816856338695}
+  - {fileID: 1466159547990502741}
 --- !u!1 &5036151481362315069
 GameObject:
   m_ObjectHideFlags: 0
@@ -53365,6 +53384,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6058849929021727873
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5488825052858547230}
+  m_Layer: 0
+  m_Name: RespawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5488825052858547230
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6058849929021727873}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: -7.5, y: 0, z: -30}
+  m_LocalScale: {x: 0.59999996, y: 0.6, z: 0.59999996}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1483214954809008973}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6071908602734351177
 GameObject:
   m_ObjectHideFlags: 0
@@ -78352,9 +78402,9 @@ MonoBehaviour:
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(395.126648,69.39365)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Repeater","NodeData":{"Offset":"(0.46513176,115.3495)"},"ID":1,"Name":"Repeater","Instant":true,"SharedIntcount":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolrepeatForever":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolendOnFailure":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(-3.72133446,108.604691)"},"ID":2,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-293.7312,124.125389)"},"ID":3,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"Mother_Init","NodeData":{"Offset":"(-89.554184,125.138268)"},"ID":4,"Name":"Mother  
-        Init","Instant":true},{"Type":"Mother_Initialize","NodeData":{"Offset":"(77.00465,119.497108)"},"ID":5,"Name":"Mother  
-        Initialize","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-77.47885,235.949951)"},"ID":6,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"Mother_CanAttack","NodeData":{"Offset":"(-306.890839,137.067871)"},"ID":7,"Name":"Mother  
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(295.126648,31.8936577)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Repeater","NodeData":{"Offset":"(-1.162775,123.953606)"},"ID":1,"Name":"Repeater","Instant":true,"SharedIntcount":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolrepeatForever":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolendOnFailure":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(-3.72133636,143.4884)"},"ID":2,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-216.046417,117.906891)"},"ID":3,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"Mother_Init","NodeData":{"Offset":"(-127.054184,125.138268)"},"ID":4,"Name":"Mother  
+        Init","Instant":true},{"Type":"Mother_Initialize","NodeData":{"Offset":"(52.00465,131.9971)"},"ID":5,"Name":"Mother  
+        Initialize","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(3.38793945,224.322052)"},"ID":6,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"Mother_CanAttack","NodeData":{"Offset":"(-306.890839,137.067871)"},"ID":7,"Name":"Mother  
         Can Attack","Instant":true},{"Type":"Mother_ChangePattern","NodeData":{"Offset":"(-111.41452,144.427261)"},"ID":8,"Name":"Mother  
         Change Pattern","Instant":true},{"Type":"Mother_PlayPattern","NodeData":{"Offset":"(121.6215,140.811142)"},"ID":9,"Name":"Mother  
         Play Pattern","Instant":true}]},{"Type":"Mother_Death","NodeData":{"Offset":"(154.508545,188.0745)"},"ID":10,"Name":"Mother  

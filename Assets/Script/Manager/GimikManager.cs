@@ -16,7 +16,6 @@ public class GimikManager : Singleton<GimikManager>
     private void Awake()
     {
         GimikEventDic.Add(GimikEnum.OpenDoor, OpenDoor);
-        
     }
 
     #region MoveDoor

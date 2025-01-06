@@ -28459,6 +28459,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4557266349298698696}
   - {fileID: 8260232054850129619}
   - {fileID: 417858266237927938}
   - {fileID: 6868041673427461072}
@@ -28492,6 +28493,7 @@ MonoBehaviour:
   _door: {fileID: 1086721277852714047}
   _outTransform: {fileID: 3382718724463542947}
   _endingDoor: {fileID: 6823916560498234734}
+  _respawnPoint: {fileID: 4557266349298698696}
 --- !u!1 &3214219657910167717
 GameObject:
   m_ObjectHideFlags: 0
@@ -37502,6 +37504,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &4032022588294333461
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4557266349298698696}
+  m_Layer: 0
+  m_Name: RespawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4557266349298698696
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4032022588294333461}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 0, y: 15, z: 0}
+  m_LocalScale: {x: 0.59999996, y: 0.6, z: 0.59999996}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2568844644042941932}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4038960492427062708
 GameObject:
   m_ObjectHideFlags: 0

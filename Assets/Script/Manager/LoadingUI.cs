@@ -54,6 +54,8 @@ public class LoadingUI : MonoBehaviour
 
             durationTime += 2 * _duration;
         }
+
+        _childObject.SetActive(false);
     }
 
     public IEnumerator ImageBlink(ResourceRequest request = null)

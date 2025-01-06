@@ -5,12 +5,26 @@ using UnityEngine;
 public class BossStage : Stage
 {
     [Header("BossDoor")]
-    [SerializeField] private GameObject _bossDoor;
+    [SerializeField] private BossDoor _bossDoor;
+
+    [Header("BossTrigger")]
+    [SerializeField] private BossTrigger _bossTrigger;
 
     [Header("Door")]
     [SerializeField] private CutSceneDoor _door;
 
+    [Header("RespawnPoint")]
+    [SerializeField] private Transform _respawnPoint;
+
+    [Header("RespawnDisableObject")]
+    [SerializeField] private GameObject[] _respawnDisableObjects;
+
     private HashSet<HitSwitch> _hitSwitchSet;
+
+    private void Awake()
+    {
+        RespawnPoint = _respawnPoint;
+    }
 
     private void OnEnable()
     {
@@ -55,11 +69,20 @@ public class BossStage : Stage
 
         if (_hitSwitchSet.Count <= 0)
         {
-            var moveGimik = GimikManager.Instance.Gimik;
+            _bossDoor.OpenDoor();
+        }
+    }
 
-            if(moveGimik.TryGetValue(GimikEnum.OpenDoor, out Action<GameObject> moveEvent))
+    public override void OnEnableGimikObject()
+    {
+        _bossDoor.OpenDoor();
+        _bossTrigger.OnEnableBossTrigger();
+
+        foreach (var disableObject in _respawnDisableObjects)
+        {
+            if(disableObject != null)
             {
-                moveEvent?.Invoke(_bossDoor);
+                disableObject.SetActive(false);
             }
         }
     }

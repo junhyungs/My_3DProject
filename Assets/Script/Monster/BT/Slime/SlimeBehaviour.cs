@@ -24,7 +24,6 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     [SerializeField] private Material _originalMaterial;
 
     #region Property
-    public bool Last { get; set; }
     public GameObject PlayerObject { get; set; }
     public BT_MonsterData Data => _data;
     public bool Spawn => _isSpawn;
@@ -37,16 +36,11 @@ public class SlimeBehaviour : BehaviourMonster, IDamged
     protected override void OnEnable()
     {
         base.OnEnable();
-
-        Last = false;
     }
 
-    private void OnDisable()
+    public override void OnDisableMonster()
     {
-        if (Last)
-        {
-            Destroy(gameObject);
-        }
+        base.OnDisableMonster();
     }
 
     protected override void Start()

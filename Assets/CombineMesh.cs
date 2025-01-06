@@ -75,11 +75,6 @@ public class CombineMesh : MonoBehaviour
 
         var combineParentObject = new GameObject(_name);
 
-        if (_isStatic)
-        {
-            combineParentObject.isStatic = true;
-        }
-
         foreach(var keyValuePair in meshDictionary)
         {
             var material = keyValuePair.Key;

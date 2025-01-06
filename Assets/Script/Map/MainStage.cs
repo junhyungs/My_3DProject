@@ -10,6 +10,11 @@ public class MainStage : Stage
 
     private bool _isFirst = true;
 
+    private void Awake()
+    {
+        RespawnPoint = _startTransform;
+    }
+
     private void OnEnable()
     {
         if (!_isFirst)

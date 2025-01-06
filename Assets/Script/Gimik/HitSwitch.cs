@@ -9,6 +9,12 @@ public class HitSwitch : MonoBehaviour, IHitSwitch
 
     public Action<HitSwitch> _swithAction;
     private float _moveTime = 4f;
+    private Vector3 _initializeDoorPosition;
+
+    private void Awake()
+    {
+        _initializeDoorPosition = EventObject.transform.position;
+    }
 
     public void OnHitSwitch()
     {
@@ -31,9 +37,14 @@ public class HitSwitch : MonoBehaviour, IHitSwitch
 
     private IEnumerator DoorCoroutine(GameObject eventObject, Vector3 moveDirection)
     {
-        Vector3 startPosition = eventObject.transform.position;
+        Vector3 startPosition = _initializeDoorPosition;
 
         Vector3 endPosition = startPosition + moveDirection;
+
+        if(Vector3.Distance(eventObject.transform.position, endPosition) < 0.01f)
+        {
+            yield break;
+        }
 
         float elapsedTime = 0f;
 

@@ -12,6 +12,14 @@ public class GimikStage : Stage
     [Header("EndingDoor")]
     [SerializeField] private GameObject _endingDoor;
 
+    [Header("RespawnPosition")]
+    [SerializeField] private Transform _respawnPoint;
+
+    private void Awake()
+    {
+        RespawnPoint = _respawnPoint;
+    }
+
     private void OnEnable()
     {
         if(_door != null)
@@ -44,5 +52,11 @@ public class GimikStage : Stage
     public override void SpawnItems()
     {
         base.SpawnItems();
+    }
+
+    public override void OnEnableGimikObject()
+    {
+        _spawnGimikComponent.OnDisableSpawnMonsters();
+        _spawnGimikComponent.OnEnableTriggerCollider();
     }
 }

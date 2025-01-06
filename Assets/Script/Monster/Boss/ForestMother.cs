@@ -18,6 +18,9 @@ public class ForestMother : MonoBehaviour, IDamged
     public ForestMotherProperty Property { get; set; }
     #endregion
 
+    private Vector3 _startPosition;
+    private Quaternion _startRotation;
+
     private void Awake()
     {
         InitializeForestMother();
@@ -25,6 +28,12 @@ public class ForestMother : MonoBehaviour, IDamged
 
     private void OnEnable()
     {
+        if(Vector3.Distance(transform.position, _startPosition) > 0.01f)
+        {
+            transform.position = _startPosition;
+            transform.rotation = _startRotation;
+        }
+
         var materialValue = _copyMaterial.GetFloat("_Float");
 
         if (materialValue <= 0f)
@@ -44,6 +53,10 @@ public class ForestMother : MonoBehaviour, IDamged
     private void InitializeForestMother()
     {
         _animator = gameObject.GetComponent<Animator>();
+
+        _startPosition = transform.position;
+
+        _startRotation = transform.rotation;
 
         SetMaterial();
     }
@@ -112,5 +125,10 @@ public class ForestMother : MonoBehaviour, IDamged
         }
 
         gameObject.SetActive(false);
+    }
+
+    public void DeBugs()
+    {
+        Debug.Log("·Î±× ½ÇÇàµÊ");
     }
 }

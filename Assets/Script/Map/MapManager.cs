@@ -50,7 +50,7 @@ public class MapManager : Singleton<MapManager>
 
         UIManager.Instance.OnInitializeImage(false);
 
-        ChangeMap(Map.MainStage);
+        ChangeMap(Map.BossStage);
     }
 
     public MapData GetMapData(string id)
@@ -149,12 +149,15 @@ public class MapManager : Singleton<MapManager>
             Debug.Log("¸ÊÀÌ µñ¼Å³Ê¸®¿¡ ¾ø½À´Ï´Ù.");
     }
 
-    public void Respawn()
+    public IEnumerator Respawn(Player playerComponent)
     {
-        if(_currentMap != null )
-        {
-            ChangeMap(_currentMapName);
-        }
+        yield return StartCoroutine(UIManager.Instance.GetGlobalLoadingUIFunc.Invoke());
+
+        var stageComponent = _currentMap.GetComponent<Stage>();
+
+        stageComponent.OnEnableGimikObject();
+
+        playerComponent.transform.position = stageComponent.RespawnPoint.position;
     }
-   
+
 }
