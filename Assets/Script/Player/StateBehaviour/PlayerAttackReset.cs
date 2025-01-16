@@ -47,6 +47,7 @@ public class PlayerAttackReset : StateMachineBehaviour//부착된 애니메이션 State�
 
         if (isChargeTrue && Input.GetMouseButtonUp(2))
         {
+            Debug.Log("실행쓰");
             animator.SetTrigger("ChargeFail");
         }
 

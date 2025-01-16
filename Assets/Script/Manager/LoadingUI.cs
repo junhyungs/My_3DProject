@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,10 +7,11 @@ public class LoadingUI : MonoBehaviour
     [Header("Image")]
     [SerializeField] private Image _loadIcon;
 
+    private Coroutine _loadingCoroutine;
     private GameObject _childObject;
 
     private float _duration = 0.3f;
-    private float _requestNullDuration = 2.0f;
+    private float _maxDuration = 2.0f;
     private float _exitDuration = 2.0f;
 
     private void Awake()
@@ -31,11 +31,25 @@ public class LoadingUI : MonoBehaviour
         UIManager.Instance.AddExitEvent(ExitImageBlink, false);
     }
 
-    public void StartLoadingUI(ResourceRequest request = null)
+    public void StartLoadingUI(bool isStart)
     {
-        _childObject.SetActive(true);
+        if (isStart)
+        {
+            _childObject.SetActive(true);
 
-        StartCoroutine(ImageBlink(request));
+            _loadingCoroutine = StartCoroutine(ImageBlink());
+        }
+        else
+        {
+            if(_loadingCoroutine != null)
+            {
+                StopCoroutine(_loadingCoroutine);
+
+                _childObject.SetActive(false);
+
+                _loadingCoroutine = null;
+            }
+        }
     }
 
     private IEnumerator ExitImageBlink()
@@ -58,38 +72,20 @@ public class LoadingUI : MonoBehaviour
         _childObject.SetActive(false);
     }
 
-    public IEnumerator ImageBlink(ResourceRequest request = null)
+    public IEnumerator ImageBlink()
     {
         Color color = _loadIcon.color;
 
-        if(request != null)
+        float durationTime = 0f;
+
+        while (durationTime < _maxDuration)
         {
-            while (!request.isDone)
-            {
-                yield return StartCoroutine(FadeImage(color, 1f, _duration));
+            yield return StartCoroutine(FadeImage(color, 1f, _duration));
 
-                yield return StartCoroutine(FadeImage(color, 0f, _duration));
-            }
+            yield return StartCoroutine(FadeImage(color, 0f, _duration));
+
+            durationTime += 2 * _duration;
         }
-        else
-        {
-            float durationTime = 0f;
-
-            while(durationTime < _requestNullDuration)
-            {
-                yield return StartCoroutine(FadeImage(color, 1f, _duration));
-
-                yield return StartCoroutine(FadeImage(color, 0f, _duration));
-
-                durationTime += 2 * _duration;
-            }
-        }
-
-        //yield return StartCoroutine(FadeImage(color, 1f, _duration));
-
-        //yield return StartCoroutine(FadeImage(color, 0f, _duration));
-
-        _childObject.SetActive(false);
     }
 
     private IEnumerator FadeImage(Color color, float targetAlpha, float duration)

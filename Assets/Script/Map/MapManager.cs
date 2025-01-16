@@ -50,7 +50,7 @@ public class MapManager : Singleton<MapManager>
 
         UIManager.Instance.OnInitializeImage(false);
 
-        ChangeMap(Map.BossStage);
+        ChangeMap(Map.MainStage);
     }
 
     public MapData GetMapData(string id)
@@ -91,12 +91,12 @@ public class MapManager : Singleton<MapManager>
 
         ResourceRequest request = Resources.LoadAsync<GameObject>(path);
 
-        UIManager.Instance.OnLoadingUI(request);
+        UIManager.Instance.OnLoadingUI(true);
 
-        while (!request.isDone)
+        yield return new WaitUntil(() =>
         {
-            yield return null;
-        }
+            return request.isDone;
+        });
 
         if(_currentMap !=null)
         {
@@ -121,7 +121,7 @@ public class MapManager : Singleton<MapManager>
 
     private void LoadMap(Map mapName)
     {
-        UIManager.Instance.OnLoadingUI(null);   
+        UIManager.Instance.OnLoadingUI(true);   
 
         if(_currentMap != null)
         {

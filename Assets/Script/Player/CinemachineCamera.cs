@@ -21,6 +21,7 @@ public class CinemachineCamera : MonoBehaviour
 
     private GameObject m_playerCam;
     private CinemachineVirtualCamera m_virtualCam;
+    private CinemachineTransposer _transposer;
     private Vector3 _onDisablePosition;
 
 
@@ -42,11 +43,6 @@ public class CinemachineCamera : MonoBehaviour
 
     private void OnEnable()
     {
-        if(m_virtualCam != null)
-        {
-            m_virtualCam.m_Lens.FieldOfView = _currentFieldOfView;
-        }
-
         if(m_playerCam != null)
         {
             Vector3 movePosition = transform.position - _onDisablePosition;
@@ -54,6 +50,11 @@ public class CinemachineCamera : MonoBehaviour
             m_playerCam.transform.position += movePosition;
 
             m_playerCam.SetActive(true);
+        }
+
+        if (m_virtualCam != null)
+        {
+            m_virtualCam.m_Lens.FieldOfView = _currentFieldOfView;
         }
     }
 
@@ -101,34 +102,36 @@ public class CinemachineCamera : MonoBehaviour
 
     private void CameraMovement()
     {
-        bool KeyDown = Input.anyKey;
+        bool isGetMouseButton_Right = Input.GetMouseButton(1);
+        bool isGetKeyDown_LeftShift = Input.GetKey(KeyCode.LeftShift);
 
-        switch (KeyDown)
+        if(isGetMouseButton_Right || isGetKeyDown_LeftShift)
         {
-            case true:
-                if (Input.GetMouseButton(1) && Input.GetKey(KeyCode.LeftShift))
-                {
-                    m_virtualCam.Follow = m_maxTrans.transform;
-                    m_virtualCam.LookAt = m_maxTrans.transform;
-                }
-                else if (Input.GetMouseButton(1))
-                {
-                    m_virtualCam.Follow = m_targetTrans.transform;
-                    m_virtualCam.LookAt = m_targetTrans.transform;
-                }
-                else if (Input.GetKey(KeyCode.LeftShift))
-                {
-                    RayPosition();
-                    m_virtualCam.Follow = m_lookTrans.transform;
-                    m_virtualCam.LookAt = m_lookTrans.transform;
-                }
-                break;
-            case false:
-                m_virtualCam.Follow = transform;
-                m_virtualCam.LookAt = transform;
-                break;
-        }
+            SetTransposer(2f);
 
+            if(isGetMouseButton_Right && isGetKeyDown_LeftShift)
+            {
+                m_virtualCam.Follow = m_maxTrans.transform;
+                m_virtualCam.LookAt = m_maxTrans.transform;
+            }
+            else if (isGetMouseButton_Right)
+            {
+                m_virtualCam.Follow = m_targetTrans.transform;
+                m_virtualCam.LookAt = m_targetTrans.transform;
+            }
+            else if (isGetKeyDown_LeftShift)
+            {
+                RayPosition();
+                m_virtualCam.Follow = m_lookTrans.transform;
+                m_virtualCam.LookAt = m_lookTrans.transform;
+            }
+        }
+        else
+        {
+            SetTransposer(0f);
+            m_virtualCam.Follow = transform;
+            m_virtualCam.LookAt = transform;
+        }
     }
 
     private void InitCamera()
@@ -151,19 +154,24 @@ public class CinemachineCamera : MonoBehaviour
             Destroy(doNothing);
         }
 
-        var transPoser = m_virtualCam.GetCinemachineComponent<CinemachineTransposer>();
+        _transposer = m_virtualCam.GetCinemachineComponent<CinemachineTransposer>();
 
-        if (transPoser != null)
+        if (_transposer != null)
         {
-            transPoser.m_BindingMode = CinemachineTransposer.BindingMode.WorldSpace;
-            transPoser.m_FollowOffset = m_CinemachineVirtualCameraFollowOffSet;
-            transPoser.m_XDamping = 2f;
-            transPoser.m_YDamping = 2f;
-            transPoser.m_ZDamping = 2f;
+            _transposer.m_BindingMode = CinemachineTransposer.BindingMode.WorldSpace;
+            _transposer.m_FollowOffset = m_CinemachineVirtualCameraFollowOffSet;
+
+            SetTransposer(0f);
         }
     }
 
-   
+    private void SetTransposer(float Damping)
+    {
+        _transposer.m_XDamping = Damping;
+        _transposer.m_YDamping = Damping;
+        _transposer.m_ZDamping = Damping;
+    }
+
     private IEnumerator DeathCameraZoom()
     {
         float cameraFieldOfView = m_virtualCam.m_Lens.FieldOfView;

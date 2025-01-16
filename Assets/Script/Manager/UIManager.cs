@@ -6,7 +6,7 @@ using UnityEngine;
 public class UIManager : Singleton<UIManager>
 {
     public static event Action _onAbilityUI;
-    public static event Action<ResourceRequest> _loadingUI;
+    public static event Action<bool> _loadingUI;
     public static event Action<bool> _deathUI;
     public static event Action<bool> _initializeUI;
     public static event Action _onMapNameUI;
@@ -32,9 +32,9 @@ public class UIManager : Singleton<UIManager>
         _onAbilityUI.Invoke();
     }
 
-    public void OnLoadingUI(ResourceRequest request = null)
+    public void OnLoadingUI(bool isStart)
     {
-        _loadingUI.Invoke(request);
+        _loadingUI.Invoke(isStart);
     }
 
     public void OnDeathUI(bool isActive)

@@ -143,4 +143,13 @@ public class Stage : MonoBehaviour
 
         return result;
     }
+
+    protected IEnumerator StopLoadingUI(Action closeDoor = null)
+    {
+        yield return new WaitForSeconds(1.5f);
+
+        closeDoor?.Invoke();
+
+        UIManager.Instance.OnLoadingUI(false);
+    }
 }

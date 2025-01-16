@@ -9,6 +9,9 @@ public class ShadowPlayer : MonoBehaviour
 
     Vector3 _previousPosition;
     Vector3 _previouspreviousPosition;
+    Vector3 _savePosition;
+
+    public Vector3 SavePosition => _savePosition;
 
     private void Update()
     {
@@ -19,14 +22,25 @@ public class ShadowPlayer : MonoBehaviour
 
         float distance = Vector3.Distance(transform.position, _player.transform.position);
 
-        if(distance > 0.2f)
+        if(distance > 1f)
         {
             _previouspreviousPosition = _previousPosition;
-
             _previousPosition = _player.transform.position;
-
             transform.position = _previouspreviousPosition;
+
+            _savePosition = transform.position - (_player.transform.position - transform.position).normalized;
         }
+
+        Rotation();
+    }
+
+    private void Rotation()
+    {
+        Vector3 rotationDirection = _player.transform.position - transform.position;
+
+        Quaternion rotation = Quaternion.LookRotation(rotationDirection);
+
+        transform.rotation = rotation;
     }
 
     public void InitializeShadowPlayer(Player player)
@@ -41,6 +55,18 @@ public class ShadowPlayer : MonoBehaviour
         Gizmos.color = Color.yellow;
 
         Gizmos.DrawWireSphere(transform.position, 1f);
+
+        Gizmos.color = Color.blue;
+
+        Gizmos.DrawWireSphere(_savePosition, 1f);
+
+        Vector3 start = transform.position;
+
+        Vector3 forward = transform.TransformDirection(Vector3.forward);
+
+        Vector3 end = start + forward * 5;  
+
+        Debug.DrawLine(start, end);
     }
 
 }

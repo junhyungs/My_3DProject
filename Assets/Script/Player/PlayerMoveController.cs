@@ -25,6 +25,7 @@ public class PlayerMoveController : MonoBehaviour
     private float m_speedOffSet;
     //GroundCheck
     private bool isGround;
+    private bool isFell;
     //VerticalVelocity
     private float m_verticalVelocity;
     //RotationVelocity
@@ -63,6 +64,8 @@ public class PlayerMoveController : MonoBehaviour
 
     private CharacterController m_playerController;
     private Animator m_playerAnimator;
+    private PlayerInput _playerInput;
+    private InputAction _inputAction;
 
     private void Awake()
     {
@@ -70,6 +73,8 @@ public class PlayerMoveController : MonoBehaviour
 
         m_playerController = GetComponent<CharacterController>();
         m_playerAnimator = GetComponent<Animator>();
+        _playerInput = GetComponent<PlayerInput>();
+        _inputAction = _playerInput.actions["Move"];
     }
 
     private void OnEnable()
@@ -84,7 +89,11 @@ public class PlayerMoveController : MonoBehaviour
 
     void Update()
     {
-        if (!isLadder)
+        if (isLadder)
+        {
+            LadderMovement();
+        }
+        else
         {
             CheckGround();
             Gravity();
@@ -204,32 +213,31 @@ public class PlayerMoveController : MonoBehaviour
     {
         if (isGround)
         {
-            //if (m_verticalVelocity < 0)
-            //{
-            //    m_verticalVelocity = -2f;
-            //}
-            m_verticalVelocity = 0f;
+            m_verticalVelocity = Mathf.Max(m_verticalVelocity, -1f);
+
+            m_verticalVelocity += -0.1f * Time.deltaTime;
         }
         else
         {
             m_verticalVelocity += m_gravity * Time.deltaTime;
-            m_verticalVelocity = Mathf.Max(m_verticalVelocity, -10f);
         }
+        
+        m_verticalVelocity = Mathf.Max(m_verticalVelocity, -20f);
     }
 
     private void CheckGround()
     {
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        isGround = Physics.CheckSphere(spherePosition, 0.5f, LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore);
+        
+        bool ground = Physics.CheckSphere(spherePosition, 0.5f, LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore);
+        bool fell = Physics.CheckSphere(spherePosition, 0.5f, LayerMask.GetMask("Fell"), QueryTriggerInteraction.Ignore);
 
-        if (isGround)
-        {
-            m_playerAnimator.SetBool("isGround", false);
-        }
-        else
-        {
-            m_playerAnimator.SetBool("isGround", true);
-        }
+        bool isFalling = !(isGround || isFell);
+
+        m_playerAnimator.SetBool("isFalling", isFalling);
+
+        isGround = ground;
+        isFell = fell;
     }
 
     private bool SpeedCorrection(float currentHorizontalspeed)
@@ -240,29 +248,59 @@ public class PlayerMoveController : MonoBehaviour
     //EndMovement--------------------------------------------------------------------------------------------------------------------
 
     //Climb--------------------------------------------------------------------------------------------------------------------------
-    private void OnTriggerStay(Collider other)
+
+    private float _lowestPointY, _highestPointY;
+
+    private void SetPoint((float lowestPointY, float highestPointY) ladderLength)
     {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Ladder"))
-        {
-            if (isLadder)
-            {
-                CheckGround();
-                m_previousPositionY = transform.position;
-                Vector3 move = new Vector3(0f, m_playerInput.y, 0f) * m_radderSpeed * Time.deltaTime;
-                m_playerAnimator.SetFloat("ClimbSpeed", m_playerInput.y);
-                transform.Translate(move);
-            }
-        }
+        _lowestPointY = ladderLength.lowestPointY;
+        _highestPointY = ladderLength.highestPointY;
     }
 
-    private void OnTriggerExit(Collider other)
+    private bool LadderCheck()
     {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Ladder"))
+        if (transform.position.y >= _highestPointY)
         {
-            isLadderDirection = m_previousPositionY.y > m_currentPositionY.y ? true : false;
-            m_playerAnimator.SetBool("ClimbExit", false);
-            transform.SetParent(null);
+            _endLadderSpeed = 5f;
         }
+        else if (transform.position.y < _lowestPointY)
+        {
+            _endLadderSpeed = 0f;
+        }
+        else
+        {
+            return false;
+        }
+
+        ExitLadder();
+
+        return true;        
+    }
+
+    private void ExitLadder()
+    {
+        m_playerAnimator.SetBool("ClimbExit", false);
+        transform.SetParent(null);
+    }
+
+    
+    private void LadderMovement()
+    {
+        if(_inputAction.ReadValue<Vector2>() == Vector2.zero)
+        {
+            m_playerInput = Vector2.zero;
+        }
+        else
+        {
+            if (!LadderCheck())
+            {
+                Vector3 moveVector = new Vector3(0f, m_playerInput.y, 0f) * m_radderSpeed * Time.deltaTime;
+
+                m_playerController.Move(moveVector);
+            }
+        }
+
+        m_playerAnimator.SetFloat("ClimbSpeed", m_playerInput.y);
     }
 
 
@@ -274,21 +312,21 @@ public class PlayerMoveController : MonoBehaviour
 
         foreach(var checkcoll in CheckCollider)
         {
-            if (checkcoll.gameObject.layer == LayerMask.NameToLayer("Ladder"))
+            IInteractionLadder interactionLadder = checkcoll.gameObject.GetComponent<IInteractionLadder>();
+
+            if(interactionLadder != null)
             {
-                IInteractionItem interactionItem = checkcoll.gameObject.GetComponent<IInteractionItem>();
+                isLadder = true;
 
-                if (interactionItem != null)
-                {
-                    interactionItem.InteractionItem();
-                }
+                interactionLadder.InteractionLadder(gameObject);
 
-                transform.SetParent(checkcoll.gameObject.transform);
-                transform.localPosition = Vector3.zero;
-                transform.rotation = checkcoll.transform.rotation;
+                var ladderLength = interactionLadder.LadderLength();
+
+                SetPoint(ladderLength);
+
                 m_playerAnimator.SetTrigger("Climb");
                 m_playerAnimator.SetBool("ClimbExit", true);
-                m_currentPositionY = transform.position;
+
                 break;
             }
         }   
@@ -299,17 +337,17 @@ public class PlayerMoveController : MonoBehaviour
         StartCoroutine(ClimbStateMovement());
     }
 
+    private float _endLadderSpeed;
+
     private IEnumerator ClimbStateMovement()
     {
         float startTime = Time.time;
 
-        float moveSpeed = 5.0f;
-
-        Vector3 direction = isLadderDirection ? transform.forward : transform.forward * -1f;
+        Vector3 direction = transform.forward;
 
         while (Time.time < startTime + 0.2f)
         {
-            m_playerController.Move(direction * moveSpeed * Time.deltaTime);
+            m_playerController.Move(direction * _endLadderSpeed * Time.deltaTime);
             yield return null;
         }
     }

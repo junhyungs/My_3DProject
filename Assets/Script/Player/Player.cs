@@ -62,14 +62,6 @@ public class Player : MonoBehaviour
         {
             _moveController.OnLadder();
         }
-        else if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Time.timeScale = 0f;
-        }
-        else if (Input.GetKeyDown(KeyCode.P))
-        {
-            Time.timeScale = 1f;
-        }
     }
 
     private void CreateShadowPlayer()

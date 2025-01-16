@@ -84,6 +84,12 @@ public class PlayerWeaponController : MonoBehaviour
 
         SetWeapon(PlayerWeapon.Sword);
     }
+
+    public void TakeDamageWeapon()
+    {
+        ResetWeapon();
+        ChargeAttackReset();
+    }
    
     public void ActiveLeftWeapon(bool isCharge)
     {

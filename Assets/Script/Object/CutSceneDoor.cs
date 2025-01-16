@@ -157,7 +157,6 @@ public class CutSceneDoor : MonoBehaviour, IInteractionItem
         MapManager.Instance.ChangeMap(_changeMap);
     }
 
-    
 
     private void OnTriggerEnter(Collider other)
     {

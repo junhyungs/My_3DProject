@@ -9,19 +9,13 @@ public class ClimbStateBehaviour : StateMachineBehaviour
 
     #region Animator.StringToHash
     private int m_Climbing_off_ladder_top = Animator.StringToHash("Climbing_off_ladder_top");
-    private int m_Climbing_ladder_down = Animator.StringToHash("Climbing_ladder_down");
-    private int m_Climbing_Idle = Animator.StringToHash("Climbing_Idle");
-    private int m_Climbing_ladder = Animator.StringToHash("Climbing_ladder");
     #endregion
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        GetComponent(animator);
-
         if (IsClimbExit(stateInfo))
         {
             m_attackController.IsAction = true;
-            m_moveContorller.IsAction = true;
             m_moveContorller.IsLadder = false;
         }
 
@@ -33,8 +27,6 @@ public class ClimbStateBehaviour : StateMachineBehaviour
         GetComponent(animator);
 
         m_attackController.IsAction = false;
-        m_moveContorller.IsAction = false;
-        m_moveContorller.IsLadder = true;
 
         animator.gameObject.layer = LayerMask.NameToLayer("LadderPlayer");
 

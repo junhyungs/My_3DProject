@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 public interface IInteractionItem
 {
     public void InteractionItem();
@@ -6,7 +7,7 @@ public interface IInteractionItem
 
 public interface IInteractionLadder
 {
-    public void InteractionLadder(NewPlayer player);
+    public void InteractionLadder(GameObject player);
     public (float,float) LadderLength();
 }
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EndStage : MonoBehaviour
+public class EndStage : Stage
 {
     [Header("StartPosition")]
     [SerializeField] private Transform _startTransform;
@@ -13,5 +13,7 @@ public class EndStage : MonoBehaviour
         player.transform.rotation = _startTransform.rotation;
 
         player.SetActive(true);
+
+        StartCoroutine(StopLoadingUI());
     }
 }

@@ -19,12 +19,14 @@ public class MainStage : Stage
     {
         if (!_isFirst)
         {
-            _door.CloseDoor();
+            StartCoroutine(StopLoadingUI(_door.CloseDoor));
         }
     }
 
     private void Start()
     {
+        UIManager.Instance.OnLoadingUI(false);
+
         SetPlayer();
 
         var timeLine = TimeLineManager.Instance.GetTimeLine(TimeLineType.Intro);

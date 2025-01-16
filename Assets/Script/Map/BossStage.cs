@@ -30,7 +30,7 @@ public class BossStage : Stage
     {
         if(_door != null)
         {
-            _door.CloseDoor();
+            StartCoroutine(StopLoadingUI(_door.CloseDoor));
         }
     }
 

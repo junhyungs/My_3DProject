@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class GimikStage : Stage
@@ -28,7 +29,7 @@ public class GimikStage : Stage
 
             player.transform.position = _outTransform.position;
 
-            _door.CloseDoor();
+            StartCoroutine(StopLoadingUI(_door.CloseDoor));
         }
     }
 

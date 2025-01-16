@@ -1044,9 +1044,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72acfca1bfe841f41b142ad42561d24a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _internalDoor: {fileID: 108285401071855788}
-  _movementTransform: {fileID: 0}
-  _uiPosition: {x: 1.2, y: 2, z: 0}
+  _asset: []
+  _inTransform: {fileID: 0}
+  _outTransform: {fileID: 0}
   _changeMap: 0
 --- !u!320 &2315835440459357743
 PlayableDirector:
@@ -1082,6 +1082,8 @@ PlayableDirector:
   - key: {fileID: 2772686437497267833, guid: fa81225f6e306f448ac5ddbb3aedab9b, type: 2}
     value: {fileID: 0}
   - key: {fileID: 8627988653476217396, guid: fa81225f6e306f448ac5ddbb3aedab9b, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 3163078998055025519, guid: fa81225f6e306f448ac5ddbb3aedab9b, type: 2}
     value: {fileID: 0}
   m_ExposedReferences:
     m_References: []

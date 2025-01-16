@@ -74,7 +74,7 @@ public class PlayerState
 
             if (interactionLadder != null)
             {
-                interactionLadder.InteractionLadder(_player);
+                //interactionLadder.InteractionLadder(_player);
 
                 var ladderState = _state.GetPlayerState(State.Ladder) as PlayerLadder;
 

@@ -2,24 +2,30 @@ using UnityEngine;
 
 public class PlayerRollStateBehaviour : StateMachineBehaviour
 {
+    #region Component
     private PlayerMoveController _moveController;
     private CharacterController _playerCharaterController;
+    #endregion
+
+    private readonly int _roll = Animator.StringToHash("isRoll");
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Initialize(animator);
+        GetController(animator);
 
         _moveController.IsAction = false;
-        animator.SetBool("isRoll", false);
+        animator.SetBool(_roll, false);
     }
 
-    private void Initialize(Animator animator)
+    private void GetController(Animator animator)
     {
-        if (_moveController != null)
-            return;
+        _moveController = GetComponent(_moveController, animator);
+        _playerCharaterController = GetComponent(_playerCharaterController, animator);  
+    }
 
-        _moveController = animator.GetComponent<PlayerMoveController>();
-        _playerCharaterController = animator.GetComponent<CharacterController>();
+    private T GetComponent<T>(T compoent, Animator animator) where T : Component
+    {
+        return compoent ?? animator.GetComponent<T>();
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

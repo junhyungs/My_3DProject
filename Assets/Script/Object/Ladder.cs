@@ -29,11 +29,11 @@ public class Ladder : MonoBehaviour, IInteractionItem, IInteractionLadder
         UIManager.Instance.HideItemInteractionUI(transform, ObjectName.LadderUI);
     }
 
-    public void InteractionLadder(NewPlayer player)
+    public void InteractionLadder(GameObject playerObject)
     {
-        player.transform.SetParent(transform);
-        player.transform.localPosition = Vector3.zero;
-        player.transform.rotation = transform.rotation;
+        playerObject.transform.SetParent(transform);
+        playerObject.transform.localPosition = Vector3.zero;
+        playerObject.transform.rotation = transform.rotation;
     }
 
     private void OnTriggerEnter(Collider other)
