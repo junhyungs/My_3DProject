@@ -27,6 +27,11 @@ public class ForestMother : MonoBehaviour, IDamaged
 
     public void OnEnableBoss()
     {
+        if(_copyMaterial == null)
+        {
+            return;
+        }
+
         var materialValue = _copyMaterial.GetFloat("_Float");
 
         if (materialValue <= 0f)

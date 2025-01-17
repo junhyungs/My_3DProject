@@ -103,7 +103,7 @@ public class Elevator : MonoBehaviour
 
         while (Vector3.Distance(transform.position, targetPosition) > 0.1f)
         {
-            Vector3 moveVector3 = _upDirection * _elevatorMoveSpeed * Time.deltaTime;
+            Vector3 moveVector3 = _upDirection * _elevatorMoveSpeed * Time.fixedDeltaTime;
 
             transform.Translate(moveVector3);
 
@@ -126,7 +126,7 @@ public class Elevator : MonoBehaviour
 
         while(Vector3.Distance(transform.position, targetPosition) > 0.1f)
         {
-            Vector3 moveVector3 = _downDirection * _elevatorMoveSpeed * Time.deltaTime;
+            Vector3 moveVector3 = _downDirection * _elevatorMoveSpeed * Time.fixedDeltaTime;
 
             transform.Translate(moveVector3);
 
