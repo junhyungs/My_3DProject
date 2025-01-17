@@ -74,7 +74,7 @@ public class GameManager : Singleton<GameManager>
 
         UIManager.Instance.OnDeathUI(false);
 
-        yield return new WaitForSeconds(1f);
+        UIManager.Instance.OnLoadingUI(true);
 
         var playerComponent = Player.GetComponent<Player>();
 
@@ -82,14 +82,18 @@ public class GameManager : Singleton<GameManager>
 
         Player.SetActive(false);
 
-        yield return StartCoroutine(MapManager.Instance.Respawn(playerComponent));
+        MapManager.Instance.Respawn(playerComponent);
 
-        Respawn();
+        StartCoroutine(Respawn());
     }
 
-    public void Respawn()
+    private IEnumerator Respawn()
     {
+        yield return new WaitForSeconds(1.5f);
+
         Player.SetActive(true);
+
+        UIManager.Instance.OnLoadingUI(false);
 
         Player.gameObject.layer = LayerMask.NameToLayer("Player");
 

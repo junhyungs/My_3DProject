@@ -5,12 +5,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 
-public interface IExitDoor
-{
-    public void ExitUIEvent(Func<IEnumerator> coroutineCallBack, bool register);
-}
-
-public class ExitDoor : MonoBehaviour, IInteractionItem, IExitDoor
+public class ExitDoor : MonoBehaviour, IInteractionItem
 {
     [Header("ExitUI")]
     [SerializeField] private GameObject _exitUI;
@@ -21,7 +16,6 @@ public class ExitDoor : MonoBehaviour, IInteractionItem, IExitDoor
     private PlayableDirector _director;
     private GameObject _player;
     private HashSet<string> _track;
-    private Func<IEnumerator> _uiEvent;
 
     private void Awake()
     {
@@ -35,9 +29,9 @@ public class ExitDoor : MonoBehaviour, IInteractionItem, IExitDoor
         };
     }
 
-    private void OnEnable()
+    private void OnDisable()
     {
-        UIManager.Instance.RegisterExitEvent(this);
+        UIManager.Instance.OnLoadingUI(false);
     }
 
     private void Start()
@@ -98,7 +92,9 @@ public class ExitDoor : MonoBehaviour, IInteractionItem, IExitDoor
 
     private IEnumerator Exit()
     {
-        yield return StartCoroutine(_uiEvent.Invoke());
+        yield return null;
+
+        UIManager.Instance.OnLoadingUI(true);
 
         SceneManager.LoadScene("StartScene");
     }
@@ -113,17 +109,5 @@ public class ExitDoor : MonoBehaviour, IInteractionItem, IExitDoor
 
         player.transform.rotation = targetRotation;
 
-    }
-
-    public void ExitUIEvent(Func<IEnumerator> coroutineCallBack, bool register)
-    {
-        if (register)
-        {
-            _uiEvent += coroutineCallBack;
-        }
-        else
-        {
-            _uiEvent -= coroutineCallBack;
-        }
     }
 }

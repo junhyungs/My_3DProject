@@ -12,8 +12,6 @@ public class UIManager : Singleton<UIManager>
     public static event Action _onMapNameUI;
 
     private Dictionary<MVVM, Delegate> _playerUIEvent = new Dictionary<MVVM, Delegate>();
-    private Func<IEnumerator> _globalLoadingUIFunc;
-    private IExitDoor _exitEvent;
 
     private void Start()
     {
@@ -26,7 +24,6 @@ public class UIManager : Singleton<UIManager>
     }
 
     #region Event
-    public Func<IEnumerator> GetGlobalLoadingUIFunc => _globalLoadingUIFunc;
     public void OnAbilityUI()
     {
         _onAbilityUI.Invoke();
@@ -50,26 +47,6 @@ public class UIManager : Singleton<UIManager>
     public void OnMapNameUI()
     {
         _onMapNameUI.Invoke();
-    }
-
-    public void RegisterExitEvent(IExitDoor exitDoor)
-    {
-        _exitEvent = exitDoor;
-
-        if(_globalLoadingUIFunc != null)
-        {
-            exitDoor.ExitUIEvent(_globalLoadingUIFunc, true);
-        }
-    }
-
-    public void AddExitEvent(Func<IEnumerator> coroutineCallBack, bool register)
-    {
-        _globalLoadingUIFunc = coroutineCallBack;
-
-        if(_exitEvent != null)
-        {
-            _exitEvent.ExitUIEvent(coroutineCallBack, register);
-        }
     }
     #endregion
 
