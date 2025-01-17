@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour, IDamged
+public class PlayerHealth : MonoBehaviour, IDamaged
 {
     private Player _player;
     private PlayerWeaponController _weaponController;

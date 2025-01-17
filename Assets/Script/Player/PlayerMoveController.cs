@@ -232,7 +232,7 @@ public class PlayerMoveController : MonoBehaviour
         bool ground = Physics.CheckSphere(spherePosition, 0.5f, LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore);
         bool fell = Physics.CheckSphere(spherePosition, 0.5f, LayerMask.GetMask("Fell"), QueryTriggerInteraction.Ignore);
 
-        bool isFalling = !(isGround || isFell);
+        bool isFalling = !(ground || fell);
 
         m_playerAnimator.SetBool("isFalling", isFalling);
 

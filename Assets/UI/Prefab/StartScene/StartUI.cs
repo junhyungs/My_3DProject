@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using TMPro;
 using UnityEngine.SceneManagement;
 
 public class StartUI : MonoBehaviour
@@ -12,7 +13,7 @@ public class StartUI : MonoBehaviour
         public Button button;
         public GameObject leftImage;
         public GameObject rightImage;
-        public Text buttonText;
+        public TextMeshProUGUI buttonText;
         [HideInInspector] public Vector3 initLeftPosition;
         [HideInInspector] public Vector3 initRightPosition;
 
@@ -138,7 +139,7 @@ public class StartUI : MonoBehaviour
         
     }
 
-    private void SetButtonTextColors(Text buttonText, bool isSelected)
+    private void SetButtonTextColors(TextMeshProUGUI buttonText, bool isSelected)
     {
         Color color = isSelected ? Color.white : Color.gray;
 

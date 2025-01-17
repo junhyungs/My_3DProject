@@ -24,7 +24,7 @@ public class VineHandler : MonoBehaviour
 
         _motherVine._overlapHashSet.Add(index);
 
-        IDamged hit = other.gameObject.GetComponent<IDamged>();
+        IDamaged hit = other.gameObject.GetComponent<IDamaged>();
 
         if (hit != null)
         {

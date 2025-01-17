@@ -45,7 +45,7 @@ public class ArrowObject : ProjectileObject
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
-            IDamged damaged = other.gameObject.GetComponent<IDamged>();
+            IDamaged damaged = other.gameObject.GetComponent<IDamaged>();
 
             if(damaged != null)
             {

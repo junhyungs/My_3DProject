@@ -67,7 +67,7 @@ public class MotherProjectile : MonoBehaviour
         {
             if (_data.LayerList.Contains(target.gameObject.layer))
             {
-                IDamged hit = target.GetComponent<IDamged>();
+                IDamaged hit = target.GetComponent<IDamaged>();
 
                 if (hit != null)
                 {

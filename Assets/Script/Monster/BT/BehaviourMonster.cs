@@ -129,11 +129,18 @@ public class BehaviourMonster : MonoBehaviour
 
         this.gameObject.layer = LayerMask.NameToLayer("DeadMonster");
 
-        objectEvent?.Invoke();
+        StartCoroutine(ObejctEventDelay(objectEvent));
 
         _animator.SetTrigger("Die");
 
         StartCoroutine(FireShader(5f, 0.5f, -0.3f));
+    }
+
+    private IEnumerator ObejctEventDelay(Action action)
+    {
+        yield return null;
+
+        action?.Invoke();
     }
 
     public void NavMeshAgentControl(bool isDead)

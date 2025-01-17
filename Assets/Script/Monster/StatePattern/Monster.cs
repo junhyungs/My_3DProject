@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-public abstract class Monster : MonoBehaviour, IDamged
+public abstract class Monster : MonoBehaviour, IDamaged
 {
     [Header("SkinnedMeshRenderer")]
     [SerializeField] protected SkinnedMeshRenderer m_skinnedMeshRenderer;

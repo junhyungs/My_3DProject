@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class SlimeBehaviour : BehaviourMonster, IDamged
+public class SlimeBehaviour : BehaviourMonster, IDamaged
 {
     /*
                                              [Selector]

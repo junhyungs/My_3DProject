@@ -84,10 +84,11 @@ public class ChangeScreen : MonoBehaviour
 
     private void SearchCurrentResolution()
     {
-        var currentResolution = Screen.currentResolution;
+        int currentScreenWidth = Screen.width;
+        int currentScreenHeight = Screen.height;
 
-        string findText = $"{currentResolution.width} * {currentResolution.height}";
-
+        string findText = $"{currentScreenWidth} X {currentScreenHeight}";
+        
         int findIndex = 0;
 
         for (int i = 0; i < _dropDown.options.Count; i++)
@@ -97,8 +98,11 @@ public class ChangeScreen : MonoBehaviour
                 findIndex = i;
             }
         }
-
-        _dropDown.value = findIndex;
+        
+        if(findIndex >= 0)
+        {
+            _dropDown.value = findIndex;
+        }
     }
 
     private void OnValueChanged_ScreenSize(int index)

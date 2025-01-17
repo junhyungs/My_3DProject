@@ -53,7 +53,7 @@ public class FireBallObject : ProjectileObject
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Monster"))
         {
-            IDamged hit = other.gameObject.GetComponent<IDamged>();
+            IDamaged hit = other.gameObject.GetComponent<IDamaged>();
 
             if (hit != null)
             {

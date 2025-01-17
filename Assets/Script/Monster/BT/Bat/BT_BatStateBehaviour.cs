@@ -81,7 +81,7 @@ public class BatAttackStateBehaviour : StateMachineBehaviour
 
             if (colliders.Length > 0)
             {
-                IDamged damaged = colliders[0].gameObject.GetComponent<IDamged>();
+                IDamaged damaged = colliders[0].gameObject.GetComponent<IDamaged>();
 
                 if (damaged != null)
                 {

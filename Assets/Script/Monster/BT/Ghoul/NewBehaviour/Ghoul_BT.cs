@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ghoul_BT : BehaviourMonster, IDamged, IDisableArrow
+public class Ghoul_BT : BehaviourMonster, IDamaged, IDisableArrow
 {
     [Header("SoulPosition")]
     [SerializeField] private Transform _soulTransform;

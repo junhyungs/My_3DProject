@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
 
-public class ForestMother : MonoBehaviour, IDamged
+public class ForestMother : MonoBehaviour, IDamaged
 {
     [Header("SkinnedMeshRenderer")]
     [SerializeField] private SkinnedMeshRenderer[] _skinnedMeshRenderer;
@@ -15,25 +15,18 @@ public class ForestMother : MonoBehaviour, IDamged
     private Material _copyMaterial;
     private WaitForSeconds _intensityTime = new WaitForSeconds(0.1f);
     private Animator _animator;
-    public ForestMotherProperty Property { get; set; }
-    #endregion
 
-    private Vector3 _startPosition;
-    private Quaternion _startRotation;
+    public ForestMotherProperty Property { get; set; }
+    public BossStage BossStage { get; set; }
+    #endregion
 
     private void Awake()
     {
         InitializeForestMother();
     }
 
-    private void OnEnable()
+    public void OnEnableBoss()
     {
-        if(Vector3.Distance(transform.position, _startPosition) > 0.01f)
-        {
-            transform.position = _startPosition;
-            transform.rotation = _startRotation;
-        }
-
         var materialValue = _copyMaterial.GetFloat("_Float");
 
         if (materialValue <= 0f)
@@ -53,10 +46,6 @@ public class ForestMother : MonoBehaviour, IDamged
     private void InitializeForestMother()
     {
         _animator = gameObject.GetComponent<Animator>();
-
-        _startPosition = transform.position;
-
-        _startRotation = transform.rotation;
 
         SetMaterial();
     }
@@ -98,6 +87,8 @@ public class ForestMother : MonoBehaviour, IDamged
 
     public void Die()
     {
+        BossStage.BossClear();
+
         this.gameObject.layer = LayerMask.NameToLayer("DeadMonster");
 
         _animator.SetTrigger("Death");

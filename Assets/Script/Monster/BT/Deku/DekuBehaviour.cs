@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DekuBehaviour : BehaviourMonster, IDamged
+public class DekuBehaviour : BehaviourMonster, IDamaged
 {
     /*
                                                             [Selector] 

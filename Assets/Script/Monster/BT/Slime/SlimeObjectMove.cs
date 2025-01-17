@@ -67,7 +67,7 @@ public class SlimeObjectMove : MonoBehaviour
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            IDamged hit = other.gameObject.GetComponent<IDamged>();
+            IDamaged hit = other.gameObject.GetComponent<IDamaged>();
 
             if(hit != null)
             {

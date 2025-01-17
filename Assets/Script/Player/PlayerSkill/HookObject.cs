@@ -90,7 +90,7 @@ public class HookObject : ProjectileObject, IHookPosition
 
         if(other.gameObject.layer == LayerMask.NameToLayer("Monster") && _isFire)
         {
-            IDamged hit = other.gameObject.GetComponent<IDamged>();
+            IDamaged hit = other.gameObject.GetComponent<IDamaged>();
 
             if (hit != null)
             {

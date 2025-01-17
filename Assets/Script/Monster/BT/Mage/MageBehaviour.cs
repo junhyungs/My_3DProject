@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MageBehaviour : BehaviourMonster, IDamged, IDisableMagicBullet
+public class MageBehaviour : BehaviourMonster, IDamaged, IDisableMagicBullet
 {
     private Action _disableHandler;
 

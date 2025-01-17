@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BatBehaviour : BehaviourMonster, IDamged
+public class BatBehaviour : BehaviourMonster, IDamaged
 {
     /*
                                                                                         [Selector]

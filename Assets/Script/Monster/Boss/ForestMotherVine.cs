@@ -9,7 +9,7 @@ public enum Vine
     Null
 }
 
-public class ForestMotherVine : MonoBehaviour, IDamged, ISendVineEvent
+public class ForestMotherVine : MonoBehaviour, IDamaged, ISendVineEvent
 {
     [Header("VineType")]
     [SerializeField] private Vine _vineType;

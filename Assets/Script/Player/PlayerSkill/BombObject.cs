@@ -68,7 +68,7 @@ public class BombObject : ProjectileObject
 
         for(int i = 0; i < colliders.Length; i++)
         {
-            IDamged hit = colliders[i].gameObject.GetComponent<IDamged>();
+            IDamaged hit = colliders[i].gameObject.GetComponent<IDamaged>();
 
             if (hit != null)
             {

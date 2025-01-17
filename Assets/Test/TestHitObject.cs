@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestHitObject : MonoBehaviour, IDamged
+public class TestHitObject : MonoBehaviour, IDamaged
 {
     [SerializeField]
     private int HP = 9999;

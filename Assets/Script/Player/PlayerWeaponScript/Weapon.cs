@@ -42,7 +42,7 @@ public abstract class Weapon : MonoBehaviour, IWeapon
 
     private void Attack(Collider other)
     {
-        IDamged damged = other.gameObject.GetComponent<IDamged>();
+        IDamaged damged = other.gameObject.GetComponent<IDamaged>();
 
         if (damged != null)
         {
@@ -64,7 +64,7 @@ public abstract class Weapon : MonoBehaviour, IWeapon
 
                 hitEffect.transform.rotation = Quaternion.Euler(0, 0, randomRot);
 
-                hitEffect.transform.position = other.transform.position;
+                hitEffect.transform.position = other.transform.position + new Vector3(0f, 0.5f, 0f);
 
                 hitEffect.SetActive(true);
 
