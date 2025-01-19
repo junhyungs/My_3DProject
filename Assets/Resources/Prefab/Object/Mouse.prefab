@@ -9,8 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8955859834049343461}
-  - component: {fileID: 2906207001822276244}
-  m_Layer: 0
+  m_Layer: 30
   m_Name: Mouse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,25 +25,13 @@ Transform:
   m_GameObject: {fileID: 741101848266807182}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.7, y: 0.70000005, z: 0.70000005}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1577497687317576698}
+  - {fileID: 9155002895402203997}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &2906207001822276244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 741101848266807182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e00ec81b6bad4e4d8464890bea21686, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1885808224475191018
 GameObject:
   m_ObjectHideFlags: 0
@@ -56,7 +43,7 @@ GameObject:
   - component: {fileID: 9155002895402203997}
   - component: {fileID: 4715608891230727847}
   - component: {fileID: 9210397592754590537}
-  m_Layer: 0
+  m_Layer: 30
   m_Name: MouseVisuals (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,12 +58,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1885808224475191018}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 40, y: 50, z: 50}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1577497687317576698}
+  m_Father: {fileID: 8955859834049343461}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4715608891230727847
 MeshFilter:
@@ -128,35 +115,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &2524764135884938823
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1577497687317576698}
-  m_Layer: 0
-  m_Name: MouseVisuals
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1577497687317576698
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2524764135884938823}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 9155002895402203997}
-  m_Father: {fileID: 8955859834049343461}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

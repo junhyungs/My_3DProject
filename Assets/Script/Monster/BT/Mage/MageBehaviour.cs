@@ -117,7 +117,9 @@ public class MageBehaviour : BehaviourMonster, IDamaged, IDisableMagicBullet
     {
         _currentHp -= (int)damage;
 
-        if(_currentHp <= 0)
+        StartCoroutine(IntensityChange(2f, 3f));
+
+        if (_currentHp <= 0)
         {
             if(TelePort != null)
             {
@@ -127,10 +129,6 @@ public class MageBehaviour : BehaviourMonster, IDamaged, IDisableMagicBullet
             }
 
             Die(_soulPosition, _disableHandler);
-        }
-        else
-        {
-            StartCoroutine(IntensityChange(2f, 3f));
         }
     }
 

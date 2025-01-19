@@ -38,9 +38,12 @@ public class ShadowPlayer : MonoBehaviour
     {
         Vector3 rotationDirection = _player.transform.position - transform.position;
 
-        Quaternion rotation = Quaternion.LookRotation(rotationDirection);
+        if(rotationDirection != Vector3.zero)
+        {
+            Quaternion rotation = Quaternion.LookRotation(rotationDirection);
 
-        transform.rotation = rotation;
+            transform.rotation = rotation;
+        }
     }
 
     public void InitializeShadowPlayer(Player player)

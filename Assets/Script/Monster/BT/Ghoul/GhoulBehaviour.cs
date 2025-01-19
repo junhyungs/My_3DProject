@@ -100,13 +100,11 @@ public class GhoulBehaviour : BehaviourMonster, IDamaged, IDisableArrow
     {
         _currentHp -= damage;
 
-        if(_currentHp <= 0)
+        StartCoroutine(IntensityChange(2f, 3f));
+
+        if (_currentHp <= 0)
         {
             Die(_soulTransform, _disableHandler);
-        }
-        else
-        {
-            StartCoroutine(IntensityChange(2f, 3f));
         }
     }
 

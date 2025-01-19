@@ -62,7 +62,12 @@ public class BombObject : ProjectileObject
         bombParticle.SetActive(false);
 
         GameObject explosionParticle = gameObject.transform.GetChild(1).gameObject;
-        explosionParticle.SetActive(true);
+        ParticleSystem particleSystem = explosionParticle.GetComponent<ParticleSystem>();
+
+        if (particleSystem != null)
+        {
+            particleSystem.Play();
+        }
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, _range, LayerMask.GetMask("Monster"));
 

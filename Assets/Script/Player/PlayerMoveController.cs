@@ -37,9 +37,6 @@ public class PlayerMoveController : MonoBehaviour
     //Ladder
     private bool isLadder;
     private float m_radderSpeed;
-    private bool isLadderDirection = true;
-    private Vector3 m_currentPositionY;
-    private Vector3 m_previousPositionY;
     //Hook
     private float _hookSpeed = 15f;
     private bool _isCollider;

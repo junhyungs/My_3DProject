@@ -105,13 +105,11 @@ public class SlimeBehaviour : BehaviourMonster, IDamaged
     {
         _currentHp -= damage;
 
-        if(_currentHp <= 0)
+        StartCoroutine(IntensityChange(2f, 3f));
+
+        if (_currentHp <= 0)
         {
             Die(_soulPosition);
-        }
-        else
-        {
-            StartCoroutine(IntensityChange(2f, 3f));
         }
     }
 

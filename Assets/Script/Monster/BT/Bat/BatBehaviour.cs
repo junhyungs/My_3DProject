@@ -100,13 +100,11 @@ public class BatBehaviour : BehaviourMonster, IDamaged
     {
         _currentHp -= damage;
 
+        StartCoroutine(IntensityChange(2f, 3f));
+
         if (_currentHp <= 0)
         {
             Die(_soulTransform);
-        }
-        else
-        {
-            StartCoroutine(IntensityChange(2f, 3f));
         }
     }
 

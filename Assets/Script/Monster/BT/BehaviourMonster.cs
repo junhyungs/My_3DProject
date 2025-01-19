@@ -114,6 +114,10 @@ public class BehaviourMonster : MonoBehaviour
 
     public void Die(Transform soulTransform, Action objectEvent = null)
     {
+        this.gameObject.layer = LayerMask.NameToLayer("DeadMonster");
+
+        _isDead = true;
+
         if (_isSpawn)
         {
             _spawnComponent.UnRegisterMonster(gameObject);
@@ -121,13 +125,9 @@ public class BehaviourMonster : MonoBehaviour
             _isSpawn = false;
         }
 
-        _isDead = true;
-
         NavMeshAgentControl(_isDead);
 
         MonsterSoul(soulTransform);
-
-        this.gameObject.layer = LayerMask.NameToLayer("DeadMonster");
 
         StartCoroutine(ObejctEventDelay(objectEvent));
 

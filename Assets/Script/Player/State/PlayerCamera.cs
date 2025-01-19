@@ -7,11 +7,6 @@ public class PlayerCamera : MonoBehaviour
 {
     private const string _path = "Prefab/Camera/PlayerVirtualCam";
 
-    private float _maxDistance = 15f;
-    private float _skillDistance = 5f;
-    private float _lookDistance = 10f;
-    private float _fieldOfView;
-
     private Vector3 _cameraFollowOffSet = new Vector3(0f, 10f, -8f);
 
     private void Start()
@@ -49,7 +44,6 @@ public class PlayerCamera : MonoBehaviour
             transPoser.m_ZDamping = 2f;
         }
 
-        _fieldOfView = virtualCameraComponent.m_Lens.FieldOfView;
     }
 
 }
