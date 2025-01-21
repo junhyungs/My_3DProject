@@ -33,6 +33,7 @@ public class POT : MonoBehaviour, IDamaged
 
         foreach (var cell in _childList)
         {
+            cell.SetLayer("Cell");
             cell.SetKinematic(false);
         }
 

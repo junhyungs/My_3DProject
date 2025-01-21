@@ -25,6 +25,16 @@ public class POT_Cell : MonoBehaviour
         _rigidbody.isKinematic = use;
     }
 
+    public void SetLayer(string layerName)
+    {
+        if (string.IsNullOrWhiteSpace(layerName))
+        {
+            return;
+        }
+
+        gameObject.layer = LayerMask.NameToLayer(layerName);
+    }
+
     public IEnumerator MoveAndRotateTowardsCoroutine(POT pot)
     {
         SetKinematic(true);
@@ -56,6 +66,7 @@ public class POT_Cell : MonoBehaviour
                 transform.localPosition = _initializeLocalPosition;
                 transform.localRotation = _initializeLocalRotation;
 
+                SetLayer("Default");
                 pot.UnRegisterHashSet(this);
 
                 yield break;
