@@ -25,6 +25,8 @@ public class ScreenPanel : MonoBehaviour
         _backAction.action.performed += BackAction;
 
         _inventroyPanel.DisableTriggerAction(true);
+
+        Cursor.visible = true;
     }
 
     private void OnDisable()
@@ -36,6 +38,8 @@ public class ScreenPanel : MonoBehaviour
         _backAction.action.Disable();
 
         _inventroyPanel.DisableTriggerAction(false);
+
+        Cursor.visible = false;
     }
 
     private void BackAction(InputAction.CallbackContext text)

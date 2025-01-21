@@ -150,14 +150,13 @@ public class BehaviourMonster : MonoBehaviour
             return;
         }
 
-        _agent.isStopped = isDead;
-
         if (isDead)
         {
-            _agent.velocity = Vector3.zero;
-
+            _agent.SetDestination(transform.position);
             _agent.ResetPath();
         }
+
+        _agent.isStopped = isDead;
     }
 
     public IEnumerator FireShader(float maxTime, float startValue, float endValue)

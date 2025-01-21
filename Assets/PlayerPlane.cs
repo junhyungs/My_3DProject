@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class PlayerPlane : MonoBehaviour
 {
@@ -8,13 +7,30 @@ public class PlayerPlane : MonoBehaviour
     [SerializeField] private GameObject _mouseObject;
     [SerializeField] private float _planeHeight;
 
-    public Transform MouseTransform
-    {
-        get { return _mouse.transform; }
-    }
+    public CinemachineVirtualCamera VirtualCamera { get; set; }
+    public CinemachineTransposer Transposer { get; set; }
+    public Vector3 Point { get; set; }
 
     private GameObject _mouse;
     private Plane _plane;
+   
+    private void OnEnable()
+    {
+        SetActiveMouseObject(true);
+    }
+
+    private void OnDisable()
+    {
+        SetActiveMouseObject(false);
+    }
+
+    private void SetActiveMouseObject(bool active)
+    {
+        if(_mouse != null)
+        {
+            _mouse.SetActive(active);
+        }
+    }
 
     private void Start()
     {
@@ -54,7 +70,9 @@ public class PlayerPlane : MonoBehaviour
         {
             Vector3 point = ray.GetPoint(distance);
 
-            _mouse.transform.position = point;
+            Point = point;
+
+            MouseMovement(point);
         }
 
         Rotation();
@@ -70,5 +88,71 @@ public class PlayerPlane : MonoBehaviour
 
             _mouse.transform.rotation = Quaternion.Euler(90f, targetRotation.eulerAngles.y, 0f);
         }
+    }
+
+    private void MouseMovement(Vector3 point)
+    {
+        bool isGetMouseButton_Right = Input.GetMouseButton(1);
+        bool isGetKeyDown_LeftShift = Input.GetKey(KeyCode.LeftShift);
+
+        if(isGetMouseButton_Right || isGetKeyDown_LeftShift)
+        {
+            SetTransposer(2f);
+
+            if (isGetMouseButton_Right && isGetKeyDown_LeftShift)
+            {
+                SetMouseObjectPosition(point, 20f);
+            }
+            else if (isGetMouseButton_Right)
+            {
+                SetMouseObjectPosition(point, 8f);
+            }
+            else if(isGetKeyDown_LeftShift)
+            {
+                SetMouseObjectPosition(point, 15f);
+            }
+
+            if(VirtualCamera.m_Follow != _mouse.transform)
+            {
+                VirtualCamera.m_Follow = _mouse.transform;
+                VirtualCamera.LookAt = _mouse.transform;
+            }
+        }
+        else
+        {
+            SetTransposer(0f);
+
+            if(VirtualCamera.m_Follow != _player)
+            {
+                VirtualCamera.m_Follow = _player;
+                VirtualCamera.m_LookAt = _player;
+            }
+
+            _mouse.transform.position = point;
+        }
+    }
+
+    private void SetTransposer(float Damping)
+    {
+        if(Transposer.m_XDamping != Damping)
+        {
+            Transposer.m_XDamping = Damping;
+            Transposer.m_YDamping = Damping;
+            Transposer.m_ZDamping = Damping;
+        }
+    }
+
+    private void SetMouseObjectPosition(Vector3 point, float maxDistance)
+    {
+        Vector3 moveDirection = (point - _player.position).normalized;
+
+        float currentDistence = Vector3.Distance(point, _player.position);
+
+        if(currentDistence > maxDistance)
+        {
+            point = _player.position + moveDirection * maxDistance;
+        }
+
+        _mouse.transform.position = point;
     }
 }

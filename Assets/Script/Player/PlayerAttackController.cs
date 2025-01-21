@@ -15,6 +15,7 @@ public class PlayerAttackController : MonoBehaviour
     private GameObject[] m_PositionObject;
     private PlayerWeaponController m_weaponController;
     private PlayerSkillController m_skillController;
+    private PlayerPlane _plane;
     private Animator m_attackAnimation;
 
     public GameObject[] PositionObject => m_PositionObject;
@@ -50,6 +51,7 @@ public class PlayerAttackController : MonoBehaviour
         m_weaponController = GetComponent<PlayerWeaponController>();   
         m_skillController = GetComponent<PlayerSkillController>();  
         m_attackAnimation = GetComponent<Animator>();
+        _plane = transform.GetComponentInChildren<PlayerPlane>();
 
         m_PositionObject = new GameObject[3];
 
@@ -220,18 +222,14 @@ public class PlayerAttackController : MonoBehaviour
 
     private void LookAtMouse()
     {
-        Ray mouseRay = Camera.main.ScreenPointToRay( Input.mousePosition );
-        
-        if(Physics.Raycast(mouseRay, out RaycastHit hit, 100, _mouseTargetLayer))
+        Vector3 lookPosition = new Vector3(_plane.Point.x, transform.position.y
+            , _plane.Point.z);
+
+        float distance = Vector3.Distance(transform.position, _plane.Point);
+
+        if(distance > 0.1f)
         {
-            Vector3 lookPosition = new Vector3(hit.point.x,transform.position.y, hit.point.z);
-
-            float distance = Vector3.Distance(transform.position, hit.point);
-
-            if(distance > 0.1f)
-            {
-                transform.LookAt(lookPosition);
-            }
+            transform.LookAt(lookPosition);
         }
     }
 

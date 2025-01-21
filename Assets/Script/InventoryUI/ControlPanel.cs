@@ -48,7 +48,6 @@ public class ControlPanel : MonoBehaviour
 
     private void OnEnable()
     {
-
         ResetControlPanelButton();
 
         PerformedAction();
